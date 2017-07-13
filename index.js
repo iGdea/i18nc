@@ -27,10 +27,26 @@ module.exports = function(code, options)
 		dealAst.push({type: 'i18nHandler', value: item});
 	});
 
+	var defineFunctionArgAst = collect.defineFunctionArgAst.sort(function(a, b)
+		{
+			return a.range[0] > b.range[0] ? 1 : -1;
+		})[0];
+
+	if (defineFunctionArgAst) dealAst.push({type: 'defineFunctionArg', value: defineFunctionArgAst});
+
 	collect.specialWordsAst.forEach(function(item)
 	{
 		dealAst.push({type: 'specialWord', value: item});
 	});
+
+	var i18nPlaceholder =
+	{
+		code: '',
+		toString: function()
+		{
+			return this.code;
+		}
+	};
 
 
 	dealAst.sort(function(a, b)
@@ -46,7 +62,13 @@ module.exports = function(code, options)
 			switch(item.type)
 			{
 				case 'i18nHandler':
-					newCode.unshift(tmpCode.slice(endPos));
+					newCode.unshift(tmpCode.slice(endPos).replace(/^\n+/g, '\n'));
+					tmpCode = tmpCode.slice(0, startPos).replace(/\n+$/g, '\n');
+					break;
+
+				case'defineFunctionArg':
+					startPos = ast.body.range[0]+1;
+					newCode.unshift('\n\n', i18nPlaceholder, '\n\n\n', tmpCode.slice(startPos));
 					tmpCode = tmpCode.slice(0, startPos);
 					break;
 
@@ -62,7 +84,12 @@ module.exports = function(code, options)
 		});
 
 
+	i18nPlaceholder.code = 'function I18N(){}';
 	var result = tmpCode+newCode.join('');
+	if (!defineFunctionArgAst)
+	{
+		result = i18nPlaceholder + '\n\n\n' + result;
+	}
 
 	return result;
 };
