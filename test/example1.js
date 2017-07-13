@@ -1,10 +1,11 @@
 module.exports = function code()
 {
-    var ccc;       // 中文注释
-    var c2 = "中文0";
-    var c1 = "中文"+0;
-    var c1 = "123"+0;
-    var c1 = "<span>12中文</span>"+0;
+    var result;       // 中文注释
+    result = "中文0";
+    result += "中文1"+1;
+    result += "123"+2;
+    result += '2中文4中文5';     // 中文注释
+    result += "<span>中文3</span>"+0;
 
     var c5 = {
         d1: '中文1',
@@ -13,28 +14,55 @@ module.exports = function code()
         c6: function(){}
     }
 
-    // 中文注释
-    console.log('2中');     // 中文注释
+    c5['中文key'] = '中文val';
 
-    var c3 = '2中文4中文5';     // 中文注释
-    var dd;     // 中文注释
+
+    result += c5.c1;
+    result += c5.c2;
+    result += c5['中文key'];
+
+    function print(msg)
+    {
+        return '再来' + msg;
+    }
+
+    // 中文注释
+    result += print('2中');     // 中文注释
+
     switch(a)
     {
         case '我中文们':
+            result += '我中文们';
+            break;
+
         case 11+'我中文们':
-        case dd()+'我中文们':
+            result += 11+'我中文们';
+            break;
+
+        case print('一般不会吧')+'我中文们':
+            result += print('一般不会吧')+'我中文们';
+            break;
     }
 
-    if (c5.c6 == '我中文们')
+    if (!!'我中文们')
     {
-        c5['我中文们']
-        c2 += '中文';
-        true ? '中午呢' : '中文呢？'
+        result += true ? '中午呢' : '中文呢？'
     }
 
-    // 中文注释
-    for(;;)
+
+    // define 的处理
+    var define = 'hihi';
+    function define(){}
+
+    define(function()
     {
-        function c8(){}
-    }
+        var someCode = '111';
+        define(function()
+        {
+            var someCode2 = '111';
+        });
+    });
+
+
+    return result;
 }
