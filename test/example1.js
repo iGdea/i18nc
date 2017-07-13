@@ -64,5 +64,10 @@ module.exports = function code()
     });
 
 
+    // __I18N__
+    function __I18N__()
+    {}
+
+
     return result;
 }

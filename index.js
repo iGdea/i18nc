@@ -21,24 +21,48 @@ module.exports = function(code, options)
 	var newCode = [];
 	var tmpCode = code;
 
-	collect.specialWordsAst.sort(function(a, b)
+	var dealAst = [];
+	collect.i18nHanlderAst.forEach(function(item)
+	{
+		dealAst.push({type: 'i18nHandler', value: item});
+	});
+
+	collect.specialWordsAst.forEach(function(item)
+	{
+		dealAst.push({type: 'specialWord', value: item});
+	});
+
+
+	dealAst.sort(function(a, b)
 		{
-			return a.range[0] > b.range[0] ? -1 : 1;
+			return a.value.range[0] > b.value.range[0] ? -1 : 1;
 		})
 		.forEach(function(item)
 		{
-			if (!item) return;
+			var ast = item.value;
+			var startPos = ast.range[0];
+			var endPos = ast.range[1];
 
-			var startPos = item.range[0];
-			var endPos = item.range[1];
+			switch(item.type)
+			{
+				case 'i18nHandler':
+					newCode.unshift(tmpCode.slice(endPos));
+					tmpCode = tmpCode.slice(0, startPos);
+					break;
 
-			newCode.unshift(
-				escodegen.generate(item.__i18n_replace_info__.newAst, escodegenOptions),
-				tmpCode.slice(endPos)
-			);
+				case 'specialWord':
+					newCode.unshift(
+						escodegen.generate(ast.__i18n_replace_info__.newAst, escodegenOptions),
+						tmpCode.slice(endPos)
+					);
 
-			tmpCode = tmpCode.slice(0, startPos);
+					tmpCode = tmpCode.slice(0, startPos);
+					break;
+			}
 		});
 
-	return tmpCode+newCode.join('');
+
+	var result = tmpCode+newCode.join('');
+
+	return result;
 };
