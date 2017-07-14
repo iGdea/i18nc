@@ -20,9 +20,11 @@ module.exports = function(code, options)
 
 	var newCode = [];
 	var tmpCode = code;
+	var specialWords = [];
+	var dirtySpecialWords = [];
+	var dealAst = [];
 	var defineFunctionArgAst;
 
-	var dealAst = [];
 	collect.i18nHanlderAst.forEach(function(item)
 	{
 		dealAst.push({type: 'i18nHandler', value: item});
@@ -43,7 +45,25 @@ module.exports = function(code, options)
 
 	collect.specialWordsAst.forEach(function(item)
 	{
+		specialWords.push(item.value);
 		dealAst.push({type: 'specialWord', value: item});
+	});
+
+	collect.i18nArgs.forEach(function(args)
+	{
+		var args1 = args[0];
+
+		if (args1)
+		{
+			if (args1.type == 'Literal')
+			{
+				specialWords.push(args1.value);
+			}
+			else
+			{
+				dirtySpecialWords.push(escodegen.generate(args1, escodegenOptions));
+			}
+		}
 	});
 
 
@@ -103,11 +123,15 @@ module.exports = function(code, options)
 
 
 	i18nPlaceholder.code = 'function I18N(){}';
-	var result = newCode.join('')+tmpCode;
+	var resultCode = newCode.join('')+tmpCode;
 	if (!defineFunctionArgAst && !collect.i18nHanlderAst.length)
 	{
-		result = i18nPlaceholder +'\n\n'+ result;
+		resultCode = i18nPlaceholder +'\n\n'+ resultCode;
 	}
 
-	return result;
+	return {
+		code: resultCode,
+		specialWords: _.uniq(specialWords),
+		dirtySpecialWords: dirtySpecialWords
+	};
 };

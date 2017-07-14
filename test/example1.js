@@ -64,9 +64,13 @@ module.exports = function code()
     });
 
 
-    // __I18N__
-    function __I18N__()
-    {}
+    // I18N
+    function I18N(msg)
+    {
+        return msg
+    }
+
+    result += I18N('I18N(中文)');
 
 
     return result;
