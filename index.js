@@ -22,10 +22,10 @@ module.exports = function(code, options)
 	var collect	= new Collecter(options).collect(ast);
 
 	var newCode			= [];
-	var tmpCode			= code;
 	var specialWords	= [];
 	var dirtyWords		= [];
 	var dealAst			= [];
+	var tmpCode			= code;
 	var defineFunctionArgAst;
 
 	collect.i18nHanlderAst.forEach(function(item)
@@ -125,7 +125,7 @@ module.exports = function(code, options)
 		});
 
 
-	i18nPlaceholder.code = 'function I18N(){}';
+	i18nPlaceholder.code = 'function '+options.handlerName+'(msg, type, example){return msg;}';
 	var resultCode = newCode.join('')+tmpCode;
 	if (!defineFunctionArgAst && !collect.i18nHanlderAst.length)
 	{
