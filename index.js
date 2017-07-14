@@ -20,6 +20,7 @@ module.exports = function(code, options)
 
 	var newCode = [];
 	var tmpCode = code;
+	var defineFunctionArgAst;
 
 	var dealAst = [];
 	collect.i18nHanlderAst.forEach(function(item)
@@ -27,18 +28,29 @@ module.exports = function(code, options)
 		dealAst.push({type: 'i18nHandler', value: item});
 	});
 
-	var defineFunctionArgAst = collect.defineFunctionArgAst.sort(function(a, b)
-		{
-			return a.range[0] > b.range[0] ? 1 : -1;
-		})[0];
+	if (!collect.i18nHanlderAst.length)
+	{
+		defineFunctionArgAst = collect.defineFunctionArgAst.sort(function(a, b)
+			{
+				return a.range[0] > b.range[0] ? 1 : -1;
+			})[0];
 
-	if (defineFunctionArgAst) dealAst.push({type: 'defineFunctionArg', value: defineFunctionArgAst});
+		if (defineFunctionArgAst)
+		{
+			dealAst.push({type: 'defineFunctionArg', value: defineFunctionArgAst});
+		}
+	}
 
 	collect.specialWordsAst.forEach(function(item)
 	{
 		dealAst.push({type: 'specialWord', value: item});
 	});
 
+
+	// i18n 函数插入时机
+	// 如果原来有这个函数，就替换
+	// 如果没有，就尝试查到第一个define内
+	// 如果没有define，就直接插入到文件开头
 	var i18nPlaceholder =
 	{
 		code: '',
@@ -63,7 +75,7 @@ module.exports = function(code, options)
 			switch(item.type)
 			{
 				case 'i18nHandler':
-					newCode.push(tmpCode.slice(0, startPos));
+					newCode.push(tmpCode.slice(0, startPos), i18nPlaceholder);
 
 					tmpCode = tmpCode.slice(endPos);
 					fixIndex += endPos;
@@ -71,7 +83,7 @@ module.exports = function(code, options)
 
 				case'defineFunctionArg':
 					startPos = ast.body.range[0]+1-fixIndex;
-					newCode.push(tmpCode.slice(0, startPos), i18nPlaceholder);
+					newCode.push(tmpCode.slice(0, startPos), '\n\n', i18nPlaceholder, '\n\n');
 
 					tmpCode = tmpCode.slice(startPos);
 					fixIndex += startPos;
@@ -92,9 +104,9 @@ module.exports = function(code, options)
 
 	i18nPlaceholder.code = 'function I18N(){}';
 	var result = newCode.join('')+tmpCode;
-	if (!defineFunctionArgAst)
+	if (!defineFunctionArgAst && !collect.i18nHanlderAst.length)
 	{
-		result = i18nPlaceholder + result;
+		result = i18nPlaceholder +'\n\n'+ result;
 	}
 
 	return result;
