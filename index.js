@@ -2,6 +2,7 @@ var _ = require('underscore');
 var esprima = require('esprima');
 var escodegen = require('escodegen');
 var Collecter = require('./lib/collecter');
+var optionsUtils = require('./lib/options');
 
 var escodegenOptions =
 {
@@ -15,14 +16,16 @@ var escodegenOptions =
 
 module.exports = function(code, options)
 {
-	var ast = esprima.parse(code, {range: true});
-	var collect = new Collecter(options).collect(ast);
+	options = optionsUtils.extend(options);
 
-	var newCode = [];
-	var tmpCode = code;
-	var specialWords = [];
-	var dirtyWords = [];
-	var dealAst = [];
+	var ast		= esprima.parse(code, {range: true});
+	var collect	= new Collecter(options).collect(ast);
+
+	var newCode			= [];
+	var tmpCode			= code;
+	var specialWords	= [];
+	var dirtyWords		= [];
+	var dealAst			= [];
 	var defineFunctionArgAst;
 
 	collect.i18nHanlderAst.forEach(function(item)
