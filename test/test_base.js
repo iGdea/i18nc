@@ -4,5 +4,9 @@ var code = require('./example1').toString();
 
 console.log(code);
 console.log(' ================ ');
-console.log(i18nc(code));
 
+var info = i18nc(code);
+console.log(info.code);
+
+console.log(' ================ ');
+console.log(info.specialWords, info.dirtyWords);
