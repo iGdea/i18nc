@@ -49,46 +49,52 @@ module.exports = function(code, options)
 	};
 
 
+	var fixIndex = 0;
 	dealAst.sort(function(a, b)
 		{
-			return a.value.range[0] > b.value.range[0] ? -1 : 1;
+			return a.value.range[0] > b.value.range[0] ? 1 : -1;
 		})
 		.forEach(function(item)
 		{
 			var ast = item.value;
-			var startPos = ast.range[0];
-			var endPos = ast.range[1];
+			var startPos = ast.range[0] - fixIndex;
+			var endPos = ast.range[1] - fixIndex;
 
 			switch(item.type)
 			{
 				case 'i18nHandler':
-					newCode.unshift(tmpCode.slice(endPos).replace(/^\n+/g, '\n'));
-					tmpCode = tmpCode.slice(0, startPos).replace(/\n+$/g, '\n');
+					newCode.push(tmpCode.slice(0, startPos));
+
+					tmpCode = tmpCode.slice(endPos);
+					fixIndex += endPos;
 					break;
 
 				case'defineFunctionArg':
-					startPos = ast.body.range[0]+1;
-					newCode.unshift('\n\n', i18nPlaceholder, '\n\n\n', tmpCode.slice(startPos));
-					tmpCode = tmpCode.slice(0, startPos);
+					startPos = ast.body.range[0]+1-fixIndex;
+					newCode.push(tmpCode.slice(0, startPos), i18nPlaceholder);
+
+					tmpCode = tmpCode.slice(startPos);
+					fixIndex += startPos;
 					break;
 
 				case 'specialWord':
-					newCode.unshift(
-						escodegen.generate(ast.__i18n_replace_info__.newAst, escodegenOptions),
-						tmpCode.slice(endPos)
+					newCode.push(
+						tmpCode.slice(0, startPos),
+						escodegen.generate(ast.__i18n_replace_info__.newAst, escodegenOptions)
 					);
 
-					tmpCode = tmpCode.slice(0, startPos);
+					tmpCode = tmpCode.slice(endPos);
+					fixIndex += endPos;
 					break;
 			}
 		});
 
 
 	i18nPlaceholder.code = 'function I18N(){}';
-	var result = tmpCode+newCode.join('');
+	var result = newCode.join('')+tmpCode;
 	if (!defineFunctionArgAst)
 	{
-		result = i18nPlaceholder + '\n\n\n' + result;
+		result = i18nPlaceholder + result;
 	}
 
 	return result;
