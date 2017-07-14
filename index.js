@@ -21,7 +21,7 @@ module.exports = function(code, options)
 	var newCode = [];
 	var tmpCode = code;
 	var specialWords = [];
-	var dirtySpecialWords = [];
+	var dirtyWords = [];
 	var dealAst = [];
 	var defineFunctionArgAst;
 
@@ -61,7 +61,7 @@ module.exports = function(code, options)
 			}
 			else
 			{
-				dirtySpecialWords.push(escodegen.generate(args1, escodegenOptions));
+				dirtyWords.push(escodegen.generate(args1, escodegenOptions));
 			}
 		}
 	});
@@ -130,8 +130,8 @@ module.exports = function(code, options)
 	}
 
 	return {
-		code: resultCode,
-		specialWords: _.uniq(specialWords),
-		dirtySpecialWords: dirtySpecialWords
+		code			: resultCode,
+		dirtyWords		: dirtyWords,
+		specialWords	: _.uniq(specialWords),
 	};
 };
