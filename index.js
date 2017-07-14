@@ -33,7 +33,7 @@ module.exports = function(code, options)
 		dealAst.push({type: 'i18nHandler', value: item});
 	});
 
-	if (!collect.i18nHanlderAst.length)
+	if (!collect.i18nHanlderAst.length && options.insertToDefineHalder)
 	{
 		defineFunctionArgAst = collect.defineFunctionArgAst.sort(function(a, b)
 			{
@@ -48,7 +48,7 @@ module.exports = function(code, options)
 
 	collect.specialWordsAst.forEach(function(item)
 	{
-		specialWords.push(item.value);
+		specialWords = specialWords.concat(item.__i18n_replace_info__.specialWords);
 		dealAst.push({type: 'specialWord', value: item});
 	});
 
@@ -74,16 +74,7 @@ module.exports = function(code, options)
 	// 如果原来有这个函数，就替换
 	// 如果没有，就尝试查到第一个define内
 	// 如果没有define，就直接插入到文件开头
-	var i18nPlaceholder =
-	{
-		code: '',
-		toString: function()
-		{
-			return this.code;
-		}
-	};
-
-
+	var i18nPlaceholders = [];
 	var fixIndex = 0;
 	dealAst.sort(function(a, b)
 		{
@@ -98,7 +89,9 @@ module.exports = function(code, options)
 			switch(item.type)
 			{
 				case 'i18nHandler':
+					var i18nPlaceholder = new I18NPlaceholder(ast, specialWords, options);
 					newCode.push(tmpCode.slice(0, startPos), i18nPlaceholder);
+					i18nPlaceholders.push(i18nPlaceholder);
 
 					tmpCode = tmpCode.slice(endPos);
 					fixIndex += endPos;
@@ -106,7 +99,10 @@ module.exports = function(code, options)
 
 				case'defineFunctionArg':
 					startPos = ast.body.range[0]+1-fixIndex;
+
+					var i18nPlaceholder = new I18NPlaceholder(null, specialWords, options);
 					newCode.push(tmpCode.slice(0, startPos), '\n\n', i18nPlaceholder, '\n\n');
+					i18nPlaceholders.push(i18nPlaceholder);
 
 					tmpCode = tmpCode.slice(startPos);
 					fixIndex += startPos;
@@ -125,7 +121,6 @@ module.exports = function(code, options)
 		});
 
 
-	i18nPlaceholder.code = 'function '+options.handlerName+'(msg, type, example){return msg;}';
 	var resultCode = newCode.join('')+tmpCode;
 	if (!defineFunctionArgAst && !collect.i18nHanlderAst.length)
 	{
@@ -138,3 +133,32 @@ module.exports = function(code, options)
 		specialWords	: _.uniq(specialWords),
 	};
 };
+
+
+function I18NPlaceholder(ast, specialWords, options)
+{
+	this.ast = ast;
+	this.specialWords = specialWords;
+	this.options = options;
+}
+
+_.extend(I18NPlaceholder.prototype,
+	{
+		toString: function()
+		{
+			return 'function '+this.options.handlerName+'(msg, type, example)'
+				+'{'
+					+'/* Do not modify this key value. */'
+					+'var FILE_KEY="'+this.options.defaultFilekey+'";'
+					+'var DEFAULT_JSON={};'
+					+'var LAN='+this.options.acceptLanguageCode+';'
+					+'/* It is must a json. */'
+					+'var CUSTOM_JSON={};'
+					+'return (LAN && ((FILE_KEY && CUSTOM_JSON[LAN]) || DEFAULT_JSON[LAN])) || msg;'
+				+'}';
+		},
+		parse: function()
+		{
+
+		},
+	});
