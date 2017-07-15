@@ -3,6 +3,7 @@ var esprima = require('esprima');
 var escodegen = require('escodegen');
 var Collecter = require('./lib/collecter');
 var optionsUtils = require('./lib/options');
+var i18nFunctionUtils = require('./lib/i18n_function_utils');
 
 var escodegenOptions =
 {
@@ -146,16 +147,14 @@ _.extend(I18NPlaceholder.prototype,
 	{
 		toString: function()
 		{
-			return 'function '+this.options.handlerName+'(msg, type, example)'
-				+'{'
-					+'/* Do not modify this key value. */'
-					+'var FILE_KEY="'+this.options.defaultFilekey+'";'
-					+'var DEFAULT_JSON={};'
-					+'var LAN='+this.options.acceptLanguageCode+';'
-					+'/* It is must a json. */'
-					+'var CUSTOM_JSON={};'
-					+'return (LAN && ((FILE_KEY && CUSTOM_JSON[LAN]) || DEFAULT_JSON[LAN])) || msg;'
-				+'}';
+			return i18nFunctionUtils.render(
+				{
+					handlerName: this.options.handlerName,
+					FILE_KEY: this.options.defaultFilekey,
+					acceptLanguageCode: this.options.acceptLanguageCode,
+					TRANSLATE_DEFAULT_JSON: JSON.stringify({}),
+					TRANSLATE_SUBTYPE_JSON: JSON.stringify({})
+				});
 		},
 		parse: function()
 		{

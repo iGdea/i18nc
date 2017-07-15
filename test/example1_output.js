@@ -64,7 +64,36 @@ module.exports = function code()
 
 
     // I18N
-    function I18N(msg, type, example){/* Do not modify this key value. */var FILE_KEY="";var DEFAULT_JSON={};var LAN=typeof window == "object" ? window.__i18n_lan__ : typeof global == "object" && global.__i18n_lan__;/* It is must a json. */var CUSTOM_JSON={};return (LAN && ((FILE_KEY && CUSTOM_JSON[LAN]) || DEFAULT_JSON[LAN])) || msg;}
+    function I18N(msg, subtype, plusExample)
+{
+	var LAN = typeof window == "object" ? window.__i18n_lan__ : typeof global == "object" && global.__i18n_lan__;
+	if (!LAN) return msg;
+
+	if (I18N.__TRANSLATE_LAN__ != LAN)
+	{
+		/* Do not modify this key value. */
+		var FILE_KEY = "";
+		var FUNCTION_VERSION = 1;
+
+		/**
+		Do not modify the values.
+		If you want, see https://github.com/Bacra/node-i18nc/wiki/How-to-modify-translate-data-in-JS-file
+		 */
+		var TRANSLATE_DEFAULT_JSON = {};
+		var TRANSLATE_SUBTYPE_JSON = {};
+
+		I18N.__TRANSLATE_LAN__ = LAN;
+		I18N.__TRANSLATE_DEFAULT_JSON__ = TRANSLATE_DEFAULT_JSON && TRANSLATE_DEFAULT_JSON[LAN];
+		I18N.__TRANSLATE_SUBTYPE_JSON__ = TRANSLATE_SUBTYPE_JSON && TRANSLATE_SUBTYPE_JSON[LAN];
+	}
+
+	var subtypeJSON = subtype && I18N.__TRANSLATE_SUBTYPE_JSON__;
+	var defaultJSON = I18N.__TRANSLATE_DEFAULT_JSON__;
+
+	return (subtypeJSON && subtypeJSON[subtype] && subtypeJSON[subtype][msg])
+		|| (defaultJSON && defaultJSON[msg])
+		|| msg;
+}
 
     result += I18N('I18N(中文)');
 

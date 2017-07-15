@@ -34,5 +34,3 @@ describe('#i18nc', function()
 		expect(info.dirtyWords).to.empty();
 	});
 });
-
-
