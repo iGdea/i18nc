@@ -69,7 +69,8 @@ module.exports = function code()
 	var LAN = typeof window == "object" ? window.__i18n_lan__ : typeof global == "object" && global.__i18n_lan__;
 	if (!LAN) return msg;
 
-	if (I18N.__TRANSLATE_LAN__ != LAN)
+	var self = I18N;
+	if (self.__TRANSLATE_LAN__ != LAN)
 	{
 		/* Do not modify this key value. */
 		var FILE_KEY = "";
@@ -82,13 +83,13 @@ module.exports = function code()
 		var TRANSLATE_DEFAULT_JSON = {};
 		var TRANSLATE_SUBTYPE_JSON = {};
 
-		I18N.__TRANSLATE_LAN__ = LAN;
-		I18N.__TRANSLATE_DEFAULT_JSON__ = TRANSLATE_DEFAULT_JSON && TRANSLATE_DEFAULT_JSON[LAN];
-		I18N.__TRANSLATE_SUBTYPE_JSON__ = TRANSLATE_SUBTYPE_JSON && TRANSLATE_SUBTYPE_JSON[LAN];
+		self.__TRANSLATE_LAN__ = LAN;
+		self.__TRANSLATE_DEFAULT_JSON__ = TRANSLATE_DEFAULT_JSON && TRANSLATE_DEFAULT_JSON[LAN];
+		self.__TRANSLATE_SUBTYPE_JSON__ = TRANSLATE_SUBTYPE_JSON && TRANSLATE_SUBTYPE_JSON[LAN];
 	}
 
-	var subtypeJSON = subtype && I18N.__TRANSLATE_SUBTYPE_JSON__;
-	var defaultJSON = I18N.__TRANSLATE_DEFAULT_JSON__;
+	var subtypeJSON = subtype && self.__TRANSLATE_SUBTYPE_JSON__;
+	var defaultJSON = self.__TRANSLATE_DEFAULT_JSON__;
 
 	return (subtypeJSON && subtypeJSON[subtype] && subtypeJSON[subtype][msg])
 		|| (defaultJSON && defaultJSON[msg])
