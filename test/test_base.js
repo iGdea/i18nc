@@ -11,7 +11,7 @@ describe('#i18nc', function()
 	it('#first', function()
 	{
 		var info = i18nc(example1.toString());
-		// require('fs').writeFileSync(__dirname+'/example1_output.js', 'module.exports = '+info.code);
+		require('fs').writeFileSync(__dirname+'/example1_output.js', 'module.exports = '+info.code);
 		expect(info.code.split('\n')).to.eql(example1_output.toString().split('\n'));
 		eval('var example1_new ='+info.code);
 
