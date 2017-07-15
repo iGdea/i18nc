@@ -1,4 +1,4 @@
-var _ = require('underscore');
+var _ = require('lodash');
 var esprima = require('esprima');
 var escodegen = require('escodegen');
 var Collecter = require('./lib/collecter');
