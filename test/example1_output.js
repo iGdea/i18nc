@@ -112,7 +112,7 @@ module.exports = function code()
 		 * {
 		 * 	key: [] || 'The translation is empty.'
 		 * }
-		 *  */
+		 */
 		var TRANSLATE_DEFAULT_JSON = {};
 		var TRANSLATE_SUBTYPE_JSON = {};
 

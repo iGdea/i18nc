@@ -46,7 +46,7 @@ function {{@handlerName}}(msg, subtype, plusExample)
 		 * {
 		 * 	key: [] || 'The translation is empty.'
 		 * }
-		 *  */
+		 */
 		var TRANSLATE_DEFAULT_JSON = {{@TRANSLATE_DEFAULT_JSON}};
 		var TRANSLATE_SUBTYPE_JSON = {{@TRANSLATE_SUBTYPE_JSON}};
 
