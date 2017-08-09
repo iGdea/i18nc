@@ -64,15 +64,15 @@ module.exports = function code()
 
 
     // I18N
-    function I18N(msg, subtype, plusExample)
+    function I18N(msg, subtype, example)
 {
 	/**
-	 * @param  {String} msg          translateKey
-	 * @param  {String} subtype      Indicates a special treatment
-	 * 									or a continuous relationship
-	 * @param  {String} plusExample  In the case of professional translation,
-	 * 									the reference content is added after the content is translated.
-	 * 									It is usefull for i18nc tool.
+	 * @param  {String} msg      translateKey
+	 * @param  {String} subtype  Indicates a special treatment
+	 * 								or a continuous relationship
+	 * @param  {String} example  In the case of professional translation,
+	 * 								the reference content is added after the content is translated.
+	 * 								Support `%s` symbol.
 	 *
 	 *
 	 * [Warn]
