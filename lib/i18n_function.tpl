@@ -17,7 +17,7 @@ function {{@handlerName}}(msg, subtype, example)
 
 
 
-	var LAN = {{@acceptLanguageCode}};
+	var LAN = ({{@acceptLanguageCode}});
 	if (!LAN) return msg;
 
 	var self = {{@handlerName}};
