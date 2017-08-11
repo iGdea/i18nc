@@ -7,18 +7,24 @@ function {{@handlerName}}(msg, subtype, example)
 	 * @param  {String} example  In the case of professional translation,
 	 * 								the reference content is added after the content is translated.
 	 * 								Support `%s` symbol.
-	 *
-	 *
+	 * 
+	 * 
 	 * [Warn]
 	 * I18nc Tool collects `{{@handlerName}}` callee arguments for professional translation.
 	 * Use simple string arguments when call `{{@handlerName}}`.
 	 * Variables and Operators are not supported.
+	 * 
 	 */
 
 
 
 	var LAN = ({{@acceptLanguageCode}});
 	if (!LAN) return msg;
+
+	if (!subtype && example)
+	{
+		subtype = 'e.g. '+example;
+	}
 
 	var self = {{@handlerName}};
 	if (self.__TRANSLATE_LAN__ != LAN)
