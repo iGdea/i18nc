@@ -23,15 +23,15 @@ function {{@handlerName}}(msg, subtype, example)
 
 	if (!subtype && example)
 	{
-		subtype = 'e.g. '+example;
+		subtype = '<e.g.> '+example;
 	}
 
 	var self = {{@handlerName}};
 	if (self.__TRANSLATE_LAN__ != LAN)
 	{
 		/* Do not modify this key value. */
-		var FILE_KEY = "{{FILE_KEY}}";
-		var FUNCTION_VERSION = 1;
+		var __FILE_KEY__ = "{{FILE_KEY}}";
+		var __FUNCTION_VERSION__ = 1;
 
 		/**
 		 * Do not modify the values.
@@ -53,16 +53,14 @@ function {{@handlerName}}(msg, subtype, example)
 		 * 	key: [] || 'The translation is empty.'
 		 * }
 		 */
-		var TRANSLATE_DEFAULT_JSON = {{@TRANSLATE_DEFAULT_JSON}};
-		var TRANSLATE_SUBTYPE_JSON = {{@TRANSLATE_SUBTYPE_JSON}};
+		var __TRANSLATE_JSON__ = {{@TRANSLATE_JSON}};
 
 		self.__TRANSLATE_LAN__ = LAN;
-		self.__TRANSLATE_DEFAULT_JSON__ = TRANSLATE_DEFAULT_JSON && TRANSLATE_DEFAULT_JSON[LAN];
-		self.__TRANSLATE_SUBTYPE_JSON__ = TRANSLATE_SUBTYPE_JSON && TRANSLATE_SUBTYPE_JSON[LAN];
+		self.__TRANSLATE_JSON__ = __TRANSLATE_JSON__ || {};
 	}
 
-	var subtypeJSON = subtype && self.__TRANSLATE_SUBTYPE_JSON__;
-	var defaultJSON = self.__TRANSLATE_DEFAULT_JSON__;
+	var defaultJSON = self.__TRANSLATE_JSON__.DEFAULTS;
+	var subtypeJSON = subtype && self.__TRANSLATE_JSON__.SUBTYPES;
 
 	var result = (subtypeJSON && subtypeJSON[subtype] && subtypeJSON[subtype][msg])
 		|| (defaultJSON && defaultJSON[msg])
@@ -71,5 +69,8 @@ function {{@handlerName}}(msg, subtype, example)
 
 	// Taking into account the use of the array that is empty,
 	// so the need for mandatory conversion of the results data.
-	return ''+result;
+	if (result && result.join)
+		return ''+result;
+	else
+		return result;
 }

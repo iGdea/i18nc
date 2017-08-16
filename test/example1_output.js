@@ -73,25 +73,31 @@ module.exports = function code()
 	 * @param  {String} example  In the case of professional translation,
 	 * 								the reference content is added after the content is translated.
 	 * 								Support `%s` symbol.
-	 *
-	 *
+	 * 
+	 * 
 	 * [Warn]
 	 * I18nc Tool collects `I18N` callee arguments for professional translation.
 	 * Use simple string arguments when call `I18N`.
 	 * Variables and Operators are not supported.
+	 * 
 	 */
 
 
 
-	var LAN = typeof window == "object" ? window.__i18n_lan__ : typeof global == "object" && global.__i18n_lan__;
+	var LAN = (typeof window == "object" ? window.__i18n_lan__ : typeof global == "object" && global.__i18n_lan__);
 	if (!LAN) return msg;
+
+	if (!subtype && example)
+	{
+		subtype = '<e.g.> '+example;
+	}
 
 	var self = I18N;
 	if (self.__TRANSLATE_LAN__ != LAN)
 	{
 		/* Do not modify this key value. */
-		var FILE_KEY = "";
-		var FUNCTION_VERSION = 1;
+		var __FILE_KEY__ = "";
+		var __FUNCTION_VERSION__ = 1;
 
 		/**
 		 * Do not modify the values.
@@ -113,16 +119,14 @@ module.exports = function code()
 		 * 	key: [] || 'The translation is empty.'
 		 * }
 		 */
-		var TRANSLATE_DEFAULT_JSON = {};
-		var TRANSLATE_SUBTYPE_JSON = {};
+		var __TRANSLATE_JSON__ = {"DEFAULTS":{},"SUBTYPES":{}};
 
 		self.__TRANSLATE_LAN__ = LAN;
-		self.__TRANSLATE_DEFAULT_JSON__ = TRANSLATE_DEFAULT_JSON && TRANSLATE_DEFAULT_JSON[LAN];
-		self.__TRANSLATE_SUBTYPE_JSON__ = TRANSLATE_SUBTYPE_JSON && TRANSLATE_SUBTYPE_JSON[LAN];
+		self.__TRANSLATE_JSON__ = __TRANSLATE_JSON__ || {};
 	}
 
-	var subtypeJSON = subtype && self.__TRANSLATE_SUBTYPE_JSON__;
-	var defaultJSON = self.__TRANSLATE_DEFAULT_JSON__;
+	var defaultJSON = self.__TRANSLATE_JSON__.DEFAULTS;
+	var subtypeJSON = subtype && self.__TRANSLATE_JSON__.SUBTYPES;
 
 	var result = (subtypeJSON && subtypeJSON[subtype] && subtypeJSON[subtype][msg])
 		|| (defaultJSON && defaultJSON[msg])
@@ -131,7 +135,10 @@ module.exports = function code()
 
 	// Taking into account the use of the array that is empty,
 	// so the need for mandatory conversion of the results data.
-	return ''+result;
+	if (result && result.join)
+		return ''+result;
+	else
+		return result;
 }
 
     result += I18N('I18N(中文)');
