@@ -1,0 +1,21 @@
+{
+	"word_db":
+	{
+		"db1": "db1"
+	},
+	"word_db_emtpy":
+	{
+		"db1": ""
+	},
+	"word_custom":
+	{
+		"db1": "db1",
+		"custom": "custom"
+	},
+	"word_all":
+	{
+		"db1": "db1",
+		"custom": "custom",
+		"db2": "db2"
+	}
+}

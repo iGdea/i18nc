@@ -1,0 +1,112 @@
+{
+    "type": "ObjectExpression",
+    "properties": [
+    {
+        "type": "Property",
+        "key":
+        {
+            "type": "Literal",
+            "value": "word_db",
+            "raw": "'word_db'"
+        },
+        "computed": false,
+        "value":
+        {
+            "type": "Literal",
+            "value": "db1",
+            "raw": "'db1'"
+        },
+        "kind": "init",
+        "method": false,
+        "shorthand": false
+    },
+    {
+        "type": "Property",
+        "key":
+        {
+            "type": "Literal",
+            "value": "word_db_emtpy",
+            "raw": "'word_db_emtpy'"
+        },
+        "computed": false,
+        "value":
+        {
+            "type": "ArrayExpression",
+            "elements": []
+        },
+        "kind": "init",
+        "method": false,
+        "shorthand": false
+    },
+    {
+        "type": "Property",
+        "key":
+        {
+            "type": "Literal",
+            "value": "word_custom",
+            "raw": "'word_custom'"
+        },
+        "computed": false,
+        "value":
+        {
+            "type": "LogicalExpression",
+            "operator": "||",
+            "left":
+            {
+                "type": "Literal",
+                "value": "custom",
+                "raw": "'custom'"
+            },
+            "right":
+            {
+                "type": "Literal",
+                "value": "db1",
+                "raw": "'db1'"
+            }
+        },
+        "kind": "init",
+        "method": false,
+        "shorthand": false
+    },
+    {
+        "type": "Property",
+        "key":
+        {
+            "type": "Literal",
+            "value": "word_all",
+            "raw": "'word_all'"
+        },
+        "computed": false,
+        "value":
+        {
+            "type": "LogicalExpression",
+            "operator": "||",
+            "left":
+            {
+                "type": "LogicalExpression",
+                "operator": "||",
+                "left":
+                {
+                    "type": "Literal",
+                    "value": "db2",
+                    "raw": "'db2'"
+                },
+                "right":
+                {
+                    "type": "Literal",
+                    "value": "custom",
+                    "raw": "'custom'"
+                }
+            },
+            "right":
+            {
+                "type": "Literal",
+                "value": "db1",
+                "raw": "'db1'"
+            }
+        },
+        "kind": "init",
+        "method": false,
+        "shorthand": false
+    }]
+}

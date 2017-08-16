@@ -4,7 +4,7 @@
   "description": "i18n",
   "main": "index.js",
   "scripts": {
-    "test": "cross-env DEBUG=dbcombo* mocha test/test_*"
+    "test": "cross-env DEBUG=i18nc* mocha test/test_*"
   },
   "dependencies": {
     "art-template": "^4.12.1",

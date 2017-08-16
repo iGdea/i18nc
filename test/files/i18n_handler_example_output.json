@@ -1,0 +1,34 @@
+{
+	"__FILE_KEY__": "I am a __FILE_KEY__",
+	"__FUNCTION_VERSION__": 1,
+	"__TRANSLATE_JSON__":
+	{
+		"DEFAULTS":
+		{
+			"zh":
+			{
+				"中文":
+				{
+					"db1": "test",
+					"custom": "",
+					"db2": 11
+				}
+			}
+		},
+		"SUBTYPES":
+		{
+			"subtype":
+			{
+				"zh":
+				{
+					"中文":
+					{
+						"db1": "test",
+						"custom": "",
+						"db2": 11
+					}
+				}
+			}
+		}
+	}
+}
