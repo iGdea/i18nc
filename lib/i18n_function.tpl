@@ -1,12 +1,10 @@
-function {{@handlerName}}(msg, subtype, example)
+function {{@handlerName}}(msg, subtype)
 {
 	/**
 	 * @param  {String} msg      translateKey
-	 * @param  {String} subtype  Indicates a special treatment
-	 * 								or a continuous relationship
-	 * @param  {String} example  In the case of professional translation,
-	 * 								the reference content is added after the content is translated.
-	 * 								Support `%s` symbol.
+	 * @param  {String} subtype  Indicates a special treatment.
+	 * 								Use `<line>` to represent continuous relationships.
+	 * 								Use `<e.g.>` to provide an example. Support `%s` symbol.
 	 * 
 	 * 
 	 * [Warn]
@@ -20,11 +18,6 @@ function {{@handlerName}}(msg, subtype, example)
 
 	var LAN = ({{@acceptLanguageCode}});
 	if (!LAN) return msg;
-
-	if (!subtype && example)
-	{
-		subtype = '<e.g.> '+example;
-	}
 
 	var self = {{@handlerName}};
 	if (self.__TRANSLATE_LAN__ != LAN)

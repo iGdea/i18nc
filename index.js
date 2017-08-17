@@ -1,9 +1,11 @@
-var _ = require('lodash');
-var esprima = require('esprima');
-var escodegen = require('escodegen');
-var Collecter = require('./lib/collecter');
-var optionsUtils = require('./lib/options');
-var i18nFunctionUtils = require('./lib/i18n_function_utils');
+var _						= require('lodash');
+var esprima					= require('esprima');
+var escodegen				= require('escodegen');
+var Collecter				= require('./lib/collecter');
+var astUtils				= require('./lib/ast_utils');
+var optionsUtils			= require('./lib/options');
+var i18nFunctionUtils		= require('./lib/i18n_function_utils');
+var i18nFunctionParser		= require('./lib/i18n_function_parser');
 
 var escodegenOptions =
 {
@@ -23,11 +25,15 @@ module.exports = function(code, options)
 	var collect	= new Collecter(options).collect(ast);
 
 	var newCode			= [];
-	var specialWords	= [];
 	var dirtyWords		= [];
 	var dealAst			= [];
 	var tmpCode			= code;
 	var defineFunctionArgAst;
+	var codeTranslateWords =
+	{
+		DEFAULTS_words	: [],
+		SUBTYPES_list	: {},
+	};
 
 	collect.i18nHanlderAst.forEach(function(item)
 	{
@@ -47,28 +53,53 @@ module.exports = function(code, options)
 		}
 	}
 
-	collect.specialWordsAst.forEach(function(item)
+	collect.translateWordAsts.forEach(function(item)
 	{
-		specialWords = specialWords.concat(item.__i18n_replace_info__.specialWords);
-		dealAst.push({type: 'specialWord', value: item});
+		codeTranslateWords.DEFAULTS_words = codeTranslateWords.DEFAULTS_words.concat(item.__i18n_replace_info__.translateWords);
+		dealAst.push({type: 'translateWord', value: item});
 	});
+	
 
-	collect.i18nArgs.forEach(function(args)
-	{
-		var args1 = args[0];
-
-		if (args1)
+	collect.i18nArgs.filter(function(args)
 		{
-			if (args1.type == 'Literal')
+			return args && args[0];
+		})
+		.sort(function(a, b)
+		{
+			return a[0].range[0] > b[0].range[0] ? 1 : -1;
+		})
+		.forEach(function(args)
+		{
+			var args0 = args[0];
+			var args1 = args[1];
+			var args2 = args[2];
+
+			if (!args0 || !args0.value) return;
+			if (args0.type != 'Literal')
 			{
-				specialWords.push(args1.value);
+				dirtyWords.push(escodegen.generate(args0, escodegenOptions));
+				return;
+			}
+
+			// 需要提取后面两个参数数据
+			var wordInfo =
+			{
+				value: args0.value,
+				subtype: args1 && astUtils.getConstValueFromAst(args1),
+			};
+			
+
+			if (wordInfo.subtype)
+			{
+				var arr = codeTranslateWords.SUBTYPES_list[wordInfo.subtype]
+					|| (codeTranslateWords.SUBTYPES_list[wordInfo.subtype] = []);
+				arr.push(wordInfo);
 			}
 			else
 			{
-				dirtyWords.push(escodegen.generate(args1, escodegenOptions));
+				codeTranslateWords.DEFAULTS_words.push(wordInfo.value);
 			}
-		}
-	});
+		});
 
 
 	// i18n 函数插入时机
@@ -90,7 +121,7 @@ module.exports = function(code, options)
 			switch(item.type)
 			{
 				case 'i18nHandler':
-					var i18nPlaceholder = new I18NPlaceholder(ast, specialWords, options);
+					var i18nPlaceholder = new I18NPlaceholder(ast, codeTranslateWords, options);
 					newCode.push(tmpCode.slice(0, startPos), i18nPlaceholder);
 					i18nPlaceholders.push(i18nPlaceholder);
 
@@ -101,7 +132,7 @@ module.exports = function(code, options)
 				case'defineFunctionArg':
 					startPos = ast.body.range[0]+1-fixIndex;
 
-					var i18nPlaceholder = new I18NPlaceholder(null, specialWords, options);
+					var i18nPlaceholder = new I18NPlaceholder(null, codeTranslateWords, options);
 					newCode.push(tmpCode.slice(0, startPos), '\n\n', i18nPlaceholder, '\n\n');
 					i18nPlaceholders.push(i18nPlaceholder);
 
@@ -109,7 +140,7 @@ module.exports = function(code, options)
 					fixIndex += startPos;
 					break;
 
-				case 'specialWord':
+				case 'translateWord':
 					newCode.push(
 						tmpCode.slice(0, startPos),
 						escodegen.generate(ast.__i18n_replace_info__.newAst, escodegenOptions)
@@ -121,26 +152,32 @@ module.exports = function(code, options)
 			}
 		});
 
+	// 先整理获取到的翻译数据
+	codeTranslateWords.DEFAULTS_words = _.uniq(codeTranslateWords.DEFAULTS_words);
 
+	// 再输出最终代码
 	var resultCode = newCode.join('')+tmpCode;
+
 	if (!defineFunctionArgAst && !collect.i18nHanlderAst.length)
 	{
 		resultCode = i18nPlaceholder +'\n\n'+ resultCode;
 	}
 
+
 	return {
-		code			: resultCode,
-		dirtyWords		: dirtyWords,
-		specialWords	: _.uniq(specialWords),
+		code				: resultCode,
+		dirtyWords			: dirtyWords,
+		codeTranslateWords	: codeTranslateWords,
 	};
 };
 
 
-function I18NPlaceholder(ast, specialWords, options)
+function I18NPlaceholder(oldAst, codeTranslateWords, options)
 {
-	this.ast = ast;
-	this.specialWords = specialWords;
-	this.options = options;
+	this.oldAst				= oldAst;
+	this.options			= options;
+	this._parseResult		= null;
+	this.codeTranslateWords	= codeTranslateWords;
 }
 
 _.extend(I18NPlaceholder.prototype,
@@ -152,12 +189,16 @@ _.extend(I18NPlaceholder.prototype,
 					handlerName: this.options.handlerName,
 					FILE_KEY: this.options.defaultFilekey,
 					acceptLanguageCode: this.options.acceptLanguageCode,
-					TRANSLATE_DEFAULT_JSON: JSON.stringify({}),
-					TRANSLATE_SUBTYPE_JSON: JSON.stringify({})
+					TRANSLATE_JSON: JSON.stringify({DEFAULTS:{}, SUBTYPES: {}}),
 				});
 		},
 		parse: function()
 		{
+			if (!this._parseResult)
+			{
+				this._parseResult = i18nFunctionParser.parse(this.oldAst);
+			}
 
+			return this._parseResult;
 		},
 	});
