@@ -4,7 +4,7 @@ var escodegen				= require('escodegen');
 var Collecter				= require('./lib/collecter');
 var astUtils				= require('./lib/ast_utils');
 var optionsUtils			= require('./lib/options');
-var i18nFunctionUtils		= require('./lib/i18n_function_utils');
+var i18nFunctionGenerator	= require('./lib/i18n_function_generator');
 var i18nFunctionParser		= require('./lib/i18n_function_parser');
 
 var escodegenOptions =
@@ -184,7 +184,7 @@ _.extend(I18NPlaceholder.prototype,
 	{
 		toString: function()
 		{
-			return i18nFunctionUtils.render(
+			return i18nFunctionGenerator.render(
 				{
 					handlerName: this.options.handlerName,
 					FILE_KEY: this.options.defaultFilekey,
