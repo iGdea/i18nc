@@ -13,9 +13,9 @@ describe('#i18nc', function()
 	it('#first', function()
 	{
 		var info = i18nc(example1.toString());
+
 		// fs.writeFileSync(__dirname+'/files/example1_output.js', 'module.exports = '+info.code);
-		// fs.writeFileSync(__dirname+'/files/example1_output_code.json', JSON.stringify(info.codeTranslateWords, null, '\t'));
-		// fs.writeFileSync(__dirname+'/files/example1_output_func.json', JSON.stringify(info.funcTranslateWords, null, '\t'));
+
 		expect(info.code.split('\n')).to.eql(example1_output.toString().split('\n'));
 		eval('var example1_new ='+info.code);
 
@@ -29,6 +29,10 @@ describe('#i18nc', function()
 	it('#retry', function()
 	{
 		var info = i18nc(example1_output.toString());
+
+		// fs.writeFileSync(__dirname+'/files/example1_output_code.json', JSON.stringify(info.codeTranslateWords, null, '\t'));
+		// fs.writeFileSync(__dirname+'/files/example1_output_func.json', JSON.stringify(info.funcTranslateWords, null, '\t'));
+
 		expect(info.code.split('\n')).to.eql(example1_output.toString().split('\n'));
 		eval('var example1_new ='+info.code);
 
