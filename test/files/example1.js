@@ -62,6 +62,9 @@ module.exports = function code()
         result += true ? '中午呢' : '中文呢？'
     }
 
+    I18N('中文I18N');
+    I18N('中文I18N', 'haha');
+    I18N('中文I18N2', 'haha');
 
     // I18N
     function I18N(msg)

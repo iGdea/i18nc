@@ -1,3 +1,4 @@
+var fs				= require('fs');
 var _				= require('lodash');
 var expect			= require('expect.js');
 var i18nc			= require('../');
@@ -6,13 +7,15 @@ var example1_output	= require('./files/example1_output');
 
 describe('#i18nc', function()
 {
-	var translateWords = ['中文0', '中文1', '2中文4中文5', '中文span', '中文span2', '中文span3', '中文2', '中文3', '中文key', '中文val', '再来', '2中', '我中文们', '一般不会吧', '中午呢', '中文呢？', 'I18N(中文)'];
+	var translateWords = ['中文0', '中文1', '2中文4中文5', '中文span', '中文span2', '中文span3', '中文2', '中文3', '中文key', '中文val', '再来', '2中', '我中文们', '一般不会吧', '中午呢', '中文呢？', 'I18N(中文)', '中文I18N', '中文I18N2'].sort();
 
 
 	it('#first', function()
 	{
 		var info = i18nc(example1.toString());
-		// require('fs').writeFileSync(__dirname+'/files/example1_output.js', 'module.exports = '+info.code);
+		// fs.writeFileSync(__dirname+'/files/example1_output.js', 'module.exports = '+info.code);
+		// fs.writeFileSync(__dirname+'/files/example1_output_code.json', JSON.stringify(info.codeTranslateWords, null, '\t'));
+		// fs.writeFileSync(__dirname+'/files/example1_output_func.json', JSON.stringify(info.funcTranslateWords, null, '\t'));
 		expect(info.code.split('\n')).to.eql(example1_output.toString().split('\n'));
 		eval('var example1_new ='+info.code);
 
@@ -38,12 +41,12 @@ describe('#i18nc', function()
 
 function getTranslateWords(codeTranslateWords)
 {
-	var translateWords = _.map(codeTranslateWords.SUBTYPES_list, function(info)
+	var translateWords = _.map(codeTranslateWords.SUBTYPES, function(val)
 		{
-			return info.value;
+			return val;
 		});
-	translateWords = translateWords.concat(codeTranslateWords.DEFAULTS_words);
+	translateWords = [].concat.apply(codeTranslateWords.DEFAULTS, translateWords);
 
-	return _.uniq(translateWords);
+	return _.uniq(translateWords).sort();
 }
 
