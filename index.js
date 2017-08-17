@@ -1,7 +1,7 @@
 var _						= require('lodash');
 var esprima					= require('esprima');
 var escodegen				= require('escodegen');
-var Collecter				= require('./lib/collecter');
+var ASTCollecter			= require('./lib/ast_collecter').ASTCollecter;
 var astUtils				= require('./lib/ast_utils');
 var optionsUtils			= require('./lib/options');
 var i18nFunctionGenerator	= require('./lib/i18n_function_generator');
@@ -22,7 +22,7 @@ module.exports = function(code, options)
 	options = optionsUtils.extend(options);
 
 	var ast		= esprima.parse(code, {range: true});
-	var collect	= new Collecter(options).collect(ast);
+	var collect	= new ASTCollecter(options).collect(ast);
 
 	var newCode			= [];
 	var dirtyWords		= [];
