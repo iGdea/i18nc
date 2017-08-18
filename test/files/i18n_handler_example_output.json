@@ -1,38 +1,46 @@
 {
-	"__FILE_KEY__": "I am a __FILE_KEY__",
+	"__FILE_KEY__": "i18n_handler_example",
 	"__FUNCTION_VERSION__": 1,
 	"__TRANSLATE_JSON__": {
 		"zh": {
 			"DEFAULTS": {
 				"中文0": [
-					"zh0"
+					"in_file zh0"
 				],
 				"中文1": [
-					"zh1",
-					"custom1"
+					"in_file zh1",
+					"in_file custom1"
 				],
 				"中文2": [
-					"zh2",
+					"in_file zh2",
 					"",
-					"zh2_db"
+					"in_file zh2_db"
 				],
 				"中文3_empty": [
+					""
+				],
+				"中文4_empty": [
+					"",
+					""
+				],
+				"中文5_empty": [
+					"",
 					""
 				]
 			},
 			"SUBTYPES": {
 				"subtype": {
 					"中文0": [
-						"subtye_zh0"
+						"in_file subtye_zh0"
 					],
 					"中文1": [
-						"subtye_zh1",
-						"subtye_custom1"
+						"in_file subtye_zh1",
+						"in_file ubtye_custom1"
 					],
 					"中文2": [
-						"subtye_zh2",
+						"in_file subtye_zh2",
 						"",
-						"subtye_zh2_db"
+						"in_file subtye_zh2_db"
 					],
 					"中文3_empty": [
 						""

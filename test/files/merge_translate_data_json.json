@@ -2,40 +2,52 @@
 	"DEFAULTS": {
 		"中文0": {
 			"zh": [
-				"db1",
-				"custom",
-				"db2"
+				"indb db1",
+				"indb custom",
+				"indb db2"
 			]
 		},
 		"中文1": {
 			"zh": [
-				"zh1",
-				"custom1"
+				"in_file zh1",
+				"in_file custom1"
 			]
 		},
 		"中文2": {
 			"zh": [
-				"zh2",
+				"in_file zh2",
 				"",
-				"zh2_db"
+				"in_file zh2_db"
 			]
 		},
-		"中文3_empty": {}
+		"中文3_empty": {},
+		"中文4_empty": {
+			"zh": [
+				"",
+				""
+			]
+		},
+		"中文5_empty": {
+			"zh": [
+				"",
+				""
+			]
+		}
 	},
 	"SUBTYPES": {
 		"subtype": {
 			"中文0": {},
 			"中文1": {
 				"zh": [
-					"subtye_zh1",
-					"subtye_custom1"
+					"in_file subtye_zh1",
+					"in_file ubtye_custom1"
 				]
 			},
 			"中文2": {
 				"zh": [
-					"subtye_zh2",
+					"in_file subtye_zh2",
 					"",
-					"subtye_zh2_db"
+					"in_file subtye_zh2_db"
 				]
 			},
 			"中文3_empty": {}

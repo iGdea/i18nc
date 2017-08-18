@@ -1,14 +1,16 @@
 {
     'zh': {
         'DEFAULTS': {
-            '中文0': 'db2' || 'custom' || 'db1',
-            '中文1': 'custom1' || 'zh1',
-            '中文2': 'zh2_db' || [] || 'zh2'
+            '中文0': 'indb db2' || 'indb custom' || 'indb db1',
+            '中文1': 'in_file custom1' || 'in_file zh1',
+            '中文2': 'in_file zh2_db' || [] || 'in_file zh2',
+            '中文4_empty': [] || [],
+            '中文5_empty': [] || []
         },
         'SUBTYPES': {
             'subtype': {
-                '中文1': 'subtye_custom1' || 'subtye_zh1',
-                '中文2': 'subtye_zh2_db' || [] || 'subtye_zh2'
+                '中文1': 'in_file ubtye_custom1' || 'in_file subtye_zh1',
+                '中文2': 'in_file subtye_zh2_db' || [] || 'in_file subtye_zh2'
             }
         }
     }

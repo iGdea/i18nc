@@ -5,16 +5,18 @@
         {
             "DEFAULTS":
             {
-                "中文1": "db1"
+                "中文1": "indb db1"
             },
             "SUBTYPES":
             {}
         },
-        "I am a __FILE_KEY__":
+
+
+        "i18n_handler_example":
         {
             "DEFAULTS":
             {
-                "中文0": ["db1", "custom", "db2"]
+                "中文0": ["indb db1", "indb custom", "indb db2"]
             },
             "SUBTYPES":
             {}
