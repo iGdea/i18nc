@@ -17,7 +17,7 @@ function I18N(msg, subtype)
 
 
 
-	var LAN = (typeof window == "object" ? window.__i18n_lan__ : typeof global == "object" && global.__i18n_lan__);
+	var LAN = 'zh';
 	if (!LAN) return msg;
 
 	var self = I18N;
