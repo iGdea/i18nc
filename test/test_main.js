@@ -1,7 +1,7 @@
-var fs				= require('fs');
 var _				= require('lodash');
 var expect			= require('expect.js');
 var i18nc			= require('../');
+var autoWriteFile	= require('./files/auto_write_file');
 var example1		= require('./files/example1');
 var example1_output	= require('./files/example1_output');
 
@@ -14,7 +14,7 @@ describe('#i18nc', function()
 	{
 		var info = i18nc(example1.toString());
 
-		// fs.writeFileSync(__dirname+'/files/example1_output.js', 'module.exports = '+info.code);
+		autoWriteFile('example1_output.js', 'module.exports = '+info.code);
 
 		expect(info.code.split('\n')).to.eql(example1_output.toString().split('\n'));
 		eval('var example1_new ='+info.code);
@@ -30,8 +30,8 @@ describe('#i18nc', function()
 	{
 		var info = i18nc(example1_output.toString());
 
-		// fs.writeFileSync(__dirname+'/files/example1_output_code.json', JSON.stringify(info.codeTranslateWords, null, '\t'));
-		// fs.writeFileSync(__dirname+'/files/example1_output_func.json', JSON.stringify(info.funcTranslateWords, null, '\t'));
+		autoWriteFile('example1_output_code.json', info.codeTranslateWords);
+		autoWriteFile('example1_output_func.json', info.funcTranslateWords);
 
 		expect(info.code.split('\n')).to.eql(example1_output.toString().split('\n'));
 		eval('var example1_new ='+info.code);
