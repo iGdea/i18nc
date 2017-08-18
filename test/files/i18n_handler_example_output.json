@@ -1,19 +1,36 @@
 {
 	"__FILE_KEY__": "I am a __FILE_KEY__",
 	"__FUNCTION_VERSION__": 1,
-	"__TRANSLATE_JSON__":
-	{
-		"zh":
-		{
-			"DEFAULTS":
-			{
-				"中文": ["test", "", 11]
+	"__TRANSLATE_JSON__": {
+		"zh": {
+			"DEFAULTS": {
+				"中文0": [
+					"zh0"
+				],
+				"中文1": [
+					"zh1",
+					"custom1"
+				],
+				"中文2": [
+					"zh2",
+					"",
+					"zh2_db"
+				]
 			},
-			"SUBTYPES":
-			{
-				"subtype":
-				{
-					"中文": ["test", "", 11]
+			"SUBTYPES": {
+				"subtype": {
+					"中文0": [
+						"subtye_zh0"
+					],
+					"中文1": [
+						"subtye_zh1",
+						"subtye_custom1"
+					],
+					"中文2": [
+						"subtye_zh2",
+						"",
+						"subtye_zh2_db"
+					]
 				}
 			}
 		}
