@@ -53,7 +53,8 @@ module.exports = function I18N(msg, subtype)
 				{
 					'中文0': 'zh0',
 					'中文1': 'custom1' || 'zh1',
-					'中文2': 'zh2_db' || [] || 'zh2'
+					'中文2': 'zh2_db' || [] || 'zh2',
+					'中文3_empty': '',
 				},
 				"SUBTYPES":
 				{
@@ -61,7 +62,8 @@ module.exports = function I18N(msg, subtype)
 					{
 						'中文0': 'subtye_zh0',
 						'中文1': 'subtye_custom1' || 'subtye_zh1',
-						'中文2': 'subtye_zh2_db' || [] || 'subtye_zh2'
+						'中文2': 'subtye_zh2_db' || [] || 'subtye_zh2',
+						'中文3_empty': '',
 					}
 				}
 			}

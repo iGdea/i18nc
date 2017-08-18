@@ -15,6 +15,9 @@
 					"zh2",
 					"",
 					"zh2_db"
+				],
+				"中文3_empty": [
+					""
 				]
 			},
 			"SUBTYPES": {
@@ -30,6 +33,9 @@
 						"subtye_zh2",
 						"",
 						"subtye_zh2_db"
+					],
+					"中文3_empty": [
+						""
 					]
 				}
 			}
