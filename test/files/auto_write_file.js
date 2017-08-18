@@ -1,6 +1,6 @@
 var fs = require('fs');
 
-module.exports = function write(filename, data)
+module.exports = function write(filename, data, type)
 {
     if (!process.env.TEST_BUILD) return;
 
@@ -9,5 +9,6 @@ module.exports = function write(filename, data)
         data = JSON.stringify(data, null, '\t');
     }
 
-    fs.writeFileSync(__dirname+'/'+filename, data);
+    var file_path = type == 'example' ? __dirname+'/../example/' : __dirname+'/';
+    fs.writeFileSync(file_path+filename, data);
 }

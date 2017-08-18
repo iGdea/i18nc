@@ -1,9 +1,9 @@
-var _				= require('lodash');
-var expect			= require('expect.js');
-var i18nc			= require('../');
-var autoWriteFile	= require('./files/auto_write_file');
-var example1		= require('./files/example1');
-var example1_output	= require('./files/example1_output');
+var _					= require('lodash');
+var expect				= require('expect.js');
+var i18nc				= require('../');
+var autoWriteFile		= require('./files/auto_write_file');
+var exampleCode			= require('./example/func_code');
+var exampleCode_output	= require('./example/func_code_output');
 
 describe('#i18nc', function()
 {
@@ -12,15 +12,15 @@ describe('#i18nc', function()
 
 	it('#first', function()
 	{
-		var info = i18nc(example1.toString());
+		var info = i18nc(exampleCode.toString());
 
-		autoWriteFile('example1_output.js', 'module.exports = '+info.code);
+		autoWriteFile('func_code_output.js', 'module.exports = '+info.code, 'example');
 
-		expect(info.code.split('\n')).to.eql(example1_output.toString().split('\n'));
-		eval('var example1_new ='+info.code);
+		expect(info.code.split('\n')).to.eql(exampleCode_output.toString().split('\n'));
+		eval('var exampleCode_new ='+info.code);
 
 
-		expect(example1_new()).to.be(example1());
+		expect(exampleCode_new()).to.be(exampleCode());
 		expect(getTranslateWords(info.codeTranslateWords)).to.eql(translateWords);
 		expect(info.dirtyWords).to.empty();
 	});
@@ -28,15 +28,15 @@ describe('#i18nc', function()
 
 	it('#retry', function()
 	{
-		var info = i18nc(example1_output.toString());
+		var info = i18nc(exampleCode_output.toString());
 
-		autoWriteFile('example1_output_code.json', info.codeTranslateWords);
-		autoWriteFile('example1_output_func.json', info.funcTranslateWords);
+		autoWriteFile('func_code_output_code.json', info.codeTranslateWords, 'example');
+		autoWriteFile('func_code_output_func.json', info.funcTranslateWords, 'example');
 
-		expect(info.code.split('\n')).to.eql(example1_output.toString().split('\n'));
-		eval('var example1_new ='+info.code);
+		expect(info.code.split('\n')).to.eql(exampleCode_output.toString().split('\n'));
+		eval('var exampleCode_new ='+info.code);
 
-		expect(example1_new()).to.be(example1());
+		expect(exampleCode_new()).to.be(exampleCode());
 		expect(getTranslateWords(info.codeTranslateWords)).to.eql(translateWords);
 		expect(info.dirtyWords).to.empty();
 	});
