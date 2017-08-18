@@ -16,7 +16,7 @@ describe('#i18nc', function()
 
 		autoWriteFile('func_code_output.js', 'module.exports = '+info.code, 'example');
 
-		expect(info.code.split('\n')).to.eql(exampleCode_output.toString().split('\n'));
+		expect(code2arr(info.code)).to.eql(code2arr(exampleCode_output.toString()));
 		eval('var exampleCode_new ='+info.code);
 
 
@@ -33,7 +33,7 @@ describe('#i18nc', function()
 		autoWriteFile('func_code_output_code.json', info.codeTranslateWords, 'example');
 		autoWriteFile('func_code_output_func.json', info.funcTranslateWords, 'example');
 
-		expect(info.code.split('\n')).to.eql(exampleCode_output.toString().split('\n'));
+		expect(code2arr(info.code)).to.eql(code2arr(exampleCode_output.toString()));
 		eval('var exampleCode_new ='+info.code);
 
 		expect(exampleCode_new()).to.be(exampleCode());
@@ -54,3 +54,15 @@ function getTranslateWords(codeTranslateWords)
 	return _.uniq(translateWords).sort();
 }
 
+function code2arr(code)
+{
+	return code.split('\n')
+		.map(function(val)
+		{
+			return val.trim();
+		})
+		.filter(function(val)
+		{
+			return val;
+		});
+}
