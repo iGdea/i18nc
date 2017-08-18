@@ -1,14 +1,20 @@
 {
     "zh":
     {
-        "normal":
+        "<allfile>":
         {
             "DEFAULTS":
             {
-                "中文1": "indb db1"
+                "中文db <allfile>": "indb <allfile>"
             },
             "SUBTYPES":
-            {}
+            {
+                "subtype":
+                {
+                    "中文 allfile subtype1": "indb <allfile> subtype1",
+                    "中文 thisfile subtype2": "indb <allfile> subtype2"
+                }
+            }
         },
 
 
@@ -16,10 +22,20 @@
         {
             "DEFAULTS":
             {
-                "中文0": ["indb db1", "indb custom", "indb db2"]
+                "中文0":
+                [
+                    "indb <thisfile> db1",
+                    "indb <thisfile> custom",
+                    "indb <thisfile> db2"
+                ]
             },
             "SUBTYPES":
-            {}
+            {
+                "subtype":
+                {
+                    "中文 thisfile subtype2": ["indb <thisfile> subtype2"]
+                }
+            }
         }
     }
 }

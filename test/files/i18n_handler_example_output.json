@@ -32,6 +32,9 @@
 					"in_file 2",
 					"in_file 3",
 					"in_file 4"
+				],
+				"中文db <allfile>": [
+					"in file <allfile>"
 				]
 			},
 			"SUBTYPES": {
@@ -50,6 +53,12 @@
 					],
 					"中文3_empty": [
 						""
+					],
+					"中文 allfile subtype1": [
+						"in_file allfile subtype1"
+					],
+					"中文 thisfile subtype2": [
+						"in_file thisfile subtype2"
 					]
 				}
 			}
