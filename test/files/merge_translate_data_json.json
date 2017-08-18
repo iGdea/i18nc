@@ -16,8 +16,7 @@
 		"中文2": {
 			"zh": [
 				"in_file zh2",
-				"",
-				"in_file zh2_db"
+				""
 			]
 		},
 		"中文3_empty": {},
@@ -31,6 +30,12 @@
 			"zh": [
 				"",
 				""
+			]
+		},
+		"中文6_empty": {
+			"zh": [
+				"in_file 1",
+				"in_file 4"
 			]
 		}
 	},
@@ -46,8 +51,7 @@
 			"中文2": {
 				"zh": [
 					"in_file subtye_zh2",
-					"",
-					"in_file subtye_zh2_db"
+					""
 				]
 			},
 			"中文3_empty": {}
