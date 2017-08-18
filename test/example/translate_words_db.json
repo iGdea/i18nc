@@ -1,0 +1,23 @@
+{
+    "zh":
+    {
+        "normal":
+        {
+            "DEFAULTS":
+            {
+                "中文1": "db1"
+            },
+            "SUBTYPES":
+            {}
+        },
+        "I am a __FILE_KEY__":
+        {
+            "DEFAULTS":
+            {
+                "中文0": ["db1", "custom", "db2"]
+            },
+            "SUBTYPES":
+            {}
+        }
+    }
+}

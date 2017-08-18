@@ -4,30 +4,8 @@ module.exports =
 {
 	FILE_KEY			: funcInfo.__FILE_KEY__,
 	funcTranslateWords	: funcInfo.__TRANSLATE_JSON__,
-	dbTranslateWords:
-	{
-		zh:
-		{
-			normal:
-			{
-				DEFAULTS:
-				{
-					'中文1': 'db1'
-				},
-				SUBTYPES:
-				{}
-			},
-			'I am a __FILE_KEY__':
-			{
-				DEFAULTS:
-				{
-					'中文0': ['db1', 'custom', 'db2']
-				},
-				SUBTYPES:
-				{}
-			}
-		}
-	},
+
+	dbTranslateWords	: require('../example/translate_words_db.json'),
 
 	// test/example/example_code_output_code.json
 	codeTranslateWords:
