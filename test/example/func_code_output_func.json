@@ -1,33 +1,3 @@
 {
-	"default_file_key": {
-		"__FILE_KEY__ast": {
-			"type": "Literal",
-			"value": "default_file_key",
-			"raw": "\"default_file_key\"",
-			"range": [
-				2344,
-				2362
-			]
-		},
-		"__FILE_KEY__": "default_file_key",
-		"__FUNCTION_VERSION__ast": {
-			"type": "Literal",
-			"value": 1,
-			"raw": "1",
-			"range": [
-				2394,
-				2395
-			]
-		},
-		"__FUNCTION_VERSION__": 1,
-		"__TRANSLATE_JSON__ast": {
-			"type": "ObjectExpression",
-			"properties": [],
-			"range": [
-				3035,
-				3037
-			]
-		},
-		"__TRANSLATE_JSON__": {}
-	}
+	"default_file_key": {}
 }

@@ -47,6 +47,15 @@ describe('#i18n_function_generator', function()
 	});
 
 
+	it('#getTranslateJSON', function()
+	{
+		var args = require('./files/merge_translate_data.js');
+		var result = i18nFunctionGenerator.getTranslateJSON(args);
+
+		expect(result).to.eql(require('./files/merge_translate_data_output.json'));
+	});
+
+
 	it('#genTranslateJSONCode', function()
 	{
 		var data = require('./files/merge_translate_data_json.json');

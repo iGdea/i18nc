@@ -52,7 +52,7 @@ describe('#i18nc', function()
 		var exampleCode = require('./files/i18n_handler_example.js');
 		var dbTranslateWords = require('./example/translate_words_db');
 		exampleCode = 'module.exports = I18N;\n'+exampleCode.toString();
-		
+
 		it('#nocode', function()
 		{
 			var info = i18nc(exampleCode,
@@ -90,10 +90,12 @@ describe('#i18nc', function()
 
 			autoWriteFile('i18n_handler_example_i18nc_wdithcode_output_code.json', info.codeTranslateWords);
 			autoWriteFile('i18n_handler_example_i18nc_wdithcode_output_func.json', info.funcTranslateWords);
+			autoWriteFile('i18n_handler_example_i18nc_wdithcode_output_used.json', info.usedTranslateWords);
 			autoWriteFile('i18n_handler_example_i18nc_wdithcode_output_code.js', info.code);
 
 			expect(info.codeTranslateWords).to.eql(require('./files/i18n_handler_example_i18nc_wdithcode_output_code.json'));
 			expect(info.funcTranslateWords).to.eql(require('./files/i18n_handler_example_i18nc_wdithcode_output_func.json'));
+			expect(info.usedTranslateWords).to.eql(require('./files/i18n_handler_example_i18nc_wdithcode_output_used.json'));
 			expect(code2arr(info.code)).to.eql(code2arr(fs.readFileSync(__dirname+'/files/i18n_handler_example_i18nc_wdithcode_output_code.js').toString()));
 		})
 	});
