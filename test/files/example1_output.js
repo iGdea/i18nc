@@ -115,7 +115,7 @@ module.exports = function code()
 		 * 	key: [] || 'The translation is empty.'
 		 * }
 		 */
-		var __TRANSLATE_JSON__ = {"zh":{"DEFAULTS":{},"SUBTYPES":{}}};
+		var __TRANSLATE_JSON__ = {};
 
 		self.__TRANSLATE_LAN__ = LAN;
 		self.__TRANSLATE_LAN_JSON__ = __TRANSLATE_JSON__[LAN] || {};

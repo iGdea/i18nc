@@ -2,6 +2,7 @@ var debug					= require('debug')('i18nc:test_i18n_function_generator');
 var expect					= require('expect.js');
 var escodegen				= require('escodegen');
 var optionsUtils			= require('../lib/options');
+var autoWriteFile			= require('./files/auto_write_file');
 var i18nFunctionGenerator	= require('../lib/i18n_function_generator');
 
 describe('#i18n_function_generator', function()
@@ -21,5 +22,49 @@ describe('#i18n_function_generator', function()
 		var otherCode = escodegen.generate(otherAst, optionsUtils.escodegenOptions);
 
 		expect(resultCode).to.be(otherCode);
+	});
+
+
+	it('#mergeTranslateData', function()
+	{
+		var args = require('./files/merge_translate_data');
+		var result = i18nFunctionGenerator._mergeTranslateData(args);
+
+		autoWriteFile('merge_translate_data_json.json', result);
+
+		expect(result).to.eql(require('./files/merge_translate_data_json.json'));
+	});
+
+	it('#to_TRANSLATE_DATA_fromat', function()
+	{
+		var args = require('./files/merge_translate_data_json.json');
+		var result = i18nFunctionGenerator._to_TRANSLATE_DATA_fromat(args);
+
+		autoWriteFile('merge_translate_data_output.json', result);
+
+		expect(result).to.eql(require('./files/merge_translate_data_output.json'));
+	});
+
+
+	it('#genTranslateJSONCode', function()
+	{
+		var data = require('./files/merge_translate_data_json.json');
+		var result = i18nFunctionGenerator._to_TRANSLATE_DATA_fromat(data);
+
+		autoWriteFile('merge_translate_data_output.json', result);
+
+		expect(result).to.eql(require('./files/merge_translate_data_output.json'));
+	});
+
+
+	it('#translateJSON2ast', function()
+	{
+		var data = require('./files/merge_translate_data_output.json');
+		var resultAst = i18nFunctionGenerator._translateJSON2ast(data);
+		var resultCode = escodegen.generate(resultAst, optionsUtils.escodegenOptions);
+
+		autoWriteFile('merge_translate_data_output_code.js', resultCode);
+
+		// expect(resultCode).to.eql(require('./files/merge_translate_data_output.json'));
 	});
 });

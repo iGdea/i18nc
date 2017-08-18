@@ -1,0 +1,33 @@
+{
+	"zh": {
+		"DEFAULTS": {
+			"中文0": [
+				"db1",
+				"custom",
+				"db2"
+			],
+			"中文1": [
+				"zh1",
+				"custom1"
+			],
+			"中文2": [
+				"zh2",
+				"",
+				"zh2_db"
+			]
+		},
+		"SUBTYPES": {
+			"subtype": {
+				"中文1": [
+					"subtye_zh1",
+					"subtye_custom1"
+				],
+				"中文2": [
+					"subtye_zh2",
+					"",
+					"subtye_zh2_db"
+				]
+			}
+		}
+	}
+}
