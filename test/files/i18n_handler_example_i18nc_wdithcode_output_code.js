@@ -1,5 +1,4 @@
 module.exports = I18N;
-
 function I18N(msg, subtype)
 {
 	/**
@@ -49,35 +48,17 @@ function I18N(msg, subtype)
 		 * }
 		 */
 		var __TRANSLATE_JSON__ = {
-			"zh":
-			{
-				"DEFAULTS":
-				{
-					'中文0': 'in_file zh0',
-					'中文1': 'in_file custom1' || 'in_file zh1',
-					'中文2': 'in_file zh2_db' || [] || 'in_file zh2',
-
-					'中文3_empty': '',
-					'中文4_empty': '' || '',
-					'中文5_empty': [] || '',
-					'中文6_empty': 'in_file 4' || 'in_file 3' || 'in_file 2' || 'in_file 1',
-
-					'中文db <allfile>': 'in file <allfile>'
-				},
-				"SUBTYPES":
-				{
-					'subtype':
-					{
-						'中文0': 'in_file subtye_zh0',
-						'中文1': 'in_file ubtye_custom1' || 'in_file subtye_zh1',
-						'中文2': 'in_file subtye_zh2_db' || [] || 'in_file subtye_zh2',
-						'中文3_empty': '',
-						'中文 allfile subtype1': 'in_file allfile subtype1',
-						'中文 thisfile subtype2': 'in_file thisfile subtype2',
-					}
-				}
-			}
-		};
+    'zh': {
+        'DEFAULTS': {
+            '中文0': 'indb <thisfile> db2' || 'indb <thisfile> custom' || 'indb <thisfile> db1',
+            '中文1': 'in_file custom1' || 'in_file zh1',
+            '中文2': [] || 'in_file zh2',
+            '中文4_empty': [] || [],
+            '中文5_empty': [] || [],
+            '中文6_empty': 'in_file 4' || 'in_file 1'
+        }
+    }
+};
 
 		self.__TRANSLATE_LAN__ = LAN;
 		self.__TRANSLATE_LAN_JSON__ = __TRANSLATE_JSON__[LAN] || {};
@@ -97,4 +78,26 @@ function I18N(msg, subtype)
 		return ''+result;
 	else
 		return result;
+}
+var codeJSON = {
+	"DEFAULTS": [
+		I18N('中文0'),
+		I18N('中文1'),
+		I18N('中文2'),
+		I18N('中文3_empty'),
+		I18N('中文4_empty'),
+		I18N('中文5_empty'),
+		I18N('中文6_empty'),
+		I18N('中文db ') + '<allfile>'
+	],
+	"SUBTYPES": {
+		"subtype": [
+			I18N('中文0'),
+			I18N('中文1'),
+			I18N('中文2'),
+			I18N('中文3_empty'),
+			I18N('中文 allfile subtype1'),
+			I18N('中文 thisfile subtype2')
+		]
+	}
 }
