@@ -1,3 +1,4 @@
+var fs						= require('fs');
 var debug					= require('debug')('i18nc:test_i18n_function_generator');
 var expect					= require('expect.js');
 var escodegen				= require('escodegen');
@@ -65,6 +66,22 @@ describe('#i18n_function_generator', function()
 
 		autoWriteFile('merge_translate_data_output_code.js', resultCode);
 
-		// expect(resultCode).to.eql(require('./files/merge_translate_data_output.json'));
+		var otherCode = fs.readFileSync(__dirname+'/files/merge_translate_data_output_code.js').toString();
+
+		expect(code2arr(resultCode)).to.eql(code2arr(otherCode));
 	});
 });
+
+
+function code2arr(code)
+{
+	return code.split('\n')
+		.map(function(val)
+		{
+			return val.trim();
+		})
+		.filter(function(val)
+		{
+			return val;
+		});
+}
