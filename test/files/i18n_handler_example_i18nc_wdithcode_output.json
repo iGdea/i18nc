@@ -84,8 +84,6 @@
 			"zh": {
 				"DEFAULTS": {
 					"中文0": [
-						"indb <thisfile> db1",
-						"indb <thisfile> custom",
 						"indb <thisfile> db2"
 					],
 					"中文1": [
