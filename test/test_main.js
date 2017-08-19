@@ -116,6 +116,15 @@ describe('#i18nc', function()
 			expect(code2arr(info.code)).to.eql(code2arr(fs.readFileSync(__dirname+'/files/func_code_noi18n_output_noclosure.js').toString()));
 		});
 
+		it('#define', function()
+		{
+			var exampleCode = require('./files/func_code_noi18n_define').toString();
+			var info = i18nc(exampleCode);
+
+			autoWriteFile('func_code_noi18n_define_output.js', info.code);
+
+			expect(code2arr(info.code)).to.eql(code2arr(fs.readFileSync(__dirname+'/files/func_code_noi18n_define_output.js').toString()));
+		});
 	});
 });
 
