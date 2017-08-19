@@ -1,0 +1,38 @@
+{
+	"codeTranslateWords": {
+		"DEFAULTS": [
+			"中文0",
+			"中文1",
+			"2中文4中文5",
+			"中文span",
+			"中文span2",
+			"中文span3",
+			"中文2",
+			"中文3",
+			"中文key",
+			"中文val",
+			"再来",
+			"2中",
+			"我中文们",
+			"一般不会吧",
+			"中午呢",
+			"中文呢？",
+			"中文I18N"
+		],
+		"SUBTYPES": {
+			"haha": [
+				"中文I18N",
+				"中文I18N2"
+			],
+			"subtype": [
+				"I18N(中文)"
+			]
+		}
+	},
+	"funcTranslateWords": {
+		"func_code_file_key": {}
+	},
+	"usedTranslateWords": {
+		"func_code_file_key": {}
+	}
+}

@@ -73,9 +73,9 @@ describe('#i18n_function_generator', function()
 		var resultAst = i18nFunctionGenerator._translateJSON2ast(data);
 		var resultCode = escodegen.generate(resultAst, optionsUtils.escodegenOptions);
 
-		autoWriteFile('merge_translate_data_output_code.js', resultCode);
+		autoWriteFile('merge_translate_data_output.js', resultCode);
 
-		var otherCode = fs.readFileSync(__dirname+'/files/merge_translate_data_output_code.js').toString();
+		var otherCode = fs.readFileSync(__dirname+'/files/merge_translate_data_output.js').toString();
 
 		expect(code2arr(resultCode)).to.eql(code2arr(otherCode));
 	});

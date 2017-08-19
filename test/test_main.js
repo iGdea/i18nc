@@ -33,8 +33,7 @@ describe('#i18nc', function()
 		{
 			var info = i18nc(exampleCode_output.toString());
 
-			autoWriteFile('func_code_output_code.json', info.codeTranslateWords, 'example');
-			autoWriteFile('func_code_output_func.json', info.funcTranslateWords, 'example');
+			autoWriteFile('func_code_output.json', getOutputJSON(info), 'example');
 
 			expect(code2arr(info.code)).to.eql(code2arr(exampleCode_output.toString()));
 			eval('var exampleCode_new ='+info.code);
@@ -60,13 +59,11 @@ describe('#i18nc', function()
 				dbTranslateWords: dbTranslateWords
 			});
 
-			autoWriteFile('i18n_handler_example_i18nc_nocode_output_code.json', info.codeTranslateWords);
-			autoWriteFile('i18n_handler_example_i18nc_nocode_output_func.json', info.funcTranslateWords);
-			autoWriteFile('i18n_handler_example_i18nc_nocode_output_code.js', info.code);
+			autoWriteFile('i18n_handler_example_i18nc_nocode_output.json', getOutputJSON(info));
+			autoWriteFile('i18n_handler_example_i18nc_nocode_output.js', info.code);
 
-			expect(info.codeTranslateWords).to.eql(require('./files/i18n_handler_example_i18nc_nocode_output_code.json'));
-			expect(info.funcTranslateWords).to.eql(require('./files/i18n_handler_example_i18nc_nocode_output_func.json'));
-			expect(code2arr(info.code)).to.eql(code2arr(fs.readFileSync(__dirname+'/files/i18n_handler_example_i18nc_nocode_output_code.js').toString()));
+			expect(getOutputJSON(info)).to.eql(require('./files/i18n_handler_example_i18nc_nocode_output.json'));
+			expect(code2arr(info.code)).to.eql(code2arr(fs.readFileSync(__dirname+'/files/i18n_handler_example_i18nc_nocode_output.js').toString()));
 		});
 
 		it('#widthcode', function()
@@ -88,19 +85,24 @@ describe('#i18nc', function()
 				dbTranslateWords: dbTranslateWords
 			});
 
-			autoWriteFile('i18n_handler_example_i18nc_wdithcode_output_code.json', info.codeTranslateWords);
-			autoWriteFile('i18n_handler_example_i18nc_wdithcode_output_func.json', info.funcTranslateWords);
-			autoWriteFile('i18n_handler_example_i18nc_wdithcode_output_used.json', info.usedTranslateWords);
-			autoWriteFile('i18n_handler_example_i18nc_wdithcode_output_code.js', info.code);
+			autoWriteFile('i18n_handler_example_i18nc_wdithcode_output.json', getOutputJSON(info));
+			autoWriteFile('i18n_handler_example_i18nc_wdithcode_output.js', info.code);
 
-			expect(info.codeTranslateWords).to.eql(require('./files/i18n_handler_example_i18nc_wdithcode_output_code.json'));
-			expect(info.funcTranslateWords).to.eql(require('./files/i18n_handler_example_i18nc_wdithcode_output_func.json'));
-			expect(info.usedTranslateWords).to.eql(require('./files/i18n_handler_example_i18nc_wdithcode_output_used.json'));
-			expect(code2arr(info.code)).to.eql(code2arr(fs.readFileSync(__dirname+'/files/i18n_handler_example_i18nc_wdithcode_output_code.js').toString()));
-		})
+			expect(getOutputJSON(info)).to.eql(require('./files/i18n_handler_example_i18nc_wdithcode_output.json'));
+			expect(code2arr(info.code)).to.eql(code2arr(fs.readFileSync(__dirname+'/files/i18n_handler_example_i18nc_wdithcode_output.js').toString()));
+		});
 	});
 });
 
+
+function getOutputJSON(info)
+{
+	return {
+		codeTranslateWords: info.codeTranslateWords,
+		funcTranslateWords: info.funcTranslateWords,
+		usedTranslateWords: info.usedTranslateWords
+	};
+}
 
 function getTranslateWords(codeTranslateWords)
 {
