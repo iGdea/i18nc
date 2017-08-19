@@ -1,4 +1,4 @@
-{
+module.exports = {
 	'zh': {
 		'DEFAULTS': {
 			'中文0': 'indb <thisfile> db2',
