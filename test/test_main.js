@@ -92,6 +92,31 @@ describe('#i18nc', function()
 			expect(code2arr(info.code)).to.eql(code2arr(fs.readFileSync(__dirname+'/files/i18n_handler_example_i18nc_wdithcode_output.js').toString()));
 		});
 	});
+
+
+	describe('#insert', function()
+	{
+		it('#noI18N', function()
+		{
+			var exampleCode = require('./files/func_code_noi18n').toString();
+			var info = i18nc(exampleCode);
+
+			autoWriteFile('func_code_noi18n_output.js', info.code);
+
+			expect(code2arr(info.code)).to.eql(code2arr(fs.readFileSync(__dirname+'/files/func_code_noi18n_output.js').toString()));
+		});
+
+		it('#noI18N noclosure', function()
+		{
+			var exampleCode = require('./files/func_code_noi18n').toString();
+			var info = i18nc(exampleCode, {isClosureWhenInsertedHead: false});
+
+			autoWriteFile('func_code_noi18n_output_noclosure.js', info.code);
+
+			expect(code2arr(info.code)).to.eql(code2arr(fs.readFileSync(__dirname+'/files/func_code_noi18n_output_noclosure.js').toString()));
+		});
+
+	});
 });
 
 
