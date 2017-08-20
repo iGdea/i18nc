@@ -30,9 +30,31 @@
 		}
 	},
 	"funcTranslateWords": {
-		"func_code_file_key": {}
+		"func_code_file_key": {
+			"tw": {
+				"SUBTYPES": {
+					"subtype": {
+						"I18N(中文)": [
+							"",
+							"I18N(中文)"
+						]
+					}
+				}
+			}
+		}
 	},
 	"usedTranslateWords": {
-		"func_code_file_key": {}
+		"func_code_file_key": {
+			"tw": {
+				"SUBTYPES": {
+					"subtype": {
+						"I18N(中文)": [
+							"",
+							"I18N(中文)"
+						]
+					}
+				}
+			}
+		}
 	}
 }

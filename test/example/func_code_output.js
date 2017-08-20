@@ -115,7 +115,7 @@ module.exports = function code()
 			 * 	key: [] || 'The translation is empty.'
 			 * }
 			 */
-			var __TRANSLATE_JSON__ = {};
+			var __TRANSLATE_JSON__ = { 'tw': { 'SUBTYPES': { 'subtype': { 'I18N(中文)': 'I18N(中文)' || [] } } } };
 
 			self.__TRANSLATE_LAN__ = LAN;
 			self.__TRANSLATE_LAN_JSON__ = __TRANSLATE_JSON__[LAN] || {};
