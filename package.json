@@ -1,6 +1,6 @@
 {
   "name": "i18nc",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "i18n",
   "main": "index.js",
   "scripts": {
