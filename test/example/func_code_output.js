@@ -23,48 +23,39 @@ module.exports = function code()
 
     function print(msg)
     {
-        return I18N('再来') + msg;
+        return I18N('再来一句，') + msg;
     }
 
     // 中文注释
-    result += print(I18N('2中'));     // 中文注释
+    result += print(I18N('print中文'));     // 中文注释
 
-    function switch_print(a)
+    function switch_print(name)
     {
-        switch(a)
+        switch(name)
         {
-            case I18N('我中文们'):
-                result += I18N('我中文们');
-                break;
-
-            case 11+I18N('我中文们'):
-                result += 11+I18N('我中文们');
-                break;
-
-            case c5[I18N('中文key')]:
-                result += 11+c5[I18N('中文key')];
-                break;
-
-            case print(I18N('一般不会吧'))+I18N('我中文们'):
-                result += print(I18N('一般不会吧'))+I18N('我中文们');
+            case I18N('中文case'):
+            case 11+I18N('中文case+数字'):
+            case c5[I18N('中文key')]+I18N('中文case+objkey'):
+            case print(I18N('run 中文'))+I18N('中文case+handler'):
+                result += name;
                 break;
         }
     }
 
-    switch_print(I18N('我中文们'));
-    switch_print(11+I18N('我中文们'));
-    switch_print(c5[I18N('中文key')]);
-    switch_print(print(I18N('一般不会吧'))+I18N('我中文们'));
+    switch_print(I18N('中文case'));
+    switch_print(11+I18N('中文case+数字'));
+    switch_print(c5[I18N('中文key')]+I18N('中文case+objkey'));
+    switch_print(print(I18N('run 中文'))+I18N('中文case+handler'));
 
 
-    if (!!I18N('我中文们'))
+    if (!!I18N('中文if'))
     {
-        result += true ? I18N('中午呢') : I18N('中文呢？')
+        result += true ? I18N('中午true') : I18N('中文false')
     }
 
     I18N('中文I18N');
-    I18N('中文I18N', 'haha');
-    I18N('中文I18N2', 'haha');
+    I18N('中文I18N subtype', 'subtype');
+    I18N('中文I18N subtype', 'subtype');
 
     // I18N
 	function I18N(msg, subtype)
@@ -115,7 +106,13 @@ module.exports = function code()
 			 * 	key: [] || 'The translation is empty.'
 			 * }
 			 */
-			var __TRANSLATE_JSON__ = { 'tw': { 'SUBTYPES': { 'subtype': { 'I18N(中文)': 'I18N(中文)' || [] } } } };
+			var __TRANSLATE_JSON__ = {
+					'tw': { 'SUBTYPES': { 'subtype': { 'I18N(中文)': 'I18N(中文)' || [] } } },
+					'zh': {
+						'DEFAULTS': { '中文key': '中文键' },
+						'SUBTYPES': { 'subtype': { 'I18N(中文)': '中文国际化' } }
+					}
+				};
 
 			self.__TRANSLATE_LAN__ = LAN;
 			self.__TRANSLATE_LAN_JSON__ = __TRANSLATE_JSON__[LAN] || {};
@@ -138,6 +135,7 @@ module.exports = function code()
 	}
 
     result += I18N('I18N(中文)', 'subtype');
+    result += I18N('I18N(中文)', 'subtype2');
 
 
     return result;

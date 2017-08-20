@@ -1,8 +1,9 @@
-var _				= require('lodash');
-var fs				= require('fs');
-var expect			= require('expect.js');
-var i18nc			= require('../');
-var autoWriteFile	= require('./files/auto_write_file');
+var _					= require('lodash');
+var fs					= require('fs');
+var expect				= require('expect.js');
+var i18nc				= require('../');
+var autoWriteFile		= require('./files/auto_write_file');
+var dbTranslateWords	= require('./example/translate_words_db');
 
 describe('#i18nc', function()
 {
@@ -10,18 +11,21 @@ describe('#i18nc', function()
 	{
 		var exampleCode			= require('./example/func_code');
 		var exampleCode_output	= require('./example/func_code_output');
-		var translateWords		= ['中文0', '中文1', '2中文4中文5', '中文span', '中文span2', '中文span3', '中文2', '中文3', '中文key', '中文val', '再来', '2中', '我中文们', '一般不会吧', '中午呢', '中文呢？', 'I18N(中文)', '中文I18N', '中文I18N2'].sort();
+		var translateWords		= ["2中文4中文5","I18N(中文)","print中文","run 中文","中午true","中文0","中文1","中文2","中文3","中文I18N","中文I18N subtype","中文case","中文case+handler","中文case+objkey","中文case+数字","中文false","中文if","中文key","中文span","中文span2","中文span3","中文val","再来一句，"].sort();
 
 
 		it('#first', function()
 		{
-			var info = i18nc(exampleCode.toString());
+			var info = i18nc(exampleCode.toString(),
+				{
+					dbTranslateWords: dbTranslateWords
+				});
 
 			autoWriteFile('func_code_output.js', 'module.exports = '+info.code, 'example');
 
 			expect(code2arr(info.code)).to.eql(code2arr(exampleCode_output.toString()));
 			eval('var exampleCode_new ='+info.code);
-
+			// console.log(JSON.stringify(getTranslateWords(info.codeTranslateWords)));
 
 			expect(exampleCode_new()).to.be(exampleCode());
 			expect(getTranslateWords(info.codeTranslateWords)).to.eql(translateWords);
@@ -31,7 +35,10 @@ describe('#i18nc', function()
 
 		it('#retry', function()
 		{
-			var info = i18nc(exampleCode_output.toString());
+			var info = i18nc(exampleCode_output.toString(),
+				{
+					dbTranslateWords: dbTranslateWords
+				});
 
 			autoWriteFile('func_code_output.json', getOutputJSON(info), 'example');
 
@@ -49,7 +56,6 @@ describe('#i18nc', function()
 	describe('#widthdb funcData', function()
 	{
 		var exampleCode = require('./files/i18n_handler_example.js');
-		var dbTranslateWords = require('./example/translate_words_db');
 		exampleCode = 'module.exports = I18N;\n'+exampleCode.toString();
 
 		it('#nocode', function()

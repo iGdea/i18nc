@@ -36,6 +36,22 @@
                     "中文 thisfile subtype2": ["indb <thisfile> subtype2"]
                 }
             }
+        },
+
+        "func_code_file_key":
+        {
+            "DEFAULTS":
+            {
+                "中文key": ["中文键"],
+                "I18N(中文)": ["国际化中文"]
+            },
+            "SUBTYPES":
+            {
+                "subtype":
+                {
+                    "I18N(中文)": ["中文国际化"]
+                }
+            }
         }
     }
 }

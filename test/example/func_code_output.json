@@ -11,20 +11,24 @@
 			"中文3",
 			"中文key",
 			"中文val",
-			"再来",
-			"2中",
-			"我中文们",
-			"一般不会吧",
-			"中午呢",
-			"中文呢？",
+			"再来一句，",
+			"print中文",
+			"中文case",
+			"中文case+数字",
+			"中文case+objkey",
+			"run 中文",
+			"中文case+handler",
+			"中文if",
+			"中午true",
+			"中文false",
 			"中文I18N"
 		],
 		"SUBTYPES": {
-			"haha": [
-				"中文I18N",
-				"中文I18N2"
-			],
 			"subtype": [
+				"中文I18N subtype",
+				"I18N(中文)"
+			],
+			"subtype2": [
 				"I18N(中文)"
 			]
 		}
@@ -40,11 +44,39 @@
 						]
 					}
 				}
+			},
+			"zh": {
+				"DEFAULTS": {
+					"中文key": [
+						"中文键"
+					]
+				},
+				"SUBTYPES": {
+					"subtype": {
+						"I18N(中文)": [
+							"中文国际化"
+						]
+					}
+				}
 			}
 		}
 	},
 	"usedTranslateWords": {
 		"func_code_file_key": {
+			"zh": {
+				"DEFAULTS": {
+					"中文key": [
+						"中文键"
+					]
+				},
+				"SUBTYPES": {
+					"subtype": {
+						"I18N(中文)": [
+							"中文国际化"
+						]
+					}
+				}
+			},
 			"tw": {
 				"SUBTYPES": {
 					"subtype": {
