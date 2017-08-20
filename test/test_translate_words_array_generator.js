@@ -72,6 +72,15 @@ describe('#chooseWord', function()
 			['func1', 'func custom', 'func2', 'func custom2'],
 			['func1', 'func custom', 'func2', 'func custom2']
 		]);
+
+		_genIt(['func1', 'func custom', 'func2', 'func custom2', 'func custom3'],
+		[
+			['func1', 'func custom', 'func2', 'func custom3'],
+			['func1', 'func custom', 'func2', 'func custom3'],
+			['func1', 'func custom', 'func2', 'func custom3'],
+			['func1', 'func custom', 'func2', 'func custom3'],
+			['func1', 'func custom', 'func2', 'func custom3']
+		]);
 	});
 
 	describe('#same 1', function()
@@ -111,6 +120,15 @@ describe('#chooseWord', function()
 			['db1', 'func custom', 'func2', 'func custom2'],
 			['db1', 'func custom', 'func2', 'func custom2']
 		]);
+
+		_genIt(['db1', 'func custom', 'func2', 'func custom2', 'func custom3'],
+		[
+			['db1', 'func custom', 'func2', 'func custom3'],
+			['db1', 'func custom', 'func2', 'func custom3'],
+			['db1', 'func custom', 'func2', 'func custom3'],
+			['db1', 'func custom', 'func2', 'func custom3'],
+			['db1', 'func custom', 'func2', 'func custom3']
+		]);
 	});
 
 
@@ -142,6 +160,15 @@ describe('#chooseWord', function()
 			['func1', 'db custom', 'func2', 'func custom2'],
 			['func1', 'db custom', 'func2', 'func custom2']
 		]);
+
+		_genIt(['func1', 'db custom', 'func2', 'func custom2', 'func custom3'],
+		[
+			['func1', 'db custom', 'func2', 'func custom3'],
+			['func1', 'db custom', 'func2', 'func custom3'],
+			['func1', 'db custom', 'func2', 'func custom3'],
+			['func1', 'db custom', 'func2', 'func custom3'],
+			['func1', 'db custom', 'func2', 'func custom3']
+		]);
 	});
 
 	describe('#same 3', function()
@@ -162,6 +189,15 @@ describe('#chooseWord', function()
 			['func1', 'func custom', 'db2', 'func custom2'],
 			['func1', 'func custom', 'db2', 'func custom2'],
 			['func1', 'func custom', 'db2', 'func custom2']
+		]);
+
+		_genIt(['func1', 'func custom', 'db2', 'func custom2', 'func custom3'],
+		[
+			['func1', 'func custom', 'db2', 'func custom3'],
+			['func1', 'func custom', 'db2', 'func custom3'],
+			['func1', 'func custom', 'db2', 'func custom3'],
+			['func1', 'func custom', 'db2', 'func custom3'],
+			['func1', 'func custom', 'db2', 'func custom3']
 		]);
 	});
 
@@ -194,6 +230,15 @@ describe('#chooseWord', function()
 			['db1', 'db custom', 'func2', 'func custom2'],
 			['db1', 'db custom', 'func2', 'func custom2']
 		]);
+
+		_genIt(['db1', 'db custom', 'func2', 'func custom2', 'func custom3'],
+		[
+			['db1', 'db custom', 'func2', 'func custom3'],
+			['db1', 'db custom', 'func2', 'func custom3'],
+			['db1', 'db custom', 'func2', 'func custom3'],
+			['db1', 'db custom', 'func2', 'func custom3'],
+			['db1', 'db custom', 'func2', 'func custom3']
+		]);
 	});
 
 	describe('#same 1,2,3', function()
@@ -214,6 +259,15 @@ describe('#chooseWord', function()
 			['db1', 'db custom', 'db2', 'func custom2'],
 			['db1', 'db custom', 'db2', 'func custom2'],
 			['db1', 'db custom', 'db2', 'func custom2']
+		]);
+
+		_genIt(['db1', 'db custom', 'db2', 'func custom2', 'func custom3'],
+		[
+			['db1', 'db custom', 'db2', 'func custom3'],
+			['db1', 'db custom', 'db2', 'func custom3'],
+			['db1', 'db custom', 'db2', 'func custom3'],
+			['db1', 'db custom', 'db2', 'func custom3'],
+			['db1', 'db custom', 'db2', 'func custom3']
 		]);
 	});
 });
