@@ -43,6 +43,7 @@ function I18N(msg, subtype)
 		 * 	normail_key: dbTranlateResult,
 		 * 	use_modified_key: codeModifieResult || prevDBTranlateResult,
 		 * 	use_newdb_key: newDBTranlateResult || codeModifieResult || prevDBTranlateResult
+		 * 	force_modified_key: forceCodeModifieResult || newDBTranlateResult || codeModifieResult || prevDBTranlateResult
 		 * }
 		 *
 		 * @tips Use an empty array to represent an empty string.
@@ -121,6 +122,7 @@ function I18N(msg, subtype)
 		 * 	normail_key: dbTranlateResult,
 		 * 	use_modified_key: codeModifieResult || prevDBTranlateResult,
 		 * 	use_newdb_key: newDBTranlateResult || codeModifieResult || prevDBTranlateResult
+		 * 	force_modified_key: forceCodeModifieResult || newDBTranlateResult || codeModifieResult || prevDBTranlateResult
 		 * }
 		 *
 		 * @tips Use an empty array to represent an empty string.
