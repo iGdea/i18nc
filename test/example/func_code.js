@@ -10,7 +10,7 @@ module.exports = function code()
     var c5 = {
         d1: '中文1',
         d2: ['中文2', '中文3'],
-        // '中文4': '中文4',
+        '中文key in object': '中文val in object',
         c6: function(){}
     }
 

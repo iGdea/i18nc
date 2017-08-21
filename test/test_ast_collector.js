@@ -4,4 +4,5 @@ var AstCollector	= require('../lib/ast_collector').AstCollector;
 describe('#AstCollector', function()
 {
 	it('#ignore scan', function(){});
+	it('#isIgnoreScanWarn', function(){});
 });
