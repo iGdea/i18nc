@@ -2,6 +2,7 @@ var esprima			= require('esprima');
 var expect			= require('expect.js');
 var ASTCollector	= require('../lib/ast_collector').ASTCollector;
 var optionsUtils	= require('../lib/options');
+var astUtils		= require('../lib/ast_utils');
 
 describe('#ASTCollector', function()
 {
@@ -41,13 +42,11 @@ describe('#ASTCollector', function()
 		var collect = getCollect(code);
 		var words = collect.translateWordAsts.map(function(item, index)
 			{
-				if (index == 1)
-					expect(item.__i18n_skip_replace__).to.be(true);
-				else
-					expect(item.__i18n_skip_replace__).to.be(undefined);
-
 				return item.__i18n_replace_info__.translateWords;
 			});
+		expect(!!astUtils.checkAstFlag(collect.translateWordAsts[0], astUtils.AST_FLAGS.SKIP_REPLACE)).to.be(false);
+
+		expect(!!astUtils.checkAstFlag(collect.translateWordAsts[1], astUtils.AST_FLAGS.SKIP_REPLACE)).to.be(true);
 
 		expect(words).to.eql([['中文'], ['这个中文还在']]);
 	});
