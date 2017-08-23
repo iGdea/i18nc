@@ -117,7 +117,7 @@ module.exports = function code()
 					{
 						'subtype':
 						{
-							'简体++': '簡體--',
+							'简体++': '簡體++',
 							'I18N(中文)': 'I18N(中文)'
 						}
 					}
