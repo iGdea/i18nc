@@ -22,7 +22,7 @@ describe('#i18n_function_generator', function()
 			});
 		var otherCode = escodegen.generate(otherAst, optionsUtils.escodegenOptions);
 
-		expect(resultCode).to.be(otherCode);
+		expect(code2arr(resultCode)).to.be(code2arr(otherCode));
 	});
 
 

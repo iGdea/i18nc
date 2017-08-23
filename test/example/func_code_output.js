@@ -107,7 +107,7 @@ module.exports = function code()
 			 * }
 			 */
 			var __TRANSLATE_JSON__ = {
-					'tw': { 'SUBTYPES': { 'subtype': { 'I18N(中文)': 'I18N(中文)' || [] } } },
+					'tw': { 'SUBTYPES': { 'subtype': { 'I18N(中文)': 'I18N(中文)' || '' } } },
 					'zh': {
 						'DEFAULTS': { '中文key': '中文键' },
 						'SUBTYPES': { 'subtype': { 'I18N(中文)': '中文国际化' } }
