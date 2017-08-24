@@ -1,4 +1,6 @@
 ;(function(){
+
+
 function I18N(msg, subtype)
 {
 	/**
