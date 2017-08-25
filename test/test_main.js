@@ -187,6 +187,17 @@ describe('#i18nc', function()
 
 			expect(code2arr(info.code)).to.eql(code2arr(fs.readFileSync(__dirname+'/files/func_code_i18n_define_output.js').toString()));
 		});
+
+
+		it('#no words', function()
+		{
+			var exampleCode = require('./files/func_code_i18n_nowords').toString();
+			var info = i18nc(exampleCode);
+
+			autoWriteFile('func_code_i18n_nowords_output.js', info.code);
+
+			expect(code2arr(info.code)).to.eql(code2arr(fs.readFileSync(__dirname+'/files/func_code_i18n_nowords_output.js').toString()));
+		});
 	});
 });
 
