@@ -6,6 +6,8 @@
 			"run 中文",
 			"run 中文",
 			"中午true",
+			"中文 only db",
+			"中文 only file",
 			"中文0",
 			"中文1",
 			"中文1",
@@ -47,6 +49,12 @@
 	"funcTranslateWords": {
 		"func_code_file_key": {
 			"tw": {
+				"DEFAULTS": {
+					"中文 only file": [
+						"",
+						"中文只在文件"
+					]
+				},
 				"SUBTYPES": {
 					"subtype": {
 						"I18N(中文)": [
@@ -58,6 +66,9 @@
 			},
 			"zh": {
 				"DEFAULTS": {
+					"中文 only db": [
+						"中文只在数据库"
+					],
 					"中文key": [
 						"中文键"
 					]
@@ -76,6 +87,9 @@
 		"func_code_file_key": {
 			"zh": {
 				"DEFAULTS": {
+					"中文 only db": [
+						"中文只在数据库"
+					],
 					"中文key": [
 						"中文键"
 					]
@@ -89,6 +103,12 @@
 				}
 			},
 			"tw": {
+				"DEFAULTS": {
+					"中文 only file": [
+						"",
+						"中文只在文件"
+					]
+				},
 				"SUBTYPES": {
 					"subtype": {
 						"I18N(中文)": [

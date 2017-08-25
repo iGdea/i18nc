@@ -4,6 +4,8 @@ module.exports = function code()
     result = I18N('中文0');
     result += I18N('中文1')+1;
     result += "123"+2;
+    result += I18N('中文 only db');
+    result += I18N('中文 only file');
     result += I18N('2中文4中文5');     // 中文注释
     result += '<span>' + I18N('中文span') + '</span>' + I18N('中文span2') + '<span>' + I18N('中文span3')+0;
 
@@ -107,9 +109,15 @@ module.exports = function code()
 			 * }
 			 */
 			var __TRANSLATE_JSON__ = {
-					'tw': { 'SUBTYPES': { 'subtype': { 'I18N(中文)': 'I18N(中文)' || '' } } },
+					'tw': {
+						'DEFAULTS': { '中文 only file': '中文只在文件' || '' },
+						'SUBTYPES': { 'subtype': { 'I18N(中文)': 'I18N(中文)' || '' } }
+					},
 					'zh': {
-						'DEFAULTS': { '中文key': '中文键' },
+						'DEFAULTS': {
+							'中文 only db': '中文只在数据库',
+							'中文key': '中文键'
+						},
 						'SUBTYPES': { 'subtype': { 'I18N(中文)': '中文国际化' } }
 					}
 				};

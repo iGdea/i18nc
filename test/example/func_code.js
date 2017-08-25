@@ -4,6 +4,8 @@ module.exports = function code()
     result = "中文0";
     result += "中文1"+1;
     result += "123"+2;
+    result += "中文 only db";
+    result += "中文 only file";
     result += '2中文4中文5';     // 中文注释
     result += "<span>中文span</span>中文span2<span>中文span3"+0;
 
@@ -112,6 +114,7 @@ module.exports = function code()
 					"DEFAULTS":
 					{
 						'简体': '簡體',
+						'中文 only file': '' || '中文只在文件'
 					},
 					"SUBTYPES":
 					{

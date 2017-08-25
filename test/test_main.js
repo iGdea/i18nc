@@ -11,7 +11,7 @@ describe('#i18nc', function()
 	{
 		var exampleCode			= require('./example/func_code');
 		var exampleCode_output	= require('./example/func_code_output');
-		var translateWords		= ["2中文4中文5","I18N(中文)","print中文","run 中文","中午true","中文0","中文1","中文2","中文3","中文I18N","中文I18N subtype","中文case","中文case+handler","中文case+objkey","中文case+数字","中文false","中文if","中文key","中文span","中文span2","中文span3","中文val","再来一句，","中文val in object"].sort();
+		var translateWords		= ["2中文4中文5","I18N(中文)","print中文","run 中文","中午true","中文0","中文1","中文2","中文3","中文I18N","中文I18N subtype","中文case","中文case+handler","中文case+objkey","中文case+数字","中文false","中文if","中文key","中文span","中文span2","中文span3","中文val","再来一句，","中文val in object","中文 only db","中文 only file"].sort();
 
 
 		it('#first', function()
