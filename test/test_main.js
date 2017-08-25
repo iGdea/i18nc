@@ -102,7 +102,7 @@ describe('#i18nc', function()
 	});
 
 
-	describe('#insert', function()
+	describe('#insert when noi18n', function()
 	{
 		it('#noI18N', function()
 		{
@@ -145,6 +145,47 @@ describe('#i18nc', function()
 			autoWriteFile('func_code_noi18n_define_output_notdefine.js', info.code);
 
 			expect(code2arr(info.code)).to.eql(code2arr(fs.readFileSync(__dirname+'/files/func_code_noi18n_define_output_notdefine.js').toString()));
+		});
+	});
+
+	describe('#simple i18n', function()
+	{
+		it('#one i18n', function()
+		{
+			var exampleCode = require('./files/func_code_i18n').toString();
+			var info = i18nc(exampleCode);
+
+			autoWriteFile('func_code_i18n_output.js', info.code);
+
+			expect(code2arr(info.code)).to.eql(code2arr(fs.readFileSync(__dirname+'/files/func_code_i18n_output.js').toString()));
+		});
+
+		it('#define and scope', function()
+		{
+			var exampleCode = require('./files/func_code_i18n_define').toString();
+			var info = i18nc(exampleCode,
+				{
+					dbTranslateWords:
+					{
+						zh:
+						{
+							'<allfile>':
+							{
+								DEFAULTS:
+								{
+									'global 中文1': 'global 中文1',
+									'define1 中文': 'define1 中文',
+									'define2 中文': 'define2 中文',
+									'global 中文2': 'global 中文2'
+								}
+							}
+						}
+					}
+				});
+
+			autoWriteFile('func_code_i18n_define_output.js', info.code);
+
+			expect(code2arr(info.code)).to.eql(code2arr(fs.readFileSync(__dirname+'/files/func_code_i18n_define_output.js').toString()));
 		});
 	});
 });
