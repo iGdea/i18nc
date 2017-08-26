@@ -177,11 +177,10 @@ describe('#ASTCollector', function()
 function getCollect(code, options)
 {
 	var ast = esprima.parse(code.toString(), optionsUtils.esprimaOptions);
-	return new ASTCollector(options).collect(ast);
+	return new ASTCollector(optionsUtils.extend(options)).collect(ast);
 }
 
 function getFinalCollect()
 {
 	return getCollect.apply(this, arguments).squeeze();
 }
-
