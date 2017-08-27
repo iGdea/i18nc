@@ -1,5 +1,5 @@
 module.exports = {
-	'zh': {
+	'en': {
 		'DEFAULTS': {
 			'中文0': 'indb <thisfile> db2',
 			'中文1': 'in_file custom1' || 'in_file zh1',

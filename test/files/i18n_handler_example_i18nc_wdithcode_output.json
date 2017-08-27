@@ -20,7 +20,7 @@
 	},
 	"funcTranslateWords": {
 		"i18n_handler_example": {
-			"zh": {
+			"en": {
 				"DEFAULTS": {
 					"中文0": [
 						"in_file zh0"
@@ -82,7 +82,7 @@
 	},
 	"usedTranslateWords": {
 		"i18n_handler_example": {
-			"zh": {
+			"en": {
 				"DEFAULTS": {
 					"中文0": [
 						"indb <thisfile> db2"

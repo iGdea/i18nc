@@ -18,8 +18,8 @@
 				"type": "Property",
 				"key": {
 					"type": "Literal",
-					"value": "zh",
-					"raw": "\"zh\""
+					"value": "en",
+					"raw": "\"en\""
 				},
 				"computed": false,
 				"value": {
@@ -419,7 +419,7 @@
 		]
 	},
 	"__TRANSLATE_JSON__": {
-		"zh": {
+		"en": {
 			"DEFAULTS": {
 				"中文0": [
 					"in_file zh0"

@@ -7,13 +7,13 @@ function I18N(msg, subtype)
 	 * @param  {String} subtype  Indicates a special treatment.
 	 * 								Use `<line>` to represent continuous relationships.
 	 * 								Use `<e.g.>` to provide an example. Support `%s` symbol.
-	 * 
-	 * 
+	 *
+	 *
 	 * [Warn]
 	 * I18nc Tool collects `I18N` callee arguments for professional translation.
 	 * Use simple string arguments when call `I18N`.
 	 * Variables and Operators are not supported.
-	 * 
+	 *
 	 */
 
 
@@ -49,7 +49,7 @@ function I18N(msg, subtype)
 		 * }
 		 */
 		var __TRANSLATE_JSON__ = {
-			"zh":
+			"en":
 			{
 				"DEFAULTS":
 				{

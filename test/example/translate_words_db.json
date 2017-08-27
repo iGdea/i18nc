@@ -1,5 +1,5 @@
 {
-    "zh":
+    "en":
     {
         "<allfile>":
         {
@@ -36,8 +36,10 @@
                     "中文 thisfile subtype2": ["indb <thisfile> subtype2"]
                 }
             }
-        },
-
+        }
+    },
+    "tw":
+    {
         "func_code_file_key":
         {
             "DEFAULTS":

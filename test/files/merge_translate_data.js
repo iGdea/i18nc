@@ -10,10 +10,10 @@ module.exports =
 	// test/example/example_code_output_code.json
 	codeTranslateWords:
 	{
-		DEFAULTS: Object.keys(funcInfo.__TRANSLATE_JSON__.zh.DEFAULTS),
+		DEFAULTS: Object.keys(funcInfo.__TRANSLATE_JSON__.en.DEFAULTS),
 		SUBTYPES:
 		{
-			subtype: Object.keys(funcInfo.__TRANSLATE_JSON__.zh.SUBTYPES.subtype)
+			subtype: Object.keys(funcInfo.__TRANSLATE_JSON__.en.SUBTYPES.subtype)
 		}
 	},
 };

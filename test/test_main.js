@@ -79,10 +79,10 @@ describe('#i18nc', function()
 			var funcInfo = require('./files/i18n_handler_example_output.json');
 			var codeData =
 			{
-				DEFAULTS: Object.keys(funcInfo.__TRANSLATE_JSON__.zh.DEFAULTS),
+				DEFAULTS: Object.keys(funcInfo.__TRANSLATE_JSON__.en.DEFAULTS),
 				SUBTYPES:
 				{
-					subtype: Object.keys(funcInfo.__TRANSLATE_JSON__.zh.SUBTYPES.subtype)
+					subtype: Object.keys(funcInfo.__TRANSLATE_JSON__.en.SUBTYPES.subtype)
 				}
 			};
 
