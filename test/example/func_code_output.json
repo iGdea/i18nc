@@ -33,7 +33,8 @@
 			"中文span3",
 			"中文val",
 			"中文val in object",
-			"再来一句，"
+			"再来一句，",
+			"简体"
 		],
 		"SUBTYPES": {
 			"subtype": [
@@ -48,8 +49,11 @@
 	},
 	"funcTranslateWords": {
 		"func_code_file_key": {
-			"tw": {
+			"en": {
 				"DEFAULTS": {
+					"中文 only db": [
+						"中文只在数据库"
+					],
 					"中文 only file": [
 						"",
 						"中文只在文件"
@@ -59,18 +63,22 @@
 					"subtype": {
 						"I18N(中文)": [
 							"",
-							"I18N(中文)"
+							"I18N(zh)"
 						]
 					}
 				}
 			},
-			"zh": {
+			"tw": {
 				"DEFAULTS": {
 					"中文 only db": [
 						"中文只在数据库"
 					],
 					"中文key": [
 						"中文键"
+					],
+					"简体": [
+						"",
+						"簡體"
 					]
 				},
 				"SUBTYPES": {
@@ -85,25 +93,11 @@
 	},
 	"usedTranslateWords": {
 		"func_code_file_key": {
-			"zh": {
+			"en": {
 				"DEFAULTS": {
 					"中文 only db": [
 						"中文只在数据库"
 					],
-					"中文key": [
-						"中文键"
-					]
-				},
-				"SUBTYPES": {
-					"subtype": {
-						"I18N(中文)": [
-							"中文国际化"
-						]
-					}
-				}
-			},
-			"tw": {
-				"DEFAULTS": {
 					"中文 only file": [
 						"",
 						"中文只在文件"
@@ -113,7 +107,28 @@
 					"subtype": {
 						"I18N(中文)": [
 							"",
-							"I18N(中文)"
+							"I18N(zh)"
+						]
+					}
+				}
+			},
+			"tw": {
+				"DEFAULTS": {
+					"中文 only db": [
+						"中文只在数据库"
+					],
+					"中文key": [
+						"中文键"
+					],
+					"简体": [
+						"",
+						"簡體"
+					]
+				},
+				"SUBTYPES": {
+					"subtype": {
+						"I18N(中文)": [
+							"中文国际化"
 						]
 					}
 				}

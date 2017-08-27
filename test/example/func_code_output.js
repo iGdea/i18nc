@@ -12,15 +12,15 @@ module.exports = function code()
     var c5 = {
         d1: I18N('中文1'),
         d2: [I18N('中文2'), I18N('中文3')],
+        d3: function(){},
         '中文key in object': I18N('中文val in object'),
-        c6: function(){}
     }
 
     c5[I18N('中文key')] = I18N('中文val');
 
 
-    result += c5.c1;
-    result += c5.c2;
+    result += c5.d1;
+    result += c5.d2;
     result += c5[I18N('中文key')];
 
     function print(msg)
@@ -78,7 +78,7 @@ module.exports = function code()
 
 
 
-		var LAN = 'en';
+		var LAN = 'zh';
 		if (!LAN) return msg;
 
 		var self = I18N;
@@ -109,14 +109,18 @@ module.exports = function code()
 			 * }
 			 */
 			var __TRANSLATE_JSON__ = {
-					'tw': {
-						'DEFAULTS': { '中文 only file': '中文只在文件' || '' },
-						'SUBTYPES': { 'subtype': { 'I18N(中文)': 'I18N(中文)' || '' } }
-					},
-					'zh': {
+					'en': {
 						'DEFAULTS': {
 							'中文 only db': '中文只在数据库',
-							'中文key': '中文键'
+							'中文 only file': '中文只在文件' || ''
+						},
+						'SUBTYPES': { 'subtype': { 'I18N(中文)': 'I18N(zh)' || '' } }
+					},
+					'tw': {
+						'DEFAULTS': {
+							'中文 only db': '中文只在数据库',
+							'中文key': '中文键',
+							'简体': '簡體' || ''
 						},
 						'SUBTYPES': { 'subtype': { 'I18N(中文)': '中文国际化' } }
 					}
@@ -144,7 +148,7 @@ module.exports = function code()
 
     result += I18N('I18N(中文)', 'subtype');
     result += I18N('I18N(中文)', 'subtype2');
-
+    result += I18N('简体');
 
     return result;
 }

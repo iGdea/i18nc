@@ -36,7 +36,15 @@
                     "中文 thisfile subtype2": ["indb <thisfile> subtype2"]
                 }
             }
-        }
+        },
+
+		"func_code_file_key":
+		{
+			"DEFAULTS":
+			{
+				"中文 only db": ["中文只在数据库"]
+			}
+		}
     },
     "tw":
     {
