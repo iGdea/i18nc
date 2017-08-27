@@ -4,22 +4,29 @@ function {{@handlerName}}(msg, subtype)
 	 * @param  {String} msg      translateKey
 	 * @param  {String} subtype  Indicates a special treatment.
 	 * 								Use `<line>` to represent continuous relationships.
-	 * 								Use `<e.g.>` to provide an example. Support `%s` symbol.
-	 * 
-	 * 
+	 * 								Use `<e.g.>` to provide an example.
+	 *								Support `%s` symbol.
+	 *
+	 *
 	 * [Warn]
 	 * I18nc Tool collects `{{@handlerName}}` callee arguments for professional translation.
 	 * Use simple string arguments when call `{{@handlerName}}`.
 	 * Variables and Operators are not supported.
-	 * 
+	 *
 	 */
 
 
+	var self = {{@handlerName}};
 
-	var LAN = ({{@acceptLanguageCode}});
+{{if useOnlyThisLanguage}}
+	var LAN = "{{useOnlyThisLanguage}}";
+{{else}}
+	var GLOBAL = self.__GLOBAL__ || (self.__GLOBAL__ = {{@getGlobalCode}}) || {};
+	var LAN = GLOBAL.__i18n_lan__;
+{{/if}}
+
 	if (!LAN) return msg;
 
-	var self = {{@handlerName}};
 	if (self.__TRANSLATE_LAN__ != LAN)
 	{
 		/* Do not modify this key value. */
@@ -35,10 +42,10 @@ function {{@handlerName}}(msg, subtype)
 		 *
 		 * @example
 		 * {
-		 * 	normail_key: dbTranlateResult,
-		 * 	use_modified_key: codeModifieResult || prevDBTranlateResult,
-		 * 	use_newdb_key: newDBTranlateResult || codeModifieResult || prevDBTranlateResult
-		 * 	force_modified_key: forceCodeModifieResult || newDBTranlateResult || codeModifieResult || prevDBTranlateResult
+		 * 	normail_key			: dbTranlateResult,
+		 * 	use_modified_key	: codeModifieResult || prevDBTranlateResult,
+		 * 	use_newdb_key		: newDBTranlateResult || codeModifieResult || prevDBTranlateResult
+		 * 	force_modified_key	: forceCodeModifieResult || newDBTranlateResult || codeModifieResult || prevDBTranlateResult
 		 * }
 		 *
 		 * @tips Use an empty array to represent an empty string.

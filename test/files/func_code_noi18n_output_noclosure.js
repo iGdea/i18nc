@@ -6,22 +6,27 @@ function I18N(msg, subtype)
 	 * @param  {String} msg      translateKey
 	 * @param  {String} subtype  Indicates a special treatment.
 	 * 								Use `<line>` to represent continuous relationships.
-	 * 								Use `<e.g.>` to provide an example. Support `%s` symbol.
-	 * 
-	 * 
+	 * 								Use `<e.g.>` to provide an example.
+	 *								Support `%s` symbol.
+	 *
+	 *
 	 * [Warn]
 	 * I18nc Tool collects `I18N` callee arguments for professional translation.
 	 * Use simple string arguments when call `I18N`.
 	 * Variables and Operators are not supported.
-	 * 
+	 *
 	 */
 
 
+	var self = I18N;
 
-	var LAN = (typeof window == "object" ? window.__i18n_lan__ : typeof global == "object" && global.__i18n_lan__);
+
+	var GLOBAL = self.__GLOBAL__ || (self.__GLOBAL__ = typeof window == "object" ? window : typeof global == "object" && global) || {};
+	var LAN = GLOBAL.__i18n_lan__;
+
+
 	if (!LAN) return msg;
 
-	var self = I18N;
 	if (self.__TRANSLATE_LAN__ != LAN)
 	{
 		/* Do not modify this key value. */
@@ -37,10 +42,10 @@ function I18N(msg, subtype)
 		 *
 		 * @example
 		 * {
-		 * 	normail_key: dbTranlateResult,
-		 * 	use_modified_key: codeModifieResult || prevDBTranlateResult,
-		 * 	use_newdb_key: newDBTranlateResult || codeModifieResult || prevDBTranlateResult
-		 * 	force_modified_key: forceCodeModifieResult || newDBTranlateResult || codeModifieResult || prevDBTranlateResult
+		 * 	normail_key			: dbTranlateResult,
+		 * 	use_modified_key	: codeModifieResult || prevDBTranlateResult,
+		 * 	use_newdb_key		: newDBTranlateResult || codeModifieResult || prevDBTranlateResult
+		 * 	force_modified_key	: forceCodeModifieResult || newDBTranlateResult || codeModifieResult || prevDBTranlateResult
 		 * }
 		 *
 		 * @tips Use an empty array to represent an empty string.
