@@ -199,6 +199,16 @@ describe('#i18nc', function()
 			expect(code2arr(info.code)).to.eql(code2arr(fs.readFileSync(__dirname+'/files/func_code_i18n_nowords_output.js').toString()));
 		});
 	});
+
+
+	it('#head has content', function()
+	{
+		var info = i18nc('  define(function(){console.log("中文")})');
+
+		autoWriteFile('func_code_head_has_content_output.js', info.code);
+
+		expect(code2arr(info.code)).to.eql(code2arr(fs.readFileSync(__dirname+'/files/func_code_head_has_content_output.js').toString()));
+	});
 });
 
 
