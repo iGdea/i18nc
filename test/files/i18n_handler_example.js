@@ -1,7 +1,6 @@
 module.exports = I18N;
 
-function I18N(msg, subtype)
-{
+function I18N(msg, subtype) {
 	/**
 	 * @param  {String} msg      translateKey
 	 * @param  {String} subtype  Indicates a special treatment.
@@ -24,12 +23,12 @@ function I18N(msg, subtype)
 
 	if (!LAN) return msg;
 
-	if (self.__TRANSLATE_LAN__ != LAN)
-	{
+	if (self.__TRANSLATE_LAN__ != LAN) {
+		self.__TRANSLATE_LAN__ = LAN;
+
 		/* Do not modify this key value. */
 		var __FILE_KEY__ = "i18n_handler_example";
 		var __FUNCTION_VERSION__ = 1;
-		self.__TRANSLATE_LAN__ = LAN;
 
 		/**
 		 * Do not modify the values.
@@ -80,35 +79,38 @@ function I18N(msg, subtype)
 						'中文 thisfile subtype2': 'in_file thisfile subtype2',
 					}
 				}
+			},
+			"tw":
+			{
+				"DEFAULTS":
+				{
+					'中文0': '中文0 in tw'
+				}
 			}
 		};
 
 		var lanArr = self.__TRANSLATE_LAN_JSON__ = [];
-		if (LAN && LAN.split)
-		{
+		if (LAN && LAN.split) {
 			var lanKeys = LAN.split(',');
-			for(var i = 0, len = lanKeys.length; i < len; i++)
-			{
+			for(var i = 0, len = lanKeys.length; i < len; i++) {
 				var lanItem = __TRANSLATE_JSON__[lanKeys[i]];
 				if (lanItem) lanArr.push(lanItem);
 			}
 		}
 	}
 
-	var lanArr = self.__TRANSLATE_LAN_JSON__;
-	var result;
-	for(var i = 0, len = lanArr.length; i < len; i++)
-	{
+	var lanArr = self.__TRANSLATE_LAN_JSON__,
+		resultDefault, resultSubject;
+	for(var i = 0, len = lanArr.length; i < len; i++) {
 		var lanItem = lanArr[i];
-		var defaultJSON = lanItem.DEFAULTS;
 		var subtypeJSON = subtype && lanItem.SUBTYPES && lanItem.SUBTYPES[subtype];
-
-		result = (subtypeJSON && subtypeJSON[msg])
-			|| (defaultJSON && defaultJSON[msg]);
-
-		if (result) break;
+		resultSubject = subtypeJSON && subtypeJSON[msg];
+		if (resultSubject) break;
+		if (!resultDefault)
+			resultDefault = lanItem.DEFAULTS && lanItem.DEFAULTS[msg];
 	}
 
+	var result = resultSubject || resultDefault;
 	// Taking into account the use of the array that is empty,
 	// so the need for mandatory conversion of the results data.
 	if (result && result.join)

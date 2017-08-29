@@ -155,20 +155,19 @@ module.exports = function code()
 			}
 		}
 	
-		var lanArr = self.__TRANSLATE_LAN_JSON__;
-		var result;
+		var lanArr = self.__TRANSLATE_LAN_JSON__,
+			resultDefault, resultSubject;
 		for(var i = 0, len = lanArr.length; i < len; i++)
 		{
 			var lanItem = lanArr[i];
-			var defaultJSON = lanItem.DEFAULTS;
 			var subtypeJSON = subtype && lanItem.SUBTYPES && lanItem.SUBTYPES[subtype];
-	
-			result = (subtypeJSON && subtypeJSON[msg])
-				|| (defaultJSON && defaultJSON[msg]);
-	
-			if (result) break;
+			resultSubject = subtypeJSON && subtypeJSON[msg];
+			if (resultSubject) break;
+			if (!resultDefault)
+				resultDefault = lanItem.DEFAULTS && lanItem.DEFAULTS[msg];
 		}
-	
+
+		var result = resultSubject || resultDefault;
 		// Taking into account the use of the array that is empty,
 		// so the need for mandatory conversion of the results data.
 		if (result && result.join)

@@ -19,5 +19,6 @@ module.exports = {
 				'中文3_empty': [] || ''
 			}
 		}
-	}
+	},
+	'tw': { 'DEFAULTS': { '中文0': '中文0 in tw' || '' } }
 }
