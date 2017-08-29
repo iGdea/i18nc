@@ -66,12 +66,13 @@ module.exports = function code()
 		 * @param  {String} msg      translateKey
 		 * @param  {String} subtype  Indicates a special treatment.
 		 * 								Use `<line>` to represent continuous relationships.
-		 * 								Use `<e.g.>` to provide an example. Support `%s` symbol.
+		 * 								Use `<e.g.>` to provide an example.
+		 *								Support `%s` symbol.
 		 *
 		 *
 		 * [Warn]
-		 * I18nc Tool collects `I18N` callee arguments for professional translation.
-		 * Use simple string arguments when call `I18N`.
+		 * I18nc Tool collects `{{@handlerName}}` callee arguments for professional translation.
+		 * Use simple string arguments when call `{{@handlerName}}`.
 		 * Variables and Operators are not supported.
 		 *
 		 */
@@ -86,7 +87,7 @@ module.exports = function code()
 		{
 			/* Do not modify this key value. */
 			var __FILE_KEY__ = "func_code_file_key";
-			var __FUNCTION_VERSION__ = 1;
+			var __FUNCTION_VERSION__ = 2;
 
 			/**
 			 * Do not modify the values.
@@ -97,9 +98,10 @@ module.exports = function code()
 			 *
 			 * @example
 			 * {
-			 * 	normail_key: dbTranlateResult,
-			 * 	use_modified_key: codeModifieResult || prevDBTranlateResult,
-			 * 	use_newdb_key: newDBTranlateResult || codeModifieResult || prevDBTranlateResult
+			 * 	normail_key			: dbTranlateResult,
+			 * 	use_modified_key	: codeModifieResult || prevDBTranlateResult,
+			 * 	use_newdb_key		: newDBTranlateResult || codeModifieResult || prevDBTranlateResult
+			 * 	force_modified_key	: forceCodeModifieResult || newDBTranlateResult || codeModifieResult || prevDBTranlateResult
 			 * }
 			 *
 			 * @tips Use an empty array to represent an empty string.
@@ -127,23 +129,38 @@ module.exports = function code()
 				};
 
 			self.__TRANSLATE_LAN__ = LAN;
-			self.__TRANSLATE_LAN_JSON__ = __TRANSLATE_JSON__[LAN] || {};
+			var lanArr = self.__TRANSLATE_LAN_JSON__ = [];
+			if (LAN && LAN.split)
+			{
+				var lanKeys = LAN.split(',');
+				for(var i = 0, len = lanKeys.length; i < len; i++)
+				{
+					var lanItem = __TRANSLATE_JSON__[lanKeys[i]];
+					if (lanItem) lanArr.push(lanItem);
+				}
+			}
 		}
-
-		var defaultJSON = self.__TRANSLATE_LAN_JSON__.DEFAULTS;
-		var subtypeJSON = subtype && self.__TRANSLATE_LAN_JSON__.SUBTYPES;
-
-		var result = (subtypeJSON && subtypeJSON[subtype] && subtypeJSON[subtype][msg])
-			|| (defaultJSON && defaultJSON[msg])
-			|| msg;
-
-
+	
+		var lanArr = self.__TRANSLATE_LAN_JSON__;
+		var result;
+		for(var i = 0, len = lanArr.length; i < len; i++)
+		{
+			var lanItem = lanArr[i];
+			var defaultJSON = lanItem.DEFAULTS;
+			var subtypeJSON = subtype && lanItem.SUBTYPES && lanItem.SUBTYPES[subtype];
+	
+			result = (subtypeJSON && subtypeJSON[msg])
+				|| (defaultJSON && defaultJSON[msg]);
+	
+			if (result) break;
+		}
+	
 		// Taking into account the use of the array that is empty,
 		// so the need for mandatory conversion of the results data.
 		if (result && result.join)
 			return ''+result;
 		else
-			return result;
+			return result || msg;
 	}
 
     result += I18N('I18N(中文)', 'subtype');

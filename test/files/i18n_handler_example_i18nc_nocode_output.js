@@ -5,7 +5,8 @@ function I18N(msg, subtype)
 	 * @param  {String} msg      translateKey
 	 * @param  {String} subtype  Indicates a special treatment.
 	 * 								Use `<line>` to represent continuous relationships.
-	 * 								Use `<e.g.>` to provide an example. Support `%s` symbol.
+	 * 								Use `<e.g.>` to provide an example.
+	 *								Support `%s` symbol.
 	 *
 	 *
 	 * [Warn]
@@ -16,11 +17,15 @@ function I18N(msg, subtype)
 	 */
 
 
+	var self = I18N;
 
-	var LAN = 'zh';
+
+	var GLOBAL = self.__GLOBAL__ || (self.__GLOBAL__ = typeof window == "object" ? window : typeof global == "object" && global) || {};
+	var LAN = GLOBAL.__i18n_lan__;
+
+
 	if (!LAN) return msg;
 
-	var self = I18N;
 	if (self.__TRANSLATE_LAN__ != LAN)
 	{
 		/* Do not modify this key value. */
@@ -36,9 +41,10 @@ function I18N(msg, subtype)
 		 *
 		 * @example
 		 * {
-		 * 	normail_key: dbTranlateResult,
-		 * 	use_modified_key: codeModifieResult || prevDBTranlateResult,
-		 * 	use_newdb_key: newDBTranlateResult || codeModifieResult || prevDBTranlateResult
+		 * 	normail_key			: dbTranlateResult,
+		 * 	use_modified_key	: codeModifieResult || prevDBTranlateResult,
+		 * 	use_newdb_key		: newDBTranlateResult || codeModifieResult || prevDBTranlateResult
+		 * 	force_modified_key	: forceCodeModifieResult || newDBTranlateResult || codeModifieResult || prevDBTranlateResult
 		 * }
 		 *
 		 * @tips Use an empty array to represent an empty string.
@@ -50,21 +56,36 @@ function I18N(msg, subtype)
 		var __TRANSLATE_JSON__ = {};
 
 		self.__TRANSLATE_LAN__ = LAN;
-		self.__TRANSLATE_LAN_JSON__ = __TRANSLATE_JSON__[LAN] || {};
+		var lanArr = self.__TRANSLATE_LAN_JSON__ = [];
+		if (LAN && LAN.split)
+		{
+			var lanKeys = LAN.split(',');
+			for(var i = 0, len = lanKeys.length; i < len; i++)
+			{
+				var lanItem = __TRANSLATE_JSON__[lanKeys[i]];
+				if (lanItem) lanArr.push(lanItem);
+			}
+		}
 	}
 
-	var defaultJSON = self.__TRANSLATE_LAN_JSON__.DEFAULTS;
-	var subtypeJSON = subtype && self.__TRANSLATE_LAN_JSON__.SUBTYPES;
+	var lanArr = self.__TRANSLATE_LAN_JSON__;
+	var result;
+	for(var i = 0, len = lanArr.length; i < len; i++)
+	{
+		var lanItem = lanArr[i];
+		var defaultJSON = lanItem.DEFAULTS;
+		var subtypeJSON = subtype && lanItem.SUBTYPES && lanItem.SUBTYPES[subtype];
 
-	var result = (subtypeJSON && subtypeJSON[subtype] && subtypeJSON[subtype][msg])
-		|| (defaultJSON && defaultJSON[msg])
-		|| msg;
+		result = (subtypeJSON && subtypeJSON[msg])
+			|| (defaultJSON && defaultJSON[msg]);
 
+		if (result) break;
+	}
 
 	// Taking into account the use of the array that is empty,
 	// so the need for mandatory conversion of the results data.
 	if (result && result.join)
 		return ''+result;
 	else
-		return result;
+		return result || msg;
 }

@@ -40,7 +40,7 @@ function code()
 			{
 				/* Do not modify this key value. */
 				var __FILE_KEY__ = "default_file_key";
-				var __FUNCTION_VERSION__ = 1;
+				var __FUNCTION_VERSION__ = 2;
 		
 				/**
 				 * Do not modify the values.
@@ -66,23 +66,38 @@ function code()
 				var __TRANSLATE_JSON__ = { 'zh': { 'DEFAULTS': { 'define2 中文': 'define2 中文' } } };
 		
 				self.__TRANSLATE_LAN__ = LAN;
-				self.__TRANSLATE_LAN_JSON__ = __TRANSLATE_JSON__[LAN] || {};
+				var lanArr = self.__TRANSLATE_LAN_JSON__ = [];
+				if (LAN && LAN.split)
+				{
+					var lanKeys = LAN.split(',');
+					for(var i = 0, len = lanKeys.length; i < len; i++)
+					{
+						var lanItem = __TRANSLATE_JSON__[lanKeys[i]];
+						if (lanItem) lanArr.push(lanItem);
+					}
+				}
 			}
 		
-			var defaultJSON = self.__TRANSLATE_LAN_JSON__.DEFAULTS;
-			var subtypeJSON = subtype && self.__TRANSLATE_LAN_JSON__.SUBTYPES;
+			var lanArr = self.__TRANSLATE_LAN_JSON__;
+			var result;
+			for(var i = 0, len = lanArr.length; i < len; i++)
+			{
+				var lanItem = lanArr[i];
+				var defaultJSON = lanItem.DEFAULTS;
+				var subtypeJSON = subtype && lanItem.SUBTYPES && lanItem.SUBTYPES[subtype];
 		
-			var result = (subtypeJSON && subtypeJSON[subtype] && subtypeJSON[subtype][msg])
-				|| (defaultJSON && defaultJSON[msg])
-				|| msg;
+				result = (subtypeJSON && subtypeJSON[msg])
+					|| (defaultJSON && defaultJSON[msg]);
 		
+				if (result) break;
+			}
 		
 			// Taking into account the use of the array that is empty,
 			// so the need for mandatory conversion of the results data.
 			if (result && result.join)
 				return ''+result;
 			else
-				return result;
+				return result || msg;
 		}
 	});
 
@@ -117,7 +132,7 @@ function code()
 		{
 			/* Do not modify this key value. */
 			var __FILE_KEY__ = "default_file_key";
-			var __FUNCTION_VERSION__ = 1;
+			var __FUNCTION_VERSION__ = 2;
 	
 			/**
 			 * Do not modify the values.
@@ -151,23 +166,38 @@ function code()
 				};
 	
 			self.__TRANSLATE_LAN__ = LAN;
-			self.__TRANSLATE_LAN_JSON__ = __TRANSLATE_JSON__[LAN] || {};
+			var lanArr = self.__TRANSLATE_LAN_JSON__ = [];
+			if (LAN && LAN.split)
+			{
+				var lanKeys = LAN.split(',');
+				for(var i = 0, len = lanKeys.length; i < len; i++)
+				{
+					var lanItem = __TRANSLATE_JSON__[lanKeys[i]];
+					if (lanItem) lanArr.push(lanItem);
+				}
+			}
 		}
 	
-		var defaultJSON = self.__TRANSLATE_LAN_JSON__.DEFAULTS;
-		var subtypeJSON = subtype && self.__TRANSLATE_LAN_JSON__.SUBTYPES;
+		var lanArr = self.__TRANSLATE_LAN_JSON__;
+		var result;
+		for(var i = 0, len = lanArr.length; i < len; i++)
+		{
+			var lanItem = lanArr[i];
+			var defaultJSON = lanItem.DEFAULTS;
+			var subtypeJSON = subtype && lanItem.SUBTYPES && lanItem.SUBTYPES[subtype];
 	
-		var result = (subtypeJSON && subtypeJSON[subtype] && subtypeJSON[subtype][msg])
-			|| (defaultJSON && defaultJSON[msg])
-			|| msg;
+			result = (subtypeJSON && subtypeJSON[msg])
+				|| (defaultJSON && defaultJSON[msg]);
 	
+			if (result) break;
+		}
 	
 		// Taking into account the use of the array that is empty,
 		// so the need for mandatory conversion of the results data.
 		if (result && result.join)
 			return ''+result;
 		else
-			return result;
+			return result || msg;
 	}
 	var work = I18N('global 中文2');
 	function I18N(msg, subtype)
@@ -201,7 +231,7 @@ function code()
 		{
 			/* Do not modify this key value. */
 			var __FILE_KEY__ = "default_file_key";
-			var __FUNCTION_VERSION__ = 1;
+			var __FUNCTION_VERSION__ = 2;
 	
 			/**
 			 * Do not modify the values.
@@ -235,22 +265,37 @@ function code()
 				};
 	
 			self.__TRANSLATE_LAN__ = LAN;
-			self.__TRANSLATE_LAN_JSON__ = __TRANSLATE_JSON__[LAN] || {};
+			var lanArr = self.__TRANSLATE_LAN_JSON__ = [];
+			if (LAN && LAN.split)
+			{
+				var lanKeys = LAN.split(',');
+				for(var i = 0, len = lanKeys.length; i < len; i++)
+				{
+					var lanItem = __TRANSLATE_JSON__[lanKeys[i]];
+					if (lanItem) lanArr.push(lanItem);
+				}
+			}
 		}
 	
-		var defaultJSON = self.__TRANSLATE_LAN_JSON__.DEFAULTS;
-		var subtypeJSON = subtype && self.__TRANSLATE_LAN_JSON__.SUBTYPES;
+		var lanArr = self.__TRANSLATE_LAN_JSON__;
+		var result;
+		for(var i = 0, len = lanArr.length; i < len; i++)
+		{
+			var lanItem = lanArr[i];
+			var defaultJSON = lanItem.DEFAULTS;
+			var subtypeJSON = subtype && lanItem.SUBTYPES && lanItem.SUBTYPES[subtype];
 	
-		var result = (subtypeJSON && subtypeJSON[subtype] && subtypeJSON[subtype][msg])
-			|| (defaultJSON && defaultJSON[msg])
-			|| msg;
+			result = (subtypeJSON && subtypeJSON[msg])
+				|| (defaultJSON && defaultJSON[msg]);
 	
+			if (result) break;
+		}
 	
 		// Taking into account the use of the array that is empty,
 		// so the need for mandatory conversion of the results data.
 		if (result && result.join)
 			return ''+result;
 		else
-			return result;
+			return result || msg;
 	}
 }
