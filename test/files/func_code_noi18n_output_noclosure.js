@@ -17,13 +17,10 @@ function I18N(msg, subtype)
 	 *
 	 */
 
-
 	var self = I18N;
-
 
 	var GLOBAL = self.__GLOBAL__ || (self.__GLOBAL__ = typeof window == "object" ? window : typeof global == "object" && global) || {};
 	var LAN = GLOBAL.__i18n_lan__;
-
 
 	if (!LAN) return msg;
 
@@ -32,6 +29,7 @@ function I18N(msg, subtype)
 		/* Do not modify this key value. */
 		var __FILE_KEY__ = "default_file_key";
 		var __FUNCTION_VERSION__ = 2;
+		self.__TRANSLATE_LAN__ = LAN;
 
 		/**
 		 * Do not modify the values.
@@ -56,7 +54,6 @@ function I18N(msg, subtype)
 		 */
 		var __TRANSLATE_JSON__ = {};
 
-		self.__TRANSLATE_LAN__ = LAN;
 		var lanArr = self.__TRANSLATE_LAN_JSON__ = [];
 		if (LAN && LAN.split)
 		{

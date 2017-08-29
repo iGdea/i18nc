@@ -15,16 +15,13 @@ function {{@handlerName}}(msg, subtype)
 	 *
 	 */
 
-
 	var self = {{@handlerName}};
-
 {{if useOnlyLanguages}}
 	var LAN = "{{useOnlyLanguages}}";
 {{else}}
 	var GLOBAL = self.__GLOBAL__ || (self.__GLOBAL__ = {{@getGlobalCode}}) || {};
 	var LAN = GLOBAL.__i18n_lan__;
 {{/if}}
-
 	if (!LAN) return msg;
 
 	if (self.__TRANSLATE_LAN__ != LAN)
@@ -32,6 +29,7 @@ function {{@handlerName}}(msg, subtype)
 		/* Do not modify this key value. */
 		var __FILE_KEY__ = "{{FILE_KEY}}";
 		var __FUNCTION_VERSION__ = {{@FUNCTION_VERSION}};
+		self.__TRANSLATE_LAN__ = LAN;
 
 		/**
 		 * Do not modify the values.
@@ -56,7 +54,6 @@ function {{@handlerName}}(msg, subtype)
 		 */
 		var __TRANSLATE_JSON__ = {{@TRANSLATE_JSON}};
 
-		self.__TRANSLATE_LAN__ = LAN;
 		var lanArr = self.__TRANSLATE_LAN_JSON__ = [];
 		if (LAN && LAN.split)
 		{
