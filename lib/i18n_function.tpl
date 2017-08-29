@@ -24,10 +24,10 @@ function {{@handlerName}}(msg, subtype) {
 	if (!LAN) return msg;
 
 	if (self.__TRANSLATE_LAN__ != LAN) {
+		self.__TRANSLATE_LAN__ = LAN;
 		/* Do not modify this key value. */
 		var __FILE_KEY__ = "{{FILE_KEY}}";
 		var __FUNCTION_VERSION__ = {{@FUNCTION_VERSION}};
-		self.__TRANSLATE_LAN__ = LAN;
 
 		/**
 		 * Do not modify the values.

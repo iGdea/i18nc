@@ -24,10 +24,10 @@ function I18N(msg, subtype) {
 	if (!LAN) return msg;
 
 	if (self.__TRANSLATE_LAN__ != LAN) {
+		self.__TRANSLATE_LAN__ = LAN;
 		/* Do not modify this key value. */
 		var __FILE_KEY__ = "default_file_key";
 		var __FUNCTION_VERSION__ = 2;
-		self.__TRANSLATE_LAN__ = LAN;
 
 		/**
 		 * Do not modify the values.
