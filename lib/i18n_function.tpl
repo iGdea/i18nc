@@ -15,11 +15,11 @@ function {{@handlerName}}(msg, subtype) {
 	 */
 
 	var self = {{@handlerName}};
-{{if useOnlyLanguages}}
-	var LAN = "{{useOnlyLanguages}}";
+{{if setFileLanguages}}
+	var LAN = "{{setFileLanguages}}";
 {{else}}
-	var GLOBAL = self.__GLOBAL__ || (self.__GLOBAL__ = {{@getGlobalCode}}) || {};
-	var LAN = GLOBAL.__i18n_lan__;
+	var GLOBAL = self.__GLOBAL__ || (self.__GLOBAL__ = {{@GetGlobalCode}}) || {};
+	var LAN = GLOBAL.{{@LanguageVarName}};
 {{/if}}
 	if (!LAN) return msg;
 
