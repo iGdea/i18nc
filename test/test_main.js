@@ -7,7 +7,7 @@ var dbTranslateWords	= require('./example/translate_words_db');
 
 describe('#i18nc', function()
 {
-	describe('#nodb noFuncData', function()
+	describe('#example func', function()
 	{
 		var exampleCode			= require('./example/func_code');
 		var exampleCode_output	= require('./example/func_code_output');
@@ -51,6 +51,24 @@ describe('#i18nc', function()
 			expect(getTranslateWords(info.codeTranslateWords)).to.eql(translateWords);
 			expect(info.dirtyWords).to.empty();
 		});
+	});
+
+
+	describe('#use require', function()
+	{
+		var i18nOptions =
+		{
+			isIgnoreScanWarn: true,
+			dbTranslateWords: dbTranslateWords,
+			loadTranslateJSONByAst: function(ast, options)
+			{
+				return ast;
+			},
+			genTranslateJSON: function(code, oldJSONAst, options)
+			{
+				return code;
+			},
+		};
 	});
 
 
