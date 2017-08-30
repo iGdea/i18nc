@@ -1,4 +1,3 @@
-var esprima			= require('esprima');
 var expect			= require('expect.js');
 var ASTCollector	= require('../lib/ast_collector').ASTCollector;
 var optionsUtils	= require('../lib/options');
@@ -176,7 +175,7 @@ describe('#ASTCollector', function()
 
 function getCollect(code, options)
 {
-	var ast = esprima.parse(code.toString(), optionsUtils.esprimaOptions);
+	var ast = astUtils.parse(code.toString());
 	return new ASTCollector(optionsUtils.extend(options)).collect(ast);
 }
 
