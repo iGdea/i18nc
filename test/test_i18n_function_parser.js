@@ -5,12 +5,12 @@ var i18nFunctionParser	= require('../lib/i18n_function_parser');
 
 describe('#i18n_function_parser', function()
 {
-	describe('#translateDataAst2json', function()
+	describe('#translateSubtreeAst2json', function()
 	{
 		it('#normal', function()
 		{
 			var astData = require('./files/translate_data_ast.json');
-			var result = i18nFunctionParser._translateDataAst2json(astData);
+			var result = i18nFunctionParser._translateSubtreeAst2json(astData);
 
 			autoWriteFile('translate_data.json', JSON.stringify(result, null, '\t'));
 
@@ -20,7 +20,7 @@ describe('#i18n_function_parser', function()
 		it('#empty head', function()
 		{
 			var astData = require('./files/translate_data_ast_empty_head.json');
-			var result = i18nFunctionParser._translateDataAst2json(astData);
+			var result = i18nFunctionParser._translateSubtreeAst2json(astData);
 
 			autoWriteFile('translate_data_empty_head.json', JSON.stringify(result, null, '\t'));
 
