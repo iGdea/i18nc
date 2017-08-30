@@ -11,7 +11,15 @@ describe('#i18nc', function()
 	{
 		var exampleCode			= require('./example/func_code');
 		var exampleCode_output	= require('./example/func_code_output');
-		var translateWords		= ["2中文4中文5","I18N(中文)","print中文","run 中文","中午true","中文0","中文1","中文2","中文3","中文I18N","中文I18N subtype","中文case","中文case+handler","中文case+objkey","中文case+数字","中文false","中文if","中文key","中文span","中文span2","中文span3","中文val","再来一句，","中文val in object","中文 only db","中文 only file","简体"].sort();
+		var translateWords		=
+		[
+			"2中文4中文5","I18N(中文)","print中文","run 中文","中午true","中文0",
+			"中文1","中文2","中文3","中文I18N","中文I18N subtype","中文case",
+			"中文case+handler","中文case+objkey","中文case+数字","中文false",
+			"中文if","中文key","中文span","中文span2","中文span3","中文val",
+			"再来一句，","中文val in object","中文 only db","中文 only file","简体"
+		]
+		.sort();
 
 
 		it('#first', function()
@@ -123,7 +131,8 @@ describe('#i18nc', function()
 			autoWriteFile('i18n_handler_example_i18nc_nocode_output.js', info.code);
 
 			expect(getOutputJSON(info)).to.eql(require('./files/i18n_handler_example_i18nc_nocode_output.json'));
-			expect(code2arr(info.code)).to.eql(code2arr(fs.readFileSync(__dirname+'/files/i18n_handler_example_i18nc_nocode_output.js').toString()));
+			var otherCode = fs.readFileSync(__dirname+'/files/i18n_handler_example_i18nc_nocode_output.js');
+			expect(code2arr(info.code)).to.eql(code2arr(otherCode.toString()));
 		});
 
 		it('#widthcode', function()
@@ -149,7 +158,8 @@ describe('#i18nc', function()
 			autoWriteFile('i18n_handler_example_i18nc_wdithcode_output.js', info.code);
 
 			expect(getOutputJSON(info)).to.eql(require('./files/i18n_handler_example_i18nc_wdithcode_output.json'));
-			expect(code2arr(info.code)).to.eql(code2arr(fs.readFileSync(__dirname+'/files/i18n_handler_example_i18nc_wdithcode_output.js').toString()));
+			var otherCode = fs.readFileSync(__dirname+'/files/i18n_handler_example_i18nc_wdithcode_output.js');
+			expect(code2arr(info.code)).to.eql(code2arr(otherCode.toString()));
 		});
 	});
 
@@ -163,7 +173,8 @@ describe('#i18nc', function()
 
 			autoWriteFile('func_code_noi18n_output.js', info.code);
 
-			expect(code2arr(info.code)).to.eql(code2arr(fs.readFileSync(__dirname+'/files/func_code_noi18n_output.js').toString()));
+			var otherCode = fs.readFileSync(__dirname+'/files/func_code_noi18n_output.js');
+			expect(code2arr(info.code)).to.eql(code2arr(otherCode.toString()));
 		});
 
 		it('#noI18N noclosure', function()
@@ -173,7 +184,8 @@ describe('#i18nc', function()
 
 			autoWriteFile('func_code_noi18n_output_noclosure.js', info.code);
 
-			expect(code2arr(info.code)).to.eql(code2arr(fs.readFileSync(__dirname+'/files/func_code_noi18n_output_noclosure.js').toString()));
+			var otherCode = fs.readFileSync(__dirname+'/files/func_code_noi18n_output_noclosure.js');
+			expect(code2arr(info.code)).to.eql(code2arr(otherCode.toString()));
 		});
 
 		it('#define', function()
@@ -183,7 +195,8 @@ describe('#i18nc', function()
 
 			autoWriteFile('func_code_noi18n_define_output.js', info.code);
 
-			expect(code2arr(info.code)).to.eql(code2arr(fs.readFileSync(__dirname+'/files/func_code_noi18n_define_output.js').toString()));
+			var otherCode = fs.readFileSync(__dirname+'/files/func_code_noi18n_define_output.js');
+			expect(code2arr(info.code)).to.eql(code2arr(otherCode.toString()));
 		});
 
 		it('#define not_define', function()
@@ -196,7 +209,8 @@ describe('#i18nc', function()
 
 			autoWriteFile('func_code_noi18n_define_output_notdefine.js', info.code);
 
-			expect(code2arr(info.code)).to.eql(code2arr(fs.readFileSync(__dirname+'/files/func_code_noi18n_define_output_notdefine.js').toString()));
+			var otherCode = fs.readFileSync(__dirname+'/files/func_code_noi18n_define_output_notdefine.js');
+			expect(code2arr(info.code)).to.eql(code2arr(otherCode.toString()));
 		});
 	});
 
@@ -209,7 +223,8 @@ describe('#i18nc', function()
 
 			autoWriteFile('func_code_i18n_output.js', info.code);
 
-			expect(code2arr(info.code)).to.eql(code2arr(fs.readFileSync(__dirname+'/files/func_code_i18n_output.js').toString()));
+			var otherCode = fs.readFileSync(__dirname+'/files/func_code_i18n_output.js');
+			expect(code2arr(info.code)).to.eql(code2arr(otherCode.toString()));
 		});
 
 		it('#define and scope', function()
@@ -237,7 +252,8 @@ describe('#i18nc', function()
 
 			autoWriteFile('func_code_i18n_define_output.js', info.code);
 
-			expect(code2arr(info.code)).to.eql(code2arr(fs.readFileSync(__dirname+'/files/func_code_i18n_define_output.js').toString()));
+			var otherCode = fs.readFileSync(__dirname+'/files/func_code_i18n_define_output.js');
+			expect(code2arr(info.code)).to.eql(code2arr(otherCode.toString()));
 		});
 
 
@@ -248,7 +264,8 @@ describe('#i18nc', function()
 
 			autoWriteFile('func_code_i18n_nowords_output.js', info.code);
 
-			expect(code2arr(info.code)).to.eql(code2arr(fs.readFileSync(__dirname+'/files/func_code_i18n_nowords_output.js').toString()));
+			var otherCode = fs.readFileSync(__dirname+'/files/func_code_i18n_nowords_output.js');
+			expect(code2arr(info.code)).to.eql(code2arr(otherCode.toString()));
 		});
 	});
 
@@ -259,7 +276,8 @@ describe('#i18nc', function()
 
 		autoWriteFile('func_code_head_has_content_output.js', info.code);
 
-		expect(code2arr(info.code)).to.eql(code2arr(fs.readFileSync(__dirname+'/files/func_code_head_has_content_output.js').toString()));
+		var otherCode = fs.readFileSync(__dirname+'/files/func_code_head_has_content_output.js');
+		expect(code2arr(info.code)).to.eql(code2arr(otherCode.toString()));
 	});
 
 	it('#ignoreScanFunctionNames', function()
