@@ -209,6 +209,31 @@ describe('#i18nc', function()
 
 		expect(code2arr(info.code)).to.eql(code2arr(fs.readFileSync(__dirname+'/files/func_code_head_has_content_output.js').toString()));
 	});
+
+	it('#ignoreScanFunctionNames', function()
+	{
+		var code = function code()
+		{
+			function somefunc()
+			{
+				console.log('中文 in some func');
+			}
+
+			somefunc('中文 run some func');
+
+			function otherfunc()
+			{
+				console.log('中文 in other func');
+			}
+
+			otherfunc('中文 run other func');
+		}
+
+		var info = i18nc(code.toString(), {ignoreScanFunctionNames: ['somefunc']});
+
+		expect(getTranslateWords(info.codeTranslateWords))
+			.to.eql(['中文 in other func', '中文 run other func'].sort());
+	});
 });
 
 
