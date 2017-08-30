@@ -54,7 +54,7 @@ describe('#i18nc', function()
 	});
 
 
-	describe('#use require', function()
+	it('#use require', function()
 	{
 		var i18nOptions =
 		{
@@ -62,13 +62,47 @@ describe('#i18nc', function()
 			dbTranslateWords: dbTranslateWords,
 			loadTranslateJSONByAst: function(ast, options)
 			{
+				if (ast.type == 'CallExpression'
+					&& ast.callee
+					&& ast.callee.name == 'require'
+					&& ast.arguments
+					&& ast.arguments[0]
+					&& ast.arguments[0].type == 'Literal')
+				{
+					var file = __dirname+'/files/use_require/'+ast.arguments[0].value;
+					var newAst = i18nc.parse(fs.readFileSync(file).toString());
+
+					var retAst = newAst.body
+						&& newAst.body[0]
+						&& newAst.body[0].expression
+						&& newAst.body[0].expression.right;
+
+					if (retAst) return retAst;
+				}
+
 				return ast;
 			},
-			genTranslateJSON: function(code, oldJSONAst, options)
+			genTranslateJSON: function(code, translateData, translateDataAst, options)
 			{
-				return code;
+				var content = 'module.exports = '+code;
+				autoWriteFile('require_data.js', content, 'use_require');
+
+				var file = __dirname+'/files/use_require/require_data.js';
+				var otherContent = fs.readFileSync(file);
+				expect(code2arr(content)).to.eql(code2arr(otherContent.toString()));
+
+				return 'require("./require_data.js")';
 			},
 		};
+
+		var exampleCode = require('./files/use_require/func_code');
+		var info = i18nc(exampleCode.toString(), i18nOptions);
+
+		autoWriteFile('func_code_output.js', 'module.exports = '+info.code, 'use_require');
+
+		var otherCode = require('./files/use_require/func_code_output');
+
+		expect(code2arr(info.code)).to.eql(code2arr(otherCode.toString()));
 	});
 
 

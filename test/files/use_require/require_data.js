@@ -1,0 +1,1 @@
+module.exports = { 'en': { 'DEFAULTS': { '中文db <allfile>': 'indb <allfile>' } } }
