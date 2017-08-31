@@ -62,6 +62,10 @@ define('define2', function()
 });
 
 var work = I18N('global 中文2');
+
+function I18N(msg, subtype) {
+  ....
+}
 ```
 
 Replace `I18N` handler code:
@@ -69,8 +73,7 @@ Replace `I18N` handler code:
 ```
 function I18N(msg, subtype) {
   var self = I18N;
-
-  var GLOBAL = self.__GLOBAL__ || (self.__GLOBAL__ = typeof window == "object" ? window : typeof global == "object" && global) || {};
+  var GLOBAL = self.__GLOBAL__ || (self.__GLOBAL__ = window.settings) || {};
   var LAN = GLOBAL.__i18n_lan__;
 
   if (!LAN) return msg;
@@ -82,50 +85,26 @@ function I18N(msg, subtype) {
 
     var __TRANSLATE_JSON__ = {
         'en': {
-          'DEFAULTS': {
-            'define1 中文': 'define1 zh',
-            'global 中文1': 'global zh1',
-            'global 中文2': 'global zh2'
-          },
-          'SUBTYPES': {
-            'in define': {
-              'define1 中文': 'define1 zh in subtype'
-            }
-          }
+          'DEFAULTS': {'中文1': 'zh1', '中文2': 'zh2'},
+          'SUBTYPES': {'sub type': {'中文': 'zh in subtype'}}
         },
-        'tw': {
-          'DEFAULTS': {
-            'define1 中文': 'define1 中文tw'
-          }
-        }
+        'tw': {'DEFAULTS': {'简体': '簡體'}}
       };
 
     var lanArr = self.__TRANSLATE_LAN_JSON__ = [];
-    if (LAN && LAN.split) {
-      var lanKeys = LAN.split(',');
-      for(var i = 0, len = lanKeys.length; i < len; i++) {
-        var lanItem = __TRANSLATE_JSON__[lanKeys[i]];
-        if (lanItem) lanArr.push(lanItem);
-      }
-    }
+    ...
+    lanArr.push(__TRANSLATE_JSON__.xxx);
   }
 
-  var lanArr = self.__TRANSLATE_LAN_JSON__,
-    resultDefault, resultSubject;
+  var lanArr = self.__TRANSLATE_LAN_JSON__;
+  var result;
   for(var i = 0, len = lanArr.length; i < len; i++) {
-    var lanItem = lanArr[i];
-    var subtypeJSON = subtype && lanItem.SUBTYPES && lanItem.SUBTYPES[subtype];
-    resultSubject = subtypeJSON && subtypeJSON[msg];
-    if (resultSubject) break;
-    if (!resultDefault)
-      resultDefault = lanItem.DEFAULTS && lanItem.DEFAULTS[msg];
+    ....
+    if (result) break;
   }
 
-  var result = resultSubject || resultDefault;
-  if (result && result.join)
-    return ''+result;
-  else
-    return result || msg;
+  ....
+  return result || msg;
 }
 ```
 
@@ -140,4 +119,3 @@ function I18N(msg, subtype) {
 [coveralls-image]: https://img.shields.io/coveralls/Bacra/node-i18nc.svg
 [coveralls-url]: https://coveralls.io/github/Bacra/node-i18nc
 [license-image]: http://img.shields.io/npm/l/i18nc.svg
-
