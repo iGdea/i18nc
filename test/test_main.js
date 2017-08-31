@@ -330,12 +330,8 @@ function getTranslateWords(codeTranslateWords)
 function code2arr(code)
 {
 	return code.split('\n')
-		.map(function(val)
-		{
-			return val.trim();
-		})
 		.filter(function(val)
 		{
-			return val;
+			return val.trim();
 		});
 }
