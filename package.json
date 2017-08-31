@@ -1,7 +1,7 @@
 {
   "name": "i18nc",
-  "version": "0.4.1",
-  "description": "i18n",
+  "version": "0.4.2",
+  "description": "I18N Tool for JS files",
   "main": "index.js",
   "scripts": {
     "prepublish": "npm ls",
@@ -30,9 +30,13 @@
   },
   "keywords": [
     "i18n",
+    "translate",
+    "extract",
+    "Chinese",
+    "esprima",
     "ast"
   ],
-  "author": "Bacra Woo",
+  "author": "Bacra Woo<bacra.woo@gmail.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/Bacra/node-i18nc/issues"
