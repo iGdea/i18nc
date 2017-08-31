@@ -1,3 +1,4 @@
+/* some things */
 define(function(){
 
 function I18N(msg, subtype) {
