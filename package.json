@@ -1,6 +1,6 @@
 {
   "name": "i18nc",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "i18n",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
     "test": "cross-env DEBUG=i18nc* mocha test/test_*",
     "test-cov": "istanbul cover ./node_modules/.bin/_mocha -- test/test_* --reporter dot",
     "test-travis": "istanbul cover ./node_modules/.bin/_mocha --report lcovonly -- test/test_* --reporter dot",
-    "test_build": "cross-env DEBUG=i18nc* TEST_BUILD=true mocha test/test_*"
+    "test_build": "cross-env TEST_BUILD=true mocha test/test_*"
   },
   "dependencies": {
     "art-template": "^4.12.1",
