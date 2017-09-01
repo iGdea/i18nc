@@ -86,6 +86,14 @@ describe('#i18n_function_parser', function()
 
 			expect(result).to.eql(require('./files/translate_data_empty_head.json'));
 		});
+
+		it('#is js, not json', function()
+		{
+			var ast = esprima.parse('var a = {b: 1 || 2}');
+			var result = i18nFunctionParser._translateSubtreeAst2json(ast.body[0].declarations[0].init);
+
+			expect(result).to.eql({b: [2, 1]});
+		});
 	});
 
 	it('#parse', function()
