@@ -12,7 +12,7 @@ describe('#ASTCollector', function()
 			var v1 = '中文';
 
 			{
-				"[i18nc]skip_scan"
+				"[i18nc] skip_scan"
 				var v2 = "跳过这个中文";
 			}
 		}
@@ -33,7 +33,7 @@ describe('#ASTCollector', function()
 			var v1 = '中文';
 
 			{
-				"[i18nc]skip_repalce"
+				"[i18nc] skip_repalce"
 				var v2 = "这个中文还在";
 			}
 		}
