@@ -1,0 +1,40 @@
+{
+	"__i18n_flag__": 4,
+	"type": "BinaryExpression",
+	"operator": "+",
+	"left": {
+		"type": "BinaryExpression",
+		"operator": "*",
+		"left": {
+			"type": "Literal",
+			"value": 1,
+			"raw": "1",
+			"range": [
+				9,
+				10
+			]
+		},
+		"right": {
+			"type": "Literal",
+			"value": "a",
+			"raw": "'a'",
+			"range": [
+				11,
+				14
+			]
+		},
+		"range": [
+			9,
+			14
+		]
+	},
+	"right": {
+		"__i18n_flag__": 20,
+		"type": "Literal",
+		"value": "b2cd",
+		"range": [
+			15,
+			29
+		]
+	}
+}

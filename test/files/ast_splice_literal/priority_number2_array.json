@@ -1,0 +1,61 @@
+[
+	{
+		"type": "number",
+		"value": 1,
+		"ast": {
+			"type": "Literal",
+			"value": 1,
+			"raw": "1",
+			"range": [
+				9,
+				10
+			]
+		}
+	},
+	{
+		"type": "number",
+		"value": 2,
+		"ast": {
+			"type": "Literal",
+			"value": 2,
+			"raw": "2",
+			"range": [
+				11,
+				12
+			]
+		}
+	},
+	{
+		"type": "string",
+		"value": "3ab",
+		"comboAst": [
+			{
+				"type": "Literal",
+				"value": 3,
+				"raw": "3",
+				"range": [
+					14,
+					15
+				]
+			},
+			{
+				"type": "Literal",
+				"value": "a",
+				"raw": "'a'",
+				"range": [
+					16,
+					19
+				]
+			},
+			{
+				"type": "Literal",
+				"value": "b",
+				"raw": "'b'",
+				"range": [
+					20,
+					23
+				]
+			}
+		]
+	}
+]

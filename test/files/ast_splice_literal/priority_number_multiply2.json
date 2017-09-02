@@ -1,0 +1,94 @@
+{
+    "type": "BinaryExpression",
+    "operator": "+",
+    "left": {
+        "type": "BinaryExpression",
+        "operator": "+",
+        "left": {
+            "type": "BinaryExpression",
+            "operator": "*",
+            "left": {
+                "type": "Literal",
+                "value": 1,
+                "raw": "1",
+                "range": [
+                    9,
+                    10
+                ]
+            },
+            "right": {
+                "type": "Literal",
+                "value": 2,
+                "raw": "2",
+                "range": [
+                    11,
+                    12
+                ]
+            },
+            "range": [
+                9,
+                12
+            ]
+        },
+        "right": {
+            "type": "Literal",
+            "value": "a",
+            "raw": "'a'",
+            "range": [
+                13,
+                16
+            ]
+        },
+        "range": [
+            9,
+            16
+        ]
+    },
+    "right": {
+        "type": "BinaryExpression",
+        "operator": "+",
+        "left": {
+            "type": "BinaryExpression",
+            "operator": "+",
+            "left": {
+                "type": "Literal",
+                "value": 3,
+                "raw": "3",
+                "range": [
+                    18,
+                    19
+                ]
+            },
+            "right": {
+                "type": "Literal",
+                "value": "b",
+                "raw": "'b'",
+                "range": [
+                    20,
+                    23
+                ]
+            },
+            "range": [
+                18,
+                23
+            ]
+        },
+        "right": {
+            "type": "Literal",
+            "value": "c",
+            "raw": "'c'",
+            "range": [
+                24,
+                27
+            ]
+        },
+        "range": [
+            18,
+            27
+        ]
+    },
+    "range": [
+        9,
+        28
+    ]
+}

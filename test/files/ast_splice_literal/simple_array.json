@@ -1,0 +1,35 @@
+[
+	{
+		"type": "string",
+		"value": "abc",
+		"comboAst": [
+			{
+				"type": "Literal",
+				"value": "a",
+				"raw": "'a'",
+				"range": [
+					9,
+					12
+				]
+			},
+			{
+				"type": "Literal",
+				"value": "b",
+				"raw": "'b'",
+				"range": [
+					13,
+					16
+				]
+			},
+			{
+				"type": "Literal",
+				"value": "c",
+				"raw": "'c'",
+				"range": [
+					17,
+					20
+				]
+			}
+		]
+	}
+]

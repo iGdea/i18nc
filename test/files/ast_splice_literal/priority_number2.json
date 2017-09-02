@@ -1,0 +1,77 @@
+{
+    "type": "BinaryExpression",
+    "operator": "+",
+    "left": {
+        "type": "BinaryExpression",
+        "operator": "+",
+        "left": {
+            "type": "Literal",
+            "value": 1,
+            "raw": "1",
+            "range": [
+                9,
+                10
+            ]
+        },
+        "right": {
+            "type": "Literal",
+            "value": 2,
+            "raw": "2",
+            "range": [
+                11,
+                12
+            ]
+        },
+        "range": [
+            9,
+            12
+        ]
+    },
+    "right": {
+        "type": "BinaryExpression",
+        "operator": "+",
+        "left": {
+            "type": "BinaryExpression",
+            "operator": "+",
+            "left": {
+                "type": "Literal",
+                "value": 3,
+                "raw": "3",
+                "range": [
+                    14,
+                    15
+                ]
+            },
+            "right": {
+                "type": "Literal",
+                "value": "a",
+                "raw": "'a'",
+                "range": [
+                    16,
+                    19
+                ]
+            },
+            "range": [
+                14,
+                19
+            ]
+        },
+        "right": {
+            "type": "Literal",
+            "value": "b",
+            "raw": "'b'",
+            "range": [
+                20,
+                23
+            ]
+        },
+        "range": [
+            14,
+            23
+        ]
+    },
+    "range": [
+        9,
+        24
+    ]
+}
