@@ -74,13 +74,8 @@ define(function(){
 				resultDefault = lanItem.DEFAULTS && lanItem.DEFAULTS[msg];
 		}
 
-		var result = resultSubject || resultDefault;
-		// Taking into account the use of the array that is empty,
-		// so the need for mandatory conversion of the results data.
-		if (result && result.join)
-			return ''+result;
-		else
-			return result || msg;
+		var result = resultSubject || resultDefault || msg;
+		return typeof result == 'string' ? result : ''+result;
 	}
 
 console.log(I18N('中文'))})
