@@ -162,28 +162,41 @@ describe('#i18nc', function()
 		expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 	});
 
-	it('#ignoreScanFunctionNames', function()
+	describe('#options', function()
 	{
-		var code = function code()
+		it('#ignoreScanFunctionNames', function()
 		{
-			function somefunc()
+			var code = function code()
 			{
-				console.log('中文 in some func');
+				function somefunc()
+				{
+					console.log('中文 in some func');
+				}
+
+				somefunc('中文 run some func');
+
+				function otherfunc()
+				{
+					console.log('中文 in other func');
+				}
+
+				otherfunc('中文 run other func');
 			}
 
-			somefunc('中文 run some func');
+			var info = i18nc(code.toString(), {ignoreScanFunctionNames: ['somefunc']});
 
-			function otherfunc()
-			{
-				console.log('中文 in other func');
-			}
+			expect(autoTestUtils.codeTranslateWords2words(info.codeTranslateWords))
+				.to.eql(['中文 in other func', '中文 run other func'].sort());
+		});
 
-			otherfunc('中文 run other func');
-		}
+		it('#spliceLiteralMode', function()
+		{
+			var code = require('./files/func_code_splice_literal');
+			var info = i18nc(code.toString(), {spliceLiteralMode: 'I18N'});
 
-		var info = i18nc(code.toString(), {ignoreScanFunctionNames: ['somefunc']});
+			var otherCode = requireAfterWrite('func_code_splice_literal_output.js', info.code, {readMode: 'string'});
 
-		expect(autoTestUtils.codeTranslateWords2words(info.codeTranslateWords))
-			.to.eql(['中文 in other func', '中文 run other func'].sort());
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
+		});
 	});
 });
