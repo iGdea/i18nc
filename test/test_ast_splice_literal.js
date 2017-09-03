@@ -1,6 +1,6 @@
 var expect				= require('expect.js');
 var optionsUtils		= require('../lib/options');
-var autoWriteFile		= require('./files/auto_write_file');
+var requireAfterWrite	= require('./auto_test_utils').requireAfterWrite('ast_splice_literal');
 var spliceLiteralUtils	= require('../lib/ast_splice_literal');
 
 
@@ -47,10 +47,8 @@ describe('#spliceLiteralAst', function()
 				var arr = spliceLiteralUtils._plusBinaryExpressionAst2arrWidthClear(data, options);
 				expect(_item2val(arr)).to.eql(eqlArr);
 
-				var otherArrFile = name+'_array.json';
-				autoWriteFile(otherArrFile, arr, 'ast_splice_literal');
+				var otherArr = requireAfterWrite(name+'_array.json', arr, 'ast_splice_literal');
 
-				var otherArr = require('./files/ast_splice_literal/'+otherArrFile);
 				expect(arr).to.eql(otherArr);
 			});
 
@@ -58,10 +56,8 @@ describe('#spliceLiteralAst', function()
 			{
 				var newAst = spliceLiteralUtils.spliceLiteralAst(data, options);
 
-				var otherAstFile = name+'_output.json';
-				autoWriteFile(otherAstFile, newAst, 'ast_splice_literal');
+				var otherAst = requireAfterWrite(name+'_output.json', newAst, 'ast_splice_literal');
 
-				var otherAst = require('./files/ast_splice_literal/'+otherAstFile);
 				expect(newAst).to.eql(otherAst);
 			});
 		});
