@@ -1,5 +1,5 @@
 var expect		= require('expect.js');
-var chooseWord	= require('../lib/translate_words_array_generator').choose;
+var chooseWord	= require('../lib/words_db_or_code').choose;
 
 
 describe('#chooseWord', function()
