@@ -18,7 +18,7 @@ module.exports = function write(filename, data, type)
 			break;
 
 		case 'use_require':
-			file_path += 'use_require/';
+			file_path += '../example/cases/use_require/';
 			break;
 	}
 
