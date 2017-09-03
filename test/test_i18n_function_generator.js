@@ -3,7 +3,7 @@ var debug					= require('debug')('i18nc:test_i18n_function_generator');
 var expect					= require('expect.js');
 var escodegen				= require('escodegen');
 var optionsUtils			= require('../lib/options');
-var requireAfterWrite		= require('./auto_test_utils').requireAfterWrite;
+var requireAfterWrite		= require('./auto_test_utils').requireAfterWrite();
 var i18nFunctionGenerator	= require('../lib/i18n_function_generator');
 
 describe('#i18n_function_generator', function()
@@ -31,9 +31,9 @@ describe('#i18n_function_generator', function()
 		var args = require('./files/merge_translate_data');
 		var result = i18nFunctionGenerator._mergeTranslateData(args);
 
-		requireAfterWrite('merge_translate_data_json.json', result);
+		var outputJSON = requireAfterWrite('merge_translate_data_json.json', result);
 
-		expect(result).to.eql(require('./files/merge_translate_data_json.json'));
+		expect(result).to.eql(outputJSON);
 	});
 
 	it('#to_TRANSLATE_DATA_fromat', function()
@@ -41,9 +41,9 @@ describe('#i18n_function_generator', function()
 		var args = require('./files/merge_translate_data_json.json');
 		var result = i18nFunctionGenerator._to_TRANSLATE_DATA_fromat(args);
 
-		requireAfterWrite('merge_translate_data_output.json', result);
+		var outputJSON = requireAfterWrite('merge_translate_data_output.json', result);
 
-		expect(result).to.eql(require('./files/merge_translate_data_output.json'));
+		expect(result).to.eql(outputJSON);
 	});
 
 
@@ -61,9 +61,9 @@ describe('#i18n_function_generator', function()
 		var data = require('./files/merge_translate_data_json.json');
 		var result = i18nFunctionGenerator._to_TRANSLATE_DATA_fromat(data);
 
-		requireAfterWrite('merge_translate_data_output.json', result);
+		var outputJSON = requireAfterWrite('merge_translate_data_output.json', result);
 
-		expect(result).to.eql(require('./files/merge_translate_data_output.json'));
+		expect(result).to.eql(outputJSON);
 	});
 
 
@@ -75,9 +75,7 @@ describe('#i18n_function_generator', function()
 
 		resultCode = 'module.exports = '+resultCode;
 
-		requireAfterWrite('merge_translate_data_output.js', resultCode);
-
-		var otherCode = fs.readFileSync(__dirname+'/files/merge_translate_data_output.js').toString();
+		var otherCode = requireAfterWrite('merge_translate_data_output.js', resultCode, {readMode: 'string'});
 
 		expect(code2arr(resultCode)).to.eql(code2arr(otherCode));
 	});

@@ -5,21 +5,25 @@ var SUB_PATHS =
 	use_require: 'example/cases/use_require'
 };
 
-exports.requireAfterWrite = function requireAfterWrite(filename, data, subpath, options)
+exports.requireAfterWrite = function requireAfterWrite(subpath)
 {
 	var file_path = SUB_PATHS[subpath] || 'files';
-	var file = __dirname+'/'+file_path+'/'+filename;
 
-	if (!process.env.TEST_BUILD) return _requireOrFs(file, options);
-
-	if (typeof data == 'object')
+	return function(filename, data, options)
 	{
-		data = JSON.stringify(data, null, '\t');
+		var file = __dirname+'/'+file_path+'/'+filename;
+
+		if (!process.env.TEST_BUILD) return _requireOrFs(file, options);
+
+		if (typeof data == 'object')
+		{
+			data = JSON.stringify(data, null, '\t');
+		}
+
+		fs.writeFileSync(file, data);
+
+		return _requireOrFs(file, options);
 	}
-
-	fs.writeFileSync(file, data);
-
-	return _requireOrFs(file, options);
 }
 
 function _requireOrFs(file, options)

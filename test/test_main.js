@@ -3,7 +3,7 @@ var fs					= require('fs');
 var expect				= require('expect.js');
 var i18nc				= require('../');
 var dbTranslateWords	= require('./example/translate_words_db');
-var requireAfterWrite	= require('./auto_test_utils').requireAfterWrite;
+var requireAfterWrite	= require('./auto_test_utils').requireAfterWrite();
 
 describe('#i18nc', function()
 {
@@ -20,7 +20,7 @@ describe('#i18nc', function()
 			});
 
 			var outputJSON = requireAfterWrite('i18n_handler_example_i18nc_nocode_output.json', getOutputJSON(info));
-			var otherCode = requireAfterWrite('i18n_handler_example_i18nc_nocode_output.js', info.code, null, {readMode: 'string'});
+			var otherCode = requireAfterWrite('i18n_handler_example_i18nc_nocode_output.js', info.code, {readMode: 'string'});
 
 			expect(getOutputJSON(info)).to.eql(outputJSON);
 			expect(code2arr(info.code)).to.eql(code2arr(otherCode.toString()));
@@ -46,7 +46,7 @@ describe('#i18nc', function()
 			});
 
 			var outputJSON = requireAfterWrite('i18n_handler_example_i18nc_wdithcode_output.json', getOutputJSON(info));
-			var otherCode = requireAfterWrite('i18n_handler_example_i18nc_wdithcode_output.js', info.code, null, {readMode: 'string'});
+			var otherCode = requireAfterWrite('i18n_handler_example_i18nc_wdithcode_output.js', info.code, {readMode: 'string'});
 
 			expect(getOutputJSON(info)).to.eql(outputJSON);
 			expect(code2arr(info.code)).to.eql(code2arr(otherCode.toString()));
@@ -61,7 +61,7 @@ describe('#i18nc', function()
 			var exampleCode = require('./files/func_code_noi18n').toString();
 			var info = i18nc(exampleCode);
 
-			var otherCode = requireAfterWrite('func_code_noi18n_output.js', info.code, null, {readMode: 'string'});
+			var otherCode = requireAfterWrite('func_code_noi18n_output.js', info.code, {readMode: 'string'});
 
 			expect(code2arr(info.code)).to.eql(code2arr(otherCode.toString()));
 		});
@@ -71,7 +71,7 @@ describe('#i18nc', function()
 			var exampleCode = require('./files/func_code_noi18n').toString();
 			var info = i18nc(exampleCode, {isClosureWhenInsertedHead: false});
 
-			var otherCode = requireAfterWrite('func_code_noi18n_output_noclosure.js', info.code, null, {readMode: 'string'});
+			var otherCode = requireAfterWrite('func_code_noi18n_output_noclosure.js', info.code, {readMode: 'string'});
 
 			expect(code2arr(info.code)).to.eql(code2arr(otherCode.toString()));
 		});
@@ -81,7 +81,7 @@ describe('#i18nc', function()
 			var exampleCode = require('./files/func_code_noi18n_define').toString();
 			var info = i18nc(exampleCode);
 
-			var otherCode = requireAfterWrite('func_code_noi18n_define_output.js', info.code, null, {readMode: 'string'});
+			var otherCode = requireAfterWrite('func_code_noi18n_define_output.js', info.code, {readMode: 'string'});
 
 			expect(code2arr(info.code)).to.eql(code2arr(otherCode.toString()));
 		});
@@ -94,7 +94,7 @@ describe('#i18nc', function()
 					isInsertToDefineHalder: false
 				});
 
-			var otherCode = requireAfterWrite('func_code_noi18n_define_output_notdefine.js', info.code, null, {readMode: 'string'});
+			var otherCode = requireAfterWrite('func_code_noi18n_define_output_notdefine.js', info.code, {readMode: 'string'});
 
 			expect(code2arr(info.code)).to.eql(code2arr(otherCode.toString()));
 		});
@@ -107,7 +107,7 @@ describe('#i18nc', function()
 			var exampleCode = require('./files/func_code_i18n').toString();
 			var info = i18nc(exampleCode);
 
-			var otherCode = requireAfterWrite('func_code_i18n_output.js', info.code, null, {readMode: 'string'});
+			var otherCode = requireAfterWrite('func_code_i18n_output.js', info.code, {readMode: 'string'});
 
 			expect(code2arr(info.code)).to.eql(code2arr(otherCode.toString()));
 		});
@@ -135,7 +135,7 @@ describe('#i18nc', function()
 					}
 				});
 
-			var otherCode = requireAfterWrite('func_code_i18n_define_output.js', info.code, null, {readMode: 'string'});
+			var otherCode = requireAfterWrite('func_code_i18n_define_output.js', info.code, {readMode: 'string'});
 
 			expect(code2arr(info.code)).to.eql(code2arr(otherCode.toString()));
 		});
@@ -146,7 +146,7 @@ describe('#i18nc', function()
 			var exampleCode = require('./files/func_code_i18n_nowords').toString();
 			var info = i18nc(exampleCode);
 
-			var otherCode = requireAfterWrite('func_code_i18n_nowords_output.js', info.code, null, {readMode: 'string'});
+			var otherCode = requireAfterWrite('func_code_i18n_nowords_output.js', info.code, {readMode: 'string'});
 
 			expect(code2arr(info.code)).to.eql(code2arr(otherCode.toString()));
 		});
@@ -157,7 +157,7 @@ describe('#i18nc', function()
 	{
 		var info = i18nc('/* some things */\ndefine(function(){console.log("中文")})');
 
-		var otherCode = requireAfterWrite('func_code_head_has_content_output.js', info.code, null, {readMode: 'string'});
+		var otherCode = requireAfterWrite('func_code_head_has_content_output.js', info.code, {readMode: 'string'});
 
 		expect(code2arr(info.code)).to.eql(code2arr(otherCode.toString()));
 	});
