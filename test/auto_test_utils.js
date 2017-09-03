@@ -5,7 +5,6 @@ var fs = require('fs');
 var SUB_PATHS =
 {
 	example: 'example',
-	ast_splice_literal: 'files/ast_splice_literal',
 	use_require: 'example/cases/use_require'
 };
 

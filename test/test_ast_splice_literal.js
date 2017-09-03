@@ -4,7 +4,6 @@ var expect				= require('expect.js');
 var escodegen			= require('escodegen');
 var i18nc				= require('../');
 var optionsUtils		= require('../lib/options');
-// var requireAfterWrite	= require('./auto_test_utils').requireAfterWrite('ast_splice_literal');
 var spliceLiteralUtils	= require('../lib/ast_splice_literal');
 
 
@@ -47,36 +46,35 @@ describe('#spliceLiteralAst', function()
 			});
 	}
 
-	function _realCheck(name, codeStr, eqlInfo, mode)
+	/**
+	 * @param  {String} codeStr 表达式code
+	 * 								code字符串使用小写的字母表示
+	 * 								变量或则函数，使用大写的字幕表示
+	 * 
+	 * @param  {Object} eqlInfo 期望的结果值
+	 * 								combo 合并后的数组
+	 * 								comboCode 通过combo合成的ast生成的code（表达式，同上）
+	 * @param  {String} mode    spliceLiteralMode值
+	 */
+	function _realCheck(codeStr, eqlInfo, mode)
 	{
 		mode = mode || 'LITERAL';
 		var code = _str2code(codeStr);
-		debug('test <%s> new code:%s', name, code);
+		debug('new code:%s', code);
 
 		var data = i18nc.parse(code).body[0].expression;
 		var options = optionsUtils.extend({spliceLiteralMode: mode});
 
-		// var data = require('./files/ast_splice_literal/'+name+'.json');
-		// data = requireAfterWrite(name+'.json', data);
-		// var mainFilename = mode == 'LITERAL' || mode == 'NODE' ? name : name + '_[mode]'+mode;
 
 		it('#plusBinaryExpressionAst2arrWidthClear', function()
 		{
 			var arr = spliceLiteralUtils._plusBinaryExpressionAst2arrWidthClear(data, options);
 			expect(_item2val(arr)).to.eql(eqlInfo.combo);
-
-			// var otherArr = requireAfterWrite(mainFilename+'_array.json', arr);
-
-			// expect(arr).to.eql(otherArr);
 		});
 
 		it('#spliceLiteralAst', function()
 		{
 			var newAst = spliceLiteralUtils.spliceLiteralAst(data, options);
-
-			// var otherAst = requireAfterWrite(mainFilename+'_output.json', newAst);
-
-			// expect(newAst).to.eql(otherAst);
 
 			var escodegenOptions = {format:{quotes: 'double'}};
 			var newCode = escodegen.generate(newAst, escodegenOptions).replace(/\s/g, '');
@@ -84,25 +82,25 @@ describe('#spliceLiteralAst', function()
 		});
 	}
 
-	function _checkOne(name, codeStr)
+	function _checkOne(codeStr)
 	{
 		var args = arguments;
-		describe('#'+name+' / '+codeStr, function()
+		describe('#expr:'+codeStr, function()
 		{
 			_realCheck.apply(this, args);
 		});
 	}
 
 
-	function _checkAll(name, codeStr, eqlObj)
+	function _checkAll(codeStr, eqlObj)
 	{
-		describe('#'+name+' / '+codeStr, function()
+		describe('#expr:'+codeStr, function()
 		{
 			_.each(eqlObj, function(eqlInfo, mode)
 			{
 				describe('#mode:'+mode, function()
 				{
-					_realCheck(name, codeStr, eqlInfo, mode);
+					_realCheck(codeStr, eqlInfo, mode);
 				});
 			});
 		});
@@ -111,17 +109,17 @@ describe('#spliceLiteralAst', function()
 
 	describe('#base', function()
 	{
-		_checkOne('simple', 'a+b+c',
+		_checkOne('a+b+c',
 			{
 				combo		: ['abc'],
 				comboCode	: 'abc'
 			});
-		_checkOne('priority', 'a+(b+c)',
+		_checkOne('a+(b+c)',
 			{
 				combo: ['abc'],
 				comboCode: 'abc'
 			});
-		_checkOne('number', '1+2+a+b',
+		_checkOne('1+2+a+b',
 			{
 				combo: [1, 2, 'ab'],
 				comboCode: '1+2+ab'
@@ -131,12 +129,12 @@ describe('#spliceLiteralAst', function()
 
 	describe('#var', function()
 	{
-		_checkOne('number_var', '1+2+Var1+a+b',
+		_checkOne('1+2+Var1+a+b',
 			{
 				combo: [1, 2, '[ast:Identifier]', 'ab'],
 				comboCode: '1+2+Var1+ab'
 			});
-		_checkOne('number_var2', '1+Var1+2+a+b',
+		_checkOne('1+Var1+2+a+b',
 			{
 				combo: [1, '[ast:Identifier]', 2, 'ab'],
 				comboCode: '1+Var1+2+ab'
@@ -146,7 +144,7 @@ describe('#spliceLiteralAst', function()
 
 	describe('#run handler', function()
 	{
-		_checkOne('number_run', '1+Run(2)+3+a',
+		_checkOne('1+Run(2)+3+a',
 			{
 				combo: [1, '[callee]Run', 3, 'a'],
 				comboCode: '1+Run(2)+3+a'
@@ -156,22 +154,22 @@ describe('#spliceLiteralAst', function()
 
 	describe('#priority', function()
 	{
-		_checkOne('priority_number_one', '1+a+b+(2+c+d)',
+		_checkOne('1+a+b+(2+c+d)',
 			{
 				combo: ['1ab2cd'],
 				comboCode: '1ab2cd'
 			});
-		_checkOne('priority_number_one2', '1+(2+a+b)',
+		_checkOne('1+(2+a+b)',
 			{
 				combo: ['12ab'],
 				comboCode: '12ab'
 			});
-		_checkOne('priority_number', '1+2+a+b+(3+4+c+d)',
+		_checkOne('1+2+a+b+(3+4+c+d)',
 			{
 				combo: [1, 2, 'ab', [3, 4, 'cd']],
 				comboCode: '1+2+ab+(3+4+cd)'
 			});
-		_checkOne('priority_number2', '1+2+(3+a+b)',
+		_checkOne('1+2+(3+a+b)',
 			{
 				combo: [1, 2, '3ab'],
 				comboCode: '1+2+3ab'
@@ -180,27 +178,27 @@ describe('#spliceLiteralAst', function()
 
 	describe('#other operator', function()
 	{
-		_checkOne('priority_number_multiply', '1*a+b+(2+c+d)',
+		_checkOne('1*a+b+(2+c+d)',
 			{
 				combo: ['[ast:BinaryExpression]', 'b2cd'],
 				comboCode: '1*a+b2cd'
 			});
-		_checkOne('priority_number_multiply2', '1*2+a+(3+b+c)',
+		_checkOne('1*2+a+(3+b+c)',
 			{
 				combo: ['[ast:BinaryExpression]', 'a3bc'],
 				comboCode: '1*2+a3bc'
 			});
-		_checkOne('priority_number_multiply3', '1*2+3+(4+a+b)',
+		_checkOne('1*2+3+(4+a+b)',
 			{
 				combo: ['[ast:BinaryExpression]', 3, '4ab'],
 				comboCode: '1*2+3+4ab'
 			});
-		_checkOne('number_multiply', '1*2+3+4+a',
+		_checkOne('1*2+3+4+a',
 			{
 				combo: ['[ast:BinaryExpression]', 3, 4, 'a'],
 				comboCode: '1*2+3+4+a'
 			});
-		_checkOne('number_multiply2', '1+2*3+4+a',
+		_checkOne('1+2*3+4+a',
 			{
 				combo: [1, '[ast:BinaryExpression]', 4, 'a'],
 				comboCode: '1+2*3+4+a'
@@ -210,7 +208,7 @@ describe('#spliceLiteralAst', function()
 
 	describe('#I18N', function()
 	{
-		_checkAll('i18n_number', '1+2+a+I18N(3)',
+		_checkAll('1+2+a+I18N(3)',
 			{
 				LITERAL:
 				{
@@ -229,7 +227,7 @@ describe('#spliceLiteralAst', function()
 				}
 			});
 
-		_checkAll('i18n_string', '1+2+a+I18N(b)',
+		_checkAll('1+2+a+I18N(b)',
 			{
 				LITERAL:
 				{
@@ -248,7 +246,7 @@ describe('#spliceLiteralAst', function()
 				}
 			});
 
-		_checkAll('i18n_string2', '1+I18N(2)+3+a',
+		_checkAll('1+I18N(2)+3+a',
 			{
 				LITERAL:
 				{
@@ -267,7 +265,7 @@ describe('#spliceLiteralAst', function()
 				}
 			});
 
-		_checkAll('i18n_var', '1+2+a+I18N(Var1)',
+		_checkAll('1+2+a+I18N(Var1)',
 			{
 				LITERAL:
 				{
@@ -286,7 +284,7 @@ describe('#spliceLiteralAst', function()
 				}
 			});
 
-		_checkAll('i18n_subtype', '1+2+a+I18N(b,subtype)',
+		_checkAll('1+2+a+I18N(b,subtype)',
 			{
 				LITERAL:
 				{
