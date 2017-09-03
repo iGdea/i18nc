@@ -20,12 +20,7 @@ describe('#ASTCollector', function()
 			}
 
 			var scope = getFinalCollect(code);
-			var words = scope.translateWordAsts.map(function(item)
-				{
-					return item.__i18n_replace_info__.translateWords;
-				});
-
-			expect(words).to.eql([['中文']]);
+			expect(getScopeCodeTranslateWord(scope)).to.eql(['中文']);
 		});
 
 		it('#skip_repalce', function()
@@ -41,15 +36,9 @@ describe('#ASTCollector', function()
 			}
 
 			var scope = getFinalCollect(code);
-			var words = scope.translateWordAsts.map(function(item, index)
-				{
-					return item.__i18n_replace_info__.translateWords;
-				});
 			expect(!!astUtils.checkAstFlag(scope.translateWordAsts[0], astUtils.AST_FLAGS.SKIP_REPLACE)).to.be(false);
-
 			expect(!!astUtils.checkAstFlag(scope.translateWordAsts[1], astUtils.AST_FLAGS.SKIP_REPLACE)).to.be(true);
-
-			expect(words).to.eql([['中文'], ['这个中文还在']]);
+			expect(getScopeCodeTranslateWord(scope)).to.eql(['中文', '这个中文还在'].sort());
 		});
 	});
 	
@@ -84,31 +73,19 @@ describe('#ASTCollector', function()
 			it('#normal', function()
 			{
 				var scope = getFinalCollect(code);
-				var words = scope.translateWordAsts.map(function(item)
-					{
-						return item.__i18n_replace_info__.translateWords;
-					});
-				expect(words).to.eql([['中文'], ['简体']]);
+				expect(getScopeCodeTranslateWord(scope)).to.eql(['中文', '简体'].sort());
 			});
 
 			it('#LITERAL', function()
 			{
 				var scope = getFinalCollect(code, {spliceLiteralMode: 'LITERAL'});
-				var words = scope.translateWordAsts.map(function(item)
-					{
-						return item.__i18n_replace_info__.translateWords;
-					});
-				expect(words).to.eql([['123中文'], ['简体']]);
+				expect(getScopeCodeTranslateWord(scope)).to.eql(['123中文','简体'].sort());
 			});
 
 			it('#I18N', function()
 			{
 				var scope = getFinalCollect(code, {spliceLiteralMode: 'I18N'});
-				var words = scope.translateWordAsts.map(function(item)
-					{
-						return item.__i18n_replace_info__.translateWords;
-					});
-				expect(words).to.eql([['123中文abc'], ['简体']]);
+				expect(getScopeCodeTranslateWord(scope)).to.eql(['123中文abc', '简体'].sort());
 			});
 		});
 	});
@@ -129,12 +106,7 @@ describe('#ASTCollector', function()
 			};
 
 			var scope = getFinalCollect(code);
-			var words = scope.translateWordAsts.map(function(item, index)
-				{
-					return item.__i18n_replace_info__.translateWords;
-				});
-
-			expect(words).to.eql([['中文1'], ['中文2']]);
+			expect(getScopeCodeTranslateWord(scope)).to.eql(['中文1','中文2'].sort());
 		});
 
 		it('#scopes and I18N', function()
@@ -152,12 +124,7 @@ describe('#ASTCollector', function()
 			};
 
 			var scope = getFinalCollect(code);
-			var words = scope.subScopes[0].translateWordAsts.map(function(item, index)
-				{
-					return item.__i18n_replace_info__.translateWords;
-				});
-
-			expect(words).to.eql([['中文1'], ['中文2']]);
+			expect(getScopeCodeTranslateWord(scope.subScopes[0])).to.eql(['中文1','中文2'].sort());
 		});
 
 		it('#scopes and define', function()
@@ -179,12 +146,7 @@ describe('#ASTCollector', function()
 			};
 
 			var scope = getFinalCollect(code);
-			var words = scope.subScopes[0].translateWordAsts.map(function(item, index)
-				{
-					return item.__i18n_replace_info__.translateWords;
-				});
-
-			expect(words).to.eql([['中文1'], ['中文2'], ['中文3']]);
+			expect(getScopeCodeTranslateWord(scope.subScopes[0])).to.eql(['中文1','中文2','中文3'].sort());
 		});
 
 		it('#scopes and defines', function()
@@ -212,12 +174,7 @@ describe('#ASTCollector', function()
 			};
 
 			var scope = getFinalCollect(code);
-			var words = scope.subScopes[0].translateWordAsts.map(function(item, index)
-				{
-					return item.__i18n_replace_info__.translateWords;
-				});
-
-			expect(words).to.eql([['中文1'], ['中文2'], ['中文3'], ['中文4']]);
+			expect(getScopeCodeTranslateWord(scope.subScopes[0])).to.eql(['中文1','中文2','中文3','中文4'].sort());
 		});
 
 	});
@@ -234,4 +191,14 @@ function getCollect(code, options)
 function getFinalCollect()
 {
 	return getCollect.apply(this, arguments).squeeze();
+}
+
+function getScopeCodeTranslateWord(scope)
+{
+	var words = scope.translateWordAsts.map(function(item, index)
+		{
+			return item.__i18n_replace_info__.translateWords;
+		});
+
+	return Array.prototype.concat.apply([], words).sort();
 }
