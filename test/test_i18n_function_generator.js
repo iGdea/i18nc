@@ -3,7 +3,7 @@ var debug					= require('debug')('i18nc:test_i18n_function_generator');
 var expect					= require('expect.js');
 var escodegen				= require('escodegen');
 var optionsUtils			= require('../lib/options');
-var autoWriteFile			= require('./files/auto_write_file');
+var requireAfterWrite		= require('./auto_test_utils').requireAfterWrite;
 var i18nFunctionGenerator	= require('../lib/i18n_function_generator');
 
 describe('#i18n_function_generator', function()
@@ -31,7 +31,7 @@ describe('#i18n_function_generator', function()
 		var args = require('./files/merge_translate_data');
 		var result = i18nFunctionGenerator._mergeTranslateData(args);
 
-		autoWriteFile('merge_translate_data_json.json', result);
+		requireAfterWrite('merge_translate_data_json.json', result);
 
 		expect(result).to.eql(require('./files/merge_translate_data_json.json'));
 	});
@@ -41,7 +41,7 @@ describe('#i18n_function_generator', function()
 		var args = require('./files/merge_translate_data_json.json');
 		var result = i18nFunctionGenerator._to_TRANSLATE_DATA_fromat(args);
 
-		autoWriteFile('merge_translate_data_output.json', result);
+		requireAfterWrite('merge_translate_data_output.json', result);
 
 		expect(result).to.eql(require('./files/merge_translate_data_output.json'));
 	});
@@ -61,7 +61,7 @@ describe('#i18n_function_generator', function()
 		var data = require('./files/merge_translate_data_json.json');
 		var result = i18nFunctionGenerator._to_TRANSLATE_DATA_fromat(data);
 
-		autoWriteFile('merge_translate_data_output.json', result);
+		requireAfterWrite('merge_translate_data_output.json', result);
 
 		expect(result).to.eql(require('./files/merge_translate_data_output.json'));
 	});
@@ -75,7 +75,7 @@ describe('#i18n_function_generator', function()
 
 		resultCode = 'module.exports = '+resultCode;
 
-		autoWriteFile('merge_translate_data_output.js', resultCode);
+		requireAfterWrite('merge_translate_data_output.js', resultCode);
 
 		var otherCode = fs.readFileSync(__dirname+'/files/merge_translate_data_output.js').toString();
 

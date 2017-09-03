@@ -2,7 +2,7 @@ var _					= require('lodash');
 var fs					= require('fs');
 var expect				= require('expect.js');
 var i18nc				= require('../');
-var autoWriteFile		= require('./files/auto_write_file');
+var requireAfterWrite	= require('./auto_test_utils').requireAfterWrite;
 var dbTranslateWords	= require('./example/translate_words_db');
 
 describe('#example', function()
@@ -30,7 +30,7 @@ describe('#example', function()
 					dbTranslateWords: dbTranslateWords
 				});
 
-			autoWriteFile('func_code_output.js', 'module.exports = '+info.code, 'example');
+			requireAfterWrite('func_code_output.js', 'module.exports = '+info.code, 'example');
 
 			expect(code2arr(info.code)).to.eql(code2arr(exampleCode_output.toString()));
 			eval('var exampleCode_new ='+info.code);
@@ -50,7 +50,7 @@ describe('#example', function()
 					dbTranslateWords: dbTranslateWords
 				});
 
-			autoWriteFile('func_code_output.json', getOutputJSON(info), 'example');
+			requireAfterWrite('func_code_output.json', getOutputJSON(info), 'example');
 
 			expect(code2arr(info.code)).to.eql(code2arr(exampleCode_output.toString()));
 			eval('var exampleCode_new ='+info.code);
@@ -93,10 +93,9 @@ describe('#example', function()
 			genTranslateJSON: function(code, translateData, translateDataAst, options)
 			{
 				var content = 'module.exports = '+code;
-				autoWriteFile('require_data.js', content, 'use_require');
+				
+				var otherContent = requireAfterWrite('require_data.js', content, 'use_require', {readMode: 'string'});
 
-				var file = __dirname+'/example/cases/use_require/require_data.js';
-				var otherContent = fs.readFileSync(file);
 				expect(code2arr(content)).to.eql(code2arr(otherContent.toString()));
 
 				return 'require("./require_data.js")';
@@ -106,9 +105,7 @@ describe('#example', function()
 		var exampleCode = require('./example/cases/use_require/func_code');
 		var info = i18nc(exampleCode.toString(), i18nOptions);
 
-		autoWriteFile('func_code_output.js', 'module.exports = '+info.code, 'use_require');
-
-		var otherCode = require('./example/cases/use_require/func_code_output');
+		var otherCode = requireAfterWrite('func_code_output.js', 'module.exports = '+info.code, 'use_require');
 
 		expect(code2arr(info.code)).to.eql(code2arr(otherCode.toString()));
 	});
