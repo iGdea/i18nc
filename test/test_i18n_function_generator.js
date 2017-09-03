@@ -3,7 +3,8 @@ var debug					= require('debug')('i18nc:test_i18n_function_generator');
 var expect					= require('expect.js');
 var escodegen				= require('escodegen');
 var optionsUtils			= require('../lib/options');
-var requireAfterWrite		= require('./auto_test_utils').requireAfterWrite();
+var autoTestUtils			= require('./auto_test_utils');
+var requireAfterWrite		= autoTestUtils.requireAfterWrite();
 var i18nFunctionGenerator	= require('../lib/i18n_function_generator');
 
 describe('#i18n_function_generator', function()
@@ -22,7 +23,7 @@ describe('#i18n_function_generator', function()
 			});
 		var otherCode = escodegen.generate(otherAst, optionsUtils.escodegenOptions);
 
-		expect(code2arr(resultCode)).to.eql(code2arr(otherCode));
+		expect(autoTestUtils.code2arr(resultCode)).to.eql(autoTestUtils.code2arr(otherCode));
 	});
 
 
@@ -77,20 +78,7 @@ describe('#i18n_function_generator', function()
 
 		var otherCode = requireAfterWrite('merge_translate_data_output.js', resultCode, {readMode: 'string'});
 
-		expect(code2arr(resultCode)).to.eql(code2arr(otherCode));
+		expect(autoTestUtils.code2arr(resultCode)).to.eql(autoTestUtils.code2arr(otherCode));
 	});
 });
 
-
-function code2arr(code)
-{
-	return code.split('\n')
-		.map(function(val)
-		{
-			return val.trim();
-		})
-		.filter(function(val)
-		{
-			return val;
-		});
-}

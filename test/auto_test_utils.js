@@ -1,4 +1,7 @@
+var _ = require('lodash');
 var fs = require('fs');
+
+
 var SUB_PATHS =
 {
 	example: 'example',
@@ -39,3 +42,34 @@ function _requireOrFs(file, options)
 			return require(file);
 	}
 }
+
+
+exports.code2arr = function code2arr(code)
+{
+	return code.split('\n')
+		.filter(function(val)
+		{
+			return val.trim();
+		});
+}
+
+exports.JsonOfI18ncRet = function JsonOfI18ncRet(info)
+{
+	return {
+		codeTranslateWords: info.codeTranslateWords,
+		funcTranslateWords: info.funcTranslateWords,
+		usedTranslateWords: info.usedTranslateWords
+	};
+}
+
+exports.codeTranslateWords2words = function codeTranslateWords2words(codeTranslateWords)
+{
+	var translateWords = _.map(codeTranslateWords.SUBTYPES, function(val)
+		{
+			return val;
+		});
+	translateWords = [].concat.apply(codeTranslateWords.DEFAULTS, translateWords);
+
+	return _.uniq(translateWords).sort();
+}
+

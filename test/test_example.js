@@ -1,4 +1,3 @@
-var _					= require('lodash');
 var fs					= require('fs');
 var expect				= require('expect.js');
 var i18nc				= require('../');
@@ -33,12 +32,12 @@ describe('#example', function()
 
 			requireAfterWrite('func_code_output.js', 'module.exports = '+info.code);
 
-			expect(code2arr(info.code)).to.eql(code2arr(exampleCode_output.toString()));
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(exampleCode_output.toString()));
 			eval('var exampleCode_new ='+info.code);
-			// console.log(JSON.stringify(getTranslateWords(info.codeTranslateWords)));
+			// console.log(JSON.stringify(autoTestUtils.codeTranslateWords2words(info.codeTranslateWords)));
 
 			expect(exampleCode_new()).to.be(exampleCode());
-			expect(getTranslateWords(info.codeTranslateWords)).to.eql(translateWords);
+			expect(autoTestUtils.codeTranslateWords2words(info.codeTranslateWords)).to.eql(translateWords);
 			expect(info.dirtyWords).to.empty();
 		});
 
@@ -51,13 +50,13 @@ describe('#example', function()
 					dbTranslateWords: dbTranslateWords
 				});
 
-			requireAfterWrite('func_code_output.json', getOutputJSON(info));
+			requireAfterWrite('func_code_output.json', autoTestUtils.JsonOfI18ncRet(info));
 
-			expect(code2arr(info.code)).to.eql(code2arr(exampleCode_output.toString()));
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(exampleCode_output.toString()));
 			eval('var exampleCode_new ='+info.code);
 
 			expect(exampleCode_new()).to.be(exampleCode());
-			expect(getTranslateWords(info.codeTranslateWords)).to.eql(translateWords);
+			expect(autoTestUtils.codeTranslateWords2words(info.codeTranslateWords)).to.eql(translateWords);
 			expect(info.dirtyWords).to.empty();
 		});
 	});
@@ -98,7 +97,7 @@ describe('#example', function()
 				
 				var otherContent = requireAfterWrite('require_data.js', content, {readMode: 'string'});
 
-				expect(code2arr(content)).to.eql(code2arr(otherContent.toString()));
+				expect(autoTestUtils.code2arr(content)).to.eql(autoTestUtils.code2arr(otherContent.toString()));
 
 				return 'require("./require_data.js")';
 			},
@@ -109,36 +108,7 @@ describe('#example', function()
 
 		var otherCode = requireAfterWrite('func_code_output.js', 'module.exports = '+info.code);
 
-		expect(code2arr(info.code)).to.eql(code2arr(otherCode.toString()));
+		expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 	});
 });
 
-
-function getOutputJSON(info)
-{
-	return {
-		codeTranslateWords: info.codeTranslateWords,
-		funcTranslateWords: info.funcTranslateWords,
-		usedTranslateWords: info.usedTranslateWords
-	};
-}
-
-function getTranslateWords(codeTranslateWords)
-{
-	var translateWords = _.map(codeTranslateWords.SUBTYPES, function(val)
-		{
-			return val;
-		});
-	translateWords = [].concat.apply(codeTranslateWords.DEFAULTS, translateWords);
-
-	return _.uniq(translateWords).sort();
-}
-
-function code2arr(code)
-{
-	return code.split('\n')
-		.filter(function(val)
-		{
-			return val.trim();
-		});
-}
