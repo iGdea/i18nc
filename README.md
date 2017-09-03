@@ -32,37 +32,30 @@ ret.usedTranslateWords
 ### Input Code
 
 ```
-var work = "global 中文1";
+var word = "中文1";
 define(function()
 {
-  var word = I18N('define1 中文', 'in define');
+  var word = "中文2";
+  var word = I18N('中文', 'sub type');
 });
 
-define('define2', function()
-{
-  var word = 'define2 中文';
-});
-
-var work = "global 中文2";
+var word = '简体';
+var word = I18N('中文');
 function I18N(){}
 ```
 
 ### Output Code
 
 ```
-var work = I18N('global 中文1');
+var word = I18N('中文1');
 define(function()
 {
-  var word = I18N('define1 中文', 'in define');
+  var word = I18N('中文2');
+  var word = I18N('中文', 'sub type');
 });
 
-define('define2', function()
-{
-  var word = I18N('define2 中文');
-});
-
-var work = I18N('global 中文2');
-
+var word = I18N('简体');
+var word = I18N('中文');
 function I18N(msg, subtype) {
   ....
 }
@@ -75,7 +68,6 @@ function I18N(msg, subtype) {
   var self = I18N;
   var GLOBAL = self.__GLOBAL__ || (self.__GLOBAL__ = window.settings) || {};
   var LAN = GLOBAL.__i18n_lan__;
-
   if (!LAN) return msg;
 
   if (self.__TRANSLATE_LAN__ != LAN) {
