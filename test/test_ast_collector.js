@@ -5,171 +5,223 @@ var astUtils		= require('../lib/ast_utils');
 
 describe('#ASTCollector', function()
 {
-	it('#skip_scan', function()
+	describe('#block modifier', function()
 	{
-		var code = function code()
+		it('#skip_scan', function()
 		{
-			var v1 = '中文';
-
+			var code = function code()
 			{
-				"[i18nc] skip_scan"
-				var v2 = "跳过这个中文";
+				var v1 = '中文';
+
+				{
+					"[i18nc] skip_scan"
+					var v2 = "跳过这个中文";
+				}
 			}
-		}
 
-		var scope = getFinalCollect(code);
-		var words = scope.translateWordAsts.map(function(item)
-			{
-				return item.__i18n_replace_info__.translateWords;
-			});
+			var scope = getFinalCollect(code);
+			var words = scope.translateWordAsts.map(function(item)
+				{
+					return item.__i18n_replace_info__.translateWords;
+				});
 
-		expect(words).to.eql([['中文']]);
-	});
+			expect(words).to.eql([['中文']]);
+		});
 
-	it('#skip_repalce', function()
-	{
-		var code = function code()
+		it('#skip_repalce', function()
 		{
-			var v1 = '中文';
-
+			var code = function code()
 			{
-				"[i18nc] skip_repalce"
-				var v2 = "这个中文还在";
+				var v1 = '中文';
+
+				{
+					"[i18nc] skip_repalce"
+					var v2 = "这个中文还在";
+				}
 			}
-		}
 
-		var scope = getFinalCollect(code);
-		var words = scope.translateWordAsts.map(function(item, index)
-			{
-				return item.__i18n_replace_info__.translateWords;
-			});
-		expect(!!astUtils.checkAstFlag(scope.translateWordAsts[0], astUtils.AST_FLAGS.SKIP_REPLACE)).to.be(false);
+			var scope = getFinalCollect(code);
+			var words = scope.translateWordAsts.map(function(item, index)
+				{
+					return item.__i18n_replace_info__.translateWords;
+				});
+			expect(!!astUtils.checkAstFlag(scope.translateWordAsts[0], astUtils.AST_FLAGS.SKIP_REPLACE)).to.be(false);
 
-		expect(!!astUtils.checkAstFlag(scope.translateWordAsts[1], astUtils.AST_FLAGS.SKIP_REPLACE)).to.be(true);
+			expect(!!astUtils.checkAstFlag(scope.translateWordAsts[1], astUtils.AST_FLAGS.SKIP_REPLACE)).to.be(true);
 
-		expect(words).to.eql([['中文'], ['这个中文还在']]);
+			expect(words).to.eql([['中文'], ['这个中文还在']]);
+		});
 	});
+	
 
-	it('#isIgnoreScanWarn', function()
+	describe('#options', function()
 	{
-		var code = function code()
+		it('#isIgnoreScanWarn', function()
 		{
-			var v1 =
+			var code = function code()
 			{
-				"中文key": "中文val"
-			};
-		};
-
-		expect(getFinalCollect).withArgs(code)
-			.to.throwException(/\[I18N\] Object property can't use i18n\./);
-
-		expect(getFinalCollect).withArgs(code, {isIgnoreScanWarn: true})
-			.to.not.throwException();
-	});
-
-	it('#scopes', function()
-	{
-		var code = function code()
-		{
-			var v1 = "中文1";
-
-			function func2()
-			{
-				var v1 = "中文2";
-			};
-		};
-
-		var scope = getFinalCollect(code);
-		var words = scope.translateWordAsts.map(function(item, index)
-			{
-				return item.__i18n_replace_info__.translateWords;
-			});
-
-		expect(words).to.eql([['中文1'], ['中文2']]);
-	});
-
-	it('#scopes and I18N', function()
-	{
-		var code = function code()
-		{
-			var v1 = "中文1";
-
-			function func2()
-			{
-				var v1 = "中文2";
+				var v1 =
+				{
+					"中文key": "中文val"
+				};
 			};
 
-			function I18N(){}
-		};
+			expect(getFinalCollect).withArgs(code)
+				.to.throwException(/\[I18N\] Object property can't use i18n\./);
 
-		var scope = getFinalCollect(code);
-		var words = scope.subScopes[0].translateWordAsts.map(function(item, index)
+			expect(getFinalCollect).withArgs(code, {isIgnoreScanWarn: true})
+				.to.not.throwException();
+		});
+
+		describe('#spliceLiteralMode', function()
+		{
+			var code = function code()
 			{
-				return item.__i18n_replace_info__.translateWords;
+				var a = '123'+'中文'+I18N('abc');
+				var b = '简体';
+			}
+
+			it('#normal', function()
+			{
+				var scope = getFinalCollect(code);
+				var words = scope.translateWordAsts.map(function(item)
+					{
+						return item.__i18n_replace_info__.translateWords;
+					});
+				expect(words).to.eql([['中文'], ['简体']]);
 			});
 
-		expect(words).to.eql([['中文1'], ['中文2']]);
+			it('#LITERAL', function()
+			{
+				var scope = getFinalCollect(code, {spliceLiteralMode: 'LITERAL'});
+				var words = scope.translateWordAsts.map(function(item)
+					{
+						return item.__i18n_replace_info__.translateWords;
+					});
+				expect(words).to.eql([['123中文'], ['简体']]);
+			});
+
+			it('#I18N', function()
+			{
+				var scope = getFinalCollect(code, {spliceLiteralMode: 'I18N'});
+				var words = scope.translateWordAsts.map(function(item)
+					{
+						return item.__i18n_replace_info__.translateWords;
+					});
+				expect(words).to.eql([['123中文abc'], ['简体']]);
+			});
+		});
 	});
 
-	it('#scopes and define', function()
-	{
-		var code = function code()
-		{
-			var v1 = "中文1";
 
-			function func2()
+	describe('#scopes', function()
+	{
+		it('#scopes', function()
+		{
+			var code = function code()
 			{
-				var v1 = "中文2";
+				var v1 = "中文1";
+
+				function func2()
+				{
+					var v1 = "中文2";
+				};
 			};
 
-			define(function()
-			{
-				var v1 = "中文3"
-			});
-			function I18N(){};
-		};
+			var scope = getFinalCollect(code);
+			var words = scope.translateWordAsts.map(function(item, index)
+				{
+					return item.__i18n_replace_info__.translateWords;
+				});
 
-		var scope = getFinalCollect(code);
-		var words = scope.subScopes[0].translateWordAsts.map(function(item, index)
-			{
-				return item.__i18n_replace_info__.translateWords;
-			});
+			expect(words).to.eql([['中文1'], ['中文2']]);
+		});
 
-		expect(words).to.eql([['中文1'], ['中文2'], ['中文3']]);
-	});
-
-	it('#scopes and defines', function()
-	{
-		var code = function code()
+		it('#scopes and I18N', function()
 		{
-			var v1 = "中文1";
-
-			function func2()
+			var code = function code()
 			{
-				var v1 = "中文2";
+				var v1 = "中文1";
+
+				function func2()
+				{
+					var v1 = "中文2";
+				};
+
+				function I18N(){}
 			};
 
-			define(function()
+			var scope = getFinalCollect(code);
+			var words = scope.subScopes[0].translateWordAsts.map(function(item, index)
+				{
+					return item.__i18n_replace_info__.translateWords;
+				});
+
+			expect(words).to.eql([['中文1'], ['中文2']]);
+		});
+
+		it('#scopes and define', function()
+		{
+			var code = function code()
 			{
-				var v1 = "中文3"
-			});
+				var v1 = "中文1";
 
-			define('define', function()
+				function func2()
+				{
+					var v1 = "中文2";
+				};
+
+				define(function()
+				{
+					var v1 = "中文3"
+				});
+				function I18N(){};
+			};
+
+			var scope = getFinalCollect(code);
+			var words = scope.subScopes[0].translateWordAsts.map(function(item, index)
+				{
+					return item.__i18n_replace_info__.translateWords;
+				});
+
+			expect(words).to.eql([['中文1'], ['中文2'], ['中文3']]);
+		});
+
+		it('#scopes and defines', function()
+		{
+			var code = function code()
 			{
-				var v1 = "中文4"
-			});
+				var v1 = "中文1";
 
-			function I18N(){};
-		};
+				function func2()
+				{
+					var v1 = "中文2";
+				};
 
-		var scope = getFinalCollect(code);
-		var words = scope.subScopes[0].translateWordAsts.map(function(item, index)
-			{
-				return item.__i18n_replace_info__.translateWords;
-			});
+				define(function()
+				{
+					var v1 = "中文3"
+				});
 
-		expect(words).to.eql([['中文1'], ['中文2'], ['中文3'], ['中文4']]);
+				define('define', function()
+				{
+					var v1 = "中文4"
+				});
+
+				function I18N(){};
+			};
+
+			var scope = getFinalCollect(code);
+			var words = scope.subScopes[0].translateWordAsts.map(function(item, index)
+				{
+					return item.__i18n_replace_info__.translateWords;
+				});
+
+			expect(words).to.eql([['中文1'], ['中文2'], ['中文3'], ['中文4']]);
+		});
+
 	});
+
 });
 
 
