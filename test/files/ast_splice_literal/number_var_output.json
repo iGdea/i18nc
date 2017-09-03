@@ -1,0 +1,50 @@
+{
+	"__i18n_flag__": 4,
+	"type": "BinaryExpression",
+	"operator": "+",
+	"left": {
+		"__i18n_flag__": 4,
+		"type": "BinaryExpression",
+		"operator": "+",
+		"left": {
+			"__i18n_flag__": 4,
+			"type": "BinaryExpression",
+			"operator": "+",
+			"left": {
+				"type": "Literal",
+				"value": 1,
+				"raw": "1",
+				"range": [
+					9,
+					10
+				]
+			},
+			"right": {
+				"type": "Literal",
+				"value": 2,
+				"raw": "2",
+				"range": [
+					11,
+					12
+				]
+			}
+		},
+		"right": {
+			"type": "Identifier",
+			"name": "var1",
+			"range": [
+				13,
+				17
+			]
+		}
+	},
+	"right": {
+		"__i18n_flag__": 20,
+		"type": "Literal",
+		"value": "ab",
+		"range": [
+			18,
+			25
+		]
+	}
+}
