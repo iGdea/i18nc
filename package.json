@@ -1,6 +1,6 @@
 {
   "name": "i18nc",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "I18N Tool for JS files",
   "main": "index.js",
   "scripts": {
