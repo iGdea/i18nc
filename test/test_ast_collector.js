@@ -63,7 +63,7 @@ describe('#ASTCollector', function()
 				.to.not.throwException();
 		});
 
-		describe('#spliceLiteralMode', function()
+		describe('#comboLiteralMode', function()
 		{
 			var code = function code()
 			{
@@ -79,13 +79,13 @@ describe('#ASTCollector', function()
 
 			it('#LITERAL', function()
 			{
-				var scope = getFinalCollect(code, {spliceLiteralMode: 'LITERAL'});
+				var scope = getFinalCollect(code, {comboLiteralMode: 'LITERAL'});
 				expect(getScopeCodeTranslateWord(scope)).to.eql(['123中文','简体'].sort());
 			});
 
 			it('#I18N', function()
 			{
-				var scope = getFinalCollect(code, {spliceLiteralMode: 'I18N'});
+				var scope = getFinalCollect(code, {comboLiteralMode: 'I18N'});
 				expect(getScopeCodeTranslateWord(scope)).to.eql(['123中文abc', '简体'].sort());
 			});
 
@@ -96,7 +96,7 @@ describe('#ASTCollector', function()
 					var a = '简体'/111;
 				}
 
-				var scope = getFinalCollect(code, {spliceLiteralMode: 'I18N_ALL'});
+				var scope = getFinalCollect(code, {comboLiteralMode: 'I18N_ALL'});
 				expect(getScopeCodeTranslateWord(scope)).to.eql(['简体']);
 			});
 		});

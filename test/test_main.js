@@ -189,12 +189,12 @@ describe('#i18nc', function()
 				.to.eql(['中文 in other func', '中文 run other func'].sort());
 		});
 
-		it('#spliceLiteralMode', function()
+		it('#comboLiteralMode', function()
 		{
-			var code = require('./files/func_code_splice_literal');
-			var info = i18nc(code.toString(), {spliceLiteralMode: 'I18N'});
+			var code = require('./files/func_code_combo_literal');
+			var info = i18nc(code.toString(), {comboLiteralMode: 'I18N'});
 
-			var otherCode = requireAfterWrite('func_code_splice_literal_output.js', info.code, {readMode: 'string'});
+			var otherCode = requireAfterWrite('func_code_combo_literal_output.js', info.code, {readMode: 'string'});
 
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 		});

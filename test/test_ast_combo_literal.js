@@ -1,13 +1,13 @@
 var _					= require('lodash');
-var debug				= require('debug')('i18nc:test_ast_splice_literal');
+var debug				= require('debug')('i18nc:test_ast_combo_literal');
 var expect				= require('expect.js');
 var escodegen			= require('escodegen');
 var i18nc				= require('../');
 var optionsUtils		= require('../lib/options');
-var spliceLiteralUtils	= require('../lib/ast_splice_literal');
+var comboLiteralUtils	= require('../lib/ast_combo_literal');
 
 
-describe('#spliceLiteralAst', function()
+describe('#comboLiteralAst', function()
 {
 	var options = optionsUtils.extend();
 
@@ -54,7 +54,7 @@ describe('#spliceLiteralAst', function()
 	 * @param  {Object} eqlInfo 期望的结果值
 	 * 								combo 合并后的数组
 	 * 								comboCode 通过combo合成的ast生成的code（表达式，同上）
-	 * @param  {String} mode    spliceLiteralMode值
+	 * @param  {String} mode    comboLiteralMode值
 	 */
 	function _realCheck(codeStr, eqlInfo, mode)
 	{
@@ -63,18 +63,18 @@ describe('#spliceLiteralAst', function()
 		debug('new code:%s', code);
 
 		var data = i18nc.parse(code).body[0].expression;
-		var options = optionsUtils.extend({spliceLiteralMode: mode});
+		var options = optionsUtils.extend({comboLiteralMode: mode});
 
 
 		it('#plusBinaryExpressionAst2arrWidthClear', function()
 		{
-			var arr = spliceLiteralUtils._plusBinaryExpressionAst2arrWidthClear(data, options);
+			var arr = comboLiteralUtils._plusBinaryExpressionAst2arrWidthClear(data, options);
 			expect(_item2val(arr)).to.eql(eqlInfo.combo);
 		});
 
-		it('#spliceLiteralAst', function()
+		it('#comboLiteralAst', function()
 		{
-			var newAst = spliceLiteralUtils.spliceLiteralAst(data, options);
+			var newAst = comboLiteralUtils.comboLiteralAst(data, options);
 
 			var escodegenOptions = {format:{quotes: 'double'}};
 			var newCode = escodegen.generate(newAst, escodegenOptions).replace(/\s/g, '');
