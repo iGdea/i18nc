@@ -88,6 +88,17 @@ describe('#ASTCollector', function()
 				var scope = getFinalCollect(code, {spliceLiteralMode: 'I18N'});
 				expect(getScopeCodeTranslateWord(scope)).to.eql(['123中文abc', '简体'].sort());
 			});
+
+			it('#no changed', function()
+			{
+				var code = function code()
+				{
+					var a = '简体'/111;
+				}
+
+				var scope = getFinalCollect(code, {spliceLiteralMode: 'I18N_ALL'});
+				expect(getScopeCodeTranslateWord(scope)).to.eql(['简体']);
+			});
 		});
 	});
 
