@@ -153,9 +153,9 @@ describe('#i18nc', function()
 	});
 
 
-	it('#head has content', function()
+	it('#width head / end', function()
 	{
-		var info = i18nc('/* some things */\ndefine(function(){console.log("中文")})');
+		var info = i18nc('/* begin */\ndefine(function(){console.log("中文")})\n/* end */\n');
 
 		var otherCode = requireAfterWrite('func_code_head_has_content_output.js', info.code, {readMode: 'string'});
 

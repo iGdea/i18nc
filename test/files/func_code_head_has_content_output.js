@@ -1,4 +1,4 @@
-/* some things */
+/* begin */
 define(function(){
 
 	function I18N(msg, subtype) {
@@ -79,3 +79,4 @@ define(function(){
 	}
 
 console.log(I18N('中文'))})
+/* end */
