@@ -2,6 +2,7 @@ var expect			= require('expect.js');
 var ASTCollector	= require('../lib/ast_collector').ASTCollector;
 var optionsUtils	= require('../lib/options');
 var astUtils		= require('../lib/ast_utils');
+var i18nc			= require('../');
 
 describe('#ASTCollector', function()
 {
@@ -177,6 +178,39 @@ describe('#ASTCollector', function()
 			expect(getScopeCodeTranslateWord(scope.subScopes[0])).to.eql(['中文1','中文2','中文3','中文4'].sort());
 		});
 
+	});
+
+
+
+	describe('#events', function()
+	{
+		afterEach(function()
+		{
+			i18nc.off();
+		});
+
+		it('#cutword', function()
+		{
+			i18nc.on('cutword', function(emitData)
+			{
+				expect(emitData.words).to.empty();
+				emitData.words =
+				[
+					{
+						translateWord: true,
+						value: emitData.value
+					}
+				];
+			});
+
+			var code = function code()
+			{
+				var v1 = '1234';
+			}
+
+			var scope = getFinalCollect(code);
+			expect(getScopeCodeTranslateWord(scope)).to.eql(['1234']);
+		});
 	});
 
 });

@@ -198,5 +198,33 @@ describe('#i18nc', function()
 
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 		});
+
+
+		it('#cutword', function()
+		{
+			var code = function code()
+			{
+				var v1 = '1234';
+			}
+
+			var info = i18nc(code.toString(),
+				{
+					cutword: function(emitData)
+					{
+						expect(emitData.words).to.empty();
+						emitData.words =
+						[
+							{
+								translateWord: true,
+								value: emitData.value
+							}
+						];
+					}
+				});
+
+			var otherCode = requireAfterWrite('func_code_cutword_output.js', info.code, {readMode: 'string'});
+
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
+		});
 	});
 });
