@@ -69,8 +69,10 @@ describe('#example', function()
 		{
 			isIgnoreScanWarn: true,
 			dbTranslateWords: dbTranslateWords,
-			loadTranslateJSONByAst: function(ast, options)
+			loadTranslateJSON: function(emitData)
 			{
+				var ast = emitData.ast;
+
 				if (ast.type == 'CallExpression'
 					&& ast.callee
 					&& ast.callee.name == 'require'
@@ -86,20 +88,21 @@ describe('#example', function()
 						&& newAst.body[0].expression
 						&& newAst.body[0].expression.right;
 
-					if (retAst) return retAst;
+					if (retAst)
+					{
+						emitData.ast = retAst;
+					}
 				}
-
-				return ast;
 			},
-			genTranslateJSON: function(code, translateData, translateDataAst, options)
+			newTranslateJSON: function(emitData)
 			{
-				var content = 'module.exports = '+code;
+				var content = 'module.exports = '+emitData.newTranslateJSONCode;
 				
 				var otherContent = requireAfterWrite('require_data.js', content, {readMode: 'string'});
 
 				expect(autoTestUtils.code2arr(content)).to.eql(autoTestUtils.code2arr(otherContent.toString()));
 
-				return 'require("./require_data.js")';
+				emitData.newTranslateJSONCode = 'require("./require_data.js")';
 			},
 		};
 
