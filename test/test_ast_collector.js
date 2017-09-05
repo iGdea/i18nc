@@ -204,8 +204,8 @@ describe('#ASTCollector', function()
 		{
 			i18nc.on('cutword', function(emitData)
 			{
-				expect(emitData.words).to.empty();
-				emitData.words =
+				expect(emitData.lineStrings).to.empty();
+				emitData.lineStrings =
 				[
 					{
 						translateWord: true,

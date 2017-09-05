@@ -211,8 +211,8 @@ describe('#i18nc', function()
 				{
 					cutword: function(emitData)
 					{
-						expect(emitData.words).to.empty();
-						emitData.words =
+						expect(emitData.lineStrings).to.empty();
+						emitData.lineStrings =
 						[
 							{
 								translateWord: true,

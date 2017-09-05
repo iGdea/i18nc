@@ -326,7 +326,13 @@ describe('#astComboLiteral', function()
 				var astValues = [];
 				result.forEach(function(item)
 				{
-					translateWords.push(item.translateWords);
+					var subTranslateWords = [];
+					item.lineStrings.forEach(function(item)
+					{
+						if (item.translateWord) subTranslateWords.push(item.value);
+					});
+
+					translateWords.push(subTranslateWords);
 					astValues.push(item.ast.value);
 				});
 
