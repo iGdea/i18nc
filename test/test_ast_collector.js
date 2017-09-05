@@ -41,8 +41,42 @@ describe('#ASTCollector', function()
 			expect(!!astUtils.checkAstFlag(scope.translateWordAsts[1], astUtils.AST_FLAGS.SKIP_REPLACE)).to.be(true);
 			expect(getScopeCodeTranslateWord(scope)).to.eql(['中文', '这个中文还在'].sort());
 		});
+
+		it('#skip_scan@I18N', function()
+		{
+			var code = function code()
+			{
+				var v1 = '中文';
+
+				{
+					"[i18nc] skip_scan@I18N"
+					var v2 = "跳过这个中文";
+				}
+			}
+
+			var scope = getFinalCollect(code);
+			expect(getScopeCodeTranslateWord(scope)).to.eql(['中文']);
+		});
+
+		it('#skip_repalce@I18N', function()
+		{
+			var code = function code()
+			{
+				var v1 = '中文';
+
+				{
+					"[i18nc] skip_repalce@I18N"
+					var v2 = "这个中文还在";
+				}
+			}
+
+			var scope = getFinalCollect(code);
+			expect(!!astUtils.checkAstFlag(scope.translateWordAsts[0], astUtils.AST_FLAGS.SKIP_REPLACE)).to.be(false);
+			expect(!!astUtils.checkAstFlag(scope.translateWordAsts[1], astUtils.AST_FLAGS.SKIP_REPLACE)).to.be(true);
+			expect(getScopeCodeTranslateWord(scope)).to.eql(['中文', '这个中文还在'].sort());
+		});
 	});
-	
+
 
 	describe('#options', function()
 	{
