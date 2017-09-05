@@ -1,13 +1,13 @@
-var _					= require('lodash');
-var debug				= require('debug')('i18nc:test_ast_combo_literal');
-var expect				= require('expect.js');
-var escodegen			= require('escodegen');
-var i18nc				= require('../');
-var optionsUtils		= require('../lib/options');
-var comboLiteralUtils	= require('../lib/ast_combo_literal');
+var _				= require('lodash');
+var debug			= require('debug')('i18nc:test_ast_combo_literal');
+var expect			= require('expect.js');
+var escodegen		= require('escodegen');
+var i18nc			= require('../');
+var optionsUtils	= require('../lib/options');
+var astComboLiteral	= require('../lib/ast_combo_literal');
 
 
-describe('#comboLiteralAst', function()
+describe('#astComboLiteral', function()
 {
 	var options = optionsUtils.extend();
 
@@ -68,13 +68,13 @@ describe('#comboLiteralAst', function()
 
 		it('#plusBinaryExpressionAst2arrWidthClear', function()
 		{
-			var arr = comboLiteralUtils._plusBinaryExpressionAst2arrWidthClear(data, options);
+			var arr = astComboLiteral._plusBinaryExpressionAst2arrWidthClear(data, options);
 			expect(_item2val(arr)).to.eql(eqlInfo.combo);
 		});
 
-		it('#comboLiteralAst', function()
+		it('#combo', function()
 		{
-			var newAst = comboLiteralUtils.comboLiteralAst(data, options);
+			var newAst = astComboLiteral.combo(data, options);
 
 			var escodegenOptions = {format:{quotes: 'double'}};
 			var newCode = escodegen.generate(newAst, escodegenOptions).replace(/\s/g, '');
