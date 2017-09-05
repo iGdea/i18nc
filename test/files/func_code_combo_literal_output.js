@@ -81,6 +81,7 @@ function I18N(msg, subtype) {
 function code()
 {
 	var a = I18N('123中文abc');
-	var b = '<span>11</span>55'+'<span>11</span>'+I18N('222简体3332') + '<span>22</span>';
+	var b = '123>' + I18N('中文abc');
+	var c = '<span>11</span>55'+'<span>11</span>'+I18N('222简体3332') + '<span>22</span>';
 }
 })();
