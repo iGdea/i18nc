@@ -37,7 +37,7 @@ function code()
 				 *
 				 * If you really need to update,
 				 * please refer to the following method to modify.
-				 * @see https://github.com/Bacra/node-i18nc/wiki/How-to-modify-translate-data-in-JS-file
+				 * @see https://github.com/Bacra/node-i18nc-core/wiki/How-to-modify-translate-data-in-JS-file
 				 *
 				 * @example
 				 * {
@@ -122,7 +122,7 @@ function code()
 				 *
 				 * If you really need to update,
 				 * please refer to the following method to modify.
-				 * @see https://github.com/Bacra/node-i18nc/wiki/How-to-modify-translate-data-in-JS-file
+				 * @see https://github.com/Bacra/node-i18nc-core/wiki/How-to-modify-translate-data-in-JS-file
 				 *
 				 * @example
 				 * {

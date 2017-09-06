@@ -1,5 +1,5 @@
 var fs						= require('fs');
-var debug					= require('debug')('i18nc:test_i18n_function_generator');
+var debug					= require('debug')('i18nc-core:test_i18n_function_generator');
 var expect					= require('expect.js');
 var escodegen				= require('escodegen');
 var optionsUtils			= require('../lib/options');

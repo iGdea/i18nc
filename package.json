@@ -1,11 +1,11 @@
 {
-  "name": "i18nc",
-  "version": "0.6.1",
+  "name": "i18nc-core",
+  "version": "1.0.0",
   "description": "I18N Tool for JS files",
   "main": "index.js",
   "scripts": {
     "prepublish": "npm ls",
-    "test": "cross-env DEBUG=i18nc* mocha test/test_*",
+    "test": "cross-env DEBUG=i18nc-core* mocha test/test_*",
     "test-cov": "istanbul cover ./node_modules/.bin/_mocha -- test/test_* --reporter dot",
     "test-travis": "istanbul cover ./node_modules/.bin/_mocha --report lcovonly -- test/test_* --reporter dot",
     "test_build": "cross-env TEST_BUILD=true mocha test/test_*"
@@ -26,7 +26,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:Bacra/node-i18nc.git"
+    "url": "git@github.com:Bacra/node-i18nc-core.git"
   },
   "keywords": [
     "i18n",
@@ -39,7 +39,7 @@
   "author": "Bacra Woo<bacra.woo@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Bacra/node-i18nc/issues"
+    "url": "https://github.com/Bacra/node-i18nc-core/issues"
   },
-  "homepage": "https://github.com/Bacra/node-i18nc"
+  "homepage": "https://github.com/Bacra/node-i18nc-core"
 }

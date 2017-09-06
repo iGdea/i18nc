@@ -1,5 +1,5 @@
 var _				= require('lodash');
-var debug			= require('debug')('i18nc:test_ast_combo_literal');
+var debug			= require('debug')('i18nc-core:test_ast_combo_literal');
 var expect			= require('expect.js');
 var escodegen		= require('escodegen');
 var i18nc			= require('../');

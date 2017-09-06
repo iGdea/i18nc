@@ -5,7 +5,7 @@ var dbTranslateWords	= require('./example/translate_words_db');
 var autoTestUtils		= require('./auto_test_utils');
 var requireAfterWrite	= autoTestUtils.requireAfterWrite();
 
-describe('#i18nc', function()
+describe('#i18nc handler', function()
 {
 	describe('#widthdb funcData', function()
 	{

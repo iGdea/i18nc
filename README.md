@@ -10,13 +10,13 @@ I18NC
 
 # Install
 ```
-npm install i18nc --save
+npm install i18nc-core --save
 ```
 
 # Useage
 
 ```
-var i18nc = require('i18nc');
+var i18nc = require('i18nc-core');
 var ret = i18nc(code, options);
 
 ret.code    // output code
@@ -101,13 +101,13 @@ function I18N(msg, subtype) {
 ```
 
 
-[npm-image]: http://img.shields.io/npm/v/i18nc.svg
-[downloads-image]: http://img.shields.io/npm/dm/i18nc.svg
-[npm-url]: https://www.npmjs.org/package/i18nc
-[travis-image]: http://img.shields.io/travis/Bacra/node-i18nc/master.svg?label=linux
-[travis-url]: https://travis-ci.org/Bacra/node-i18nc
-[appveyor-image]: https://img.shields.io/appveyor/ci/Bacra/node-i18nc/master.svg?label=windows
-[appveyor-url]: https://ci.appveyor.com/project/Bacra/node-i18nc
-[coveralls-image]: https://img.shields.io/coveralls/Bacra/node-i18nc.svg
-[coveralls-url]: https://coveralls.io/github/Bacra/node-i18nc
-[license-image]: http://img.shields.io/npm/l/i18nc.svg
+[npm-image]: http://img.shields.io/npm/v/i18nc-core.svg
+[downloads-image]: http://img.shields.io/npm/dm/i18nc-core.svg
+[npm-url]: https://www.npmjs.org/package/i18nc-core
+[travis-image]: http://img.shields.io/travis/Bacra/node-i18nc-core/master.svg?label=linux
+[travis-url]: https://travis-ci.org/Bacra/node-i18nc-core
+[appveyor-image]: https://img.shields.io/appveyor/ci/Bacra/node-i18nc-core/master.svg?label=windows
+[appveyor-url]: https://ci.appveyor.com/project/Bacra/node-i18nc-core
+[coveralls-image]: https://img.shields.io/coveralls/Bacra/node-i18nc-core.svg
+[coveralls-url]: https://coveralls.io/github/Bacra/node-i18nc-core
+[license-image]: http://img.shields.io/npm/l/i18nc-core.svg
