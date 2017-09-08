@@ -62,23 +62,6 @@ module.exports = function code()
     // I18N
 	function I18N(msg, subtype)
 	{
-		/**
-		 * @param  {String} msg      translateKey
-		 * @param  {String} subtype  Indicates a special treatment.
-		 * 								Use `<line>` to represent continuous relationships.
-		 * 								Use `<e.g.>` to provide an example.
-		 *								Support `%s` symbol.
-		 *
-		 *
-		 * [Warn]
-		 * I18nc Tool collects `{{@handlerName}}` callee arguments for professional translation.
-		 * Use simple string arguments when call `{{@handlerName}}`.
-		 * Variables and Operators are not supported.
-		 *
-		 */
-
-
-
 		var LAN = 'zh';
 		if (!LAN) return msg;
 
@@ -89,27 +72,6 @@ module.exports = function code()
 			var __FILE_KEY__ = "func_code_file_key";
 			var __FUNCTION_VERSION__ = 2;
 
-			/**
-			 * Do not modify the values.
-			 *
-			 * If you really need to update,
-			 * please refer to the following method to modify.
-			 * @see https://github.com/Bacra/node-i18nc-core/wiki/How-to-modify-translate-data-in-JS-file
-			 *
-			 * @example
-			 * {
-			 * 	normail_key			: dbTranlateResult,
-			 * 	use_modified_key	: codeModifieResult || prevDBTranlateResult,
-			 * 	use_newdb_key		: newDBTranlateResult || codeModifieResult || prevDBTranlateResult
-			 * 	force_modified_key	: forceCodeModifieResult || newDBTranlateResult || codeModifieResult || prevDBTranlateResult
-			 * }
-			 *
-			 * @tips Use an empty array to represent an empty string.
-			 * @example
-			 * {
-			 * 	key: [] || 'The translation is empty.'
-			 * }
-			 */
 			var __TRANSLATE_JSON__ = {
 				"en":
 				{
@@ -167,13 +129,8 @@ module.exports = function code()
 				resultDefault = lanItem.DEFAULTS && lanItem.DEFAULTS[msg];
 		}
 
-		var result = resultSubject || resultDefault;
-		// Taking into account the use of the array that is empty,
-		// so the need for mandatory conversion of the results data.
-		if (result && result.join)
-			return ''+result;
-		else
-			return result || msg;
+		var result = resultSubject || resultDefault || msg;
+		return typeof result == 'string' ? result : ''+result;
 	}
 
     result += I18N('I18N(中文)', 'subtype');

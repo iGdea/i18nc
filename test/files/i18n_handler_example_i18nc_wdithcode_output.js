@@ -33,34 +33,27 @@ function I18N(msg, subtype) {
 		 *
 		 * If you really need to update,
 		 * please refer to the following method to modify.
-		 * @see https://github.com/Bacra/node-i18nc-core/wiki/How-to-modify-translate-data-in-JS-file
+		 * More info @see https://github.com/Bacra/node-i18nc-core/wiki/How-to-modify-translate-data-in-JS-file
 		 *
 		 * @example
 		 * {
-		 * 	normail_key			: dbTranlateResult,
-		 * 	use_modified_key	: codeModifieResult || prevDBTranlateResult,
-		 * 	use_newdb_key		: newDBTranlateResult || codeModifieResult || prevDBTranlateResult
-		 * 	force_modified_key	: forceCodeModifieResult || newDBTranlateResult || codeModifieResult || prevDBTranlateResult
-		 * }
-		 *
-		 * @tips Use an empty array to represent an empty string.
-		 * @example
-		 * {
-		 * 	key: [] || 'The translation is empty.'
+		 * 	code_modified		: codeModifieResult,
+		 * 	db_translate		: DBTranlateResult || codeModifieResult,
+		 * 	force_code_modified	: forceCodeModifieResult || DBTranlateResult || codeModifieResult
 		 * }
 		 */
 		var __TRANSLATE_JSON__ = {
 				'en': {
 					'DEFAULTS': {
-						'中文0': 'indb <thisfile> db2',
-						'中文1': 'in_file custom1' || 'in_file zh1',
+						'中文0': 'indb <thisfile> db1' || 'in_file zh0',
+						'中文1': 'in_file zh1',
 						'中文2': 'in_file zh2_db' || '' || 'in_file zh2',
-						'中文3_empty': [] || '',
-						'中文5_empty': [] || '',
-						'中文6_empty': 'in_file 4' || 'in_file 3' || 'in_file 2' || 'in_file 1'
+						'中文3_empty': [],
+						'中文5_empty': [],
+						'中文6_empty': 'in_file 4' || 'in_file 2' || 'in_file 1'
 					}
 				},
-				'tw': { 'DEFAULTS': { '中文0': '中文0 in tw' || '' } }
+				'tw': { 'DEFAULTS': { '中文0': '中文0 in tw' } }
 			};
 
 		var lanArr = self.__TRANSLATE_LAN_JSON__ = [];

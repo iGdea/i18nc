@@ -33,20 +33,13 @@ function I18N(msg, subtype) {
 		 *
 		 * If you really need to update,
 		 * please refer to the following method to modify.
-		 * @see https://github.com/Bacra/node-i18nc-core/wiki/How-to-modify-translate-data-in-JS-file
+		 * More info @see https://github.com/Bacra/node-i18nc-core/wiki/How-to-modify-translate-data-in-JS-file
 		 *
 		 * @example
 		 * {
-		 * 	normail_key			: dbTranlateResult,
-		 * 	use_modified_key	: codeModifieResult || prevDBTranlateResult,
-		 * 	use_newdb_key		: newDBTranlateResult || codeModifieResult || prevDBTranlateResult
-		 * 	force_modified_key	: forceCodeModifieResult || newDBTranlateResult || codeModifieResult || prevDBTranlateResult
-		 * }
-		 *
-		 * @tips Use an empty array to represent an empty string.
-		 * @example
-		 * {
-		 * 	key: [] || 'The translation is empty.'
+		 * 	code_modified		: codeModifieResult,
+		 * 	db_translate		: DBTranlateResult || codeModifieResult,
+		 * 	force_code_modified	: forceCodeModifieResult || DBTranlateResult || codeModifieResult
 		 * }
 		 */
 		var __TRANSLATE_JSON__ = {};

@@ -2,17 +2,16 @@
 	"DEFAULTS": {
 		"中文0": {
 			"en": [
-				"indb <thisfile> db2"
+				"in_file zh0",
+				"indb <thisfile> db1"
 			],
 			"tw": [
-				"",
 				"中文0 in tw"
 			]
 		},
 		"中文1": {
 			"en": [
-				"in_file zh1",
-				"in_file custom1"
+				"in_file zh1"
 			]
 		},
 		"中文2": {
@@ -24,14 +23,12 @@
 		},
 		"中文3_empty": {
 			"en": [
-				"",
 				""
 			]
 		},
 		"中文4_empty": {},
 		"中文5_empty": {
 			"en": [
-				"",
 				""
 			]
 		},
@@ -39,13 +36,11 @@
 			"en": [
 				"in_file 1",
 				"in_file 2",
-				"in_file 3",
 				"in_file 4"
 			]
 		},
 		"中文db <allfile>": {
 			"en": [
-				"",
 				"in file <allfile>"
 			]
 		}
@@ -54,14 +49,12 @@
 		"subtype": {
 			"中文0": {
 				"en": [
-					"",
 					"in_file subtye_zh0"
 				]
 			},
 			"中文1": {
 				"en": [
-					"in_file subtye_zh1",
-					"in_file ubtye_custom1"
+					"in_file subtye_zh1"
 				]
 			},
 			"中文2": {
@@ -73,18 +66,17 @@
 			},
 			"中文3_empty": {
 				"en": [
-					"",
 					""
 				]
 			},
 			"中文 allfile subtype1": {
 				"en": [
-					"",
 					"in_file allfile subtype1"
 				]
 			},
 			"中文 thisfile subtype2": {
 				"en": [
+					"in_file thisfile subtype2",
 					"indb <thisfile> subtype2"
 				]
 			}
