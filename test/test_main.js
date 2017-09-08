@@ -152,6 +152,84 @@ describe('#i18nc handler', function()
 		});
 	});
 
+	describe('#no db translate', function()
+	{
+		var code = 'console.log("不可能存在的中文翻译词组");';
+
+		it('#noanything', function()
+		{
+			var info = i18nc(code);
+
+			var otherCode = requireAfterWrite('func_code_no_db.js', info.code, {readMode: 'string'});
+
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+		});
+
+		it('#only lan', function()
+		{
+			var info = i18nc(code,
+				{
+					dbTranslateWords:
+					{
+						en: {DEFAULTS:{}}
+					}
+				});
+
+			var otherCode = requireAfterWrite('func_code_no_db_only_lan.js', info.code, {readMode: 'string'});
+
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+		});
+
+		it('#other_db', function()
+		{
+			var info = i18nc(code,
+				{
+					dbTranslateWords:
+					{
+						en: {DEFAULTS: {'嘿嘿': 'hihi'}}
+					}
+				});
+
+			var otherCode = requireAfterWrite('func_code_no_db_other_db.js', info.code, {readMode: 'string'});
+
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+		});
+
+		it('#setFileLanguages', function()
+		{
+			var info = i18nc(code,
+				{
+					setFileLanguages: ['en']
+				});
+
+			var otherCode = requireAfterWrite('func_code_no_db_set_lans.js', info.code, {readMode: 'string'});
+
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+		});
+
+		it('#func translate words', function()
+		{
+			var code = function code()
+			{
+				console.log("不可能存在的中文翻译词组");
+				function I18N()
+				{
+					var __FILE_KEY__ = "default_file_key";
+					var __FUNCTION_VERSION__ = 2;
+					var __TRANSLATE_JSON__ =
+					{
+						en: {DEFAULTS:{}}
+					};
+				}
+			};
+			var info = i18nc(code.toString());
+
+			var otherCode = requireAfterWrite('func_code_no_db_has_translate_json.js', info.code, {readMode: 'string'});
+
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+		})
+	});
+
 
 	it('#width head / end', function()
 	{
