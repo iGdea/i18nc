@@ -16,6 +16,7 @@
 			"中文3_empty": [
 				""
 			],
+			"中文4_empty": [],
 			"中文5_empty": [
 				""
 			],
@@ -58,7 +59,24 @@
 		"DEFAULTS": {
 			"中文0": [
 				"中文0 in tw"
-			]
+			],
+			"中文1": [],
+			"中文2": [],
+			"中文3_empty": [],
+			"中文4_empty": [],
+			"中文5_empty": [],
+			"中文6_empty": [],
+			"中文db <allfile>": []
+		},
+		"SUBTYPES": {
+			"subtype": {
+				"中文0": [],
+				"中文1": [],
+				"中文2": [],
+				"中文3_empty": [],
+				"中文 allfile subtype1": [],
+				"中文 thisfile subtype2": []
+			}
 		}
 	}
 }

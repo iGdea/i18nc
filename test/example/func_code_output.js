@@ -75,18 +75,77 @@ module.exports = function code()
 			var __TRANSLATE_JSON__ = {
 					'en': {
 						'DEFAULTS': {
+							// "2中文4中文5":
+							// "print中文":
+							// "run 中文":
+							// "中午true":
 							'中文 only db': '中文只在数据库' || '',
+							// "中文0":
+							// "中文1":
+							// "中文2":
+							// "中文3":
+							// "中文I18N":
+							// "中文case":
+							// "中文case+handler":
+							// "中文case+objkey":
+							// "中文case+数字":
+							// "中文false":
+							// "中文if":
+							// "中文key":
+							// "中文span":
+							// "中文span2":
+							// "中文span3":
+							// "中文val":
+							// "中文val in object":
+							// "再来一句，":
+							// "简体":
 							'中文 only file': '中文只在文件'
 						},
-						'SUBTYPES': { 'subtype': { 'I18N(中文)': 'I18N(zh)' } }
+						'SUBTYPES': {
+							'subtype': {
+								// "中文I18N subtype":
+								'I18N(中文)': 'I18N(zh)'
+							},
+							'subtype2': // "I18N(中文)":
+							{}
+						}
 					},
 					'tw': {
 						'DEFAULTS': {
+							// "2中文4中文5":
+							// "print中文":
+							// "run 中文":
+							// "中午true":
 							'中文 only db': '中文只在数据库' || '',
+							// "中文 only file":
+							// "中文0":
+							// "中文1":
+							// "中文2":
+							// "中文3":
+							// "中文I18N":
+							// "中文case":
+							// "中文case+handler":
+							// "中文case+objkey":
+							// "中文case+数字":
+							// "中文false":
+							// "中文if":
 							'中文key': '中文键' || '',
+							// "中文span":
+							// "中文span2":
+							// "中文span3":
+							// "中文val":
+							// "中文val in object":
+							// "再来一句，":
 							'简体': '簡體'
 						},
-						'SUBTYPES': { 'subtype': { 'I18N(中文)': '中文国际化' || '' } }
+						'SUBTYPES': {
+							'subtype': {
+								// "中文I18N subtype":
+								'I18N(中文)': '中文国际化' || ''
+							},
+							'subtype2': // "I18N(中文)":
+							{}
+						}
 					}
 				};
 

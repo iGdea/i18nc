@@ -106,6 +106,7 @@
 					"中文3_empty": [
 						""
 					],
+					"中文4_empty": [],
 					"中文5_empty": [
 						""
 					],
@@ -113,14 +114,26 @@
 						"in_file 1",
 						"in_file 2",
 						"in_file 4"
-					]
+					],
+					"中文db ": [],
+					"中文 allfile subtype1": [],
+					"中文 thisfile subtype2": []
 				}
 			},
 			"tw": {
 				"DEFAULTS": {
 					"中文0": [
 						"中文0 in tw"
-					]
+					],
+					"中文1": [],
+					"中文2": [],
+					"中文3_empty": [],
+					"中文4_empty": [],
+					"中文5_empty": [],
+					"中文6_empty": [],
+					"中文db ": [],
+					"中文 allfile subtype1": [],
+					"中文 thisfile subtype2": []
 				}
 			}
 		}

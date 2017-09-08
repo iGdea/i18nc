@@ -5,6 +5,7 @@ module.exports = {
 			'中文1': 'in_file zh1',
 			'中文2': 'in_file zh2_db' || '' || 'in_file zh2',
 			'中文3_empty': [],
+			// "中文4_empty":
 			'中文5_empty': [],
 			'中文6_empty': 'in_file 4' || 'in_file 2' || 'in_file 1',
 			'中文db <allfile>': 'in file <allfile>'
@@ -20,5 +21,25 @@ module.exports = {
 			}
 		}
 	},
-	'tw': { 'DEFAULTS': { '中文0': '中文0 in tw' } }
+	'tw': {
+		'DEFAULTS': {
+			// "中文1":
+			// "中文2":
+			// "中文3_empty":
+			// "中文4_empty":
+			// "中文5_empty":
+			// "中文6_empty":
+			// "中文db <allfile>":
+			'中文0': '中文0 in tw'
+		},
+		'SUBTYPES': {
+			'subtype': // "中文 allfile subtype1":
+			// "中文 thisfile subtype2":
+			// "中文0":
+			// "中文1":
+			// "中文2":
+			// "中文3_empty":
+			{}
+		}
+	}
 }
