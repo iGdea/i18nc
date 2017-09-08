@@ -1,7 +1,7 @@
 var expect	= require('expect.js');
 var I18N	= require('./files/i18n_handler_example');
 
-describe('#I18N handler', function()
+describe('#I18N function', function()
 {
 	describe('#lan:en', function()
 	{
@@ -12,12 +12,12 @@ describe('#I18N handler', function()
 
 		it('#no msg', function()
 		{
-			expect(I18N()).to.be(undefined);
+			expect(I18N()).to.be('undefined');
 		});
 
 		it('#number', function()
 		{
-			expect(I18N(11)).to.be(11);
+			expect(I18N(11)).to.be('11');
 		});
 
 		it('#not match', function()
