@@ -10,7 +10,15 @@ var SUB_PATHS =
 
 exports.requireAfterWrite = function requireAfterWrite(subpath)
 {
-	var file_path = SUB_PATHS[subpath] || 'files';
+	var file_path = 'files';
+	if (subpath)
+	{
+		file_path = SUB_PATHS[subpath];
+		if (!file_path)
+		{
+			file_path = 'files/'+subpath;
+		}
+	}
 
 	return function(filename, data, options)
 	{
@@ -72,4 +80,3 @@ exports.codeTranslateWords2words = function codeTranslateWords2words(codeTransla
 
 	return _.uniq(translateWords).sort();
 }
-

@@ -3,9 +3,9 @@ var expect				= require('expect.js');
 var i18nc				= require('../');
 var dbTranslateWords	= require('./example/translate_words_db');
 var autoTestUtils		= require('./auto_test_utils');
-var requireAfterWrite	= autoTestUtils.requireAfterWrite();
+var requireAfterWrite	= autoTestUtils.requireAfterWrite('main');
 
-describe('#i18nc handler', function()
+describe('#main', function()
 {
 	describe('#widthdb funcData', function()
 	{
@@ -58,7 +58,7 @@ describe('#i18nc handler', function()
 	{
 		it('#noI18N', function()
 		{
-			var exampleCode = require('./files/func_code_noi18n').toString();
+			var exampleCode = require('./files/main/input/func_code_noi18n').toString();
 			var info = i18nc(exampleCode);
 
 			var otherCode = requireAfterWrite('func_code_noi18n_output.js', info.code, {readMode: 'string'});
@@ -68,7 +68,7 @@ describe('#i18nc handler', function()
 
 		it('#noI18N noclosure', function()
 		{
-			var exampleCode = require('./files/func_code_noi18n').toString();
+			var exampleCode = require('./files/main/input/func_code_noi18n').toString();
 			var info = i18nc(exampleCode, {isClosureWhenInsertedHead: false});
 
 			var otherCode = requireAfterWrite('func_code_noi18n_output_noclosure.js', info.code, {readMode: 'string'});
@@ -78,7 +78,7 @@ describe('#i18nc handler', function()
 
 		it('#define', function()
 		{
-			var exampleCode = require('./files/func_code_noi18n_define').toString();
+			var exampleCode = require('./files/main/input/func_code_noi18n_define').toString();
 			var info = i18nc(exampleCode);
 
 			var otherCode = requireAfterWrite('func_code_noi18n_define_output.js', info.code, {readMode: 'string'});
@@ -88,7 +88,7 @@ describe('#i18nc handler', function()
 
 		it('#define not_define', function()
 		{
-			var exampleCode = require('./files/func_code_noi18n_define').toString();
+			var exampleCode = require('./files/main/input/func_code_noi18n_define').toString();
 			var info = i18nc(exampleCode,
 				{
 					isInsertToDefineHalder: false
@@ -104,7 +104,7 @@ describe('#i18nc handler', function()
 	{
 		it('#one i18n', function()
 		{
-			var exampleCode = require('./files/func_code_i18n').toString();
+			var exampleCode = require('./files/main/input/func_code_i18n').toString();
 			var info = i18nc(exampleCode);
 
 			var otherCode = requireAfterWrite('func_code_i18n_output.js', info.code, {readMode: 'string'});
@@ -114,7 +114,7 @@ describe('#i18nc handler', function()
 
 		it('#define and scope', function()
 		{
-			var exampleCode = require('./files/func_code_i18n_define').toString();
+			var exampleCode = require('./files/main/input/func_code_i18n_define').toString();
 			var info = i18nc(exampleCode,
 				{
 					dbTranslateWords:
@@ -143,7 +143,7 @@ describe('#i18nc handler', function()
 
 		it('#no words', function()
 		{
-			var exampleCode = require('./files/func_code_i18n_nowords').toString();
+			var exampleCode = require('./files/main/input/func_code_i18n_nowords').toString();
 			var info = i18nc(exampleCode);
 
 			var otherCode = requireAfterWrite('func_code_i18n_nowords_output.js', info.code, {readMode: 'string'});
@@ -230,14 +230,16 @@ describe('#i18nc handler', function()
 		})
 	});
 
-
-	it('#width head / end', function()
+	describe('#core style', function()
 	{
-		var info = i18nc('/* begin */\ndefine(function(){console.log("中文")})\n/* end */\n');
+		it('#width head / end', function()
+		{
+			var info = i18nc('/* begin */\ndefine(function(){console.log("中文")})\n/* end */\n');
 
-		var otherCode = requireAfterWrite('func_code_head_has_content_output.js', info.code, {readMode: 'string'});
+			var otherCode = requireAfterWrite('func_code_head_has_content_output.js', info.code, {readMode: 'string'});
 
-		expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+		});
 	});
 
 	describe('#options', function()
@@ -269,7 +271,7 @@ describe('#i18nc handler', function()
 
 		it('#comboLiteralMode', function()
 		{
-			var code = require('./files/func_code_combo_literal');
+			var code = require('./files/main/input/func_code_combo_literal');
 			var info = i18nc(code.toString(), {comboLiteralMode: 'I18N'});
 
 			var otherCode = requireAfterWrite('func_code_combo_literal_output.js', info.code, {readMode: 'string'});
