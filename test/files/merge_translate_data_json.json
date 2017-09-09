@@ -12,46 +12,37 @@
 		"中文1": {
 			"en": [
 				"in_file zh1"
-			],
-			"tw": []
+			]
 		},
 		"中文2": {
 			"en": [
 				"in_file zh2",
 				"",
 				"in_file zh2_db"
-			],
-			"tw": []
+			]
 		},
 		"中文3_empty": {
 			"en": [
 				""
-			],
-			"tw": []
+			]
 		},
-		"中文4_empty": {
-			"en": [],
-			"tw": []
-		},
+		"中文4_empty": {},
 		"中文5_empty": {
 			"en": [
 				""
-			],
-			"tw": []
+			]
 		},
 		"中文6_empty": {
 			"en": [
 				"in_file 1",
 				"in_file 2",
 				"in_file 4"
-			],
-			"tw": []
+			]
 		},
 		"中文db <allfile>": {
 			"en": [
 				"in file <allfile>"
-			],
-			"tw": []
+			]
 		}
 	},
 	"SUBTYPES": {
@@ -59,41 +50,35 @@
 			"中文0": {
 				"en": [
 					"in_file subtye_zh0"
-				],
-				"tw": []
+				]
 			},
 			"中文1": {
 				"en": [
 					"in_file subtye_zh1"
-				],
-				"tw": []
+				]
 			},
 			"中文2": {
 				"en": [
 					"in_file subtye_zh2",
 					"",
 					"in_file subtye_zh2_db"
-				],
-				"tw": []
+				]
 			},
 			"中文3_empty": {
 				"en": [
 					""
-				],
-				"tw": []
+				]
 			},
 			"中文 allfile subtype1": {
 				"en": [
 					"in_file allfile subtype1"
-				],
-				"tw": []
+				]
 			},
 			"中文 thisfile subtype2": {
 				"en": [
 					"in_file thisfile subtype2",
 					"indb <thisfile> subtype2"
-				],
-				"tw": []
+				]
 			}
 		}
 	}

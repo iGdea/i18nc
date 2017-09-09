@@ -44,7 +44,16 @@ function I18N(msg, subtype) {
 		 * 	force_code_modified	: forceCodeModifieResult || DBTranlateResult || codeModifieResult
 		 * }
 		 */
-		var __TRANSLATE_JSON__ = {};
+		var __TRANSLATE_JSON__ = {
+				'<LAN KEY>': {
+					'DEFAULTS': {
+						// "123中文abc":
+						// "222简体3332":
+						// "中文abc":
+						'<e.g.> translate word': ''
+					}
+				}
+			};
 
 		var lanArr = self.__TRANSLATE_LAN_JSON__ = [];
 		if (LAN && LAN.split) {

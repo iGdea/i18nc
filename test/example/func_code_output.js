@@ -106,8 +106,10 @@ module.exports = function code()
 								// "中文I18N subtype":
 								'I18N(中文)': 'I18N(zh)'
 							},
-							'subtype2': // "I18N(中文)":
-							{}
+							'subtype2': {
+								// "I18N(中文)":
+								'<e.g.> translate word': ''
+							}
 						}
 					},
 					'tw': {
@@ -143,8 +145,10 @@ module.exports = function code()
 								// "中文I18N subtype":
 								'I18N(中文)': '中文国际化' || ''
 							},
-							'subtype2': // "I18N(中文)":
-							{}
+							'subtype2': {
+								// "I18N(中文)":
+								'<e.g.> translate word': ''
+							}
 						}
 					}
 				};

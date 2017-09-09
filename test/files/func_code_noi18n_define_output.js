@@ -46,7 +46,15 @@ function code()
 				 * 	force_code_modified	: forceCodeModifieResult || DBTranlateResult || codeModifieResult
 				 * }
 				 */
-				var __TRANSLATE_JSON__ = {};
+				var __TRANSLATE_JSON__ = {
+						'<LAN KEY>': {
+							'DEFAULTS': {
+								// "中文":
+								// "中文2":
+								'<e.g.> translate word': ''
+							}
+						}
+					};
 
 				var lanArr = self.__TRANSLATE_LAN_JSON__ = [];
 				if (LAN && LAN.split) {
@@ -124,7 +132,15 @@ function code()
 				 * 	force_code_modified	: forceCodeModifieResult || DBTranlateResult || codeModifieResult
 				 * }
 				 */
-				var __TRANSLATE_JSON__ = {};
+				var __TRANSLATE_JSON__ = {
+						'<LAN KEY>': {
+							'DEFAULTS': {
+								// "define2 中文":
+								// "define2 中文2":
+								'<e.g.> translate word': ''
+							}
+						}
+					};
 
 				var lanArr = self.__TRANSLATE_LAN_JSON__ = [];
 				if (LAN && LAN.split) {

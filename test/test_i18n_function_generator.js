@@ -81,4 +81,3 @@ describe('#i18n_function_generator', function()
 		expect(autoTestUtils.code2arr(resultCode)).to.eql(autoTestUtils.code2arr(otherCode));
 	});
 });
-
