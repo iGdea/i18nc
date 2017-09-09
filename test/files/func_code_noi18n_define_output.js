@@ -30,7 +30,7 @@ function code()
 				self.__TRANSLATE_LAN__ = LAN;
 				/* Do not modify this key value. */
 				var __FILE_KEY__ = "default_file_key";
-				var __FUNCTION_VERSION__ = 2;
+				var __FUNCTION_VERSION__ = "3";
 
 				/**
 				 * Do not modify the values.
@@ -116,7 +116,7 @@ function code()
 				self.__TRANSLATE_LAN__ = LAN;
 				/* Do not modify this key value. */
 				var __FILE_KEY__ = "default_file_key";
-				var __FUNCTION_VERSION__ = 2;
+				var __FUNCTION_VERSION__ = "3";
 
 				/**
 				 * Do not modify the values.

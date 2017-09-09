@@ -70,7 +70,7 @@ module.exports = function code()
 		{
 			/* Do not modify this key value. */
 			var __FILE_KEY__ = "func_code_file_key";
-			var __FUNCTION_VERSION__ = 2;
+			var __FUNCTION_VERSION__ = "3";
 
 			var __TRANSLATE_JSON__ = {
 					'en': {
@@ -165,7 +165,7 @@ module.exports = function code()
 				}
 			}
 		}
-	
+
 		var lanArr = self.__TRANSLATE_LAN_JSON__,
 			resultDefault, resultSubject;
 		for(var i = 0, len = lanArr.length; i < len; i++)

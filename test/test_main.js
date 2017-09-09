@@ -26,7 +26,7 @@ describe('#i18nc handler', function()
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 		});
 
-		it('#widthcode', function()
+		it('#withcode', function()
 		{
 			var funcInfo = require('./files/i18n_handler_example_output.json');
 			var codeData =
@@ -45,8 +45,8 @@ describe('#i18nc handler', function()
 				dbTranslateWords: dbTranslateWords
 			});
 
-			var outputJSON = requireAfterWrite('i18n_handler_example_i18nc_wdithcode_output.json', autoTestUtils.JsonOfI18ncRet(info));
-			var otherCode = requireAfterWrite('i18n_handler_example_i18nc_wdithcode_output.js', info.code, {readMode: 'string'});
+			var outputJSON = requireAfterWrite('i18n_handler_example_i18nc_withcode_output.json', autoTestUtils.JsonOfI18ncRet(info));
+			var otherCode = requireAfterWrite('i18n_handler_example_i18nc_withcode_output.js', info.code, {readMode: 'string'});
 
 			expect(autoTestUtils.JsonOfI18ncRet(info)).to.eql(outputJSON);
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
