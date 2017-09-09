@@ -47,7 +47,7 @@ function I18N(msg, subtype) {
 				'<LAN KEY>': {
 					'DEFAULTS': {
 						// "不可能存在的中文翻译词组":
-						'<e.g.> translate word': ''
+						'<e.g.> translate word': null
 					}
 				}
 			};

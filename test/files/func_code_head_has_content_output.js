@@ -48,7 +48,7 @@ define(function(){
 					'<LAN KEY>': {
 						'DEFAULTS': {
 							// "中文":
-							'<e.g.> translate word': ''
+							'<e.g.> translate word': null
 						}
 					}
 				};

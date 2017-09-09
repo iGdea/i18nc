@@ -50,7 +50,7 @@ function I18N(msg, subtype) {
 						// "123中文abc":
 						// "222简体3332":
 						// "中文abc":
-						'<e.g.> translate word': ''
+						'<e.g.> translate word': null
 					}
 				}
 			};

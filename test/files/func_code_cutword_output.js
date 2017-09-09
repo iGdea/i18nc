@@ -48,7 +48,7 @@ function I18N(msg, subtype) {
 				'<LAN KEY>': {
 					'DEFAULTS': {
 						// "1234":
-						'<e.g.> translate word': ''
+						'<e.g.> translate word': null
 					}
 				}
 			};

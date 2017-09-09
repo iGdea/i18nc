@@ -65,11 +65,7 @@
 							"I18N(zh)"
 						]
 					},
-					"subtype2": {
-						"<e.g.> translate word": [
-							""
-						]
-					}
+					"subtype2": {}
 				}
 			},
 			"tw": {
@@ -93,11 +89,7 @@
 							"中文国际化"
 						]
 					},
-					"subtype2": {
-						"<e.g.> translate word": [
-							""
-						]
-					}
+					"subtype2": {}
 				}
 			}
 		}

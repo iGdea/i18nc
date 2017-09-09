@@ -51,7 +51,7 @@ function code()
 						'DEFAULTS': {
 							// "中文":
 							// "中文2":
-							'<e.g.> translate word': ''
+							'<e.g.> translate word': null
 						}
 					}
 				};

@@ -51,7 +51,7 @@ function I18N(msg, subtype) {
 						// "define2 中文2":
 						// "中文":
 						// "中文2":
-						'<e.g.> translate word': ''
+						'<e.g.> translate word': null
 					}
 				}
 			};
