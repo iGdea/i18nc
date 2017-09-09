@@ -304,5 +304,23 @@ describe('#i18nc handler', function()
 
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 		});
+
+
+		it('#isPackageAllTranslateWords', function()
+		{
+			var code = function code()
+			{
+				var v1 = '简体';
+			}
+
+			var info = i18nc(code.toString(),
+				{
+					isPackageAllTranslateWords: false
+				});
+
+			var otherCode = requireAfterWrite('func_code_no_notused_words_output.js', info.code, {readMode: 'string'});
+
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
+		});
 	});
 });
