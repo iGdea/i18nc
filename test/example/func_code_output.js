@@ -68,11 +68,10 @@ module.exports = function code()
 		var self = I18N;
 		if (self.__TRANSLATE_LAN__ != LAN)
 		{
-			/* Do not modify this key value. */
 			var __FILE_KEY__ = "func_code_file_key";
 			var __FUNCTION_VERSION__ = "3";
-
-			var __TRANSLATE_JSON__ = {
+			var __TRANSLATE_JSON__ =
+			{
 					'en': {
 						'DEFAULTS': {
 							// "2中文4中文5":

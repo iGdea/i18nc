@@ -11,18 +11,12 @@ function code()
 		var word = I18N('define2 中文');
 		function I18N(msg, subtype) {
 			/**
-			 * @param  {String} msg      translateKey
-			 * @param  {String} subtype  Indicates a special treatment.
-			 * 								Use `<line>` to represent continuous relationships.
-			 * 								Use `<e.g.>` to provide an example.
-			 *								Support `%s` symbol.
+			 * @param  {String} msg      translate words
+			 * @param  {String} subtype  indicates a special treatment
 			 *
-			 *
-			 * [Warn]
-			 * I18nc Tool collects `I18N` callee arguments for professional translation.
-			 * Use simple string arguments when call `I18N`.
-			 * Variables and Operators are not supported.
-			 *
+			 * [Warn] I18N Tool collects direct string args of `I18N` callee.
+			 * Variables or operators of args are not supported.
+			 * @see https://github.com/Bacra/node-i18nc-core/wiki/I18N_handler
 			 */
 		
 			var self = I18N;
@@ -34,24 +28,10 @@ function code()
 		
 			if (self.__TRANSLATE_LAN__ != LAN) {
 				self.__TRANSLATE_LAN__ = LAN;
-				/* Do not modify this key value. */
 				var __FILE_KEY__ = "default_file_key";
 				var __FUNCTION_VERSION__ = "3";
 		
-				/**
-				 * Do not modify the values.
-				 *
-				 * If you really need to update,
-				 * please refer to the following method to modify.
-				 * More info @see https://github.com/Bacra/node-i18nc-core/wiki/How-to-modify-translate-data-in-JS-file
-				 *
-				 * @example
-				 * {
-				 * 	code_modified		: codeModifieResult,
-				 * 	db_translate		: DBTranlateResult || codeModifieResult,
-				 * 	force_code_modified	: forceCodeModifieResult || DBTranlateResult || codeModifieResult
-				 * }
-				 */
+				// Formats @see https://github.com/Bacra/node-i18nc-core/wiki/How-to-modify-translate-data-in-JS-file
 				var __TRANSLATE_JSON__ = { 'zh': { 'DEFAULTS': { 'define2 中文': 'define2 中文' || undefined } } };
 		
 				var lanArr = self.__TRANSLATE_LAN_JSON__ = [];
@@ -81,25 +61,20 @@ function code()
 	});
 
 	function I18N(msg) {
+		// @see https://github.com/Bacra/node-i18nc-core/wiki/I18N_handler
 		var __FILE_KEY__ = "default_file_key";
 		var __FUNCTION_VERSION__ = "3.s";
-		return msg;
+		return typeof msg == 'string' ? msg : ''+msg;
 	}
 	var work = I18N('global 中文2');
 	function I18N(msg, subtype) {
 		/**
-		 * @param  {String} msg      translateKey
-		 * @param  {String} subtype  Indicates a special treatment.
-		 * 								Use `<line>` to represent continuous relationships.
-		 * 								Use `<e.g.>` to provide an example.
-		 *								Support `%s` symbol.
+		 * @param  {String} msg      translate words
+		 * @param  {String} subtype  indicates a special treatment
 		 *
-		 *
-		 * [Warn]
-		 * I18nc Tool collects `I18N` callee arguments for professional translation.
-		 * Use simple string arguments when call `I18N`.
-		 * Variables and Operators are not supported.
-		 *
+		 * [Warn] I18N Tool collects direct string args of `I18N` callee.
+		 * Variables or operators of args are not supported.
+		 * @see https://github.com/Bacra/node-i18nc-core/wiki/I18N_handler
 		 */
 	
 		var self = I18N;
@@ -111,24 +86,10 @@ function code()
 	
 		if (self.__TRANSLATE_LAN__ != LAN) {
 			self.__TRANSLATE_LAN__ = LAN;
-			/* Do not modify this key value. */
 			var __FILE_KEY__ = "default_file_key";
 			var __FUNCTION_VERSION__ = "3";
 	
-			/**
-			 * Do not modify the values.
-			 *
-			 * If you really need to update,
-			 * please refer to the following method to modify.
-			 * More info @see https://github.com/Bacra/node-i18nc-core/wiki/How-to-modify-translate-data-in-JS-file
-			 *
-			 * @example
-			 * {
-			 * 	code_modified		: codeModifieResult,
-			 * 	db_translate		: DBTranlateResult || codeModifieResult,
-			 * 	force_code_modified	: forceCodeModifieResult || DBTranlateResult || codeModifieResult
-			 * }
-			 */
+			// Formats @see https://github.com/Bacra/node-i18nc-core/wiki/How-to-modify-translate-data-in-JS-file
 			var __TRANSLATE_JSON__ = {
 					'zh': {
 						'DEFAULTS': {
