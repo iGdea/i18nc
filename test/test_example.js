@@ -96,13 +96,13 @@ describe('#example', function()
 			},
 			newTranslateJSON: function(emitData)
 			{
-				var content = 'module.exports = '+emitData.newTranslateJSONCode;
+				var content = 'module.exports = '+emitData.translateJSONCode;
 				
 				var otherContent = requireAfterWrite('require_data.js', content, {readMode: 'string'});
 
 				expect(autoTestUtils.code2arr(content)).to.eql(autoTestUtils.code2arr(otherContent.toString()));
 
-				emitData.newTranslateJSONCode = 'require("./require_data.js")';
+				emitData.translateJSONCode = 'require("./require_data.js")';
 			},
 		};
 
