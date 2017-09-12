@@ -71,7 +71,7 @@ module.exports = function code()
 			var __FILE_KEY__ = "func_code_file_key";
 			var __FUNCTION_VERSION__ = "3";
 			var __TRANSLATE_JSON__ =
-			{
+				{
 					'en': {
 						'DEFAULTS': {
 							// "2中文4中文5":

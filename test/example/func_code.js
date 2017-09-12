@@ -71,37 +71,37 @@ module.exports = function code()
 			var __FILE_KEY__ = "func_code_file_key";
 			var __FUNCTION_VERSION__ = "3";
 			var __TRANSLATE_JSON__ =
-			{
-				"en":
 				{
-					"DEFAULTS":
+					"en":
 					{
-						'中文 only file': '' || '中文只在文件'
-					},
-					"SUBTYPES":
-					{
-						'subtype':
+						"DEFAULTS":
 						{
-							'I18N(中文)': 'I18N(zh)'
+							'中文 only file': '' || '中文只在文件'
+						},
+						"SUBTYPES":
+						{
+							'subtype':
+							{
+								'I18N(中文)': 'I18N(zh)'
+							}
+						}
+					},
+					"tw":
+					{
+						"DEFAULTS":
+						{
+							'简体 not exist': '簡體不存在',
+							'简体': '簡體',
+						},
+						"SUBTYPES":
+						{
+							'subtype':
+							{
+								'简体++': '簡體++',
+							}
 						}
 					}
-				},
-				"tw":
-				{
-					"DEFAULTS":
-					{
-						'简体 not exist': '簡體不存在',
-						'简体': '簡體',
-					},
-					"SUBTYPES":
-					{
-						'subtype':
-						{
-							'简体++': '簡體++',
-						}
-					}
-				}
-			};
+				};
 
 			self.__TRANSLATE_LAN__ = LAN;
 			var lanArr = self.__TRANSLATE_LAN_JSON__ = [];
