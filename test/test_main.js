@@ -353,8 +353,6 @@ describe('#main', function()
 
 			codeData = '\nvar codeJSON='+JSON.stringify(codeData, null, '\t');
 
-			console.log(codeData);
-
 			var info = i18nc(code.toString()+codeData,
 				{
 					dbTranslateWords: dbTranslateWords,
