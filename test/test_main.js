@@ -324,5 +324,48 @@ describe('#main', function()
 
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 		});
+
+		it('#isMinI18Nhanlder', function()
+		{
+			var code = function code()
+			{
+				var v1 = '简体';
+			}
+
+			var info = i18nc(code.toString(),
+				{
+					isMinI18Nhanlder: true
+				});
+
+			var otherCode = requireAfterWrite('func_code_min_i18n_output.js', info.code, {readMode: 'string'});
+
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
+		});
+
+		it('#isMinI18Nhanlder & partialUpdate', function()
+		{
+			var code = require('./files/i18n_handler_example.js');
+			var funcInfo = require('./files/i18n_handler_example_output.json');
+			var codeData =
+			{
+				DEFAULTS: Object.keys(funcInfo.__TRANSLATE_JSON__.en.DEFAULTS),
+			}
+
+			codeData = '\nvar codeJSON='+JSON.stringify(codeData, null, '\t');
+
+			console.log(codeData);
+
+			var info = i18nc(code.toString()+codeData,
+				{
+					dbTranslateWords: dbTranslateWords,
+					isMinI18Nhanlder: true
+				});
+
+			var otherCode = requireAfterWrite('func_code_min_i18n_output2.js', info.code, {readMode: 'string'});
+
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
+		});
+
+
 	});
 });
