@@ -7,10 +7,10 @@
 	"__FILE_KEY__": "i18n_handler_example",
 	"__FUNCTION_VERSION__ast": {
 		"type": "Literal",
-		"value": 1,
-		"raw": "1"
+		"value": "3",
+		"raw": "\"3\""
 	},
-	"__FUNCTION_VERSION__": 1,
+	"__FUNCTION_VERSION__": "3",
 	"__TRANSLATE_JSON__ast": {
 		"type": "ObjectExpression",
 		"properties": [

@@ -12,7 +12,7 @@ function I18N(msg, subtype) {
 		self.__TRANSLATE_LAN__ = LAN;
 
 		var __FILE_KEY__ = "i18n_handler_example";
-		var __FUNCTION_VERSION__ = 1;
+		var __FUNCTION_VERSION__ = "3";
 
 		var __TRANSLATE_JSON__ = {
 			"en":

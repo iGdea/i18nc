@@ -1,14 +1,5 @@
 module.exports = I18N;
 function I18N(msg, subtype) {
-	/**
-	 * @param  {String} msg      translate words
-	 * @param  {String} subtype  indicates a special treatment
-	 *
-	 * [Warn] I18N Tool collects direct string args of `I18N` callee.
-	 * Variables or operators of args are not supported.
-	 * @see https://github.com/Bacra/node-i18nc-core/wiki/I18N_handler
-	 */
-
 	var self = I18N;
 
 	var GLOBAL = self.__GLOBAL__ || (self.__GLOBAL__ = typeof window == "object" ? window : typeof global == "object" && global) || {};
@@ -18,10 +9,10 @@ function I18N(msg, subtype) {
 
 	if (self.__TRANSLATE_LAN__ != LAN) {
 		self.__TRANSLATE_LAN__ = LAN;
-		var __FILE_KEY__ = "i18n_handler_example";
-		var __FUNCTION_VERSION__ = "1";
 
-		// Formats @see https://github.com/Bacra/node-i18nc-core/wiki/How-to-modify-translate-data-in-JS-file
+		var __FILE_KEY__ = "i18n_handler_example";
+		var __FUNCTION_VERSION__ = "3";
+
 		var __TRANSLATE_JSON__ = {};
 
 		var lanArr = self.__TRANSLATE_LAN_JSON__ = [];
