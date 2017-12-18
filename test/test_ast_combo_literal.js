@@ -4,7 +4,7 @@ var expect			= require('expect.js');
 var escodegen		= require('escodegen');
 var i18nc			= require('../');
 var optionsUtils	= require('../lib/options');
-var astComboLiteral	= require('../lib/ast_combo_literal');
+var astComboLiteral	= require('../lib/plugins/ast_combo_literal');
 
 
 describe('#astComboLiteral', function()
@@ -51,7 +51,7 @@ describe('#astComboLiteral', function()
 		 * @param  {String} codeStr 表达式code
 		 * 								code字符串使用小写的字母表示
 		 * 								变量或则函数，使用大写的字幕表示
-		 * 
+		 *
 		 * @param  {Object} eqlInfo 期望的结果值
 		 * 								combo 合并后的数组
 		 * 								comboCode 通过combo合成的ast生成的code（表达式，同上）
@@ -108,7 +108,7 @@ describe('#astComboLiteral', function()
 		}
 
 
-	
+
 		describe('#base', function()
 		{
 			_checkOne('a+b+c',
