@@ -21,7 +21,7 @@ function code()
 					if (self.__TRANSLATE_LAN__ != LAN) {
 						self.__TRANSLATE_LAN__ = LAN;
 						var __FILE_KEY__ = "default_file_key";
-						var __FUNCTION_VERSION__ = "2";
+						var __FUNCTION_VERSION__ = "3";
 				
 						// Formats @see https://github.com/Bacra/node-i18nc-core/wiki/How-to-modify-translate-data-in-JS-file
 						var __TRANSLATE_JSON__ = {
