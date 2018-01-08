@@ -25,15 +25,13 @@ function {{@handlerName}}(msg, subtype) {
 		}
 	}
 
-	var lanArr = self.__TRANSLATE_LAN_JSON__,
-		resultDefault, resultSubject;
+	var lanArr = self.__TRANSLATE_LAN_JSON__, resultDefault, resultSubject;
 	for(var i = 0, len = lanArr.length; i < len; i++) {
 		var lanItem = lanArr[i];
 		var subtypeJSON = subtype && lanItem.SUBTYPES && lanItem.SUBTYPES[subtype];
 		resultSubject = subtypeJSON && subtypeJSON[msg];
 		if (resultSubject) break;
-		if (!resultDefault)
-			resultDefault = lanItem.DEFAULTS && lanItem.DEFAULTS[msg];
+		if (!resultDefault) resultDefault = lanItem.DEFAULTS && lanItem.DEFAULTS[msg];
 	}
 
 	var result = resultSubject || resultDefault || msg;
