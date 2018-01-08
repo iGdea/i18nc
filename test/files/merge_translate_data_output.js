@@ -7,7 +7,7 @@ module.exports = {
 			'中文3_empty': [],
 			'中文5_empty': [],
 			'中文6_empty': 'in_file 4' || 'in_file 2' || 'in_file 1',
-			'中文db <allfile>': 'in file <allfile>'
+			'中文db *': 'in file *'
 		},
 		'SUBTYPES': {
 			'subtype': {

@@ -24,8 +24,8 @@ function I18N(msg, subtype) {
 						'中文3_empty': [],
 						// "中文4_empty":
 						'中文5_empty': [],
-						// "中文db ":
-						'中文6_empty': 'in_file 4' || 'in_file 2' || 'in_file 1'
+						'中文6_empty': 'in_file 4' || 'in_file 2' || 'in_file 1',
+						'中文db *': 'in file *'
 					}
 				},
 				'tw': {
@@ -36,7 +36,7 @@ function I18N(msg, subtype) {
 						// "中文4_empty":
 						// "中文5_empty":
 						// "中文6_empty":
-						// "中文db ":
+						// "中文db *":
 						'中文0': '中文0 in tw'
 					}
 				}
@@ -75,7 +75,7 @@ var codeJSON = {
 		I18N('中文4_empty'),
 		I18N('中文5_empty'),
 		I18N('中文6_empty'),
-		I18N('中文db ') + '<allfile>'
+		I18N('中文db *')
 	],
 	"SUBTYPES": {
 		"subtype": [

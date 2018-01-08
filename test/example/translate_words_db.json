@@ -1,18 +1,18 @@
 {
     "en":
     {
-        "<allfile>":
+        "*":
         {
             "DEFAULTS":
             {
-                "中文db <allfile>": "indb <allfile>"
+                "中文db *": "indb *"
             },
             "SUBTYPES":
             {
                 "subtype":
                 {
-                    "中文 allfile subtype1": "indb <allfile> subtype1",
-                    "中文 thisfile subtype2": "indb <allfile> subtype2"
+                    "中文 allfile subtype1": "indb * subtype1",
+                    "中文 thisfile subtype2": "indb * subtype2"
                 }
             }
         },

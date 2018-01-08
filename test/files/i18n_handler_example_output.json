@@ -229,14 +229,14 @@
 										"type": "Property",
 										"key": {
 											"type": "Literal",
-											"value": "中文db <allfile>",
-											"raw": "'中文db <allfile>'"
+											"value": "中文db *",
+											"raw": "'中文db *'"
 										},
 										"computed": false,
 										"value": {
 											"type": "Literal",
-											"value": "in file <allfile>",
-											"raw": "'in file <allfile>'"
+											"value": "in file *",
+											"raw": "'in file *'"
 										},
 										"kind": "init",
 										"method": false,
@@ -498,8 +498,8 @@
 					"in_file 3",
 					"in_file 4"
 				],
-				"中文db <allfile>": [
-					"in file <allfile>"
+				"中文db *": [
+					"in file *"
 				]
 			},
 			"SUBTYPES": {

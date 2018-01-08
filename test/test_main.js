@@ -121,7 +121,7 @@ describe('#main', function()
 					{
 						zh:
 						{
-							'<allfile>':
+							'*':
 							{
 								DEFAULTS:
 								{

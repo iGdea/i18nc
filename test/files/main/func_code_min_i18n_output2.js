@@ -12,7 +12,7 @@ function I18N(msg, subtype) {
 		var __FILE_KEY__ = "i18n_handler_example";
 		var __FUNCTION_VERSION__ = "3";
 
-		var __TRANSLATE_JSON__ = {'en':{'DEFAULTS':{'中文0':'indb <thisfile> db1'||'in_file zh0','中文1':'in_file zh1','中文2':'in_file zh2_db'||''||'in_file zh2','中文3_empty':[],'中文5_empty':[],'中文6_empty':'in_file 4'||'in_file 2'||'in_file 1'}},'tw':{'DEFAULTS':{'中文0':'中文0 in tw'}}};
+		var __TRANSLATE_JSON__ = {'en':{'DEFAULTS':{'中文0':'indb <thisfile> db1'||'in_file zh0','中文1':'in_file zh1','中文2':'in_file zh2_db'||''||'in_file zh2','中文3_empty':[],'中文5_empty':[],'中文6_empty':'in_file 4'||'in_file 2'||'in_file 1','中文db *':'in file *'}},'tw':{'DEFAULTS':{'中文0':'中文0 in tw'}}};
 
 		var lanArr = self.__TRANSLATE_LAN_JSON__ = [];
 		if (LAN && LAN.split) {
@@ -47,6 +47,6 @@ var codeJSON={
 		I18N('中文4_empty'),
 		I18N('中文5_empty'),
 		I18N('中文6_empty'),
-		I18N('中文db ') + '<allfile>'
+		I18N('中文db *')
 	]
 }

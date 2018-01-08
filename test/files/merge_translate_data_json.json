@@ -39,9 +39,9 @@
 				"in_file 4"
 			]
 		},
-		"中文db <allfile>": {
+		"中文db *": {
 			"en": [
-				"in file <allfile>"
+				"in file *"
 			]
 		}
 	},
