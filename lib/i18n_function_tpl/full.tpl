@@ -1,13 +1,4 @@
 function {{@handlerName}}(msg, subtype) {
-	/**
-	 * @param  {String} msg      translate words
-	 * @param  {String} subtype  indicates a special treatment
-	 *
-	 * [Warn] I18N Tool collects direct string args of `{{@handlerName}}` callee.
-	 * Variables or operators of args are not supported.
-	 * @see https://github.com/Bacra/node-i18nc-core/wiki/I18N_handler
-	 */
-
 	var self = {{@handlerName}};
 {{if setFileLanguages}}
 	var LAN = "{{setFileLanguages}}";
@@ -22,7 +13,6 @@ function {{@handlerName}}(msg, subtype) {
 		var __FILE_KEY__ = "{{FILE_KEY}}";
 		var __FUNCTION_VERSION__ = "{{@FUNCTION_VERSION}}";
 
-		// Formats @see https://github.com/Bacra/node-i18nc-core/wiki/How-to-modify-translate-data-in-JS-file
 		var __TRANSLATE_JSON__ = {{@TRANSLATE_JSON}};
 
 		var lanArr = self.__TRANSLATE_LAN_JSON__ = [];
