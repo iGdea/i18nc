@@ -3,4 +3,6 @@ test/tmp
 coverage
 npm-debug.log
 sauce_connect.log
+
 .tags*
+.DS_Store
