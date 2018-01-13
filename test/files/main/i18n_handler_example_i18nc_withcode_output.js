@@ -18,22 +18,18 @@ function I18N(msg, subtype) {
 					'DEFAULTS': {
 						// "中文 allfile subtype1":
 						// "中文 thisfile subtype2":
-						'中文0': 'indb <thisfile> db1' || 'in_file zh0',
-						'中文1': 'in_file zh1',
-						'中文2': 'in_file zh2_db' || '' || 'in_file zh2',
-						'中文3_empty': [],
-						// "中文4_empty":
-						'中文5_empty': [],
-						'中文6_empty': 'in_file 4' || 'in_file 2' || 'in_file 1',
-						'中文db *': 'in file *'
+						'中文0': 'indb <thisfile> db0',
+						'中文1': 'in_file custom1',
+						'中文2': 'in_file zh2_db',
+						// "中文5_empty":
+						'中文6_empty': 'in_file 4',
+						'中文db *': 'indb *'
 					}
 				},
 				'tw': {
 					'DEFAULTS': {
 						// "中文1":
 						// "中文2":
-						// "中文3_empty":
-						// "中文4_empty":
 						// "中文5_empty":
 						// "中文6_empty":
 						// "中文db *":
@@ -71,8 +67,6 @@ var codeJSON = {
 		I18N('中文0'),
 		I18N('中文1'),
 		I18N('中文2'),
-		I18N('中文3_empty'),
-		I18N('中文4_empty'),
 		I18N('中文5_empty'),
 		I18N('中文6_empty'),
 		I18N('中文db *')
@@ -82,7 +76,6 @@ var codeJSON = {
 			I18N('中文0'),
 			I18N('中文1'),
 			I18N('中文2'),
-			I18N('中文3_empty'),
 			I18N('中文 allfile subtype1'),
 			I18N('中文 thisfile subtype2')
 		]

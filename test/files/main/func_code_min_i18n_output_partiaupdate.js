@@ -12,7 +12,7 @@ function I18N(msg, subtype) {
 		var __FILE_KEY__ = "i18n_handler_example";
 		var __FUNCTION_VERSION__ = "3";
 
-		var __TRANSLATE_JSON__ = {'en':{'DEFAULTS':{'中文0':'indb <thisfile> custom','中文1':'in_file custom1','中文2':'in_file zh2_db','中文6_empty':'in_file 4','中文db *':'in file *'}},'tw':{'DEFAULTS':{'中文0':'中文0 in tw'}}};
+		var __TRANSLATE_JSON__ = {'en':{'DEFAULTS':{'中文0':'indb <thisfile> db0','中文1':'in_file custom1','中文2':'in_file zh2_db','中文5_empty':[],'中文6_empty':'in_file 4','中文db *':'indb *'}},'tw':{'DEFAULTS':{'中文0':'中文0 in tw'}}};
 
 		var lanArr = self.__TRANSLATE_LAN_JSON__ = [];
 		if (LAN && LAN.split) {
@@ -43,8 +43,6 @@ var codeJSON={
 		I18N('中文0'),
 		I18N('中文1'),
 		I18N('中文2'),
-		I18N('中文3_empty'),
-		I18N('中文4_empty'),
 		I18N('中文5_empty'),
 		I18N('中文6_empty'),
 		I18N('中文db *')

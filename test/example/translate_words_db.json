@@ -22,7 +22,7 @@
         {
             "DEFAULTS":
             {
-                "中文0": "indb <thisfile> custom"
+                "中文0": "indb <thisfile> db0"
             },
             "SUBTYPES":
             {
