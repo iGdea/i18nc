@@ -76,7 +76,7 @@ module.exports = function code()
 					{
 						"DEFAULTS":
 						{
-							'中文 only file': '' || '中文只在文件'
+							'中文 only file': '中文只在文件'
 						},
 						"SUBTYPES":
 						{

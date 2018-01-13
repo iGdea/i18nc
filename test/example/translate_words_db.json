@@ -22,17 +22,13 @@
         {
             "DEFAULTS":
             {
-                "中文0":
-                [
-                    "indb <thisfile> custom",
-                    "indb <thisfile> db1"
-                ]
+                "中文0": "indb <thisfile> custom"
             },
             "SUBTYPES":
             {
                 "subtype":
                 {
-                    "中文 thisfile subtype2": ["", "indb <thisfile> subtype2"]
+                    "中文 thisfile subtype2": "indb <thisfile> subtype2"
                 }
             }
         },
@@ -41,7 +37,7 @@
 		{
 			"DEFAULTS":
 			{
-				"中文 only db": ["", "中文只在数据库"]
+				"中文 only db": "中文只在数据库"
 			}
 		}
     },
@@ -51,15 +47,15 @@
         {
             "DEFAULTS":
             {
-                "中文key": ["", "中文键"],
-                "中文 only db": ["", "中文只在数据库"],
-                "I18N(中文)": ["", "国际化中文"]
+                "中文key": "中文键",
+                "中文 only db": "中文只在数据库",
+                "I18N(中文)": "国际化中文"
             },
             "SUBTYPES":
             {
                 "subtype":
                 {
-                    "I18N(中文)": ["", "中文国际化"]
+                    "I18N(中文)": "中文国际化"
                 }
             }
         }

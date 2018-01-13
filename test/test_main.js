@@ -261,7 +261,7 @@ describe('#main', function()
 				}
 
 				otherfunc('中文 run other func');
-			}
+			};
 
 			var info = i18nc(code.toString(), {ignoreScanFunctionNames: ['somefunc']});
 
@@ -285,7 +285,7 @@ describe('#main', function()
 			var code = function code()
 			{
 				var v1 = '1234';
-			}
+			};
 
 			var info = i18nc(code.toString(),
 				{
@@ -313,7 +313,7 @@ describe('#main', function()
 			var code = function code()
 			{
 				var v1 = '简体';
-			}
+			};
 
 			var info = i18nc(code.toString(),
 				{
@@ -325,45 +325,66 @@ describe('#main', function()
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 		});
 
-		it('#isMinI18Nhanlder', function()
+		describe('#isMinI18Nhanlder', function()
 		{
-			var code = function code()
+			it('#base', function()
 			{
-				var v1 = '简体';
-			}
-
-			var info = i18nc(code.toString(),
+				var code = function code()
 				{
-					isMinI18Nhanlder: true
-				});
+					var v1 = '简体';
+				};
 
-			var otherCode = requireAfterWrite('func_code_min_i18n_output.js', info.code, {readMode: 'string'});
+				var info = i18nc(code.toString(),
+					{
+						isMinI18Nhanlder: true
+					});
 
-			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
-		});
+				var otherCode = requireAfterWrite('func_code_min_i18n_output_base.js', info.code, {readMode: 'string'});
 
-		it('#isMinI18Nhanlder & partialUpdate', function()
-		{
-			var code = require('./files/i18n_handler_example.js');
-			var funcInfo = require('./files/i18n_handler_example_output.json');
-			var codeData =
+				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
+			});
+
+			it('#wdithdb', function()
 			{
-				DEFAULTS: Object.keys(funcInfo.__TRANSLATE_JSON__.en.DEFAULTS),
-			}
-
-			codeData = '\nvar codeJSON='+JSON.stringify(codeData, null, '\t');
-
-			console.log(codeData);
-
-			var info = i18nc(code.toString()+codeData,
+				var code = function code()
 				{
-					dbTranslateWords: dbTranslateWords,
-					isMinI18Nhanlder: true
-				});
+					var v1 = '简体';
+				};
 
-			var otherCode = requireAfterWrite('func_code_min_i18n_output2.js', info.code, {readMode: 'string'});
+				var info = i18nc(code.toString(),
+					{
+						dbTranslateWords: dbTranslateWords,
+						isMinI18Nhanlder: true
+					});
 
-			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
+				var otherCode = requireAfterWrite('func_code_min_i18n_output_widthdb.js', info.code, {readMode: 'string'});
+
+				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
+			});
+
+			it('#partialUpdate', function()
+			{
+				var code = require('./files/i18n_handler_example.js');
+				var funcInfo = require('./files/i18n_handler_example_output.json');
+				var codeData =
+				{
+					DEFAULTS: Object.keys(funcInfo.__TRANSLATE_JSON__.en.DEFAULTS),
+				};
+
+				codeData = '\nvar codeJSON='+JSON.stringify(codeData, null, '\t');
+				// console.log(codeData);
+
+				var info = i18nc(code.toString()+codeData,
+					{
+						dbTranslateWords: dbTranslateWords,
+						isMinI18Nhanlder: true
+					});
+
+				var otherCode = requireAfterWrite('func_code_min_i18n_output_partiaupdate.js', info.code, {readMode: 'string'});
+
+				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
+			});
+
 		});
 
 

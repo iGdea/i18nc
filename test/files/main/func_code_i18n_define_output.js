@@ -22,7 +22,7 @@ function code()
 				var __FILE_KEY__ = "default_file_key";
 				var __FUNCTION_VERSION__ = "3";
 		
-				var __TRANSLATE_JSON__ = { 'zh': { 'DEFAULTS': { 'define2 中文': 'define2 中文' || undefined } } };
+				var __TRANSLATE_JSON__ = { 'zh': { 'DEFAULTS': { 'define2 中文': 'define2 中文' } } };
 		
 				var lanArr = self.__TRANSLATE_LAN_JSON__ = [];
 				if (LAN && LAN.split) {
@@ -70,9 +70,9 @@ function code()
 			var __TRANSLATE_JSON__ = {
 					'zh': {
 						'DEFAULTS': {
-							'define1 中文': 'define1 中文' || undefined,
-							'global 中文1': 'global 中文1' || undefined,
-							'global 中文2': 'global 中文2' || undefined
+							'define1 中文': 'define1 中文',
+							'global 中文1': 'global 中文1',
+							'global 中文2': 'global 中文2'
 						}
 					}
 				};

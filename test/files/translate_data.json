@@ -1,17 +1,4 @@
 {
-	"word_all": [
-		"db1",
-		"custom",
-		"db2"
-	],
-	"word_custom": [
-		"db1",
-		"custom"
-	],
-	"word_db": [
-		"db1"
-	],
-	"word_db_emtpy": [
-		""
-	]
+	"word_db": "word_db",
+	"word_db_emtpy": "word_db_emtpy"
 }

@@ -78,7 +78,7 @@ module.exports = function code()
 							// "print中文":
 							// "run 中文":
 							// "中午true":
-							'中文 only db': '中文只在数据库' || '',
+							'中文 only db': '中文只在数据库',
 							// "中文0":
 							// "中文1":
 							// "中文2":
@@ -117,7 +117,7 @@ module.exports = function code()
 							// "print中文":
 							// "run 中文":
 							// "中午true":
-							'中文 only db': '中文只在数据库' || '',
+							'中文 only db': '中文只在数据库',
 							// "中文 only file":
 							// "中文0":
 							// "中文1":
@@ -130,7 +130,7 @@ module.exports = function code()
 							// "中文case+数字":
 							// "中文false":
 							// "中文if":
-							'中文key': '中文键' || '',
+							'中文key': '中文键',
 							// "中文span":
 							// "中文span2":
 							// "中文span3":
@@ -142,7 +142,7 @@ module.exports = function code()
 						'SUBTYPES': {
 							'subtype': {
 								// "中文I18N subtype":
-								'I18N(中文)': '中文国际化' || ''
+								'I18N(中文)': '中文国际化'
 							},
 							'subtype2': {
 								// "I18N(中文)":

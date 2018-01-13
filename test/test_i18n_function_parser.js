@@ -5,95 +5,14 @@ var i18nFunctionParser	= require('../lib/i18n_function_parser');
 
 describe('#i18n_function_parser', function()
 {
-	describe('#translateLogicalValAst2arr', function()
+	it('#translateSubtreeAst2json', function()
 	{
-		function run(code)
-		{
-			var ast = esprima.parse(code).body[0].expression;
-			return i18nFunctionParser._translateLogicalValAst2arrWidthClear(ast);
-		}
+		var astData = require('./files/translate_data_ast.json');
+		var result = i18nFunctionParser._translateSubtreeAst2json(astData);
 
-		it('#normal', function()
-		{
-			expect(run('1 || 2 || 3 || 4')).to.eql([4, 3, 2, 1]);
-		});
+		var outputJSON = requireAfterWrite('translate_data.json', result);
 
-		it('#no and', function()
-		{
-			expect(run).withArgs('1 || 2 && 3 || 4').to.throwError('RANSLATE_JSON DATA OPERATOR IS NOT `OR`');
-		});
-
-		it('#array empty', function()
-		{
-			expect(run('[] || 0 || 0')).to.eql(['', 0, 0]);
-		});
-
-		it('#empty string', function()
-		{
-			expect(run('"" || 1 || 0')).to.eql([0, 1]);
-		});
-
-		it('#empty 10000', function()
-		{
-			expect(run('1 || 0 || 0 || 0')).to.eql([0, 0, 0, 1]);
-		});
-
-		it('#empty 0001', function()
-		{
-			expect(run('0 || 0 || 0 || 1')).to.eql([1]);
-		});
-
-		it('#empty 0(00)1', function()
-		{
-			expect(run('0 || (0 || 0) || 1')).to.eql([1]);
-		});
-
-		it('#empty 1001', function()
-		{
-			expect(run('1 || 0 || 0 || 1')).to.eql([1, 0, 0, 1]);
-		});
-
-		it('#empty 1(00)1', function()
-		{
-			expect(run('1 || (0 || 0) || 1')).to.eql([1, 0, 0, 1]);
-		});
-
-		it('#empty 10(01)', function()
-		{
-			expect(run('1 || 0 || (0 || 1)')).to.eql([1, 0, 0, 1]);
-		});
-	});
-
-
-	describe('#translateSubtreeAst2json', function()
-	{
-		it('#normal', function()
-		{
-			var astData = require('./files/translate_data_ast.json');
-			var result = i18nFunctionParser._translateSubtreeAst2json(astData);
-
-			var outputJSON = requireAfterWrite('translate_data.json', result);
-
-			expect(result).to.eql(outputJSON);
-		});
-
-		it('#empty head', function()
-		{
-			var astData = require('./files/translate_data_ast_empty_head.json');
-			var result = i18nFunctionParser._translateSubtreeAst2json(astData);
-
-			var outputJSON = requireAfterWrite('translate_data_empty_head.json', result);
-
-			expect(result).to.eql(outputJSON);
-		});
-
-		it('#is js, not json', function()
-		{
-			var ast = esprima.parse('var a = {b: 1 || 2}');
-			var result = i18nFunctionParser._translateSubtreeAst2json(ast.body[0].declarations[0].init);
-
-			expect(result).to.eql({b: [2, 1]});
-		});
+		expect(result).to.eql(outputJSON);
 	});
 
 	it('#parse', function()

@@ -13,10 +13,10 @@ describe('#i18n_function_generator', function()
 	{
 		var astData = require('./files/translate_data.json');
 		var resultAst = i18nFunctionGenerator._wordmap2ast(astData);
+		var otherAst = requireAfterWrite('translate_data_ast.json', resultAst);
 		debug('wordmap2ast resultAst:%o', resultAst);
 		var resultCode = escodegen.generate(resultAst, optionsUtils.escodegenOptions);
 
-		var otherAst = require('./files/translate_data_ast.json');
 		otherAst.properties = otherAst.properties.sort(function(a, b)
 			{
 				return a.key.value > b.key.value ? 1 : -1;
