@@ -13,7 +13,7 @@ function I18N(msg, subtype) {
 		var __FUNCTION_VERSION__ = "3";
 
 		var __TRANSLATE_JSON__ = {
-				'<LAN KEY>': {
+				'en-US': {
 					'DEFAULTS': {
 						// "define2 中文":
 						// "define2 中文2":

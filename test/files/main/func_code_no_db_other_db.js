@@ -13,7 +13,7 @@ function I18N(msg, subtype) {
 		var __FUNCTION_VERSION__ = "3";
 
 		var __TRANSLATE_JSON__ = {
-				'<LAN KEY>': {
+				'en-US': {
 					'DEFAULTS': {
 						// "不可能存在的中文翻译词组":
 						'<e.g.> translate word': null

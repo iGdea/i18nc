@@ -15,7 +15,7 @@ function code()
 			var __FUNCTION_VERSION__ = "3";
 	
 			var __TRANSLATE_JSON__ = {
-					'<LAN KEY>': {
+					'en-US': {
 						'DEFAULTS': {
 							// "中文":
 							// "中文2":
