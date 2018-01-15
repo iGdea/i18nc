@@ -1,11 +1,7 @@
 function {{@handlerName}}(msg, subtype) {
 	var self = {{@handlerName}};
-{{if setFileLanguages}}
-	var LAN = "{{setFileLanguages}}";
-{{else}}
 	var GLOBAL = self.__GLOBAL__ || (self.__GLOBAL__ = {{@GetGlobalCode}}) || {};
 	var LAN = GLOBAL.{{@LanguageVarName}};
-{{/if}}
 	if (!LAN) return msg;
 
 	if (self.__TRANSLATE_LAN__ != LAN) {

@@ -11,10 +11,8 @@ function code()
 		var word = I18N('define2 中文');
 		function I18N(msg, subtype) {
 			var self = I18N;
-		
 			var GLOBAL = self.__GLOBAL__ || (self.__GLOBAL__ = typeof window == "object" ? window : typeof global == "object" && global) || {};
 			var LAN = GLOBAL.__i18n_lan__;
-		
 			if (!LAN) return msg;
 		
 			if (self.__TRANSLATE_LAN__ != LAN) {
@@ -56,10 +54,8 @@ function code()
 	var work = I18N('global 中文2');
 	function I18N(msg, subtype) {
 		var self = I18N;
-	
 		var GLOBAL = self.__GLOBAL__ || (self.__GLOBAL__ = typeof window == "object" ? window : typeof global == "object" && global) || {};
 		var LAN = GLOBAL.__i18n_lan__;
-	
 		if (!LAN) return msg;
 	
 		if (self.__TRANSLATE_LAN__ != LAN) {

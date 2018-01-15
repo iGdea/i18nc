@@ -195,11 +195,11 @@ describe('#main', function()
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 		});
 
-		it('#setFileLanguages', function()
+		it('#pickFileLanguages', function()
 		{
 			var info = i18nc(code,
 				{
-					setFileLanguages: ['en']
+					pickFileLanguages: ['en']
 				});
 
 			var otherCode = requireAfterWrite('func_code_no_db_set_lans.js', info.code, {readMode: 'string'});

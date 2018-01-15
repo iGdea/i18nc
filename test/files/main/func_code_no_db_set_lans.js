@@ -3,9 +3,8 @@
 
 function I18N(msg, subtype) {
 	var self = I18N;
-
-	var LAN = "en";
-
+	var GLOBAL = self.__GLOBAL__ || (self.__GLOBAL__ = typeof window == "object" ? window : typeof global == "object" && global) || {};
+	var LAN = GLOBAL.__i18n_lan__;
 	if (!LAN) return msg;
 
 	if (self.__TRANSLATE_LAN__ != LAN) {
