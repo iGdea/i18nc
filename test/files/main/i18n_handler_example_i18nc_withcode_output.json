@@ -13,7 +13,8 @@
 			"中文6_empty",
 			"中文db *"
 		],
-		"SUBTYPES": {}
+		"SUBTYPES": {},
+		"SUBTYPE_LINES": []
 	},
 	"funcTranslateWords": {
 		"i18n_handler_example": {

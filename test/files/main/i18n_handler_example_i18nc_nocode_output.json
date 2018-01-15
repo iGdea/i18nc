@@ -1,7 +1,8 @@
 {
 	"codeTranslateWords": {
 		"DEFAULTS": [],
-		"SUBTYPES": {}
+		"SUBTYPES": {},
+		"SUBTYPE_LINES": []
 	},
 	"funcTranslateWords": {
 		"i18n_handler_example": {
