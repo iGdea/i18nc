@@ -308,7 +308,7 @@ describe('#main', function()
 		});
 
 
-		it('#isPackageAllTranslateWords', function()
+		it('#isInjectAllTranslateWords', function()
 		{
 			var code = function code()
 			{
@@ -317,7 +317,7 @@ describe('#main', function()
 
 			var info = i18nc(code.toString(),
 				{
-					isPackageAllTranslateWords: false
+					isInjectAllTranslateWords: false
 				});
 
 			var otherCode = requireAfterWrite('func_code_no_notused_words_output.js', info.code, {readMode: 'string'});
