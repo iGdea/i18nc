@@ -4,7 +4,7 @@ var expect			= require('expect.js');
 var escodegen		= require('escodegen');
 var i18nc			= require('../');
 var optionsUtils	= require('../lib/options');
-var astComboLiteral	= require('../lib/plugins/ast_combo_literal');
+var astComboLiteral	= require('../lib/plugins/combo_literal/combo_literal');
 
 
 describe('#astComboLiteral', function()
