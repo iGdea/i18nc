@@ -31,10 +31,10 @@ describe('#main', function()
 			var funcInfo = require('./files/i18n_handler_example_output.json');
 			var codeData =
 			{
-				DEFAULTS: Object.keys(funcInfo.__TRANSLATE_JSON__.en.DEFAULTS),
+				DEFAULTS: Object.keys(funcInfo.__TRANSLATE_JSON__['en-US'].DEFAULTS),
 				SUBTYPES:
 				{
-					subtype: Object.keys(funcInfo.__TRANSLATE_JSON__.en.SUBTYPES.subtype)
+					subtype: Object.keys(funcInfo.__TRANSLATE_JSON__['en-US'].SUBTYPES.subtype)
 				}
 			};
 
@@ -199,7 +199,7 @@ describe('#main', function()
 		{
 			var info = i18nc(code,
 				{
-					pickFileLanguages: ['en']
+					pickFileLanguages: ['en-US']
 				});
 
 			var otherCode = requireAfterWrite('func_code_no_db_set_lans.js', info.code, {readMode: 'string'});
@@ -368,7 +368,7 @@ describe('#main', function()
 				var funcInfo = require('./files/i18n_handler_example_output.json');
 				var codeData =
 				{
-					DEFAULTS: Object.keys(funcInfo.__TRANSLATE_JSON__.en.DEFAULTS),
+					DEFAULTS: Object.keys(funcInfo.__TRANSLATE_JSON__['en-US'].DEFAULTS),
 				};
 
 				codeData = '\nvar codeJSON='+JSON.stringify(codeData, null, '\t');

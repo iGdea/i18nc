@@ -14,7 +14,7 @@ function I18N(msg, subtype) {
 		var __FUNCTION_VERSION__ = "3";
 
 		var __TRANSLATE_JSON__ = {
-				'en': {
+				'en-US': {
 					'DEFAULTS': {
 						// "中文 allfile subtype1":
 						// "中文 thisfile subtype2":
@@ -26,7 +26,7 @@ function I18N(msg, subtype) {
 						'中文db *': 'indb *'
 					}
 				},
-				'tw': {
+				'zh-TW': {
 					'DEFAULTS': {
 						// "中文1":
 						// "中文2":

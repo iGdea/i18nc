@@ -3,11 +3,11 @@ var I18N	= require('./files/i18n_handler_example');
 
 describe('#I18N function', function()
 {
-	describe('#lan:en', function()
+	describe('#lan:en-US', function()
 	{
 		beforeEach(function()
 		{
-			global.__i18n_lan__ = 'en';
+			global.__i18n_lan__ = 'en-US';
 		});
 
 		it('#no msg', function()
@@ -47,11 +47,11 @@ describe('#I18N function', function()
 	});
 
 
-	describe('#lan:zh', function()
+	describe('#lan:zh-CN', function()
 	{
 		beforeEach(function()
 		{
-			global.__i18n_lan__ = 'zh';
+			global.__i18n_lan__ = 'zh-CN';
 		});
 
 		it('#match default', function()
@@ -66,11 +66,11 @@ describe('#I18N function', function()
 	});
 
 
-	describe('#lan:zh,en', function()
+	describe('#lan:zh-CN,en-US', function()
 	{
 		beforeEach(function()
 		{
-			global.__i18n_lan__ = 'zh,en';
+			global.__i18n_lan__ = 'zh-CN,en-US';
 		});
 
 		it('#match default', function()
@@ -84,11 +84,11 @@ describe('#I18N function', function()
 		});
 	});
 
-	describe('#lan:tw,en', function()
+	describe('#lan:zh-TW,en-US', function()
 	{
 		beforeEach(function()
 		{
-			global.__i18n_lan__ = 'tw,en';
+			global.__i18n_lan__ = 'zh-TW,en-US';
 		});
 
 		it('#match default', function()

@@ -1,5 +1,5 @@
 module.exports = {
-	'en': {
+	'en-US': {
 		'DEFAULTS': {
 			'中文0': 'indb <thisfile> db0',
 			'中文1': 'in_file custom1',
@@ -18,5 +18,5 @@ module.exports = {
 			}
 		}
 	},
-	'tw': { 'DEFAULTS': { '中文0': '中文0 in tw' } }
+	'zh-TW': { 'DEFAULTS': { '中文0': '中文0 in tw' } }
 }

@@ -72,7 +72,7 @@ module.exports = function code()
 			var __FUNCTION_VERSION__ = "3";
 			var __TRANSLATE_JSON__ =
 				{
-					"en":
+					"en-US":
 					{
 						"DEFAULTS":
 						{
@@ -86,7 +86,7 @@ module.exports = function code()
 							}
 						}
 					},
-					"tw":
+					"zh-TW":
 					{
 						"DEFAULTS":
 						{

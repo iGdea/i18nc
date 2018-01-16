@@ -15,7 +15,7 @@ function I18N(msg, subtype) {
 		var __FUNCTION_VERSION__ = "3";
 
 		var __TRANSLATE_JSON__ = {
-			"en":
+			"en-US":
 			{
 				"DEFAULTS":
 				{
@@ -43,7 +43,7 @@ function I18N(msg, subtype) {
 					}
 				}
 			},
-			"tw":
+			"zh-TW":
 			{
 				"DEFAULTS":
 				{

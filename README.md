@@ -76,11 +76,11 @@ function I18N(msg, subtype) {
     var __FUNCTION_VERSION__ = 2;
 
     var __TRANSLATE_JSON__ = {
-        'en': {
+        'en-US': {
           'DEFAULTS': {'中文1': 'zh1', '中文2': 'zh2'},
           'SUBTYPES': {'sub type': {'中文': 'zh in subtype'}}
         },
-        'tw': {'DEFAULTS': {'简体': '簡體'}}
+        'zh-TW': {'DEFAULTS': {'简体': '簡體'}}
       };
 
     var lanArr = self.__TRANSLATE_LAN_JSON__ = [];

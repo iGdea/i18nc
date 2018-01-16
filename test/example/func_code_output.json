@@ -53,7 +53,7 @@
 	},
 	"funcTranslateWords": {
 		"func_code_file_key": {
-			"en": {
+			"en-US": {
 				"DEFAULTS": {
 					"中文 only db": "中文只在数据库",
 					"中文 only file": "中文只在文件"
@@ -65,7 +65,7 @@
 					"subtype2": {}
 				}
 			},
-			"tw": {
+			"zh-TW": {
 				"DEFAULTS": {
 					"中文 only db": "中文只在数据库",
 					"中文key": "中文键",
@@ -82,7 +82,7 @@
 	},
 	"usedTranslateWords": {
 		"func_code_file_key": {
-			"en": {
+			"en-US": {
 				"DEFAULTS": {
 					"中文 only db": "中文只在数据库",
 					"中文 only file": "中文只在文件"
@@ -93,7 +93,7 @@
 					}
 				}
 			},
-			"tw": {
+			"zh-TW": {
 				"DEFAULTS": {
 					"中文 only db": "中文只在数据库",
 					"中文key": "中文键",

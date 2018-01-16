@@ -18,8 +18,8 @@
 				"type": "Property",
 				"key": {
 					"type": "Literal",
-					"value": "en",
-					"raw": "\"en\""
+					"value": "en-US",
+					"raw": "\"en-US\""
 				},
 				"computed": false,
 				"value": {
@@ -323,8 +323,8 @@
 				"type": "Property",
 				"key": {
 					"type": "Literal",
-					"value": "tw",
-					"raw": "\"tw\""
+					"value": "zh-TW",
+					"raw": "\"zh-TW\""
 				},
 				"computed": false,
 				"value": {
@@ -373,7 +373,7 @@
 		]
 	},
 	"__TRANSLATE_JSON__": {
-		"en": {
+		"en-US": {
 			"DEFAULTS": {
 				"中文0": "in_file zh0",
 				"中文1": "in_file custom1",
@@ -392,7 +392,7 @@
 				}
 			}
 		},
-		"tw": {
+		"zh-TW": {
 			"DEFAULTS": {
 				"中文0": "中文0 in tw"
 			}
