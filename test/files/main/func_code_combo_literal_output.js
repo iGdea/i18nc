@@ -9,7 +9,7 @@ function I18N(msg, subtype) {
 
 	if (self.__TRANSLATE_LAN__ != LAN) {
 		self.__TRANSLATE_LAN__ = LAN;
-		var __FILE_KEY__ = "default_file_key";
+		var __FILE_KEY__ = "*";
 		var __FUNCTION_VERSION__ = "3";
 
 		var __TRANSLATE_JSON__ = {

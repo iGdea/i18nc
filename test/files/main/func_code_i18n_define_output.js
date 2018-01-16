@@ -17,7 +17,7 @@ function code()
 		
 			if (self.__TRANSLATE_LAN__ != LAN) {
 				self.__TRANSLATE_LAN__ = LAN;
-				var __FILE_KEY__ = "default_file_key";
+				var __FILE_KEY__ = "*";
 				var __FUNCTION_VERSION__ = "3";
 		
 				var __TRANSLATE_JSON__ = { 'zh': { 'DEFAULTS': { 'define2 中文': 'define2 中文' } } };
@@ -47,7 +47,7 @@ function code()
 	});
 
 	function I18N(msg) {
-		var __FILE_KEY__ = "default_file_key";
+		var __FILE_KEY__ = "*";
 		var __FUNCTION_VERSION__ = "3.s";
 		return typeof msg == 'string' ? msg : ''+msg;
 	}
@@ -60,7 +60,7 @@ function code()
 	
 		if (self.__TRANSLATE_LAN__ != LAN) {
 			self.__TRANSLATE_LAN__ = LAN;
-			var __FILE_KEY__ = "default_file_key";
+			var __FILE_KEY__ = "*";
 			var __FUNCTION_VERSION__ = "3";
 	
 			var __TRANSLATE_JSON__ = {
