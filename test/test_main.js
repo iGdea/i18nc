@@ -325,6 +325,11 @@ describe('#main', function()
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 		});
 
+		it('#codeModifyRangs', function()
+		{
+			console.log('@todo');
+		});
+
 		describe('#isMinI18Nhanlder', function()
 		{
 			it('#base', function()
