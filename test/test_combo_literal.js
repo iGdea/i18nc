@@ -2,7 +2,7 @@ var _				= require('lodash');
 var debug			= require('debug')('i18nc-core:test_combo_literal');
 var expect			= require('expect.js');
 var escodegen		= require('escodegen');
-var i18nc			= require('../');
+var i18nc			= require('../lib/ast_utils');
 var optionsUtils	= require('../lib/options');
 var astComboLiteral	= require('../lib/plugins/combo_literal/combo_literal');
 
