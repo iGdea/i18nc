@@ -245,7 +245,7 @@ describe('#main', function()
 
 	describe('#result', function()
 	{
-		it('#dirtyWords', function()
+		it('#dirtyAsts', function()
 		{
 			console.log('@todo');
 		});

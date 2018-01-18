@@ -38,7 +38,7 @@ describe('#example', function()
 
 			expect(exampleCode_new()).to.be(exampleCode());
 			expect(autoTestUtils.codeTranslateWords2words(info.codeTranslateWords)).to.eql(translateWords);
-			expect(info.dirtyWords).to.empty();
+			expect(info.dirtyAsts).to.empty();
 		});
 
 
@@ -57,7 +57,7 @@ describe('#example', function()
 
 			expect(exampleCode_new()).to.be(exampleCode());
 			expect(autoTestUtils.codeTranslateWords2words(info.codeTranslateWords)).to.eql(translateWords);
-			expect(info.dirtyWords).to.empty();
+			expect(info.dirtyAsts).to.empty();
 		});
 	});
 
