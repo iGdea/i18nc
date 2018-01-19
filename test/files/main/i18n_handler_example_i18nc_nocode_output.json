@@ -4,6 +4,10 @@
 		"SUBTYPES": {},
 		"SUBTYPE_LINES": []
 	},
+	"i18nArgsTranslateWords": {
+		"DEFAULTS": [],
+		"SUBTYPES": {}
+	},
 	"funcTranslateWords": {
 		"i18n_handler_example": {
 			"en-US": {
