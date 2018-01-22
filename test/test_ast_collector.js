@@ -75,6 +75,11 @@ describe('#ASTCollector', function()
 			expect(!!astUtils.checkAstFlag(scope.translateWordAsts[1], astUtils.AST_FLAGS.SKIP_REPLACE)).to.be(true);
 			expect(getScopeCodeTranslateWord(scope)).to.eql(['中文', '这个中文还在'].sort());
 		});
+
+		it('#default_subtype', function()
+		{
+			console.log('@todo');
+		});
 	});
 
 
