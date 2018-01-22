@@ -1,7 +1,7 @@
-function {{@handlerName}}(msg, tpldata, subtype) {
-	var self = {{@handlerName}};
-	var GLOBAL = self.__GLOBAL__ || (self.__GLOBAL__ = {{@GetGlobalCode}}) || {};
-	var LAN = GLOBAL.{{@LanguageVarName}};
+function $handlerName(msg, tpldata, subtype) {
+	var self = $handlerName;
+	var GLOBAL = self.__GLOBAL__ || (self.__GLOBAL__ = $GetGlobalCode) || {};
+	var LAN = GLOBAL.$LanguageVarName;
 	if (!LAN) return msg;
 	if (!tpldata.slice) {
 		subtype = tpldata;
@@ -10,10 +10,10 @@ function {{@handlerName}}(msg, tpldata, subtype) {
 
 	if (self.__TRANSLATE_LAN__ != LAN) {
 		self.__TRANSLATE_LAN__ = LAN;
-		var __FILE_KEY__ = "{{FILE_KEY}}";
-		var __FUNCTION_VERSION__ = "{{@FUNCTION_VERSION}}";
+		var __FILE_KEY__ = "$FILE_KEY";
+		var __FUNCTION_VERSION__ = "$FUNCTION_VERSION";
 
-		var __TRANSLATE_JSON__ = {{@TRANSLATE_JSON}};
+		var __TRANSLATE_JSON__ = $TRANSLATE_JSON;
 
 		var lanArr = self.__TRANSLATE_LAN_JSON__ = [];
 		if (LAN && LAN.split) {
