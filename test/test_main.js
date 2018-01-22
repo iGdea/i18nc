@@ -334,7 +334,7 @@ describe('#main', function()
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 		});
 
-		it('#codeModifyRangs', function()
+		it('#codeModifiedArea', function()
 		{
 			console.log('@todo');
 		});
