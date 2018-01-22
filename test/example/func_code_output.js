@@ -68,9 +68,10 @@ module.exports = function code()
 		var self = I18N;
 		if (self.__TRANSLATE_LAN__ != LAN)
 		{
-			var __FILE_KEY__ = "func_code_file_key";
-			var __FUNCTION_VERSION__ = "3";
-			var __TRANSLATE_JSON__ =
+			self.__TRANSLATE_LAN__ = LAN;
+			self.__FILE_KEY__ = "func_code_file_key";
+			self.__FUNCTION_VERSION__ = "3";
+			self.__TRANSLATE_JSON__ =
 				{
 					'en-US': {
 						'DEFAULTS': {
@@ -152,7 +153,7 @@ module.exports = function code()
 					}
 				};
 
-			self.__TRANSLATE_LAN__ = LAN;
+			var __TRANSLATE_JSON__ = self.__TRANSLATE_JSON__;
 			var lanArr = self.__TRANSLATE_LAN_JSON__ = [];
 			if (LAN && LAN.split)
 			{
