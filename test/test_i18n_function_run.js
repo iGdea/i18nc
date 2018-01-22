@@ -101,5 +101,19 @@ describe('#I18N function', function()
 			expect(I18N('中文0', 'subtype')).to.be('in_file subtye_zh0');
 		});
 	});
+
+	describe('#tpldata', function()
+	{
+		it('#base', function()
+		{
+			console.log('@todo');
+		});
+
+		it('#I18N args', function()
+		{
+			console.log('@todo');
+		});
+	});
+
 });
 

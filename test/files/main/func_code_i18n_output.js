@@ -3,11 +3,15 @@ function code()
 	var word = I18N('中文');
 	consol.log(word, I18N('中文2'));
 
-	function I18N(msg, subtype) {
+	function I18N(msg, tpldata, subtype) {
 		var self = I18N;
 		var GLOBAL = self.__GLOBAL__ || (self.__GLOBAL__ = typeof window == "object" ? window : typeof global == "object" && global) || {};
 		var LAN = GLOBAL.__i18n_lan__;
 		if (!LAN) return msg;
+		if (!tpldata.slice) {
+			subtype = tpldata;
+			tpldata = [];
+		}
 	
 		if (self.__TRANSLATE_LAN__ != LAN) {
 			self.__TRANSLATE_LAN__ = LAN;
@@ -44,6 +48,10 @@ function code()
 		}
 	
 		var result = resultSubject || resultDefault || msg;
-		return typeof result == 'string' ? result : ''+result;
+		var replace_index = 0;
+		return (''+result).replace(/(%s)|(%\{(.+?)\}%)/g, function() {
+			var newVal = tpldata[replace_index++];
+			return newVal === undefined || newVal === null ? '' : newVal;
+		});
 	}
 }

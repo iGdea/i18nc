@@ -1,8 +1,12 @@
-function {{@handlerName}}(msg, subtype) {
+function {{@handlerName}}(msg, tpldata, subtype) {
 	var self = {{@handlerName}};
 	var GLOBAL = self.__GLOBAL__ || (self.__GLOBAL__ = {{@GetGlobalCode}}) || {};
 	var LAN = GLOBAL.{{@LanguageVarName}};
 	if (!LAN) return msg;
+	if (!tpldata.slice) {
+		subtype = tpldata;
+		tpldata = [];
+	}
 
 	if (self.__TRANSLATE_LAN__ != LAN) {
 		self.__TRANSLATE_LAN__ = LAN;
@@ -31,5 +35,9 @@ function {{@handlerName}}(msg, subtype) {
 	}
 
 	var result = resultSubject || resultDefault || msg;
-	return typeof result == 'string' ? result : ''+result;
+	var replace_index = 0;
+	return (''+result).replace(/(%s)|(%\{(.+?)\}%)/g, function() {
+		var newVal = tpldata[replace_index++];
+		return newVal === undefined || newVal === null ? '' : newVal;
+	});
 }
