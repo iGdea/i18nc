@@ -1,0 +1,40 @@
+{
+	"codeTranslateWords": {
+		"DEFAULTS": [
+			"中文I18N",
+			"简体"
+		],
+		"SUBTYPES": {
+			"subtype": [
+				"I18N(中文)",
+				"中文I18N subtype",
+				"中文I18N subtype"
+			],
+			"subtype2": [
+				"I18N(中文)"
+			]
+		},
+		"SUBTYPE_LINES": [
+			"中文I18N subtype%s中文I18N subtype%sI18N(中文)",
+			"I18N(中文)"
+		]
+	},
+	"i18nArgsTranslateWords": {
+		"DEFAULTS": [
+			"中文I18N",
+			"简体"
+		],
+		"SUBTYPES": {
+			"subtype": [
+				"中文I18N subtype",
+				"中文I18N subtype",
+				"I18N(中文)"
+			],
+			"subtype2": [
+				"I18N(中文)"
+			]
+		}
+	},
+	"funcTranslateWords": {},
+	"usedTranslateWords": {}
+}

@@ -334,22 +334,22 @@ describe('#main', function()
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 		});
 
-		/*
+
 		describe('#codeModifiedArea', function()
 		{
-			var exampleCode = require('./files/i18n_handler_example.js');
-			exampleCode = 'module.exports = I18N;\n'+exampleCode.toString();
+			var exampleCode = fs.readFileSync(__dirname+'/example/func_code.js').toString();
 
 			it('#only i18nHanlder', function()
 			{
 				var info = i18nc(exampleCode,
 				{
 					codeModifiedArea: ['i18nHanlder'],
-					dbTranslateWords: dbTranslateWords
+					dbTranslateWords: dbTranslateWords,
+					isIgnoreScanWarn: true,
 				});
 
-				var outputJSON = requireAfterWrite('i18n_handler_example_codeModifiedArea1_output.json', autoTestUtils.JsonOfI18ncRet(info));
-				var otherCode = requireAfterWrite('i18n_handler_example_codeModifiedArea1_output.js', info.code, {readMode: 'string'});
+				var outputJSON = requireAfterWrite('func_code_codeModifiedArea1_output.json', autoTestUtils.JsonOfI18ncRet(info));
+				var otherCode = requireAfterWrite('func_code_codeModifiedArea1_output.js', info.code, {readMode: 'string'});
 
 				expect(autoTestUtils.JsonOfI18ncRet(info)).to.eql(outputJSON);
 				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
@@ -360,11 +360,12 @@ describe('#main', function()
 				var info = i18nc(exampleCode,
 				{
 					codeModifiedArea: ['translateWord'],
-					dbTranslateWords: dbTranslateWords
+					dbTranslateWords: dbTranslateWords,
+					isIgnoreScanWarn: true,
 				});
 
-				var outputJSON = requireAfterWrite('i18n_handler_example_codeModifiedArea2_output.json', autoTestUtils.JsonOfI18ncRet(info));
-				var otherCode = requireAfterWrite('i18n_handler_example_codeModifiedArea2_output.js', info.code, {readMode: 'string'});
+				var outputJSON = requireAfterWrite('func_code_codeModifiedArea2_output.json', autoTestUtils.JsonOfI18ncRet(info));
+				var otherCode = requireAfterWrite('func_code_codeModifiedArea2_output.js', info.code, {readMode: 'string'});
 
 				expect(autoTestUtils.JsonOfI18ncRet(info)).to.eql(outputJSON);
 				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
@@ -375,17 +376,18 @@ describe('#main', function()
 				var info = i18nc(exampleCode,
 				{
 					codeModifiedArea: [],
-					dbTranslateWords: dbTranslateWords
+					dbTranslateWords: dbTranslateWords,
+					isIgnoreScanWarn: true,
 				});
 
-				var outputJSON = requireAfterWrite('i18n_handler_example_codeModifiedArea3_output.json', autoTestUtils.JsonOfI18ncRet(info));
-				var otherCode = requireAfterWrite('i18n_handler_example_codeModifiedArea3_output.js', info.code, {readMode: 'string'});
+				var outputJSON = requireAfterWrite('func_code_codeModifiedArea3_output.json', autoTestUtils.JsonOfI18ncRet(info));
+				var otherCode = requireAfterWrite('func_code_codeModifiedArea3_output.js', info.code, {readMode: 'string'});
 
 				expect(autoTestUtils.JsonOfI18ncRet(info)).to.eql(outputJSON);
 				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 			});
 		});
-		*/
+
 
 		describe('#isMinI18Nhanlder', function()
 		{
