@@ -64,9 +64,10 @@ exports.code2arr = function code2arr(code)
 exports.JsonOfI18ncRet = function JsonOfI18ncRet(info)
 {
 	return {
-		codeTranslateWords: info.codeTranslateWords,
-		funcTranslateWords: info.funcTranslateWords,
-		usedTranslateWords: info.usedTranslateWords
+		codeTranslateWords		: info.codeTranslateWords,
+		i18nArgsTranslateWords	: info.i18nArgsTranslateWords,
+		funcTranslateWords		: info.funcTranslateWords,
+		usedTranslateWords		: info.usedTranslateWords,
 	};
 }
 

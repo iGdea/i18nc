@@ -68,17 +68,18 @@ module.exports = function code()
 		var self = I18N;
 		if (self.__TRANSLATE_LAN__ != LAN)
 		{
-			var __FILE_KEY__ = "func_code_file_key";
-			var __FUNCTION_VERSION__ = "3";
-			var __TRANSLATE_JSON__ =
+			self.__TRANSLATE_LAN__ = LAN;
+			self.__FILE_KEY__ = "func_code_file_key";
+			self.__FUNCTION_VERSION__ = "3";
+			self.__TRANSLATE_JSON__ =
 				{
-					'en': {
+					'en-US': {
 						'DEFAULTS': {
 							// "2中文4中文5":
 							// "print中文":
 							// "run 中文":
 							// "中午true":
-							'中文 only db': '中文只在数据库' || '',
+							'中文 only db': '中文只在数据库',
 							// "中文0":
 							// "中文1":
 							// "中文2":
@@ -111,13 +112,13 @@ module.exports = function code()
 							}
 						}
 					},
-					'tw': {
+					'zh-TW': {
 						'DEFAULTS': {
 							// "2中文4中文5":
 							// "print中文":
 							// "run 中文":
 							// "中午true":
-							'中文 only db': '中文只在数据库' || '',
+							'中文 only db': '中文只在数据库',
 							// "中文 only file":
 							// "中文0":
 							// "中文1":
@@ -130,7 +131,7 @@ module.exports = function code()
 							// "中文case+数字":
 							// "中文false":
 							// "中文if":
-							'中文key': '中文键' || '',
+							'中文key': '中文键',
 							// "中文span":
 							// "中文span2":
 							// "中文span3":
@@ -142,7 +143,7 @@ module.exports = function code()
 						'SUBTYPES': {
 							'subtype': {
 								// "中文I18N subtype":
-								'I18N(中文)': '中文国际化' || ''
+								'I18N(中文)': '中文国际化'
 							},
 							'subtype2': {
 								// "I18N(中文)":
@@ -152,7 +153,7 @@ module.exports = function code()
 					}
 				};
 
-			self.__TRANSLATE_LAN__ = LAN;
+			var __TRANSLATE_JSON__ = self.__TRANSLATE_JSON__;
 			var lanArr = self.__TRANSLATE_LAN_JSON__ = [];
 			if (LAN && LAN.split)
 			{

@@ -1,8 +1,8 @@
 module.exports = {
-	'en': {
+	'en-US': {
 		'DEFAULTS': {
 			// "中文2":
-			'中文db <allfile>': 'indb <allfile>' || undefined
+			'中文db *': 'indb *'
 		}
 	}
 }

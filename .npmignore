@@ -8,6 +8,8 @@ npm-debug.log
 .editorconfig
 .npmignore
 .tags*
+.DS_Store
+
 appveyor.yml
 
 test

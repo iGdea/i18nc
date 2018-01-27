@@ -45,49 +45,73 @@
 			"subtype2": [
 				"I18N(中文)"
 			]
+		},
+		"SUBTYPE_LINES": [
+			"中文I18N subtype%s中文I18N subtype%sI18N(中文)",
+			"I18N(中文)"
+		]
+	},
+	"i18nArgsTranslateWords": {
+		"DEFAULTS": [
+			"中文0",
+			"中文1",
+			"中文 only db",
+			"中文 only file",
+			"2中文4中文5",
+			"中文span",
+			"中文span2",
+			"中文span3",
+			"中文2",
+			"中文3",
+			"中文val in object",
+			"中文key",
+			"中文val",
+			"再来一句，",
+			"print中文",
+			"中文case",
+			"中文case+数字",
+			"中文case+objkey",
+			"run 中文",
+			"中文case+handler",
+			"中文if",
+			"中午true",
+			"中文false",
+			"中文I18N",
+			"简体"
+		],
+		"SUBTYPES": {
+			"subtype": [
+				"中文I18N subtype",
+				"I18N(中文)"
+			],
+			"subtype2": [
+				"I18N(中文)"
+			]
 		}
 	},
 	"funcTranslateWords": {
 		"func_code_file_key": {
-			"en": {
+			"en-US": {
 				"DEFAULTS": {
-					"中文 only db": [
-						"",
-						"中文只在数据库"
-					],
-					"中文 only file": [
-						"中文只在文件"
-					]
+					"中文 only db": "中文只在数据库",
+					"中文 only file": "中文只在文件"
 				},
 				"SUBTYPES": {
 					"subtype": {
-						"I18N(中文)": [
-							"I18N(zh)"
-						]
+						"I18N(中文)": "I18N(zh)"
 					},
 					"subtype2": {}
 				}
 			},
-			"tw": {
+			"zh-TW": {
 				"DEFAULTS": {
-					"中文 only db": [
-						"",
-						"中文只在数据库"
-					],
-					"中文key": [
-						"",
-						"中文键"
-					],
-					"简体": [
-						"簡體"
-					]
+					"中文 only db": "中文只在数据库",
+					"中文key": "中文键",
+					"简体": "簡體"
 				},
 				"SUBTYPES": {
 					"subtype": {
-						"I18N(中文)": [
-							"",
-							"中文国际化"
-						]
+						"I18N(中文)": "中文国际化"
 					},
 					"subtype2": {}
 				}
@@ -96,44 +120,26 @@
 	},
 	"usedTranslateWords": {
 		"func_code_file_key": {
-			"en": {
+			"en-US": {
 				"DEFAULTS": {
-					"中文 only db": [
-						"",
-						"中文只在数据库"
-					],
-					"中文 only file": [
-						"中文只在文件"
-					]
+					"中文 only db": "中文只在数据库",
+					"中文 only file": "中文只在文件"
 				},
 				"SUBTYPES": {
 					"subtype": {
-						"I18N(中文)": [
-							"I18N(zh)"
-						]
+						"I18N(中文)": "I18N(zh)"
 					}
 				}
 			},
-			"tw": {
+			"zh-TW": {
 				"DEFAULTS": {
-					"中文 only db": [
-						"",
-						"中文只在数据库"
-					],
-					"中文key": [
-						"",
-						"中文键"
-					],
-					"简体": [
-						"簡體"
-					]
+					"中文 only db": "中文只在数据库",
+					"中文key": "中文键",
+					"简体": "簡體"
 				},
 				"SUBTYPES": {
 					"subtype": {
-						"I18N(中文)": [
-							"",
-							"中文国际化"
-						]
+						"I18N(中文)": "中文国际化"
 					}
 				}
 			}

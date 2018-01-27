@@ -1,84 +1,41 @@
 {
 	"DEFAULTS": {
 		"中文0": {
-			"en": [
-				"in_file zh0",
-				"indb <thisfile> db1"
-			],
-			"tw": [
-				"中文0 in tw"
-			]
+			"en-US": "indb <thisfile> db0",
+			"zh-TW": "中文0 in tw"
 		},
 		"中文1": {
-			"en": [
-				"in_file zh1"
-			]
+			"en-US": "in_file custom1"
 		},
 		"中文2": {
-			"en": [
-				"in_file zh2",
-				"",
-				"in_file zh2_db"
-			]
+			"en-US": "in_file zh2_db"
 		},
-		"中文3_empty": {
-			"en": [
-				""
-			]
-		},
-		"中文4_empty": {},
 		"中文5_empty": {
-			"en": [
-				""
-			]
+			"en-US": ""
 		},
 		"中文6_empty": {
-			"en": [
-				"in_file 1",
-				"in_file 2",
-				"in_file 4"
-			]
+			"en-US": "in_file 4"
 		},
-		"中文db <allfile>": {
-			"en": [
-				"in file <allfile>"
-			]
+		"中文db *": {
+			"en-US": "indb *"
 		}
 	},
 	"SUBTYPES": {
 		"subtype": {
 			"中文0": {
-				"en": [
-					"in_file subtye_zh0"
-				]
+				"en-US": "in_file subtye_zh0"
 			},
 			"中文1": {
-				"en": [
-					"in_file subtye_zh1"
-				]
+				"en-US": "in_file ubtye_custom1"
 			},
 			"中文2": {
-				"en": [
-					"in_file subtye_zh2",
-					"",
-					"in_file subtye_zh2_db"
-				]
-			},
-			"中文3_empty": {
-				"en": [
-					""
-				]
+				"en-US": "in_file subtye_zh2_db"
 			},
 			"中文 allfile subtype1": {
-				"en": [
-					"in_file allfile subtype1"
-				]
+				"en-US": "indb * subtype1"
 			},
 			"中文 thisfile subtype2": {
-				"en": [
-					"in_file thisfile subtype2",
-					"indb <thisfile> subtype2"
-				]
+				"en-US": "indb <thisfile> subtype2"
 			}
 		}
 	}
