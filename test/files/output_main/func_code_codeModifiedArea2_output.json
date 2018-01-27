@@ -67,6 +67,56 @@
 			]
 		}
 	},
-	"funcTranslateWords": {},
-	"usedTranslateWords": {}
+	"funcTranslateWords": {
+		"func_code_file_key": {
+			"en-US": {
+				"DEFAULTS": {
+					"中文 only file": "中文只在文件"
+				},
+				"SUBTYPES": {
+					"subtype": {
+						"I18N(中文)": "I18N(zh)"
+					}
+				}
+			},
+			"zh-TW": {
+				"DEFAULTS": {
+					"简体 not exist": "簡體不存在",
+					"简体": "簡體"
+				},
+				"SUBTYPES": {
+					"subtype": {
+						"简体++": "簡體++"
+					}
+				}
+			}
+		}
+	},
+	"usedTranslateWords": {
+		"func_code_file_key": {
+			"en-US": {
+				"DEFAULTS": {
+					"中文 only db": "中文只在数据库",
+					"中文 only file": "中文只在文件"
+				},
+				"SUBTYPES": {
+					"subtype": {
+						"I18N(中文)": "I18N(zh)"
+					}
+				}
+			},
+			"zh-TW": {
+				"DEFAULTS": {
+					"中文 only db": "中文只在数据库",
+					"中文key": "中文键",
+					"简体": "簡體"
+				},
+				"SUBTYPES": {
+					"subtype": {
+						"I18N(中文)": "中文国际化"
+					}
+				}
+			}
+		}
+	}
 }

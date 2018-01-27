@@ -1,28 +1,3 @@
-;(function(){
-
-
-function I18N(g,h,i){var a=I18N;var o=a.__GLOBAL__||(a.__GLOBAL__=typeof window == "object" ? window : typeof global == "object" && global)||{};var d=o.__i18n_lan__;if(!d)return g;if(!h.slice){i=h;h=[]}if(a.__TRANSLATE_LAN__!=d){a.__TRANSLATE_LAN__=d;a.__FILE_KEY__='*';a.__FUNCTION_VERSION__='3';a.__TRANSLATE_JSON__={
-				'en-US': {
-					'DEFAULTS': {
-						// "中文I18N":
-						// "简体":
-						'<e.g.> translate word': null
-					},
-					'SUBTYPES': {
-						'subtype': {
-							// "I18N(中文)":
-							// "中文I18N subtype":
-							'<e.g.> translate word': null
-						},
-						'subtype2': {
-							// "I18N(中文)":
-							'<e.g.> translate word': null
-						}
-					}
-				}
-			}
-;var n=a.__TRANSLATE_JSON__;var e=a.__TRANSLATE_LAN_JSON__=[];if(d&&d.split){var j=d.split(',');for(var b=0,f=j.length;b<f;b++){var c=n[j[b]];if(c)e.push(c)}}}var e=a.__TRANSLATE_LAN_JSON__,k,l;for(var b=0,f=e.length;b<f;b++){var c=e[b];var m=i&&c.SUBTYPES&&c.SUBTYPES[i];l=m&&m[g];if(l)break;if(!k)k=c.DEFAULTS&&c.DEFAULTS[g]}var q=l||k||g;var p=0;return(''+q).replace(/(%s)|(%\{(.+?)\})/g,function(){var a=h[p++];return a===undefined||a===null?'':a})}
-
 module.exports = function code()
 {
     var result;       // 中文注释
@@ -98,32 +73,81 @@ module.exports = function code()
 			self.__FUNCTION_VERSION__ = "3";
 			self.__TRANSLATE_JSON__ =
 				{
-					"en-US":
-					{
-						"DEFAULTS":
-						{
+					'en-US': {
+						'DEFAULTS': {
+							// "2中文4中文5":
+							// "print中文":
+							// "run 中文":
+							// "中午true":
+							'中文 only db': '中文只在数据库',
+							// "中文0":
+							// "中文1":
+							// "中文2":
+							// "中文3":
+							// "中文I18N":
+							// "中文case":
+							// "中文case+handler":
+							// "中文case+objkey":
+							// "中文case+数字":
+							// "中文false":
+							// "中文if":
+							// "中文key":
+							// "中文span":
+							// "中文span2":
+							// "中文span3":
+							// "中文val":
+							// "中文val in object":
+							// "再来一句，":
+							// "简体":
 							'中文 only file': '中文只在文件'
 						},
-						"SUBTYPES":
-						{
-							'subtype':
-							{
+						'SUBTYPES': {
+							'subtype': {
+								// "中文I18N subtype":
 								'I18N(中文)': 'I18N(zh)'
+							},
+							'subtype2': {
+								// "I18N(中文)":
+								'<e.g.> translate word': null
 							}
 						}
 					},
-					"zh-TW":
-					{
-						"DEFAULTS":
-						{
-							'简体 not exist': '簡體不存在',
-							'简体': '簡體',
+					'zh-TW': {
+						'DEFAULTS': {
+							// "2中文4中文5":
+							// "print中文":
+							// "run 中文":
+							// "中午true":
+							'中文 only db': '中文只在数据库',
+							// "中文 only file":
+							// "中文0":
+							// "中文1":
+							// "中文2":
+							// "中文3":
+							// "中文I18N":
+							// "中文case":
+							// "中文case+handler":
+							// "中文case+objkey":
+							// "中文case+数字":
+							// "中文false":
+							// "中文if":
+							'中文key': '中文键',
+							// "中文span":
+							// "中文span2":
+							// "中文span3":
+							// "中文val":
+							// "中文val in object":
+							// "再来一句，":
+							'简体': '簡體'
 						},
-						"SUBTYPES":
-						{
-							'subtype':
-							{
-								'简体++': '簡體++',
+						'SUBTYPES': {
+							'subtype': {
+								// "中文I18N subtype":
+								'I18N(中文)': '中文国际化'
+							},
+							'subtype2': {
+								// "I18N(中文)":
+								'<e.g.> translate word': null
 							}
 						}
 					}
@@ -164,5 +188,3 @@ module.exports = function code()
 
     return result;
 }
-
-})();
