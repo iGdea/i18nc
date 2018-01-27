@@ -1,5 +1,6 @@
 var _ = require('lodash');
 var fs = require('fs');
+var mkdirp = require('mkdirp');
 
 
 var SUB_PATHS =
@@ -31,6 +32,7 @@ exports.requireAfterWrite = function requireAfterWrite(subpath)
 			data = JSON.stringify(data, null, '\t');
 		}
 
+		mkdirp.sync(__dirname+'/'+file_path);
 		fs.writeFileSync(file, data);
 
 		return _requireOrFs(file, options);
