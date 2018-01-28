@@ -1,42 +1,42 @@
 {
 	"codeTranslateWords": {
 		"DEFAULTS": [],
-		"SUBTYPES": {},
-		"SUBTYPE_LINES": []
+		"SUBTYPES": {}
 	},
 	"i18nArgsTranslateWords": {
 		"DEFAULTS": [],
 		"SUBTYPES": {}
 	},
 	"funcTranslateWords": {
-		"i18n_handler_example": {
-			"en-US": {
-				"DEFAULTS": {
-					"中文0": "in_file zh0",
-					"中文1": "in_file custom1",
-					"中文2": "in_file zh2_db",
-					"中文5_empty": "",
-					"中文6_empty": "in_file 4",
-					"中文db *": "in file *"
+		"i18n_handler_example": [
+			{
+				"en-US": {
+					"DEFAULTS": {
+						"中文0": "in_file zh0",
+						"中文1": "in_file custom1",
+						"中文2": "in_file zh2_db",
+						"中文5_empty": "",
+						"中文6_empty": "in_file 4",
+						"中文db *": "in file *"
+					},
+					"SUBTYPES": {
+						"subtype": {
+							"中文0": "in_file subtye_zh0",
+							"中文1": "in_file ubtye_custom1",
+							"中文2": "in_file subtye_zh2_db",
+							"中文 allfile subtype1": "in_file allfile subtype1",
+							"中文 thisfile subtype2": "in_file thisfile subtype2"
+						}
+					}
 				},
-				"SUBTYPES": {
-					"subtype": {
-						"中文0": "in_file subtye_zh0",
-						"中文1": "in_file ubtye_custom1",
-						"中文2": "in_file subtye_zh2_db",
-						"中文 allfile subtype1": "in_file allfile subtype1",
-						"中文 thisfile subtype2": "in_file thisfile subtype2"
+				"zh-TW": {
+					"DEFAULTS": {
+						"中文0": "中文0 in tw"
 					}
 				}
-			},
-			"zh-TW": {
-				"DEFAULTS": {
-					"中文0": "中文0 in tw"
-				}
 			}
-		}
+		]
 	},
-	"usedTranslateWords": {
-		"i18n_handler_example": {}
-	}
+	"usedTranslateWords": {},
+	"subScopeDatas": []
 }

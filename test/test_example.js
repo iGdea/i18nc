@@ -34,10 +34,10 @@ describe('#example', function()
 
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(exampleCode_output.toString()));
 			eval('var exampleCode_new ='+info.code);
-			// console.log(JSON.stringify(autoTestUtils.codeTranslateWords2words(info.codeTranslateWords)));
+			// console.log(JSON.stringify(autoTestUtils.getCodeTranslateAllWords(info)));
 
 			expect(exampleCode_new()).to.be(exampleCode());
-			expect(autoTestUtils.codeTranslateWords2words(info.codeTranslateWords)).to.eql(translateWords);
+			expect(autoTestUtils.getCodeTranslateAllWords(info)).to.eql(translateWords);
 			expect(info.dirtyAsts).to.empty();
 		});
 
@@ -56,7 +56,7 @@ describe('#example', function()
 			eval('var exampleCode_new ='+info.code);
 
 			expect(exampleCode_new()).to.be(exampleCode());
-			expect(autoTestUtils.codeTranslateWords2words(info.codeTranslateWords)).to.eql(translateWords);
+			expect(autoTestUtils.getCodeTranslateAllWords(info)).to.eql(translateWords);
 			expect(info.dirtyAsts).to.empty();
 		});
 	});
@@ -97,7 +97,7 @@ describe('#example', function()
 			newTranslateJSON: function(emitData)
 			{
 				var content = 'module.exports = '+emitData.translateJSONCode;
-				
+
 				var otherContent = requireAfterWrite('require_data.js', content, {readMode: 'string'});
 
 				expect(autoTestUtils.code2arr(content)).to.eql(autoTestUtils.code2arr(otherContent.toString()));
@@ -114,4 +114,3 @@ describe('#example', function()
 		expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 	});
 });
-

@@ -274,7 +274,7 @@ describe('#main', function()
 
 			var info = i18nc(code.toString(), {ignoreScanFunctionNames: ['somefunc']});
 
-			expect(autoTestUtils.codeTranslateWords2words(info.codeTranslateWords))
+			expect(autoTestUtils.getCodeTranslateAllWords(info))
 				.to.eql(['中文 in other func', '中文 run other func'].sort());
 		});
 
