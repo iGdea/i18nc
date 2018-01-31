@@ -67,7 +67,7 @@ exports.JsonOfI18ncRet = function JsonOfI18ncRet(info)
 {
 	return {
 		codeTranslateWords		: info.codeTranslateWords,
-		i18nArgsTranslateWords	: info.i18nArgsTranslateWords,
+		I18NArgsTranslateWords	: info.I18NArgsTranslateWords,
 		funcTranslateWords		: info.funcTranslateWords,
 		usedTranslateWords		: info.usedTranslateWords,
 		subScopeDatas			: _.map(info.subScopeDatas, exports.JsonOfI18ncRet),

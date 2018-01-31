@@ -3,7 +3,7 @@
 		"DEFAULTS": [],
 		"SUBTYPES": {}
 	},
-	"i18nArgsTranslateWords": {
+	"I18NArgsTranslateWords": {
 		"DEFAULTS": [],
 		"SUBTYPES": {}
 	},
@@ -59,7 +59,7 @@
 					]
 				}
 			},
-			"i18nArgsTranslateWords": {
+			"I18NArgsTranslateWords": {
 				"DEFAULTS": [
 					"中文0",
 					"中文1",
