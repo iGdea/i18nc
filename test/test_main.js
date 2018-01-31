@@ -253,7 +253,7 @@ describe('#main', function()
 
 	describe('#options', function()
 	{
-		it('#ignoreScanFunctionNames', function()
+		it('#ignoreScanHandlerNames', function()
 		{
 			var code = function code()
 			{
@@ -272,7 +272,7 @@ describe('#main', function()
 				otherfunc('中文 run other func');
 			};
 
-			var info = i18nc(code.toString(), {ignoreScanFunctionNames: ['somefunc']});
+			var info = i18nc(code.toString(), {ignoreScanHandlerNames: ['somefunc']});
 
 			expect(autoTestUtils.getCodeTranslateAllWords(info))
 				.to.eql(['中文 in other func', '中文 run other func'].sort());
