@@ -343,7 +343,7 @@ describe('#main', function()
 			{
 				var info = i18nc(exampleCode,
 				{
-					codeModifiedArea: ['i18nHandler'],
+					codeModifiedArea: ['I18NHandler'],
 					dbTranslateWords: dbTranslateWords,
 					isIgnoreScanWarn: true,
 				});
