@@ -1,5 +1,5 @@
 {
-	"hanlderName": "I18N",
+	"handlerName": "I18N",
 	"__FILE_KEY__ast": {
 		"type": "Literal",
 		"value": "i18n_handler_example",
