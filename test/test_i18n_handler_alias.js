@@ -2,7 +2,7 @@ var fs					= require('fs');
 var expect				= require('expect.js');
 var i18nc				= require('../');
 var autoTestUtils		= require('./auto_test_utils');
-var requireAfterWrite	= autoTestUtils.requireAfterWrite('I18N_alias_output');
+var requireAfterWrite	= autoTestUtils.requireAfterWrite('output_I18N_alias');
 
 
 describe('#I18N_alias', function()

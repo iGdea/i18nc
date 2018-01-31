@@ -10,7 +10,6 @@ describe('#example', function()
 	{
 		var requireAfterWrite	= autoTestUtils.requireAfterWrite('example');
 		var exampleCode			= require('./example/func_code');
-		var exampleCode_output	= require('./example/func_code_output');
 		var translateWords		=
 		[
 			"2中文4中文5","I18N(中文)","print中文","run 中文","中午true","中文0",
@@ -30,13 +29,10 @@ describe('#example', function()
 					dbTranslateWords: dbTranslateWords
 				});
 
-			requireAfterWrite('func_code_output.js', 'module.exports = '+info.code);
+			var content = 'module.exports = '+info.code;
+			var otherContent = requireAfterWrite('func_code_output.js', content, {readMode: 'string'});
 
-			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(exampleCode_output.toString()));
-			eval('var exampleCode_new ='+info.code);
-			// console.log(JSON.stringify(autoTestUtils.getCodeTranslateAllWords(info)));
-
-			expect(exampleCode_new()).to.be(exampleCode());
+			expect(autoTestUtils.code2arr(content)).to.eql(autoTestUtils.code2arr(otherContent));
 			expect(autoTestUtils.getCodeTranslateAllWords(info)).to.eql(translateWords);
 			expect(info.dirtyAsts).to.empty();
 		});
@@ -44,7 +40,8 @@ describe('#example', function()
 
 		it('#retry', function()
 		{
-			var info = i18nc(exampleCode_output.toString(),
+			var exampleCode_output = require('./example/func_code_output').toString();
+			var info = i18nc(exampleCode_output,
 				{
 					isIgnoreScanWarn: true,
 					dbTranslateWords: dbTranslateWords
@@ -52,10 +49,7 @@ describe('#example', function()
 
 			requireAfterWrite('func_code_output.json', autoTestUtils.JsonOfI18ncRet(info));
 
-			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(exampleCode_output.toString()));
-			eval('var exampleCode_new ='+info.code);
-
-			expect(exampleCode_new()).to.be(exampleCode());
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(exampleCode_output));
 			expect(autoTestUtils.getCodeTranslateAllWords(info)).to.eql(translateWords);
 			expect(info.dirtyAsts).to.empty();
 		});
@@ -97,9 +91,7 @@ describe('#example', function()
 			newTranslateJSON: function(emitData)
 			{
 				var content = 'module.exports = '+emitData.translateJSONCode;
-
 				var otherContent = requireAfterWrite('require_data.js', content, {readMode: 'string'});
-
 				expect(autoTestUtils.code2arr(content)).to.eql(autoTestUtils.code2arr(otherContent.toString()));
 
 				emitData.translateJSONCode = 'require("./require_data.js")';
