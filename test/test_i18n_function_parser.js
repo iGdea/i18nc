@@ -19,7 +19,7 @@ describe('#i18n_function_parser', function()
 	{
 		var code = require('./files/i18n_handler_example').toString();
 		var ast = esprima.parse(code);
-		var result = i18nFunctionParser.parse(ast);
+		var result = i18nFunctionParser.parse(ast.body[0]);
 
 		var outputJSON = requireAfterWrite('i18n_handler_example_output.json', result);
 

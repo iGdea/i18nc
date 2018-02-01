@@ -3,7 +3,7 @@ var expect				= require('expect.js');
 var i18nc				= require('../');
 var dbTranslateWords	= require('./example/translate_words_db');
 var autoTestUtils		= require('./auto_test_utils');
-var requireAfterWrite	= autoTestUtils.requireAfterWrite('main');
+var requireAfterWrite	= autoTestUtils.requireAfterWrite('output_main');
 
 describe('#main', function()
 {
@@ -58,7 +58,7 @@ describe('#main', function()
 	{
 		it('#noI18N', function()
 		{
-			var exampleCode = require('./files/main/input/func_code_noi18n').toString();
+			var exampleCode = require('./files/casefile_main/func_code_noi18n').toString();
 			var info = i18nc(exampleCode);
 
 			var otherCode = requireAfterWrite('func_code_noi18n_output.js', info.code, {readMode: 'string'});
@@ -68,7 +68,7 @@ describe('#main', function()
 
 		it('#noI18N noclosure', function()
 		{
-			var exampleCode = require('./files/main/input/func_code_noi18n').toString();
+			var exampleCode = require('./files/casefile_main/func_code_noi18n').toString();
 			var info = i18nc(exampleCode, {isClosureWhenInsertedHead: false});
 
 			var otherCode = requireAfterWrite('func_code_noi18n_output_noclosure.js', info.code, {readMode: 'string'});
@@ -78,7 +78,7 @@ describe('#main', function()
 
 		it('#define', function()
 		{
-			var exampleCode = require('./files/main/input/func_code_noi18n_define').toString();
+			var exampleCode = require('./files/casefile_main/func_code_noi18n_define').toString();
 			var info = i18nc(exampleCode);
 
 			var otherCode = requireAfterWrite('func_code_noi18n_define_output.js', info.code, {readMode: 'string'});
@@ -88,7 +88,7 @@ describe('#main', function()
 
 		it('#define not_define', function()
 		{
-			var exampleCode = require('./files/main/input/func_code_noi18n_define').toString();
+			var exampleCode = require('./files/casefile_main/func_code_noi18n_define').toString();
 			var info = i18nc(exampleCode,
 				{
 					isInsertToDefineHalder: false
@@ -104,7 +104,7 @@ describe('#main', function()
 	{
 		it('#one i18n', function()
 		{
-			var exampleCode = require('./files/main/input/func_code_i18n').toString();
+			var exampleCode = require('./files/casefile_main/func_code_i18n').toString();
 			var info = i18nc(exampleCode);
 
 			var otherCode = requireAfterWrite('func_code_i18n_output.js', info.code, {readMode: 'string'});
@@ -114,7 +114,7 @@ describe('#main', function()
 
 		it('#define and scope', function()
 		{
-			var exampleCode = require('./files/main/input/func_code_i18n_define').toString();
+			var exampleCode = require('./files/casefile_main/func_code_i18n_define').toString();
 			var info = i18nc(exampleCode,
 				{
 					dbTranslateWords:
@@ -143,7 +143,7 @@ describe('#main', function()
 
 		it('#no words', function()
 		{
-			var exampleCode = require('./files/main/input/func_code_i18n_nowords').toString();
+			var exampleCode = require('./files/casefile_main/func_code_i18n_nowords').toString();
 			var info = i18nc(exampleCode);
 
 			var otherCode = requireAfterWrite('func_code_i18n_nowords_output.js', info.code, {readMode: 'string'});
@@ -253,7 +253,7 @@ describe('#main', function()
 
 	describe('#options', function()
 	{
-		it('#ignoreScanFunctionNames', function()
+		it('#ignoreScanHandlerNames', function()
 		{
 			var code = function code()
 			{
@@ -272,15 +272,15 @@ describe('#main', function()
 				otherfunc('中文 run other func');
 			};
 
-			var info = i18nc(code.toString(), {ignoreScanFunctionNames: ['somefunc']});
+			var info = i18nc(code.toString(), {ignoreScanHandlerNames: ['somefunc']});
 
-			expect(autoTestUtils.codeTranslateWords2words(info.codeTranslateWords))
+			expect(autoTestUtils.getCodeTranslateAllWords(info))
 				.to.eql(['中文 in other func', '中文 run other func'].sort());
 		});
 
 		it('#comboLiteralMode', function()
 		{
-			var code = require('./files/main/input/func_code_combo_literal');
+			var code = require('./files/casefile_main/func_code_combo_literal');
 			var info = i18nc(code.toString(), {comboLiteralMode: 'I18N'});
 
 			var otherCode = requireAfterWrite('func_code_combo_literal_output.js', info.code, {readMode: 'string'});
@@ -334,10 +334,60 @@ describe('#main', function()
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 		});
 
-		it('#codeModifiedArea', function()
+
+		describe('#codeModifiedArea', function()
 		{
-			console.log('@todo');
+			var exampleCode = fs.readFileSync(__dirname+'/example/func_code.js').toString();
+
+			it('#only i18nHanlder', function()
+			{
+				var info = i18nc(exampleCode,
+				{
+					codeModifiedArea: ['I18NHandler'],
+					dbTranslateWords: dbTranslateWords,
+					isIgnoreScanWarn: true,
+				});
+
+				var outputJSON = requireAfterWrite('func_code_codeModifiedArea1_output.json', autoTestUtils.JsonOfI18ncRet(info));
+				var otherCode = requireAfterWrite('func_code_codeModifiedArea1_output.js', info.code, {readMode: 'string'});
+
+				expect(autoTestUtils.JsonOfI18ncRet(info)).to.eql(outputJSON);
+				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+			});
+
+			it('#only translateWord', function()
+			{
+				var info = i18nc(exampleCode,
+				{
+					codeModifiedArea: ['translateWord'],
+					dbTranslateWords: dbTranslateWords,
+					isIgnoreScanWarn: true,
+				});
+
+				var outputJSON = requireAfterWrite('func_code_codeModifiedArea2_output.json', autoTestUtils.JsonOfI18ncRet(info));
+				var otherCode = requireAfterWrite('func_code_codeModifiedArea2_output.js', info.code, {readMode: 'string'});
+
+				expect(autoTestUtils.JsonOfI18ncRet(info)).to.eql(outputJSON);
+				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+			});
+
+			it('#empty', function()
+			{
+				var info = i18nc(exampleCode,
+				{
+					codeModifiedArea: [],
+					dbTranslateWords: dbTranslateWords,
+					isIgnoreScanWarn: true,
+				});
+
+				var outputJSON = requireAfterWrite('func_code_codeModifiedArea3_output.json', autoTestUtils.JsonOfI18ncRet(info));
+				var otherCode = requireAfterWrite('func_code_codeModifiedArea3_output.js', info.code, {readMode: 'string'});
+
+				expect(autoTestUtils.JsonOfI18ncRet(info)).to.eql(outputJSON);
+				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+			});
 		});
+
 
 		describe('#isMinI18Nhanlder', function()
 		{

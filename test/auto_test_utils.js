@@ -1,5 +1,6 @@
 var _ = require('lodash');
 var fs = require('fs');
+var mkdirp = require('mkdirp');
 
 
 var SUB_PATHS =
@@ -31,6 +32,7 @@ exports.requireAfterWrite = function requireAfterWrite(subpath)
 			data = JSON.stringify(data, null, '\t');
 		}
 
+		mkdirp.sync(__dirname+'/'+file_path);
 		fs.writeFileSync(file, data);
 
 		return _requireOrFs(file, options);
@@ -65,19 +67,25 @@ exports.JsonOfI18ncRet = function JsonOfI18ncRet(info)
 {
 	return {
 		codeTranslateWords		: info.codeTranslateWords,
-		i18nArgsTranslateWords	: info.i18nArgsTranslateWords,
+		I18NArgsTranslateWords	: info.I18NArgsTranslateWords,
 		funcTranslateWords		: info.funcTranslateWords,
 		usedTranslateWords		: info.usedTranslateWords,
+		subScopeDatas			: _.map(info.subScopeDatas, exports.JsonOfI18ncRet),
 	};
 }
 
-exports.codeTranslateWords2words = function codeTranslateWords2words(codeTranslateWords)
+exports.getCodeTranslateAllWords = function getCodeTranslateAllWords(info)
 {
-	var translateWords = _.map(codeTranslateWords.SUBTYPES, function(val)
+	var translateWords = _.map(info.codeTranslateWords.SUBTYPES, function(val)
 		{
 			return val;
 		});
-	translateWords = [].concat.apply(codeTranslateWords.DEFAULTS, translateWords);
+	translateWords = [].concat.apply(info.codeTranslateWords.DEFAULTS, translateWords);
+
+	info.subScopeDatas.forEach(function(info)
+	{
+		translateWords = translateWords.concat(exports.getCodeTranslateAllWords(info));
+	});
 
 	return _.uniq(translateWords).sort();
 }

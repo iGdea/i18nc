@@ -22,6 +22,7 @@
     "cross-env": "^2.0.0",
     "expect.js": "^0.3.1",
     "istanbul": "^0.4.5",
+    "mkdirp": "^0.5.1",
     "mocha": "^3.4.2"
   },
   "repository": {

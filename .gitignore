@@ -2,7 +2,7 @@ node_modules
 test/tmp
 coverage
 npm-debug.log
-sauce_connect.log
+package-lock.json
 
 .tags*
 .DS_Store

@@ -76,10 +76,6 @@ describe('#ASTCollector', function()
 			expect(getScopeCodeTranslateWord(scope)).to.eql(['中文', '这个中文还在'].sort());
 		});
 
-		it('#default_subtype', function()
-		{
-			console.log('@todo');
-		});
 	});
 
 
