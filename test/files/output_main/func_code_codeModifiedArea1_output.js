@@ -70,7 +70,7 @@ module.exports = function code()
 		{
 			self.__TRANSLATE_LAN__ = LAN;
 			self.__FILE_KEY__ = "func_code_file_key";
-			self.__FUNCTION_VERSION__ = "3";
+			self.__FUNCTION_VERSION__ = "5";
 			self.__TRANSLATE_JSON__ =
 				{
 					'en-US': {

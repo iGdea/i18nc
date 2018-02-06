@@ -11,7 +11,7 @@ function I18N(msg, subtype) {
 	if (self.__TRANSLATE_LAN__ != LAN) {
 		self.__TRANSLATE_LAN__ = LAN;
 		self.__FILE_KEY__ = "i18n_handler_example";
-		self.__FUNCTION_VERSION__ = "3";
+		self.__FUNCTION_VERSION__ = "5";
 		self.__TRANSLATE_JSON__ = {
 			"en-US":
 			{

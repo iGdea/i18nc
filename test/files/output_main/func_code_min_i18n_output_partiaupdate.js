@@ -9,7 +9,7 @@ function I18N(msg, subtype) {
 	if (self.__TRANSLATE_LAN__ != LAN) {
 		self.__TRANSLATE_LAN__ = LAN;
 		self.__FILE_KEY__ = "i18n_handler_example";
-		self.__FUNCTION_VERSION__ = "3";
+		self.__FUNCTION_VERSION__ = "5";
 		self.__TRANSLATE_JSON__ = {'en-US':{'DEFAULTS':{'中文0':'indb <thisfile> db0','中文1':'in_file custom1','中文2':'in_file zh2_db','中文5_empty':[],'中文6_empty':'in_file 4','中文db *':'indb *'}},'zh-TW':{'DEFAULTS':{'中文0':'中文0 in tw'}}};
 
 		var __TRANSLATE_JSON__ = self.__TRANSLATE_JSON__;
