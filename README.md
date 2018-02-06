@@ -24,6 +24,8 @@ ret.dirtyAsts
 ret.codeTranslateWords
 ret.funcTranslateWords
 ret.usedTranslateWords
+ret.I18NArgsTranslateWords
+ret.subScopeDatas
 ```
 
 
@@ -40,7 +42,7 @@ define(function()
 });
 
 var word = '简体';
-var word = I18N('中文');
+var word = I18N('%s中文%s课堂', ['<span>', '</span>']);
 function I18N(){}
 ```
 
@@ -55,50 +57,17 @@ define(function()
 });
 
 var word = I18N('简体');
-var word = I18N('中文');
-function I18N(msg, subtype) {
-  ....
-}
-```
-
-Replace `I18N` handler code:
-
-```
-function I18N(msg, subtype) {
-  var self = I18N;
-  var GLOBAL = self.__GLOBAL__ || (self.__GLOBAL__ = window.settings) || {};
-  var LAN = GLOBAL.__i18n_lan__;
-  if (!LAN) return msg;
-
-  if (self.__TRANSLATE_LAN__ != LAN) {
-    self.__TRANSLATE_LAN__ = LAN;
-    var __FILE_KEY__ = "default_file_key";
-    var __FUNCTION_VERSION__ = 2;
-
-    var __TRANSLATE_JSON__ = {
-        'en-US': {
-          'DEFAULTS': {'中文1': 'zh1', '中文2': 'zh2'},
-          'SUBTYPES': {'sub type': {'中文': 'zh in subtype'}}
-        },
-        'zh-TW': {'DEFAULTS': {'简体': '簡體'}}
-      };
-
-    var lanArr = self.__TRANSLATE_LAN_JSON__ = [];
+var word = I18N('%s中文%s课堂', ['<span>', '</span>']);
+function I18N(h,f,i){
+    var a=I18N;
     ...
-    lanArr.push(__TRANSLATE_JSON__.xxx);
-  }
-
-  var lanArr = self.__TRANSLATE_LAN_JSON__;
-  var result;
-  for(var i = 0, len = lanArr.length; i < len; i++) {
-    ....
-    if (result) break;
-  }
-
-  ....
-  return result || msg;
+    a.__FILE_KEY__='*';a.__FUNCTION_VERSION__='5';a.__TRANSLATE_JSON__={};
+    ...
+    var q=l||k||h;var p=0;
+    return(''+q).replace(/(%s)|(%\{(.+?)\})/g,function(){var a=f[p++];return a===undefined||a===null?'':a;});
 }
 ```
+
 
 
 [npm-image]: http://img.shields.io/npm/v/i18nc-core.svg
