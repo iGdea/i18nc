@@ -75,8 +75,6 @@ function I18N(h,f,i){
 [npm-url]: https://www.npmjs.org/package/i18nc-core
 [travis-image]: http://img.shields.io/travis/Bacra/node-i18nc-core/master.svg?label=linux
 [travis-url]: https://travis-ci.org/Bacra/node-i18nc-core
-[appveyor-image]: https://img.shields.io/appveyor/ci/Bacra/node-i18nc-core/master.svg?label=windows
-[appveyor-url]: https://ci.appveyor.com/project/Bacra/node-i18nc-core
 [coveralls-image]: https://img.shields.io/coveralls/Bacra/node-i18nc-core.svg
 [coveralls-url]: https://coveralls.io/github/Bacra/node-i18nc-core
 [license-image]: http://img.shields.io/npm/l/i18nc-core.svg
