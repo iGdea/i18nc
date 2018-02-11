@@ -25,7 +25,7 @@ describe('#example', function()
 		{
 			var info = i18nc(exampleCode.toString(),
 				{
-					isIgnoreScanWarn: true,
+					ignoreScanError: ['ObjectKey'],
 					dbTranslateWords: dbTranslateWords
 				});
 
@@ -43,7 +43,7 @@ describe('#example', function()
 			var exampleCode_output = require('./example/func_code_output').toString();
 			var info = i18nc(exampleCode_output,
 				{
-					isIgnoreScanWarn: true,
+					ignoreScanError: ['ObjectKey'],
 					dbTranslateWords: dbTranslateWords
 				});
 
@@ -61,7 +61,7 @@ describe('#example', function()
 		var requireAfterWrite	= autoTestUtils.requireAfterWrite('use_require');
 		var i18nOptions =
 		{
-			isIgnoreScanWarn: true,
+			ignoreScanError: ['ObjectKey'],
 			dbTranslateWords: dbTranslateWords,
 			loadTranslateJSON: function(emitData)
 			{

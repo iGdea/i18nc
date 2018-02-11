@@ -81,7 +81,7 @@ describe('#ASTCollector', function()
 
 	describe('#options', function()
 	{
-		it('#isIgnoreScanWarn', function()
+		it('#ignoreScanError', function()
 		{
 			var code = function code()
 			{
@@ -94,7 +94,7 @@ describe('#ASTCollector', function()
 			expect(getFinalCollect).withArgs(code)
 				.to.throwException(/\[I18N\] Object property can't use i18n\./);
 
-			expect(getFinalCollect).withArgs(code, {isIgnoreScanWarn: true})
+			expect(getFinalCollect).withArgs(code, {ignoreScanError: ['ObjectKey']})
 				.to.not.throwException();
 		});
 
