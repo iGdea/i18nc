@@ -3,13 +3,13 @@
 	"__FILE_KEY__ast": {
 		"type": "Literal",
 		"value": "i18n_handler_example",
-		"raw": "\"i18n_handler_example\""
+		"raw": "'i18n_handler_example'"
 	},
 	"__FILE_KEY__": "i18n_handler_example",
 	"__FUNCTION_VERSION__ast": {
 		"type": "Literal",
 		"value": "5",
-		"raw": "\"5\""
+		"raw": "'5'"
 	},
 	"__FUNCTION_VERSION__": "5",
 	"__TRANSLATE_JSON__ast": {
@@ -42,13 +42,13 @@
 										"key": {
 											"type": "Literal",
 											"value": "中文0",
-											"raw": "'中文0'"
+											"raw": "\"中文0\""
 										},
 										"computed": false,
 										"value": {
 											"type": "Literal",
 											"value": "in_file zh0",
-											"raw": "'in_file zh0'"
+											"raw": "\"in_file zh0\""
 										},
 										"kind": "init",
 										"method": false,
@@ -59,13 +59,13 @@
 										"key": {
 											"type": "Literal",
 											"value": "中文1",
-											"raw": "'中文1'"
+											"raw": "\"中文1\""
 										},
 										"computed": false,
 										"value": {
 											"type": "Literal",
 											"value": "in_file custom1",
-											"raw": "'in_file custom1'"
+											"raw": "\"in_file custom1\""
 										},
 										"kind": "init",
 										"method": false,
@@ -76,13 +76,13 @@
 										"key": {
 											"type": "Literal",
 											"value": "中文2",
-											"raw": "'中文2'"
+											"raw": "\"中文2\""
 										},
 										"computed": false,
 										"value": {
 											"type": "Literal",
 											"value": "in_file zh2_db",
-											"raw": "'in_file zh2_db'"
+											"raw": "\"in_file zh2_db\""
 										},
 										"kind": "init",
 										"method": false,
@@ -93,13 +93,13 @@
 										"key": {
 											"type": "Literal",
 											"value": "中文3_empty",
-											"raw": "'中文3_empty'"
+											"raw": "\"中文3_empty\""
 										},
 										"computed": false,
 										"value": {
 											"type": "Literal",
 											"value": "",
-											"raw": "''"
+											"raw": "\"\""
 										},
 										"kind": "init",
 										"method": false,
@@ -110,13 +110,13 @@
 										"key": {
 											"type": "Literal",
 											"value": "中文4_empty",
-											"raw": "'中文4_empty'"
+											"raw": "\"中文4_empty\""
 										},
 										"computed": false,
 										"value": {
 											"type": "Literal",
 											"value": "",
-											"raw": "''"
+											"raw": "\"\""
 										},
 										"kind": "init",
 										"method": false,
@@ -127,7 +127,7 @@
 										"key": {
 											"type": "Literal",
 											"value": "中文5_empty",
-											"raw": "'中文5_empty'"
+											"raw": "\"中文5_empty\""
 										},
 										"computed": false,
 										"value": {
@@ -143,13 +143,13 @@
 										"key": {
 											"type": "Literal",
 											"value": "中文6_empty",
-											"raw": "'中文6_empty'"
+											"raw": "\"中文6_empty\""
 										},
 										"computed": false,
 										"value": {
 											"type": "Literal",
 											"value": "in_file 4",
-											"raw": "'in_file 4'"
+											"raw": "\"in_file 4\""
 										},
 										"kind": "init",
 										"method": false,
@@ -160,13 +160,13 @@
 										"key": {
 											"type": "Literal",
 											"value": "中文db *",
-											"raw": "'中文db *'"
+											"raw": "\"中文db *\""
 										},
 										"computed": false,
 										"value": {
 											"type": "Literal",
 											"value": "in file *",
-											"raw": "'in file *'"
+											"raw": "\"in file *\""
 										},
 										"kind": "init",
 										"method": false,
@@ -194,7 +194,7 @@
 										"key": {
 											"type": "Literal",
 											"value": "subtype",
-											"raw": "'subtype'"
+											"raw": "\"subtype\""
 										},
 										"computed": false,
 										"value": {
@@ -205,13 +205,13 @@
 													"key": {
 														"type": "Literal",
 														"value": "中文0",
-														"raw": "'中文0'"
+														"raw": "\"中文0\""
 													},
 													"computed": false,
 													"value": {
 														"type": "Literal",
 														"value": "in_file subtye_zh0",
-														"raw": "'in_file subtye_zh0'"
+														"raw": "\"in_file subtye_zh0\""
 													},
 													"kind": "init",
 													"method": false,
@@ -222,13 +222,13 @@
 													"key": {
 														"type": "Literal",
 														"value": "中文1",
-														"raw": "'中文1'"
+														"raw": "\"中文1\""
 													},
 													"computed": false,
 													"value": {
 														"type": "Literal",
 														"value": "in_file ubtye_custom1",
-														"raw": "'in_file ubtye_custom1'"
+														"raw": "\"in_file ubtye_custom1\""
 													},
 													"kind": "init",
 													"method": false,
@@ -239,13 +239,13 @@
 													"key": {
 														"type": "Literal",
 														"value": "中文2",
-														"raw": "'中文2'"
+														"raw": "\"中文2\""
 													},
 													"computed": false,
 													"value": {
 														"type": "Literal",
 														"value": "in_file subtye_zh2_db",
-														"raw": "'in_file subtye_zh2_db'"
+														"raw": "\"in_file subtye_zh2_db\""
 													},
 													"kind": "init",
 													"method": false,
@@ -256,13 +256,13 @@
 													"key": {
 														"type": "Literal",
 														"value": "中文3_empty",
-														"raw": "'中文3_empty'"
+														"raw": "\"中文3_empty\""
 													},
 													"computed": false,
 													"value": {
 														"type": "Literal",
 														"value": "",
-														"raw": "''"
+														"raw": "\"\""
 													},
 													"kind": "init",
 													"method": false,
@@ -273,13 +273,13 @@
 													"key": {
 														"type": "Literal",
 														"value": "中文 allfile subtype1",
-														"raw": "'中文 allfile subtype1'"
+														"raw": "\"中文 allfile subtype1\""
 													},
 													"computed": false,
 													"value": {
 														"type": "Literal",
 														"value": "in_file allfile subtype1",
-														"raw": "'in_file allfile subtype1'"
+														"raw": "\"in_file allfile subtype1\""
 													},
 													"kind": "init",
 													"method": false,
@@ -290,13 +290,13 @@
 													"key": {
 														"type": "Literal",
 														"value": "中文 thisfile subtype2",
-														"raw": "'中文 thisfile subtype2'"
+														"raw": "\"中文 thisfile subtype2\""
 													},
 													"computed": false,
 													"value": {
 														"type": "Literal",
 														"value": "in_file thisfile subtype2",
-														"raw": "'in_file thisfile subtype2'"
+														"raw": "\"in_file thisfile subtype2\""
 													},
 													"kind": "init",
 													"method": false,
@@ -347,13 +347,13 @@
 										"key": {
 											"type": "Literal",
 											"value": "中文0",
-											"raw": "'中文0'"
+											"raw": "\"中文0\""
 										},
 										"computed": false,
 										"value": {
 											"type": "Literal",
 											"value": "中文0 in tw",
-											"raw": "'中文0 in tw'"
+											"raw": "\"中文0 in tw\""
 										},
 										"kind": "init",
 										"method": false,

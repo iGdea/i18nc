@@ -1,42 +1,5 @@
-function I18N(msg, subtype) {
-	var self = I18N;
-
-	var GLOBAL = self.__GLOBAL__ || (self.__GLOBAL__ = typeof window == "object" ? window : typeof global == "object" && global) || {};
-	var LAN = GLOBAL.__i18n_lan__;
-
-	if (!LAN) return msg;
-
-	if (self.__TRANSLATE_LAN__ != LAN) {
-		self.__TRANSLATE_LAN__ = LAN;
-		self.__FILE_KEY__ = "i18n_handler_example";
-		self.__FUNCTION_VERSION__ = "5";
-		self.__TRANSLATE_JSON__ = {'en-US':{'DEFAULTS':{'中文0':'indb <thisfile> db0','中文1':'in_file custom1','中文2':'in_file zh2_db','中文5_empty':[],'中文6_empty':'in_file 4','中文db *':'indb *'}},'zh-TW':{'DEFAULTS':{'中文0':'中文0 in tw'}}};
-
-		var __TRANSLATE_JSON__ = self.__TRANSLATE_JSON__;
-		var lanArr = self.__TRANSLATE_LAN_JSON__ = [];
-		if (LAN && LAN.split) {
-			var lanKeys = LAN.split(',');
-			for(var i = 0, len = lanKeys.length; i < len; i++) {
-				var lanItem = __TRANSLATE_JSON__[lanKeys[i]];
-				if (lanItem) lanArr.push(lanItem);
-			}
-		}
-	}
-
-	var lanArr = self.__TRANSLATE_LAN_JSON__,
-		resultDefault, resultSubject;
-	for(var i = 0, len = lanArr.length; i < len; i++) {
-		var lanItem = lanArr[i];
-		var subtypeJSON = subtype && lanItem.SUBTYPES && lanItem.SUBTYPES[subtype];
-		resultSubject = subtypeJSON && subtypeJSON[msg];
-		if (resultSubject) break;
-		if (!resultDefault)
-			resultDefault = lanItem.DEFAULTS && lanItem.DEFAULTS[msg];
-	}
-
-	var result = resultSubject || resultDefault || msg;
-	return typeof result == 'string' ? result : ''+result;
-}
+function I18N(h,f,i){var a=I18N;var o=a.__GLOBAL__||(a.__GLOBAL__=typeof window == "object" ? window : typeof global == "object" && global)||{};var d=o.__i18n_lan__;if(!d)return h;if(!f||!f.join){i=f;f=[]}if(a.__TRANSLATE_LAN__!=d){a.__TRANSLATE_LAN__=d;a.__FILE_KEY__='i18n_handler_example';a.__FUNCTION_VERSION__='5';a.__TRANSLATE_JSON__={'en-US':{'DEFAULTS':{'中文0':'indb <thisfile> db0','中文1':'in_file custom1','中文2':'in_file zh2_db','中文5_empty':[],'中文6_empty':'in_file 4','中文db *':'indb *'}},'zh-TW':{'DEFAULTS':{'中文0':'中文0 in tw'}}}
+;var n=a.__TRANSLATE_JSON__;var e=a.__TRANSLATE_LAN_JSON__=[];if(d&&d.split){var j=d.split(',');for(var b=0,g=j.length;b<g;b++){var c=n[j[b]];if(c)e.push(c)}}}var e=a.__TRANSLATE_LAN_JSON__,k,l;for(var b=0,g=e.length;b<g;b++){var c=e[b];var m=i&&c.SUBTYPES&&c.SUBTYPES[i];l=m&&m[h];if(l)break;if(!k)k=c.DEFAULTS&&c.DEFAULTS[h]}var q=l||k||h;var p=0;return(''+q).replace(/(%s)|(%\{(.+?)\})/g,function(){var a=f[p++];return a===undefined||a===null?'':a})}
 var codeJSON={
 	"DEFAULTS": [
 		I18N('中文0'),

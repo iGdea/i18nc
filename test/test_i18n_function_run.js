@@ -1,7 +1,7 @@
 var expect	= require('expect.js');
 var I18N	= require('./files/i18n_handler_example');
 
-describe('#I18N function', function()
+describe('#i18n_function_run', function()
 {
 	describe('#lan:en-US', function()
 	{
@@ -116,4 +116,3 @@ describe('#I18N function', function()
 	});
 
 });
-
