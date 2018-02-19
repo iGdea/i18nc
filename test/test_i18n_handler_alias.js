@@ -5,7 +5,7 @@ var autoTestUtils		= require('./auto_test_utils');
 var requireAfterWrite	= autoTestUtils.requireAfterWrite('output_I18N_alias');
 
 
-describe('#I18N_alias', function()
+describe('#I18N_handler_alias', function()
 {
 	var exampleCode = require('./example/func_code').toString();
 	it('#update', function()

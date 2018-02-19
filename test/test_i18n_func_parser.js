@@ -1,9 +1,9 @@
 var expect				= require('expect.js');
 var esprima				= require('esprima');
+var i18nParser			= require('../lib/i18n_func/parser');
 var requireAfterWrite	= require('./auto_test_utils').requireAfterWrite();
-var i18nParser	= require('../lib/i18n_function_parser');
 
-describe('#i18n_function_parser', function()
+describe('#i18n_func_parser', function()
 {
 	it('#translateSubtreeAst2json', function()
 	{
