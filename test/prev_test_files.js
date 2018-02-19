@@ -52,7 +52,7 @@ function i18n_handler_example()
 			FUNCTION_VERSION	: DEF.I18NFunctionVersion,
 			GetGlobalCode		: 'typeof window == "object" ? window : typeof global == "object" && global',
 			LanguageVarName		: '__i18n_lan__',
-			TRANSLATE_JSON		: JSON.stringify(TRANSLATE_JSON, null, '\t').replace(/\n/g, '\n\t'),
+			TRANSLATE_JSON_CODE	: JSON.stringify(TRANSLATE_JSON, null, '\t').replace(/\n/g, '\n\t'),
 		});
 
 	return fs.writeFileAsync(__dirname+'/files/i18n_handler_example.js', content);
