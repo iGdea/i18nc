@@ -1,18 +1,18 @@
-var fs						= require('fs');
-var debug					= require('debug')('i18nc-core:test_i18n_function_generator');
-var expect					= require('expect.js');
-var escodegen				= require('escodegen');
-var optionsUtils			= require('../lib/options');
-var autoTestUtils			= require('./auto_test_utils');
-var requireAfterWrite		= autoTestUtils.requireAfterWrite();
-var i18nFunctionGenerator	= require('../lib/i18n_function_generator');
+var fs					= require('fs');
+var debug				= require('debug')('i18nc-core:test_i18n_function_generator');
+var expect				= require('expect.js');
+var escodegen			= require('escodegen');
+var optionsUtils		= require('../lib/options');
+var autoTestUtils		= require('./auto_test_utils');
+var i18nGenerator		= require('../lib/i18n_function_generator');
+var requireAfterWrite	= autoTestUtils.requireAfterWrite();
 
 describe('#i18n_function_generator', function()
 {
 	it('#wordmap2ast', function()
 	{
 		var astData = require('./files/translate_data.json');
-		var resultAst = i18nFunctionGenerator._wordmap2ast(astData);
+		var resultAst = i18nGenerator._wordmap2ast(astData);
 		var otherAst = requireAfterWrite('translate_data_ast.json', resultAst);
 		debug('wordmap2ast resultAst:%o', resultAst);
 		var resultCode = escodegen.generate(resultAst, optionsUtils.escodegenOptions);
@@ -30,7 +30,7 @@ describe('#i18n_function_generator', function()
 	it('#mergeTranslateData', function()
 	{
 		var args = require('./files/merge_translate_data');
-		var result = i18nFunctionGenerator._mergeTranslateData(args);
+		var result = i18nGenerator._mergeTranslateData(args);
 
 		var outputJSON = requireAfterWrite('merge_translate_data_json.json', result);
 
@@ -40,7 +40,7 @@ describe('#i18n_function_generator', function()
 	it('#to_TRANSLATE_DATA_fromat', function()
 	{
 		var args = require('./files/merge_translate_data_json.json');
-		var result = i18nFunctionGenerator._to_TRANSLATE_DATA_fromat(args);
+		var result = i18nGenerator._to_TRANSLATE_DATA_fromat(args);
 
 		var outputJSON = requireAfterWrite('merge_translate_data_output.json', result);
 
@@ -51,7 +51,7 @@ describe('#i18n_function_generator', function()
 	it('#getTranslateJSON', function()
 	{
 		var args = require('./files/merge_translate_data.js');
-		var result = i18nFunctionGenerator.getTranslateJSON(args);
+		var result = i18nGenerator.getTranslateJSON(args);
 
 		expect(result).to.eql(require('./files/merge_translate_data_output.json'));
 	});
@@ -60,7 +60,7 @@ describe('#i18n_function_generator', function()
 	it('#genTranslateJSONCode', function()
 	{
 		var data = require('./files/merge_translate_data_json.json');
-		var result = i18nFunctionGenerator._to_TRANSLATE_DATA_fromat(data);
+		var result = i18nGenerator._to_TRANSLATE_DATA_fromat(data);
 
 		var outputJSON = requireAfterWrite('merge_translate_data_output.json', result);
 
@@ -71,7 +71,7 @@ describe('#i18n_function_generator', function()
 	it('#translateJSON2ast', function()
 	{
 		var data = require('./files/merge_translate_data_output.json');
-		var resultAst = i18nFunctionGenerator._translateJSON2ast(data);
+		var resultAst = i18nGenerator._translateJSON2ast(data);
 		var resultCode = escodegen.generate(resultAst, optionsUtils.escodegenOptions);
 
 		resultCode = 'module.exports = '+resultCode;
