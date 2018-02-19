@@ -1,17 +1,17 @@
 {
 	"codeTranslateWords": {
 		"DEFAULTS": [
-			"中文 allfile subtype1",
-			"中文 thisfile subtype2",
-			"中文0",
 			"中文0",
 			"中文1",
-			"中文1",
-			"中文2",
 			"中文2",
 			"中文5_empty",
 			"中文6_empty",
-			"中文db *"
+			"中文db *",
+			"中文0",
+			"中文1",
+			"中文2",
+			"中文 allfile subtype1",
+			"中文 thisfile subtype2"
 		],
 		"SUBTYPES": {}
 	},

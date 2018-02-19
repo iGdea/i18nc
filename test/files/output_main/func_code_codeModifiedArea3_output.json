@@ -1,26 +1,26 @@
 {
 	"codeTranslateWords": {
 		"DEFAULTS": [
-			"argv中文",
-			"print信息，",
-			"中午true",
 			"中文0",
 			"中文1",
-			"中文I18N",
-			"中文case",
-			"中文case",
-			"中文false",
-			"中文if",
-			"中文key",
+			"中文val in object",
 			"中文key",
 			"中文val",
-			"中文val in object",
+			"中文key",
+			"argv中文",
+			"中文case",
+			"中文if",
+			"中午true",
+			"中文false",
+			"print信息，",
+			"中文case",
+			"中文I18N",
 			"简体"
 		],
 		"SUBTYPES": {
 			"subtype": [
-				"I18N(中文)",
-				"中文I18N subtype"
+				"中文I18N subtype",
+				"I18N(中文)"
 			],
 			"subtype2": [
 				"I18N(中文)"
