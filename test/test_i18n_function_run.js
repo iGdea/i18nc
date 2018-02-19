@@ -109,15 +109,21 @@ describe('#i18n_function_run', function()
 			global.__i18n_lan__ = 'en-US';
 		});
 
-		it('#base', function()
+		it('#key %s', function()
 		{
-			expect()
+			expect(I18N('中文%s美好', [1])).to.be('中文1美好');
+			expect(I18N('中文%s美好', [1,2])).to.be('中文1美好');
+			expect(I18N('中文%s美好%s', [1,2])).to.be('中文1美好2');
+			expect(I18N('中文%s美好%s', [1])).to.be('中文1美好');
 		});
 
-		it('#I18N args', function()
+		it('#key %{}', function()
 		{
-			console.log('@todo');
+			expect(I18N('中文%{}美好', [1])).to.be('中文%{}美好');
+			expect(I18N('中文%{非常}美好', [1])).to.be('中文1美好');
+			expect(I18N('中文%{{非常}}美好', [1])).to.be('中文1}美好');
 		});
+
 	});
 
 });
