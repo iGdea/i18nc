@@ -104,9 +104,14 @@ describe('#i18n_function_run', function()
 
 	describe('#tpldata', function()
 	{
+		beforeEach(function()
+		{
+			global.__i18n_lan__ = 'en-US';
+		});
+
 		it('#base', function()
 		{
-			console.log('@todo');
+			expect()
 		});
 
 		it('#I18N args', function()

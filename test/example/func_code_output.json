@@ -68,21 +68,11 @@
 				}
 			},
 			"funcTranslateWords": {
-				"func_code_file_key": [
+				"*": [
 					{
-						"en-US": {
-							"DEFAULTS": {},
-							"SUBTYPES": {
-								"subtype": {
-									"I18N(中文)": "I18N(zh)"
-								},
-								"subtype2": {}
-							}
-						},
 						"zh-TW": {
 							"DEFAULTS": {
-								"中文key": "中文键",
-								"简体": "簡體"
+								"中文key": "中文键"
 							},
 							"SUBTYPES": {
 								"subtype": {
@@ -97,19 +87,11 @@
 			"usedTranslateWords": {
 				"zh-TW": {
 					"DEFAULTS": {
-						"中文key": "中文键",
-						"简体": "簡體"
+						"中文key": "中文键"
 					},
 					"SUBTYPES": {
 						"subtype": {
 							"I18N(中文)": "中文国际化"
-						}
-					}
-				},
-				"en-US": {
-					"SUBTYPES": {
-						"subtype": {
-							"I18N(中文)": "I18N(zh)"
 						}
 					}
 				}
