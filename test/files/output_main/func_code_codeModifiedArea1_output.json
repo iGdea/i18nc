@@ -1,45 +1,25 @@
 {
 	"codeTranslateWords": {
 		"DEFAULTS": [
-			"2中文4中文5",
-			"print中文",
-			"run 中文",
-			"run 中文",
+			"argv中文",
+			"print信息，",
 			"中午true",
-			"中文 only db",
-			"中文 only file",
 			"中文0",
 			"中文1",
-			"中文1",
-			"中文2",
-			"中文3",
 			"中文I18N",
 			"中文case",
 			"中文case",
-			"中文case+handler",
-			"中文case+handler",
-			"中文case+objkey",
-			"中文case+objkey",
-			"中文case+数字",
-			"中文case+数字",
 			"中文false",
 			"中文if",
 			"中文key",
 			"中文key",
-			"中文key",
-			"中文key",
-			"中文span",
-			"中文span2",
-			"中文span3",
 			"中文val",
 			"中文val in object",
-			"再来一句，",
 			"简体"
 		],
 		"SUBTYPES": {
 			"subtype": [
 				"I18N(中文)",
-				"中文I18N subtype",
 				"中文I18N subtype"
 			],
 			"subtype2": [
@@ -54,7 +34,6 @@
 		],
 		"SUBTYPES": {
 			"subtype": [
-				"中文I18N subtype",
 				"中文I18N subtype",
 				"I18N(中文)"
 			],
@@ -91,26 +70,21 @@
 		]
 	},
 	"usedTranslateWords": {
-		"en-US": {
-			"DEFAULTS": {
-				"中文 only db": "中文只在数据库",
-				"中文 only file": "中文只在文件"
-			},
-			"SUBTYPES": {
-				"subtype": {
-					"I18N(中文)": "I18N(zh)"
-				}
-			}
-		},
 		"zh-TW": {
 			"DEFAULTS": {
-				"中文 only db": "中文只在数据库",
 				"中文key": "中文键",
 				"简体": "簡體"
 			},
 			"SUBTYPES": {
 				"subtype": {
 					"I18N(中文)": "中文国际化"
+				}
+			}
+		},
+		"en-US": {
+			"SUBTYPES": {
+				"subtype": {
+					"I18N(中文)": "I18N(zh)"
 				}
 			}
 		}

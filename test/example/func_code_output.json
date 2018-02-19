@@ -15,33 +15,14 @@
 				"DEFAULTS": [
 					"中文0",
 					"中文1",
-					"中文 only db",
-					"中文 only file",
-					"2中文4中文5",
-					"中文span",
-					"中文span2",
-					"中文span3",
-					"中文1",
-					"中文2",
-					"中文3",
 					"中文val in object",
 					"中文key",
 					"中文val",
 					"中文key",
-					"再来一句，",
-					"print中文",
+					"print信息，",
+					"argv中文",
 					"中文case",
-					"中文case+数字",
-					"中文key",
-					"中文case+objkey",
-					"run 中文",
-					"中文case+handler",
 					"中文case",
-					"中文case+数字",
-					"中文key",
-					"中文case+objkey",
-					"run 中文",
-					"中文case+handler",
 					"中文if",
 					"中午true",
 					"中文false",
@@ -50,7 +31,6 @@
 				],
 				"SUBTYPES": {
 					"subtype": [
-						"中文I18N subtype",
 						"中文I18N subtype",
 						"I18N(中文)"
 					],
@@ -63,33 +43,14 @@
 				"DEFAULTS": [
 					"中文0",
 					"中文1",
-					"中文 only db",
-					"中文 only file",
-					"2中文4中文5",
-					"中文span",
-					"中文span2",
-					"中文span3",
-					"中文1",
-					"中文2",
-					"中文3",
 					"中文val in object",
 					"中文key",
 					"中文val",
 					"中文key",
-					"再来一句，",
-					"print中文",
+					"print信息，",
+					"argv中文",
 					"中文case",
-					"中文case+数字",
-					"中文key",
-					"中文case+objkey",
-					"run 中文",
-					"中文case+handler",
 					"中文case",
-					"中文case+数字",
-					"中文key",
-					"中文case+objkey",
-					"run 中文",
-					"中文case+handler",
 					"中文if",
 					"中午true",
 					"中文false",
@@ -98,7 +59,6 @@
 				],
 				"SUBTYPES": {
 					"subtype": [
-						"中文I18N subtype",
 						"中文I18N subtype",
 						"I18N(中文)"
 					],
@@ -111,10 +71,7 @@
 				"func_code_file_key": [
 					{
 						"en-US": {
-							"DEFAULTS": {
-								"中文 only db": "中文只在数据库",
-								"中文 only file": "中文只在文件"
-							},
+							"DEFAULTS": {},
 							"SUBTYPES": {
 								"subtype": {
 									"I18N(中文)": "I18N(zh)"
@@ -124,7 +81,6 @@
 						},
 						"zh-TW": {
 							"DEFAULTS": {
-								"中文 only db": "中文只在数据库",
 								"中文key": "中文键",
 								"简体": "簡體"
 							},
@@ -139,26 +95,21 @@
 				]
 			},
 			"usedTranslateWords": {
-				"en-US": {
-					"DEFAULTS": {
-						"中文 only db": "中文只在数据库",
-						"中文 only file": "中文只在文件"
-					},
-					"SUBTYPES": {
-						"subtype": {
-							"I18N(中文)": "I18N(zh)"
-						}
-					}
-				},
 				"zh-TW": {
 					"DEFAULTS": {
-						"中文 only db": "中文只在数据库",
 						"中文key": "中文键",
 						"简体": "簡體"
 					},
 					"SUBTYPES": {
 						"subtype": {
 							"I18N(中文)": "中文国际化"
+						}
+					}
+				},
+				"en-US": {
+					"SUBTYPES": {
+						"subtype": {
+							"I18N(中文)": "I18N(zh)"
 						}
 					}
 				}
