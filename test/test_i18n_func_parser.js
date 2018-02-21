@@ -5,16 +5,6 @@ var requireAfterWrite	= require('./auto_test_utils').requireAfterWrite();
 
 describe('#i18n_func_parser', function()
 {
-	it('#translateSubtreeAst2json', function()
-	{
-		var astData = require('./files/translate_data_ast.json');
-		var result = i18nParser._translateSubtreeAst2json(astData);
-
-		var outputJSON = requireAfterWrite('translate_data.json', result);
-
-		expect(result).to.eql(outputJSON);
-	});
-
 	it('#parse', function()
 	{
 		var code = require('./files/i18n_handler_example').toString();

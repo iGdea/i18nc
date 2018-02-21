@@ -9,24 +9,6 @@ var requireAfterWrite	= autoTestUtils.requireAfterWrite();
 
 describe('#i18n_func_generator', function()
 {
-	it('#wordmap2ast', function()
-	{
-		var astData = require('./files/translate_data.json');
-		var resultAst = i18nGenerator._wordmap2ast(astData);
-		var otherAst = requireAfterWrite('translate_data_ast.json', resultAst);
-		debug('wordmap2ast resultAst:%o', resultAst);
-		var resultCode = escodegen.generate(resultAst, optionsUtils.escodegenOptions);
-
-		otherAst.properties = otherAst.properties.sort(function(a, b)
-			{
-				return a.key.value > b.key.value ? 1 : -1;
-			});
-		var otherCode = escodegen.generate(otherAst, optionsUtils.escodegenOptions);
-
-		expect(autoTestUtils.code2arr(resultCode)).to.eql(autoTestUtils.code2arr(otherCode));
-	});
-
-
 	it('#mergeTranslateData', function()
 	{
 		var args = require('./files/merge_translate_data');
