@@ -29,4 +29,9 @@ describe('#word_json_ast', function()
 		expect(Object.keys(resultJson))
 			.to.eql(['word_1', 'word_2', 'word_3', 'word_empty1', 'word_empty2']);
 	});
+
+	it('#comments', function()
+	{
+		console.log('@todo');
+	});
 });
