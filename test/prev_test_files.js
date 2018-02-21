@@ -1,9 +1,11 @@
 var Promise = require('bluebird');
 var fs = Promise.promisifyAll(require('fs'));
 var DEF = require('../lib/def');
-var i18nTpl = require('../lib/i18n_function_tpl');
+var i18nTpl = require('../lib/i18n_func/render');
 
-function i18n_handler_example()
+
+exports.I18NHandlerExampleCode = I18NHandlerExampleCode;
+function I18NHandlerExampleCode()
 {
 	var TRANSLATE_JSON =
 	{
@@ -44,8 +46,7 @@ function i18n_handler_example()
 		}
 	};
 
-	var content = 'module.exports = I18N;\n';
-	content += i18nTpl.render(
+	return i18nTpl.render(
 		{
 			handlerName			: 'I18N',
 			FILE_KEY			: 'i18n_handler_example',
@@ -54,17 +55,23 @@ function i18n_handler_example()
 			LanguageVarName		: '__i18n_lan__',
 			TRANSLATE_JSON_CODE	: JSON.stringify(TRANSLATE_JSON, null, '\t').replace(/\n/g, '\n\t'),
 		});
+}
+
+function I18NHandlerExampleFile()
+{
+	var content = 'module.exports = I18N;\n';
+	content += I18NHandlerExampleCode();
 
 	return fs.writeFileAsync(__dirname+'/files/i18n_handler_example.js', content);
 }
 
-
 function main()
 {
+	console.log('run main');
 	return Promise.all(
 		[
-			i18n_handler_example()
+			I18NHandlerExampleFile()
 		]);
 }
 
-main();
+if (process.mainModule === module) main();
