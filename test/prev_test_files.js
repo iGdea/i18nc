@@ -65,6 +65,18 @@ function I18NHandlerExampleFile()
 	return fs.writeFileAsync(__dirname+'/files/i18n_handler_example.js', content);
 }
 
+
+exports.I18NHandlerSimpleExampleCode = I18NHandlerSimpleExampleCode;
+function I18NHandlerSimpleExampleCode()
+{
+	return i18nTpl.renderSimple(
+		{
+			handlerName			: 'I18N',
+			FILE_KEY			: 'i18n_handler_example',
+			FUNCTION_VERSION	: DEF.I18NFunctionVersion,
+		});
+}
+
 function main()
 {
 	console.log('run main');
