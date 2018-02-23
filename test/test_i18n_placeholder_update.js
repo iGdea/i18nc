@@ -81,34 +81,113 @@ describe('#i18n_func_update', function()
 
 	describe('#update', function()
 	{
+		function I18N()
+		{
+			var self = I18N;
+			self.__FILE_KEY__ = "file_key";
+			self.__FUNCTION_VERSION__ = "5";
+			self.__TRANSLATE_JSON__ = {DEFAULTS: {key: 1}};
+		}
+		var code = I18N.toString();
+		var codeTranslateWords = {
+			DEFAULTS: ['中文']
+		};
+
+		function code2arr(code)
+		{
+			return code.split(/\n\r?\t*/)
+				.filter(function(val)
+				{
+					return val;
+				});
+		}
+
+		function func2codeArr(func)
+		{
+			return code2arr(func.toString());
+		}
+
 		it('#partial', function()
 		{
-			console.log('@todo');
+			var ast = esprima.parse(code, optionsUtils.esprimaOptions);
+			var I18NPlaceholderNew = new I18NPlaceholder(
+					codeTranslateWords, code, optionsUtils.extend(), ast.body[0]
+				);
+
+			I18NPlaceholderNew.renderType = 'partial';
+			expect(func2codeArr(I18NPlaceholderNew)).to.eql(func2codeArr(function I18N()
+				{
+					var self = I18N;
+					self.__FILE_KEY__ = "file_key";
+					self.__FUNCTION_VERSION__ = "5";
+					self.__TRANSLATE_JSON__ = {
+						'en-US': {
+							'DEFAULTS': {
+								// "中文":
+								'<e.g.> translate word': null
+							}
+						}
+					};
+				}));
 		});
 
 		it('#orignal', function()
 		{
-			console.log('@todo');
+			var ast = esprima.parse(code, optionsUtils.esprimaOptions);
+			var I18NPlaceholderNew = new I18NPlaceholder(
+					codeTranslateWords, code, optionsUtils.extend(), ast.body[0]
+				);
+
+			I18NPlaceholderNew.renderType = 'orignal';
+			expect(func2codeArr(I18NPlaceholderNew)).to.eql(code2arr(code));
 		});
 
 		it('#empty', function()
 		{
-			console.log('@todo');
+			var ast = esprima.parse(code, optionsUtils.esprimaOptions);
+			var I18NPlaceholderNew = new I18NPlaceholder(
+					codeTranslateWords, code, optionsUtils.extend(), ast.body[0]
+				);
+
+			I18NPlaceholderNew.renderType = 'empty';
+			expect(func2codeArr(I18NPlaceholderNew)).to.eql([]);
 		});
 
 		it('#simple', function()
 		{
-			console.log('@todo');
+			var ast = esprima.parse(code, optionsUtils.esprimaOptions);
+			var I18NPlaceholderNew = new I18NPlaceholder(
+					codeTranslateWords, code, optionsUtils.extend(), ast.body[0]
+				);
+
+			I18NPlaceholderNew.renderType = 'simple';
+			expect(func2codeArr(I18NPlaceholderNew)).to.eql(code2arr(i18nTpl.renderSimple(
+				{
+					handlerName: 'I18N',
+					FILE_KEY: 'file_key',
+					FUNCTION_VERSION: DEF.I18NFunctionVersion+'.'+DEF.I18NFunctionSubVersion.SIMPLE,
+				})));
 		});
 
 		it('#complete', function()
 		{
-			console.log('@todo');
-		});
+			var ast = esprima.parse(code, optionsUtils.esprimaOptions);
+			var I18NPlaceholderNew = new I18NPlaceholder(
+					{}, code, optionsUtils.extend(), ast.body[0]
+				);
 
-		it('#simple2complete', function()
-		{
-			console.log('@todo');
+			I18NPlaceholderNew.renderType = 'complete';
+			var options = optionsUtils.extend();
+			var otherCode = i18nTpl.render(
+				{
+					handlerName: options.I18NHandlerName,
+					FILE_KEY: 'file_key',
+					FUNCTION_VERSION: DEF.I18NFunctionVersion,
+					GetGlobalCode : options['I18NhandlerTpl:GetGlobalCode'],
+					LanguageVarName : options['I18NhandlerTpl:LanguageVarName'],
+					TRANSLATE_JSON_CODE : '{}'
+				});
+			expect(func2codeArr(I18NPlaceholderNew)).to.eql(code2arr(otherCode));
 		});
 	});
 });
