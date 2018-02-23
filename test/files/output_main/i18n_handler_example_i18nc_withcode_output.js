@@ -15,6 +15,8 @@ function I18N(h,f,i){
 		},
 		'zh-TW': {
 			'DEFAULTS': {
+				// "中文 allfile subtype1":
+				// "中文 thisfile subtype2":
 				// "中文1":
 				// "中文2":
 				// "中文5_empty":
