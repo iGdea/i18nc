@@ -102,6 +102,28 @@ describe('#word_json_ast', function()
 				var resultCode = escodegen.generate(resultAst, optionsUtils.escodegenOptions);
 				expect(code2arr(resultCode)).to.eql(func2codeArr(code).slice(1));
 			});
+
+			it('#last', function()
+			{
+				var astData =
+				{
+					'word_1': null,
+					'word_2': null,
+					'word_3': 'word_3',
+				};
+				function code()
+				{
+					var d =
+					{
+						// "word_1":
+						// "word_2":
+						'word_3': 'word_3'
+					}
+				}
+				var resultAst = i18nGenerator._wordJson2ast(astData);
+				var resultCode = escodegen.generate(resultAst, optionsUtils.escodegenOptions);
+				expect(code2arr(resultCode)).to.eql(func2codeArr(code).slice(1));
+			});
 		});
 	});
 });

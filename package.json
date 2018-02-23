@@ -1,6 +1,6 @@
 {
   "name": "i18nc-core",
-  "version": "4.1.1",
+  "version": "4.2.0",
   "description": "I18N Tool for JS files",
   "main": "index.js",
   "scripts": {
@@ -19,7 +19,6 @@
     "lodash": "^4.17.4"
   },
   "devDependencies": {
-    "bluebird": "^3.5.1",
     "cross-env": "^2.0.0",
     "expect.js": "^0.3.1",
     "istanbul": "^0.4.5",

@@ -1,5 +1,4 @@
-var Promise = require('bluebird');
-var fs = Promise.promisifyAll(require('fs'));
+var fs = require('fs');
 var DEF = require('../lib/def');
 var i18nTpl = require('../lib/i18n_func/render');
 
@@ -62,7 +61,7 @@ function I18NHandlerExampleFile()
 	var content = 'module.exports = I18N;\n';
 	content += I18NHandlerExampleCode();
 
-	return fs.writeFileAsync(__dirname+'/files/i18n_handler_example.js', content);
+	fs.writeFileSync(__dirname+'/files/i18n_handler_example.js', content);
 }
 
 
@@ -80,10 +79,7 @@ function I18NHandlerSimpleExampleCode()
 function main()
 {
 	console.log('run main');
-	return Promise.all(
-		[
-			I18NHandlerExampleFile()
-		]);
+	I18NHandlerExampleFile();
 }
 
 if (process.mainModule === module) main();
