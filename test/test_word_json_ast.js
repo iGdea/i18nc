@@ -1,7 +1,9 @@
 var expect			= require('expect.js');
 var escodegen		= require('escodegen');
+var optionsUtils	= require('../lib/options');
 var i18nParser		= require('../lib/i18n_func/parser');
 var i18nGenerator	= require('../lib/i18n_func/generator');
+
 
 describe('#word_json_ast', function()
 {
@@ -30,8 +32,96 @@ describe('#word_json_ast', function()
 			.to.eql(['word_1', 'word_2', 'word_3', 'word_empty1', 'word_empty2']);
 	});
 
-	it('#comments', function()
+	describe('#wordJson2as', function()
 	{
-		console.log('@todo');
+		describe('#comments', function()
+		{
+			it('#empty', function()
+			{
+				var astData =
+				{
+					'word_1': null,
+					'word_2': null,
+					'word_3': null,
+				};
+				function code()
+				{
+					var d =
+					{
+						// "word_1":
+						// "word_2":
+						// "word_3":
+						'<e.g.> translate word': null
+					}
+				}
+				var resultAst = i18nGenerator._wordJson2ast(astData);
+				var resultCode = escodegen.generate(resultAst, optionsUtils.escodegenOptions);
+				expect(code2arr(resultCode)).to.eql(func2codeArr(code).slice(1));
+			});
+
+			it('#first', function()
+			{
+				var astData =
+				{
+					'word_1': null,
+					'word_2': null,
+					'word_3': 'word_3',
+				};
+				function code()
+				{
+					var d =
+					{
+						// "word_1":
+						// "word_2":
+						'word_3': 'word_3'
+					}
+				}
+				var resultAst = i18nGenerator._wordJson2ast(astData);
+				var resultCode = escodegen.generate(resultAst, optionsUtils.escodegenOptions);
+				expect(code2arr(resultCode)).to.eql(func2codeArr(code).slice(1));
+			});
+
+			it('#middle', function()
+			{
+				var astData =
+				{
+					'word_1': null,
+					'word_2': 'word_2',
+					'word_3': null,
+				};
+				function code()
+				{
+					var d =
+					{
+						// "word_1":
+						// "word_3":
+						'word_2': 'word_2'
+					}
+				}
+				var resultAst = i18nGenerator._wordJson2ast(astData);
+				var resultCode = escodegen.generate(resultAst, optionsUtils.escodegenOptions);
+				expect(code2arr(resultCode)).to.eql(func2codeArr(code).slice(1));
+			});
+		});
 	});
 });
+
+function code2arr(code)
+{
+	return code.split(/\n\r?\t*/)
+		.filter(function(val)
+		{
+			return val;
+		});
+}
+
+function func2codeArr(func)
+{
+	var code = func.toString().split('{');
+	code.shift();
+	code = code.join('{').split('}');
+	code.pop();
+	code = code.join('}');
+
+	return code2arr(code);
+}
