@@ -1,41 +1,23 @@
 {
 	"DEFAULTS": {
-		"中文0": {
-			"en-US": "indb <thisfile> db0",
-			"zh-TW": "中文0 in tw"
+		"简体": {
+			"en-US": "simplified",
+			"zh-TW": "簡體"
 		},
-		"中文1": {
-			"en-US": "in_file custom1"
-		},
-		"中文2": {
-			"en-US": "in_file zh2_db"
-		},
-		"中文5_empty": {
+		"空白": {
 			"en-US": ""
 		},
-		"中文6_empty": {
-			"en-US": "in_file 4"
+		"%s美好%s生活": {
+			"en-US": "%sgood%s life"
 		},
-		"中文db *": {
-			"en-US": "indb *"
+		"%{中文}词典": {
+			"en-US": "%{Chinese} dictionary"
 		}
 	},
 	"SUBTYPES": {
 		"subtype": {
-			"中文0": {
-				"en-US": "in_file subtye_zh0"
-			},
-			"中文1": {
-				"en-US": "in_file ubtye_custom1"
-			},
-			"中文2": {
-				"en-US": "in_file subtye_zh2_db"
-			},
-			"中文 allfile subtype1": {
-				"en-US": "indb * subtype1"
-			},
-			"中文 thisfile subtype2": {
-				"en-US": "indb <thisfile> subtype2"
+			"简体": {
+				"en-US": "simplified subtype"
 			}
 		}
 	}

@@ -41,14 +41,14 @@
 										"type": "Property",
 										"key": {
 											"type": "Literal",
-											"value": "中文0",
-											"raw": "\"中文0\""
+											"value": "简体",
+											"raw": "\"简体\""
 										},
 										"computed": false,
 										"value": {
 											"type": "Literal",
-											"value": "in_file zh0",
-											"raw": "\"in_file zh0\""
+											"value": "simplified",
+											"raw": "\"simplified\""
 										},
 										"kind": "init",
 										"method": false,
@@ -58,76 +58,8 @@
 										"type": "Property",
 										"key": {
 											"type": "Literal",
-											"value": "中文1",
-											"raw": "\"中文1\""
-										},
-										"computed": false,
-										"value": {
-											"type": "Literal",
-											"value": "in_file custom1",
-											"raw": "\"in_file custom1\""
-										},
-										"kind": "init",
-										"method": false,
-										"shorthand": false
-									},
-									{
-										"type": "Property",
-										"key": {
-											"type": "Literal",
-											"value": "中文2",
-											"raw": "\"中文2\""
-										},
-										"computed": false,
-										"value": {
-											"type": "Literal",
-											"value": "in_file zh2_db",
-											"raw": "\"in_file zh2_db\""
-										},
-										"kind": "init",
-										"method": false,
-										"shorthand": false
-									},
-									{
-										"type": "Property",
-										"key": {
-											"type": "Literal",
-											"value": "中文3_empty",
-											"raw": "\"中文3_empty\""
-										},
-										"computed": false,
-										"value": {
-											"type": "Literal",
-											"value": "",
-											"raw": "\"\""
-										},
-										"kind": "init",
-										"method": false,
-										"shorthand": false
-									},
-									{
-										"type": "Property",
-										"key": {
-											"type": "Literal",
-											"value": "中文4_empty",
-											"raw": "\"中文4_empty\""
-										},
-										"computed": false,
-										"value": {
-											"type": "Literal",
-											"value": "",
-											"raw": "\"\""
-										},
-										"kind": "init",
-										"method": false,
-										"shorthand": false
-									},
-									{
-										"type": "Property",
-										"key": {
-											"type": "Literal",
-											"value": "中文5_empty",
-											"raw": "\"中文5_empty\""
+											"value": "空白",
+											"raw": "\"空白\""
 										},
 										"computed": false,
 										"value": {
@@ -142,14 +74,14 @@
 										"type": "Property",
 										"key": {
 											"type": "Literal",
-											"value": "中文6_empty",
-											"raw": "\"中文6_empty\""
+											"value": "无",
+											"raw": "\"无\""
 										},
 										"computed": false,
 										"value": {
 											"type": "Literal",
-											"value": "in_file 4",
-											"raw": "\"in_file 4\""
+											"value": "",
+											"raw": "\"\""
 										},
 										"kind": "init",
 										"method": false,
@@ -159,14 +91,31 @@
 										"type": "Property",
 										"key": {
 											"type": "Literal",
-											"value": "中文db *",
-											"raw": "\"中文db *\""
+											"value": "%s美好%s生活",
+											"raw": "\"%s美好%s生活\""
 										},
 										"computed": false,
 										"value": {
 											"type": "Literal",
-											"value": "in file *",
-											"raw": "\"in file *\""
+											"value": "%sgood%s life",
+											"raw": "\"%sgood%s life\""
+										},
+										"kind": "init",
+										"method": false,
+										"shorthand": false
+									},
+									{
+										"type": "Property",
+										"key": {
+											"type": "Literal",
+											"value": "%{中文}词典",
+											"raw": "\"%{中文}词典\""
+										},
+										"computed": false,
+										"value": {
+											"type": "Literal",
+											"value": "%{Chinese} dictionary",
+											"raw": "\"%{Chinese} dictionary\""
 										},
 										"kind": "init",
 										"method": false,
@@ -204,99 +153,14 @@
 													"type": "Property",
 													"key": {
 														"type": "Literal",
-														"value": "中文0",
-														"raw": "\"中文0\""
+														"value": "简体",
+														"raw": "\"简体\""
 													},
 													"computed": false,
 													"value": {
 														"type": "Literal",
-														"value": "in_file subtye_zh0",
-														"raw": "\"in_file subtye_zh0\""
-													},
-													"kind": "init",
-													"method": false,
-													"shorthand": false
-												},
-												{
-													"type": "Property",
-													"key": {
-														"type": "Literal",
-														"value": "中文1",
-														"raw": "\"中文1\""
-													},
-													"computed": false,
-													"value": {
-														"type": "Literal",
-														"value": "in_file ubtye_custom1",
-														"raw": "\"in_file ubtye_custom1\""
-													},
-													"kind": "init",
-													"method": false,
-													"shorthand": false
-												},
-												{
-													"type": "Property",
-													"key": {
-														"type": "Literal",
-														"value": "中文2",
-														"raw": "\"中文2\""
-													},
-													"computed": false,
-													"value": {
-														"type": "Literal",
-														"value": "in_file subtye_zh2_db",
-														"raw": "\"in_file subtye_zh2_db\""
-													},
-													"kind": "init",
-													"method": false,
-													"shorthand": false
-												},
-												{
-													"type": "Property",
-													"key": {
-														"type": "Literal",
-														"value": "中文3_empty",
-														"raw": "\"中文3_empty\""
-													},
-													"computed": false,
-													"value": {
-														"type": "Literal",
-														"value": "",
-														"raw": "\"\""
-													},
-													"kind": "init",
-													"method": false,
-													"shorthand": false
-												},
-												{
-													"type": "Property",
-													"key": {
-														"type": "Literal",
-														"value": "中文 allfile subtype1",
-														"raw": "\"中文 allfile subtype1\""
-													},
-													"computed": false,
-													"value": {
-														"type": "Literal",
-														"value": "in_file allfile subtype1",
-														"raw": "\"in_file allfile subtype1\""
-													},
-													"kind": "init",
-													"method": false,
-													"shorthand": false
-												},
-												{
-													"type": "Property",
-													"key": {
-														"type": "Literal",
-														"value": "中文 thisfile subtype2",
-														"raw": "\"中文 thisfile subtype2\""
-													},
-													"computed": false,
-													"value": {
-														"type": "Literal",
-														"value": "in_file thisfile subtype2",
-														"raw": "\"in_file thisfile subtype2\""
+														"value": "simplified subtype",
+														"raw": "\"simplified subtype\""
 													},
 													"kind": "init",
 													"method": false,
@@ -346,14 +210,31 @@
 										"type": "Property",
 										"key": {
 											"type": "Literal",
-											"value": "中文0",
-											"raw": "\"中文0\""
+											"value": "简体",
+											"raw": "\"简体\""
 										},
 										"computed": false,
 										"value": {
 											"type": "Literal",
-											"value": "中文0 in tw",
-											"raw": "\"中文0 in tw\""
+											"value": "簡體",
+											"raw": "\"簡體\""
+										},
+										"kind": "init",
+										"method": false,
+										"shorthand": false
+									},
+									{
+										"type": "Property",
+										"key": {
+											"type": "Literal",
+											"value": "无",
+											"raw": "\"无\""
+										},
+										"computed": false,
+										"value": {
+											"type": "Literal",
+											"value": "無",
+											"raw": "\"無\""
 										},
 										"kind": "init",
 										"method": false,
@@ -376,26 +257,21 @@
 	"__TRANSLATE_JSON__": {
 		"en-US": {
 			"DEFAULTS": {
-				"中文0": "in_file zh0",
-				"中文1": "in_file custom1",
-				"中文2": "in_file zh2_db",
-				"中文5_empty": "",
-				"中文6_empty": "in_file 4",
-				"中文db *": "in file *"
+				"简体": "simplified",
+				"空白": "",
+				"%s美好%s生活": "%sgood%s life",
+				"%{中文}词典": "%{Chinese} dictionary"
 			},
 			"SUBTYPES": {
 				"subtype": {
-					"中文0": "in_file subtye_zh0",
-					"中文1": "in_file ubtye_custom1",
-					"中文2": "in_file subtye_zh2_db",
-					"中文 allfile subtype1": "in_file allfile subtype1",
-					"中文 thisfile subtype2": "in_file thisfile subtype2"
+					"简体": "simplified subtype"
 				}
 			}
 		},
 		"zh-TW": {
 			"DEFAULTS": {
-				"中文0": "中文0 in tw"
+				"简体": "簡體",
+				"无": "無"
 			}
 		}
 	}

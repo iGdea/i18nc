@@ -1,129 +1,207 @@
-var expect	= require('expect.js');
-var I18N	= require('./files/i18n_handler_example');
+var expect = require('expect.js');
 
 describe('#i18n_func_run', function()
 {
-	describe('#lan:en-US', function()
+	describe('#full', function()
 	{
-		beforeEach(function()
+		var I18N = require('./files/i18n_handler_example');
+
+		describe('#lan:en-US', function()
 		{
-			global.__i18n_lan__ = 'en-US';
+			beforeEach(function()
+			{
+				global.__i18n_lan__ = 'en-US';
+			});
+
+			it('#no msg', function()
+			{
+				expect(I18N()).to.be('undefined');
+			});
+
+			it('#number', function()
+			{
+				expect(I18N(11)).to.be('11');
+			});
+
+			it('#not match', function()
+			{
+				expect(I18N('not match')).to.be('not match');
+			});
+
+			it('#match default', function()
+			{
+				expect(I18N('简体')).to.be('simplified');
+			});
+
+			it('#match empty', function()
+			{
+				expect(I18N('空白')).to.be('');
+				expect(I18N('无')).to.be('无');
+			});
+
+			it('#match subtype', function()
+			{
+				expect(I18N('简体', 'subtype')).to.be('simplified subtype');
+			});
+
+			it('#no has subtype', function()
+			{
+				expect(I18N('简体', 'not existed subtype')).to.be('simplified');
+			});
 		});
 
-		it('#no msg', function()
+
+		describe('#lan:zh-CN', function()
 		{
-			expect(I18N()).to.be('undefined');
+			beforeEach(function()
+			{
+				global.__i18n_lan__ = 'zh-CN';
+			});
+
+			it('#match default', function()
+			{
+				expect(I18N('简体')).to.be('简体');
+			});
+
+			it('#match subtype', function()
+			{
+				expect(I18N('简体', 'subtype')).to.be('简体');
+			});
 		});
 
-		it('#number', function()
+
+		describe('#lan:zh-CN,en-US', function()
 		{
-			expect(I18N(11)).to.be('11');
+			beforeEach(function()
+			{
+				global.__i18n_lan__ = 'zh-CN,en-US';
+			});
+
+			it('#match default', function()
+			{
+				expect(I18N('简体')).to.be('simplified');
+			});
+
+			it('#match subtype', function()
+			{
+				expect(I18N('简体', 'subtype')).to.be('simplified subtype');
+			});
 		});
 
-		it('#not match', function()
+		describe('#lan:zh-TW,en-US', function()
 		{
-			expect(I18N('not match')).to.be('not match');
+			beforeEach(function()
+			{
+				global.__i18n_lan__ = 'zh-TW,en-US';
+			});
+
+			it('#match default', function()
+			{
+				expect(I18N('简体')).to.be('簡體');
+			});
+
+			it('#match subtype', function()
+			{
+				expect(I18N('简体', 'subtype')).to.be('simplified subtype');
+			});
 		});
 
-		it('#match default', function()
+		describe('#tpldata', function()
 		{
-			expect(I18N('中文6_empty')).to.be('in_file 4');
-		});
+			beforeEach(function()
+			{
+				global.__i18n_lan__ = 'en-US';
+			});
 
-		it('#match empty', function()
-		{
-			expect(I18N('中文5_empty')).to.be('');
-		});
+			it('#key %s', function()
+			{
+				expect(I18N('美好%s生活', [1])).to.be('美好1生活');
+				expect(I18N('美好%s生活', [1,2])).to.be('美好1生活');
+				expect(I18N('%s美好%s生活', [1,2])).to.be('1good2 life');
+				expect(I18N('%s美好%s生活', [1])).to.be('1good life');
+			});
 
-		it('#match subtype', function()
-		{
-			expect(I18N('中文0', 'subtype')).to.be('in_file subtye_zh0');
-		});
+			it('#key %{}', function()
+			{
+				expect(I18N('%{中文}词典', ['English'])).to.be('English dictionary');
+				expect(I18N('%{{中文}}词典', [1])).to.be('1}词典');
+			});
 
-		it('#no has subtype', function()
-		{
-			expect(I18N('中文0', 'not existst subtype')).to.be('in_file zh0');
 		});
 	});
 
 
-	describe('#lan:zh-CN', function()
+
+	describe('#simple', function()
 	{
-		beforeEach(function()
+		var I18N = require('./files/i18n_handler_simple_example');
+
+		describe('#lan:en-US', function()
 		{
-			global.__i18n_lan__ = 'zh-CN';
+			beforeEach(function()
+			{
+				global.__i18n_lan__ = 'en-US';
+			});
+
+			it('#no msg', function()
+			{
+				expect(I18N()).to.be('undefined');
+			});
+
+			it('#number', function()
+			{
+				expect(I18N(11)).to.be('11');
+			});
+
+			it('#not match', function()
+			{
+				expect(I18N('not match')).to.be('not match');
+			});
+
+			it('#match default', function()
+			{
+				expect(I18N('简体')).to.be('简体');
+			});
+
+			it('#match empty', function()
+			{
+				expect(I18N('空白')).to.be('空白');
+				expect(I18N('无')).to.be('无');
+			});
+
+			it('#match subtype', function()
+			{
+				expect(I18N('简体', 'subtype')).to.be('简体');
+			});
+
+			it('#no has subtype', function()
+			{
+				expect(I18N('简体', 'not existed subtype')).to.be('简体');
+			});
 		});
 
-		it('#match default', function()
+		describe('#tpldata', function()
 		{
-			expect(I18N('中文6_empty')).to.be('中文6_empty');
+			beforeEach(function()
+			{
+				global.__i18n_lan__ = 'en-US';
+			});
+
+			it('#key %s', function()
+			{
+				expect(I18N('美好%s生活', [1])).to.be('美好1生活');
+				expect(I18N('美好%s生活', [1,2])).to.be('美好1生活');
+				expect(I18N('%s美好%s生活', [1,2])).to.be('1美好2生活');
+				expect(I18N('%s美好%s生活', [1])).to.be('1美好生活');
+			});
+
+			it('#key %{}', function()
+			{
+				expect(I18N('%{中文}词典', ['English'])).to.be('English词典');
+				expect(I18N('%{{中文}}词典', [1])).to.be('1}词典');
+			});
+
 		});
-
-		it('#match subtype', function()
-		{
-			expect(I18N('中文0', 'subtype')).to.be('中文0');
-		});
-	});
-
-
-	describe('#lan:zh-CN,en-US', function()
-	{
-		beforeEach(function()
-		{
-			global.__i18n_lan__ = 'zh-CN,en-US';
-		});
-
-		it('#match default', function()
-		{
-			expect(I18N('中文6_empty')).to.be('in_file 4');
-		});
-
-		it('#match subtype', function()
-		{
-			expect(I18N('中文0', 'subtype')).to.be('in_file subtye_zh0');
-		});
-	});
-
-	describe('#lan:zh-TW,en-US', function()
-	{
-		beforeEach(function()
-		{
-			global.__i18n_lan__ = 'zh-TW,en-US';
-		});
-
-		it('#match default', function()
-		{
-			expect(I18N('中文0')).to.be('中文0 in tw');
-		});
-
-		it('#match subtype', function()
-		{
-			expect(I18N('中文0', 'subtype')).to.be('in_file subtye_zh0');
-		});
-	});
-
-	describe('#tpldata', function()
-	{
-		beforeEach(function()
-		{
-			global.__i18n_lan__ = 'en-US';
-		});
-
-		it('#key %s', function()
-		{
-			expect(I18N('中文%s美好', [1])).to.be('中文1美好');
-			expect(I18N('中文%s美好', [1,2])).to.be('中文1美好');
-			expect(I18N('中文%s美好%s', [1,2])).to.be('中文1美好2');
-			expect(I18N('中文%s美好%s', [1])).to.be('中文1美好');
-		});
-
-		it('#key %{}', function()
-		{
-			expect(I18N('中文%{}美好', [1])).to.be('中文%{}美好');
-			expect(I18N('中文%{非常}美好', [1])).to.be('中文1美好');
-			expect(I18N('中文%{{非常}}美好', [1])).to.be('中文1}美好');
-		});
-
 	});
 
 });
