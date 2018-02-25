@@ -1,4 +1,8 @@
 {
+	"currentFileKey": "i18n_handler_example",
+	"orignalFileKeys": [
+		"i18n_handler_example"
+	],
 	"codeTranslateWords": {
 		"DEFAULTS": [],
 		"SUBTYPES": {}

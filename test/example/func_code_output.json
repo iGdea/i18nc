@@ -1,4 +1,6 @@
 {
+	"currentFileKey": "*",
+	"orignalFileKeys": [],
 	"codeTranslateWords": {
 		"DEFAULTS": [],
 		"SUBTYPES": {}
@@ -11,6 +13,10 @@
 	"usedTranslateWords": {},
 	"subScopeDatas": [
 		{
+			"currentFileKey": "*",
+			"orignalFileKeys": [
+				"*"
+			],
 			"codeTranslateWords": {
 				"DEFAULTS": [
 					"中文0",

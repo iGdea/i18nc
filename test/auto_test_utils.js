@@ -66,6 +66,8 @@ exports.code2arr = function code2arr(code)
 exports.JsonOfI18ncRet = function JsonOfI18ncRet(info)
 {
 	return {
+		currentFileKey			: info.currentFileKey,
+		orignalFileKeys			: info.orignalFileKeys,
 		codeTranslateWords		: info.codeTranslateWords,
 		I18NArgsTranslateWords	: info.I18NArgsTranslateWords,
 		funcTranslateWords		: info.funcTranslateWords,
