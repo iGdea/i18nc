@@ -11,11 +11,11 @@ describe('#word_json_ast', function()
 	{
 		var astData =
 		{
-			"word_1": "文字_1",
-			"word_3": "文字_3",
-			"word_2": "文字_2",
-			"word_empty1": [],
-			"word_empty2": '',
+			'word_1': '文字_1',
+			'word_3': '文字_3',
+			'word_2': '文字_2',
+			'word_empty1': [],
+			'word_empty2': '',
 		};
 
 		var resultAst = i18nGenerator._wordJson2ast(astData);
@@ -48,9 +48,9 @@ describe('#word_json_ast', function()
 				{
 					var d =
 					{
-						// "word_1":
-						// "word_2":
-						// "word_3":
+						// 'word_1':
+						// 'word_2':
+						// 'word_3':
 						'<e.g.> translate word': null
 					}
 				}
@@ -71,8 +71,8 @@ describe('#word_json_ast', function()
 				{
 					var d =
 					{
-						// "word_1":
-						// "word_2":
+						// 'word_1':
+						// 'word_2':
 						'word_3': 'word_3'
 					}
 				}
@@ -93,8 +93,8 @@ describe('#word_json_ast', function()
 				{
 					var d =
 					{
-						// "word_1":
-						// "word_3":
+						// 'word_1':
+						// 'word_3':
 						'word_2': 'word_2'
 					}
 				}
@@ -115,8 +115,8 @@ describe('#word_json_ast', function()
 				{
 					var d =
 					{
-						// "word_1":
-						// "word_2":
+						// 'word_1':
+						// 'word_2':
 						'word_3': 'word_3'
 					}
 				}

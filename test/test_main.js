@@ -230,6 +230,47 @@ describe('#main', function()
 		});
 	});
 
+	describe('#special chars', function()
+	{
+		it('#\\n\\r', function()
+		{
+			var info = i18nc('function a(){console.log("\\n\\r"); console.log("\\n")}',
+				{
+					cutWordReg: /\s+/,
+					dbTranslateWords:
+					{
+						'en-US':
+						{
+							'*': {DEFAULTS: {'\n': 'new line\n'}}
+						}
+					}
+				});
+			var otherCode = requireAfterWrite('func_code_special_chars1.js', info.code, {readMode: 'string'});
+			eval(info.code);
+
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+		});
+
+		it('#\\u2029', function()
+		{
+			var info = i18nc('function a(){console.log("\\u2029\\u2029"); console.log("\\u2029")}',
+				{
+					cutWordReg: /\u2029+/,
+					dbTranslateWords:
+					{
+						'en-US':
+						{
+							'*': {DEFAULTS: {'\u2029': 'new line\u2029'}}
+						}
+					}
+				});
+			var otherCode = requireAfterWrite('func_code_special_chars2.js', info.code, {readMode: 'string'});
+			eval(info.code);
+
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+		});
+	});
+
 
 	describe('#result', function()
 	{

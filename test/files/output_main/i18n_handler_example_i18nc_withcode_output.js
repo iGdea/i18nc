@@ -5,15 +5,15 @@ function I18N(h,f,i){
 			'DEFAULTS': {
 				'%s美好%s生活': '%sgood%s life',
 				'%{中文}词典': '%{Chinese} dictionary',
-				// "空白":
+				// '空白':
 				'简体': 'simplified'
 			}
 		},
 		'zh-TW': {
 			'DEFAULTS': {
-				// "%s美好%s生活":
-				// "%{中文}词典":
-				// "空白":
+				// '%s美好%s生活':
+				// '%{中文}词典':
+				// '空白':
 				'简体': '簡體'
 			}
 		}
