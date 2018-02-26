@@ -123,7 +123,7 @@ describe('#i18n_func_update', function()
 					self.__TRANSLATE_JSON__ = {
 						'en-US': {
 							'DEFAULTS': {
-								// "中文":
+								// '中文':
 								'<e.g.> translate word': null
 							}
 						}

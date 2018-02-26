@@ -42,27 +42,27 @@ module.exports = function code()
 		var a=I18N;var o=a.__GLOBAL__||(a.__GLOBAL__=typeof window == "object" ? window : typeof global == "object" && global)||{};var d=o.__i18n_lan__;if(!d)return h;if(!f||!f.join){i=f;f=[]}if(a.__TRANSLATE_LAN__!=d){a.__FILE_KEY__='*';a.__FUNCTION_VERSION__='5';a.__TRANSLATE_JSON__={
 			'zh-TW': {
 				'DEFAULTS': {
-					// "argv中文":
-					// "print信息，":
-					// "中午true":
-					// "中文0":
-					// "中文1":
-					// "中文I18N":
-					// "中文case":
-					// "中文false":
-					// "中文if":
-					// "中文val":
-					// "中文val in object":
-					// "简体":
+					// 'argv中文':
+					// 'print信息，':
+					// '中午true':
+					// '中文0':
+					// '中文1':
+					// '中文I18N':
+					// '中文case':
+					// '中文false':
+					// '中文if':
+					// '中文val':
+					// '中文val in object':
+					// '简体':
 					'中文key': '中文键'
 				},
 				'SUBTYPES': {
 					'subtype': {
-						// "中文I18N subtype":
+						// '中文I18N subtype':
 						'I18N(中文)': '中文国际化'
 					},
 					'subtype2': {
-						// "I18N(中文)":
+						// 'I18N(中文)':
 						'<e.g.> translate word': null
 					}
 				}
