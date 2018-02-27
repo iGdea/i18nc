@@ -144,7 +144,7 @@ describe('#main_options', function()
 	});
 
 
-	describe('#isMinI18Nhanlder', function()
+	describe('#isMinFuncTranslateCode', function()
 	{
 		it('#base', function()
 		{
@@ -155,7 +155,7 @@ describe('#main_options', function()
 
 			var info = i18nc(code.toString(),
 				{
-					isMinI18Nhanlder: true
+					isMinFuncTranslateCode: true
 				});
 
 			var otherCode = requireAfterWrite('func_code_min_i18n_output_base.js', info.code, {readMode: 'string'});
@@ -173,7 +173,7 @@ describe('#main_options', function()
 			var info = i18nc(code.toString(),
 				{
 					dbTranslateWords: dbTranslateWords,
-					isMinI18Nhanlder: true
+					isMinFuncTranslateCode: true
 				});
 
 			var otherCode = requireAfterWrite('func_code_min_i18n_output_widthdb.js', info.code, {readMode: 'string'});
@@ -196,7 +196,7 @@ describe('#main_options', function()
 			var info = i18nc(code.toString()+codeData,
 				{
 					dbTranslateWords: dbTranslateWords,
-					isMinI18Nhanlder: true
+					isMinFuncTranslateCode: true
 				});
 
 			var otherCode = requireAfterWrite('func_code_min_i18n_output_partiaupdate.js', info.code, {readMode: 'string'});
