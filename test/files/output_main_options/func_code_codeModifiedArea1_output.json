@@ -33,6 +33,21 @@
 			{}
 		]
 	},
+	"newWord4codeTranslateWords": [
+		"中文0",
+		"中文1",
+		"中文val in object",
+		"中文key",
+		"中文val",
+		"中文key",
+		"print信息，",
+		"argv中文",
+		"中文case",
+		"中文case",
+		"中文if",
+		"中午true",
+		"中文false"
+	],
 	"orignalFileKeys": [
 		"*"
 	],

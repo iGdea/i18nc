@@ -35,6 +35,13 @@
 			}
 		]
 	},
+	"newWord4codeTranslateWords": [
+		"简体",
+		"空白",
+		"%s美好%s生活",
+		"%{中文}词典",
+		"简体"
+	],
 	"orignalFileKeys": [
 		"i18n_handler_example"
 	],
