@@ -1,16 +1,9 @@
 {
-	"currentFileKey": "i18n_handler_example",
-	"orignalFileKeys": [
-		"i18n_handler_example"
-	],
 	"codeTranslateWords": {
 		"DEFAULTS": [],
 		"SUBTYPES": {}
 	},
-	"I18NArgsTranslateWords": {
-		"DEFAULTS": [],
-		"SUBTYPES": {}
-	},
+	"currentFileKey": "i18n_handler_example",
 	"funcTranslateWords": {
 		"i18n_handler_example": [
 			{
@@ -36,6 +29,9 @@
 			}
 		]
 	},
-	"usedTranslateWords": {},
-	"subScopeDatas": []
+	"orignalFileKeys": [
+		"i18n_handler_example"
+	],
+	"subScopeDatas": [],
+	"usedTranslateWords": {}
 }

@@ -1,22 +1,13 @@
 {
-	"currentFileKey": "*",
-	"orignalFileKeys": [],
 	"codeTranslateWords": {
 		"DEFAULTS": [],
 		"SUBTYPES": {}
 	},
-	"I18NArgsTranslateWords": {
-		"DEFAULTS": [],
-		"SUBTYPES": {}
-	},
+	"currentFileKey": "*",
 	"funcTranslateWords": {},
-	"usedTranslateWords": {},
+	"orignalFileKeys": [],
 	"subScopeDatas": [
 		{
-			"currentFileKey": "*",
-			"orignalFileKeys": [
-				"*"
-			],
 			"codeTranslateWords": {
 				"DEFAULTS": [
 					"中文0",
@@ -45,34 +36,7 @@
 					]
 				}
 			},
-			"I18NArgsTranslateWords": {
-				"DEFAULTS": [
-					"中文0",
-					"中文1",
-					"中文val in object",
-					"中文key",
-					"中文val",
-					"中文key",
-					"print信息，",
-					"argv中文",
-					"中文case",
-					"中文case",
-					"中文if",
-					"中午true",
-					"中文false",
-					"中文I18N",
-					"简体"
-				],
-				"SUBTYPES": {
-					"subtype": [
-						"中文I18N subtype",
-						"I18N(中文)"
-					],
-					"subtype2": [
-						"I18N(中文)"
-					]
-				}
-			},
+			"currentFileKey": "*",
 			"funcTranslateWords": {
 				"*": [
 					{
@@ -90,6 +54,10 @@
 					}
 				]
 			},
+			"orignalFileKeys": [
+				"*"
+			],
+			"subScopeDatas": [],
 			"usedTranslateWords": {
 				"zh-TW": {
 					"DEFAULTS": {
@@ -101,8 +69,8 @@
 						}
 					}
 				}
-			},
-			"subScopeDatas": []
+			}
 		}
-	]
+	],
+	"usedTranslateWords": {}
 }

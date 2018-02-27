@@ -1,8 +1,4 @@
 {
-	"currentFileKey": "i18n_handler_example",
-	"orignalFileKeys": [
-		"i18n_handler_example"
-	],
 	"codeTranslateWords": {
 		"DEFAULTS": [
 			"简体",
@@ -13,10 +9,7 @@
 		],
 		"SUBTYPES": {}
 	},
-	"I18NArgsTranslateWords": {
-		"DEFAULTS": [],
-		"SUBTYPES": {}
-	},
+	"currentFileKey": "i18n_handler_example",
 	"funcTranslateWords": {
 		"i18n_handler_example": [
 			{
@@ -42,6 +35,10 @@
 			}
 		]
 	},
+	"orignalFileKeys": [
+		"i18n_handler_example"
+	],
+	"subScopeDatas": [],
 	"usedTranslateWords": {
 		"en-US": {
 			"DEFAULTS": {
@@ -56,6 +53,5 @@
 				"简体": "簡體"
 			}
 		}
-	},
-	"subScopeDatas": []
+	}
 }

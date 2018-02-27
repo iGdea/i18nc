@@ -65,25 +65,26 @@ exports.code2arr = function code2arr(code)
 
 exports.JsonOfI18ncRet = function JsonOfI18ncRet(info)
 {
-	return {
-		currentFileKey			: info.currentFileKey,
-		orignalFileKeys			: info.orignalFileKeys,
-		codeTranslateWords		: info.codeTranslateWords,
-		I18NArgsTranslateWords	: info.I18NArgsTranslateWords,
-		funcTranslateWords		: info.funcTranslateWords,
-		usedTranslateWords		: info.usedTranslateWords,
-		subScopeDatas			: _.map(info.subScopeDatas, exports.JsonOfI18ncRet),
-	};
+	var obj = _.extend({}, info.words.toJSON(),
+		{
+			currentFileKey			: info.currentFileKey,
+			orignalFileKeys			: info.orignalFileKeys,
+			subScopeDatas			: _.map(info.subScopeDatas, exports.JsonOfI18ncRet),
+		});
+
+	result = {};
+
+	Object.keys(obj).sort().forEach(function(key)
+	{
+		result[key] = obj[key];
+	});
+
+	return result;
 }
 
 exports.getCodeTranslateAllWords = function getCodeTranslateAllWords(info)
 {
-	var translateWords = _.map(info.codeTranslateWords.SUBTYPES, function(val)
-		{
-			return val;
-		});
-	translateWords = [].concat.apply(info.codeTranslateWords.DEFAULTS, translateWords);
-
+	var translateWords = info.words.codeTranslateWords.allwords();
 	info.subScopeDatas.forEach(function(info)
 	{
 		translateWords = translateWords.concat(exports.getCodeTranslateAllWords(info));
