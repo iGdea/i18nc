@@ -2,7 +2,7 @@ var expect			= require('expect.js');
 var astTpl			= require('../lib/ast_tpl');
 var escodegen		= require('escodegen');
 var optionsUtils	= require('../lib/options');
-var LiteralHandler	= require('../lib/ast_collector').LiteralHandler;
+var LiteralHandler	= require('../lib/ast_literal_handler').LiteralHandler;
 
 describe('#cutword', function()
 {
