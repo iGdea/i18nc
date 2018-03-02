@@ -114,7 +114,7 @@ describe('#main_options', function()
 		{
 			var info = i18nc(exampleCode,
 			{
-				codeModifiedArea: ['translateWord'],
+				codeModifiedArea: ['TranslateWord'],
 				dbTranslateWords: dbTranslateWords,
 				ignoreScanError: ['ObjectKey'],
 			});
