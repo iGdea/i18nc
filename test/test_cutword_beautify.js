@@ -23,7 +23,9 @@ describe('#cutword_beautify', function()
 		{
 			it('#base', function()
 			{
-				expect(txt2code('中文<!-- 一个注释 -->词典')).to.be("I18N('中文词典')");
+				expect(txt2code('中文<!--注释-->词典')).to.be("I18N('中文词典')");
+				expect(txt2code('中文<!--<!--注释1-->词典<!--注释2-->-->查阅'))
+					.to.be("I18N('中文词典')+'-->'+I18N('查阅')");
 			});
 
 			it('#commentIndexs', function()
@@ -33,12 +35,6 @@ describe('#cutword_beautify', function()
 				expect(removeTplComment._commentIndexs('12<!-- <!-- 345 --> -->678'))
 					.to.eql([2, 16]);
 			});
-
-			// it('#resplitLineStringsByCommentIndexs', function()
-			// {
-			// 	expect(removeTplComment._resplitLineStringsByCommentIndexs(
-			// 		[]))
-			// });
 		});
 
 		it('#trim', function()
