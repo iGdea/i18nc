@@ -55,7 +55,6 @@ describe('#main_options', function()
 			{
 				cutword: function(emitData)
 				{
-					expect(emitData.lineStrings).to.empty();
 					emitData.lineStrings =
 					[
 						{
@@ -247,6 +246,20 @@ describe('#main_options', function()
 					});
 
 				var otherCode = requireAfterWrite('func_code_tpl_comment_keep.js', info.code, {readMode: 'string'});
+
+				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+			});
+
+
+			it('#nokey', function()
+			{
+				var code = require('./files/casefile_main/func_code_tpl_comment_nokey').toString();
+				var info = i18nc(code,
+					{
+						cutWordBeautify: ['RemoveTplComment']
+					});
+
+				var otherCode = requireAfterWrite('func_code_tpl_comment_nokey.js', info.code, {readMode: 'string'});
 
 				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 			});

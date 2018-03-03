@@ -239,7 +239,6 @@ describe('#ASTCollector', function()
 		{
 			i18nc.on('cutword', function(emitData)
 			{
-				expect(emitData.lineStrings).to.empty();
 				emitData.lineStrings =
 				[
 					{
