@@ -39,21 +39,17 @@
 			},
 			"currentFileKey": "*",
 			"funcTranslateWords": {
-				"*": [
-					{
-						"zh-TW": {
-							"DEFAULTS": {
-								"中文key": "中文键"
-							},
-							"SUBTYPES": {
-								"subtype": {
-									"I18N(中文)": "中文国际化"
-								},
-								"subtype2": {}
-							}
-						}
+				"zh-TW": {
+					"DEFAULTS": {
+						"中文key": "中文键"
+					},
+					"SUBTYPES": {
+						"subtype": {
+							"I18N(中文)": "中文国际化"
+						},
+						"subtype2": {}
 					}
-				]
+				}
 			},
 			"newWord4codeTranslateWords": [],
 			"orignalFileKeys": [

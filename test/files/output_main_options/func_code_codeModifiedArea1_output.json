@@ -28,11 +28,7 @@
 		}
 	},
 	"currentFileKey": "*",
-	"funcTranslateWords": {
-		"*": [
-			{}
-		]
-	},
+	"funcTranslateWords": {},
 	"newWord4codeTranslateWords": [
 		"中文0",
 		"中文1",
