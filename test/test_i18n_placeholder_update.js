@@ -73,7 +73,7 @@ describe('#i18n_func_update', function()
 					LanguageVarName : '__i18n_lan__',
 					TRANSLATE_JSON_CODE : '{}'
 				});
-			checkEmptyJSONCode(code, 'orignal');
+			checkEmptyJSONCode(code, 'original');
 			checkWidthJSONCode(code, 'complete');
 		});
 	});
@@ -131,14 +131,14 @@ describe('#i18n_func_update', function()
 				}));
 		});
 
-		it('#orignal', function()
+		it('#original', function()
 		{
 			var ast = esprima.parse(code, optionsUtils.esprimaOptions);
 			var I18NPlaceholderNew = new I18NPlaceholder(
 					codeTranslateWords, code, optionsUtils.extend(), ast.body[0]
 				);
 
-			I18NPlaceholderNew.renderType = 'orignal';
+			I18NPlaceholderNew.renderType = 'original';
 			expect(func2codeArr(I18NPlaceholderNew)).to.eql(code2arr(code));
 		});
 

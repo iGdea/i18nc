@@ -68,7 +68,7 @@ exports.JsonOfI18ncRet = function JsonOfI18ncRet(info)
 	var obj = _.extend({}, info.words.toJSON(),
 		{
 			currentFileKey				: info.currentFileKey,
-			orignalFileKeys				: info.orignalFileKeys,
+			originalFileKeys			: info.originalFileKeys,
 			newWord4codeTranslateWords	: info.words.codeTranslateWords.list4newWords(),
 			subScopeDatas				: _.map(info.subScopeDatas, exports.JsonOfI18ncRet),
 		});
