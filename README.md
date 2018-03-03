@@ -20,7 +20,7 @@ var i18nc = require('i18nc-core');
 var ret = i18nc(code, options);
 
 ret.code    // output code
-ret.dirtyAsts
+ret.dirtyWords
 ret.codeTranslateWords
 ret.funcTranslateWords
 ret.usedTranslateWords

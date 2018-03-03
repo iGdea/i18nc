@@ -26,7 +26,7 @@ describe('#example', function()
 
 			expect(autoTestUtils.code2arr(content)).to.eql(autoTestUtils.code2arr(otherContent));
 			expect(translateWords).to.eql(otherTranslateWords);
-			expect(info.dirtyAsts).to.empty();
+			expect(info.dirtyWords).to.empty();
 		});
 
 
@@ -45,7 +45,7 @@ describe('#example', function()
 
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(exampleCode_output));
 			expect(translateWords).to.eql(otherTranslateWords);
-			expect(info.dirtyAsts).to.empty();
+			expect(info.dirtyWords).to.empty();
 		});
 	});
 
