@@ -220,4 +220,37 @@ describe('#main_options', function()
 		expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 	});
 
+
+	describe('#cutwordBeautify', function()
+	{
+		describe('#RemoveTplComment', function()
+		{
+			var code = require('./files/casefile_main/func_code_tpl_comment').toString();
+
+			it('#remove', function()
+			{
+				var info = i18nc(code,
+					{
+						cutWordBeautify: ['RemoveTplComment']
+					});
+
+				var otherCode = requireAfterWrite('func_code_tpl_comment_remove.js', info.code, {readMode: 'string'});
+
+				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+			});
+
+			it('#keep', function()
+			{
+				var info = i18nc(code,
+					{
+						cutWordBeautify: []
+					});
+
+				var otherCode = requireAfterWrite('func_code_tpl_comment_keep.js', info.code, {readMode: 'string'});
+
+				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+			});
+		});
+	});
+
 });
