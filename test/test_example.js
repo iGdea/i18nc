@@ -19,7 +19,9 @@ describe('#example', function()
 					dbTranslateWords: dbTranslateWords
 				});
 			requireAfterWrite('func_code_output.json', autoTestUtils.JsonOfI18ncRet(info));
-			requireAfterWrite('func_code_output_squeeze.json', autoTestUtils.JsonOfI18ncRet(info.squeeze()));
+			var json = info.squeeze().toJSON();
+			delete json.code;
+			requireAfterWrite('func_code_output_squeeze.json', json);
 
 			var content = 'module.exports = '+info.code;
 			var otherContent = requireAfterWrite('func_code_output.js', content, {readMode: 'string'});
@@ -41,7 +43,9 @@ describe('#example', function()
 					dbTranslateWords: dbTranslateWords
 				});
 			requireAfterWrite('func_code_output2.json', autoTestUtils.JsonOfI18ncRet(info));
-			requireAfterWrite('func_code_output2_squeeze.json', autoTestUtils.JsonOfI18ncRet(info.squeeze()));
+			var json = info.squeeze().toJSON();
+			delete json.code;
+			requireAfterWrite('func_code_output2_squeeze.json', json);
 
 			var translateWords = autoTestUtils.getCodeTranslateAllWords(info);
 			var otherTranslateWords = requireAfterWrite('translate_words_code.json', translateWords);
