@@ -39,8 +39,11 @@ describe('#cutword_beautify', function()
 
 		it('#trim', function()
 		{
-			expect(txt2code('<span>      中文 词典  </span>'))
-				.to.be("'<span>      '+I18N('中文 词典')+'  </span>'");
+			expect(txt2code('<span>  中文 词典  </span>'))
+				.to.be("'<span>  '+I18N('中文 词典')+'  </span>'");
+			expect(txt2code(' 中文词典')).to.be("' '+I18N('中文词典')");
+			expect(txt2code('中文词典 ')).to.be("I18N('中文词典')+' '");
+			expect(txt2code(' 中文词典 ')).to.be("' '+I18N('中文词典')+' '");
 		});
 
 		it('#split symbol', function()
