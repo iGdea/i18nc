@@ -1,6 +1,6 @@
 {
   "name": "i18nc-core",
-  "version": "6.0.2",
+  "version": "6.0.3",
   "description": "I18N Tool for JS files",
   "main": "index.js",
   "scripts": {
