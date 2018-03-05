@@ -180,11 +180,11 @@ describe('#i18n_func_update', function()
 			var options = optionsUtils.extend();
 			var otherCode = i18nTpl.render(
 				{
-					handlerName: options.I18NHandlerName,
-					FILE_KEY: 'file_key',
-					FUNCTION_VERSION: DEF.I18NFunctionVersion,
-					GetGlobalCode : options['I18NhandlerTpl:GetGlobalCode'],
-					LanguageVarName : options['I18NhandlerTpl:LanguageVarName'],
+					handlerName         : options.I18NHandlerName,
+					FILE_KEY            : 'file_key',
+					FUNCTION_VERSION    : DEF.I18NFunctionVersion,
+					GetGlobalCode       : options.I18NhandlerTpl_GetGlobalCode,
+					LanguageVarName     : options.I18NhandlerTpl_LanguageVarName,
 					TRANSLATE_JSON_CODE : '{}'
 				});
 			expect(func2codeArr(I18NPlaceholderNew)).to.eql(code2arr(otherCode));
