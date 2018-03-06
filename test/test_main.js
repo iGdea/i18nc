@@ -276,9 +276,22 @@ describe('#main', function()
 
 	describe('#result', function()
 	{
-		it('#dirtyWords', function()
+		describe('#dirtyWords', function()
 		{
-			console.log('@todo');
+			it('#ObjectKey', function()
+			{
+				var code = function code()
+				{
+					var v1 =
+					{
+						"中文key": "中文val"
+					};
+				};
+
+				var info = i18nc(code.toString());
+
+				expect(info.squeeze().dirtyWords.toArray()).to.eql(["'中文key'"]);
+			});
 		});
 	});
 

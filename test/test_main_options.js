@@ -99,7 +99,6 @@ describe('#main_options', function()
 			{
 				codeModifiedArea: ['I18NHandler'],
 				dbTranslateWords: dbTranslateWords,
-				ignoreScanError: ['ObjectKey'],
 			});
 
 			var outputJSON = requireAfterWrite('func_code_codeModifiedArea1_output.json', autoTestUtils.JsonOfI18ncRet(info));
@@ -115,7 +114,6 @@ describe('#main_options', function()
 			{
 				codeModifiedArea: ['TranslateWord'],
 				dbTranslateWords: dbTranslateWords,
-				ignoreScanError: ['ObjectKey'],
 			});
 
 			var outputJSON = requireAfterWrite('func_code_codeModifiedArea2_output.json', autoTestUtils.JsonOfI18ncRet(info));
@@ -131,7 +129,6 @@ describe('#main_options', function()
 			{
 				codeModifiedArea: [],
 				dbTranslateWords: dbTranslateWords,
-				ignoreScanError: ['ObjectKey'],
 			});
 
 			var outputJSON = requireAfterWrite('func_code_codeModifiedArea3_output.json', autoTestUtils.JsonOfI18ncRet(info));

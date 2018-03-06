@@ -12,7 +12,6 @@ describe('#I18N_handler_alias', function()
 	{
 		var info = i18nc(exampleCode,
 			{
-				ignoreScanError: ['ObjectKey'],
 				I18NHandlerName: 'I18NNew',
 				I18NHandlerAlias: ['I18N'],
 			});
@@ -27,7 +26,6 @@ describe('#I18N_handler_alias', function()
 	{
 		var info = i18nc(exampleCode,
 			{
-				ignoreScanError: ['ObjectKey'],
 				I18NHandlerName: 'I18NNew',
 				I18NHandlerAlias: ['I18N'],
 				codeModifiedArea: ['I18NHandler', 'TranslateWord'],

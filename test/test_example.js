@@ -15,7 +15,6 @@ describe('#example', function()
 		{
 			var info = i18nc(exampleCode.toString(),
 				{
-					ignoreScanError: ['ObjectKey'],
 					dbTranslateWords: dbTranslateWords
 				});
 			requireAfterWrite('func_code_output.json', autoTestUtils.JsonOfI18ncRet(info));
@@ -30,7 +29,6 @@ describe('#example', function()
 
 			expect(autoTestUtils.code2arr(content)).to.eql(autoTestUtils.code2arr(otherContent));
 			expect(translateWords).to.eql(otherTranslateWords);
-			expect(info.dirtyWords.toArray()).to.empty();
 		});
 
 
@@ -39,7 +37,6 @@ describe('#example', function()
 			var exampleCode_output = require('./example/func_code_output').toString();
 			var info = i18nc(exampleCode_output,
 				{
-					ignoreScanError: ['ObjectKey'],
 					dbTranslateWords: dbTranslateWords
 				});
 			requireAfterWrite('func_code_output2.json', autoTestUtils.JsonOfI18ncRet(info));
@@ -52,7 +49,6 @@ describe('#example', function()
 
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(exampleCode_output));
 			expect(translateWords).to.eql(otherTranslateWords);
-			expect(info.dirtyWords.toArray()).to.empty();
 		});
 	});
 
@@ -62,7 +58,6 @@ describe('#example', function()
 		var requireAfterWrite	= autoTestUtils.requireAfterWrite('use_require');
 		var i18nOptions =
 		{
-			ignoreScanError: ['ObjectKey'],
 			dbTranslateWords: dbTranslateWords,
 			loadTranslateJSON: function(emitData)
 			{

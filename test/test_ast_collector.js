@@ -81,23 +81,6 @@ describe('#ASTCollector', function()
 
 	describe('#options', function()
 	{
-		it('#ignoreScanError', function()
-		{
-			var code = function code()
-			{
-				var v1 =
-				{
-					"中文key": "中文val"
-				};
-			};
-
-			expect(getFinalCollect).withArgs(code)
-				.to.throwException(/\[I18N\] Object property can't use i18n\./);
-
-			expect(getFinalCollect).withArgs(code, {ignoreScanError: ['ObjectKey']})
-				.to.not.throwException();
-		});
-
 		describe('#comboLiteralMode', function()
 		{
 			var code = function code()
@@ -274,9 +257,16 @@ function getFinalCollect()
 
 function getScopeCodeTranslateWord(scope)
 {
-	var words = scope.translateWordAsts.map(function(item, index)
+	var words = scope.translateWordAsts.map(function(ast, index)
 		{
-			return item.__i18n_replace_info__.translateWords;
+			if (!astUtils.checkAstFlag(ast, astUtils.AST_FLAGS.DIS_REPLACE))
+			{
+				return ast.__i18n_replace_info__.translateWords;
+			}
+		})
+		.filter(function(ast)
+		{
+			return ast;
 		});
 
 	return Array.prototype.concat.apply([], words).sort();
