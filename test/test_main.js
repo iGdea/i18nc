@@ -1,6 +1,7 @@
 var fs					= require('fs');
 var expect				= require('expect.js');
 var i18nc				= require('../');
+var DEF					= require('../lib/def');
 var dbTranslateWords	= require('./example/translate_words_db');
 var autoTestUtils		= require('./auto_test_utils');
 var requireAfterWrite	= autoTestUtils.requireAfterWrite('output_main');
@@ -152,70 +153,112 @@ describe('#main', function()
 		});
 	});
 
-	describe('#no db translate', function()
+	describe('#dbTranslate', function()
 	{
-		var code = 'console.log("不可能存在的中文翻译词组");';
-
-		it('#noanything', function()
+		describe('#no db', function()
 		{
-			var info = i18nc(code);
+			var code = 'console.log("不可能存在的中文翻译词组");';
 
-			var otherCode = requireAfterWrite('func_code_no_db.js', info.code, {readMode: 'string'});
+			it('#noanything', function()
+			{
+				var info = i18nc(code);
 
-			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
-		});
+				var otherCode = requireAfterWrite('func_code_no_db.js', info.code, {readMode: 'string'});
 
-		it('#only lan', function()
-		{
-			var info = i18nc(code,
-				{
-					dbTranslateWords:
+				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+			});
+
+			it('#only lan', function()
+			{
+				var info = i18nc(code,
 					{
-						en: {DEFAULTS:{}}
-					}
-				});
+						dbTranslateWords:
+						{
+							en:
+							{
+								'*': {DEFAULTS:{}}
+							}
+						}
+					});
 
-			var otherCode = requireAfterWrite('func_code_no_db_only_lan.js', info.code, {readMode: 'string'});
+				var otherCode = requireAfterWrite('func_code_no_db_only_lan.js', info.code, {readMode: 'string'});
 
-			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
-		});
+				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+			});
 
-		it('#other_db', function()
-		{
-			var info = i18nc(code,
-				{
-					dbTranslateWords:
+			it('#other_db', function()
+			{
+				var info = i18nc(code,
 					{
-						en: {DEFAULTS: {'嘿嘿': 'hihi'}}
-					}
-				});
+						dbTranslateWords:
+						{
+							en:
+							{
+								'*': {DEFAULTS: {'嘿嘿': 'hihi'}}
+							}
+						}
+					});
 
-			var otherCode = requireAfterWrite('func_code_no_db_other_db.js', info.code, {readMode: 'string'});
+				var otherCode = requireAfterWrite('func_code_no_db_other_db.js', info.code, {readMode: 'string'});
 
-			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+			});
 		});
 
-		it('#func translate words', function()
+		it('#use default lan', function()
 		{
 			var code = function code()
 			{
 				console.log("不可能存在的中文翻译词组");
 				function I18N()
 				{
-					var __FILE_KEY__ = "default_file_key";
-					var __FUNCTION_VERSION__ = 2;
-					var __TRANSLATE_JSON__ =
+					self = I18N;
+					self.__FILE_KEY__ = "default_file_key";
+					self.__FUNCTION_VERSION__ = "$FUNCTION_VERSION$";
+					self.__TRANSLATE_JSON__ =
 					{
-						en: {DEFAULTS:{}}
+						en: {DEFAULTS:{'1':'2'}}
 					};
 				}
 			};
-			var info = i18nc(code.toString());
-
-			var otherCode = requireAfterWrite('func_code_no_db_has_translate_json.js', info.code, {readMode: 'string'});
+			code = code.toString().replace(/\$FUNCTION_VERSION\$/, DEF.I18NFunctionVersion);
+			var info = i18nc(code);
+			var otherCode = requireAfterWrite('func_code_default_lan.js', info.code, {readMode: 'string'});
 
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
-		})
+		});
+
+		it('#update lan by db', function()
+		{
+			var code = function code()
+			{
+				console.log("简体");
+				function I18N()
+				{
+					var self = I18N;
+					self.__FILE_KEY__ = "default_file_key";
+					self.__FUNCTION_VERSION__ = "$FUNCTION_VERSION$";
+					self.__TRANSLATE_JSON__ =
+					{
+						'en': {DEFAULTS:{'1':'2'}}
+					};
+				}
+			};
+			code = code.toString().replace(/\$FUNCTION_VERSION\$/, DEF.I18NFunctionVersion);
+			var info = i18nc(code,
+				{
+					dbTranslateWords:
+					{
+						'zh-TW':
+						{
+							'*': {DEFAULTS: {'简体': '簡體'}}
+						}
+					}
+				});
+			var otherCode = requireAfterWrite('func_code_update_by_db.js', info.code, {readMode: 'string'});
+
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+		});
 	});
 
 	describe('#core style', function()

@@ -1,0 +1,12 @@
+function code()
+			{
+				console.log(I18N('简体'));
+				function I18N()
+				{
+					var self = I18N;
+					self.__FILE_KEY__ = "default_file_key";
+					self.__FUNCTION_VERSION__ = "5";
+					self.__TRANSLATE_JSON__ =
+					{ 'zh-TW': { 'DEFAULTS': { '简体': '簡體' } } };
+				}
+			}
