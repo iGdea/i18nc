@@ -108,25 +108,49 @@ describe('#i18n_func_run', function()
 
 		describe('#tpldata', function()
 		{
-			beforeEach(function()
+			describe('#width lan', function()
 			{
-				global.__i18n_lan__ = 'en-US';
+				beforeEach(function()
+				{
+					global.__i18n_lan__ = 'en-US';
+				});
+
+				it('#key %s', function()
+				{
+					expect(I18N('美好%s生活', [1])).to.be('美好1生活');
+					expect(I18N('美好%s生活', [1,2])).to.be('美好1生活');
+					expect(I18N('%s美好%s生活', [1,2])).to.be('1good2 life');
+					expect(I18N('%s美好%s生活', [1])).to.be('1good life');
+				});
+
+				it('#key %{}', function()
+				{
+					expect(I18N('%{中文}词典', ['English'])).to.be('English dictionary');
+					expect(I18N('%{{中文}}词典', [1])).to.be('1}词典');
+				});
 			});
 
-			it('#key %s', function()
+			describe('#widthout lan', function()
 			{
-				expect(I18N('美好%s生活', [1])).to.be('美好1生活');
-				expect(I18N('美好%s生活', [1,2])).to.be('美好1生活');
-				expect(I18N('%s美好%s生活', [1,2])).to.be('1good2 life');
-				expect(I18N('%s美好%s生活', [1])).to.be('1good life');
-			});
+				beforeEach(function()
+				{
+					global.__i18n_lan__ = null;
+				});
 
-			it('#key %{}', function()
-			{
-				expect(I18N('%{中文}词典', ['English'])).to.be('English dictionary');
-				expect(I18N('%{{中文}}词典', [1])).to.be('1}词典');
-			});
+				it('#key %s', function()
+				{
+					expect(I18N('美好%s生活', [1])).to.be('美好1生活');
+					expect(I18N('美好%s生活', [1,2])).to.be('美好1生活');
+					expect(I18N('%s美好%s生活', [1,2])).to.be('1美好2生活');
+					expect(I18N('%s美好%s生活', [1])).to.be('1美好生活');
+				});
 
+				it('#key %{}', function()
+				{
+					expect(I18N('%{中文}词典', ['English'])).to.be('English词典');
+					expect(I18N('%{{中文}}词典', [1])).to.be('1}词典');
+				});
+			});
 		});
 	});
 
@@ -182,23 +206,48 @@ describe('#i18n_func_run', function()
 
 		describe('#tpldata', function()
 		{
-			beforeEach(function()
+			describe('#width lan', function()
 			{
-				global.__i18n_lan__ = 'en-US';
+				beforeEach(function()
+				{
+					global.__i18n_lan__ = 'en-US';
+				});
+
+				it('#key %s', function()
+				{
+					expect(I18N('美好%s生活', [1])).to.be('美好1生活');
+					expect(I18N('美好%s生活', [1,2])).to.be('美好1生活');
+					expect(I18N('%s美好%s生活', [1,2])).to.be('1美好2生活');
+					expect(I18N('%s美好%s生活', [1])).to.be('1美好生活');
+				});
+
+				it('#key %{}', function()
+				{
+					expect(I18N('%{中文}词典', ['English'])).to.be('English词典');
+					expect(I18N('%{{中文}}词典', [1])).to.be('1}词典');
+				});
 			});
 
-			it('#key %s', function()
+			describe('#widthout lan', function()
 			{
-				expect(I18N('美好%s生活', [1])).to.be('美好1生活');
-				expect(I18N('美好%s生活', [1,2])).to.be('美好1生活');
-				expect(I18N('%s美好%s生活', [1,2])).to.be('1美好2生活');
-				expect(I18N('%s美好%s生活', [1])).to.be('1美好生活');
-			});
+				beforeEach(function()
+				{
+					global.__i18n_lan__ = null;
+				});
 
-			it('#key %{}', function()
-			{
-				expect(I18N('%{中文}词典', ['English'])).to.be('English词典');
-				expect(I18N('%{{中文}}词典', [1])).to.be('1}词典');
+				it('#key %s', function()
+				{
+					expect(I18N('美好%s生活', [1])).to.be('美好1生活');
+					expect(I18N('美好%s生活', [1,2])).to.be('美好1生活');
+					expect(I18N('%s美好%s生活', [1,2])).to.be('1美好2生活');
+					expect(I18N('%s美好%s生活', [1])).to.be('1美好生活');
+				});
+
+				it('#key %{}', function()
+				{
+					expect(I18N('%{中文}词典', ['English'])).to.be('English词典');
+					expect(I18N('%{{中文}}词典', [1])).to.be('1}词典');
+				});
 			});
 
 		});
