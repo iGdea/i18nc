@@ -263,4 +263,14 @@ describe('#main_options', function()
 		});
 	});
 
+
+	it('#isInsertI18NHandler', function()
+	{
+		var info = i18nc('var a = "中文"', {isInsertI18NHandler: false});
+
+		var otherCode = requireAfterWrite('func_code_no_insert_i18n_hanlder.js', info.code, {readMode: 'string'});
+
+		expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+	});
+
 });
