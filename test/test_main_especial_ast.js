@@ -11,7 +11,7 @@ describe('#main especial ast', function()
 		{
 			var info = i18nc('var a = /\\ds/g',
 				{
-					isInsertI18NHandler: false,
+					codeModifiedArea: {I18NHandler: false},
 				});
 
 			expect(info.code).to.be('var a = /\\ds/g');
@@ -25,7 +25,7 @@ describe('#main especial ast', function()
 
 			var info = i18nc(code,
 				{
-					isInsertI18NHandler: false,
+					codeModifiedArea: {I18NHandler: false},
 				});
 
 			expect(info.code).to.be(otherCode);
@@ -38,7 +38,7 @@ describe('#main especial ast', function()
 		{
 			var info = i18nc('var a = {"中。文": 1}',
 				{
-					isInsertI18NHandler: false,
+					codeModifiedArea: {I18NHandler: false},
 				});
 			expect(info.code).to.be('var a = {"中。文": 1}');
 		});

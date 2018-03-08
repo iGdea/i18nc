@@ -127,7 +127,7 @@ describe('#main_options', function()
 		{
 			var info = i18nc('var dd = /中文/;',
 			{
-				isInsertI18NHandler: false,
+				codeModifiedArea: {I18NHandler: false},
 				codeModifiedArea: []
 			});
 			expect(info.code).to.be('var dd = /中文/;');
@@ -276,7 +276,7 @@ describe('#main_options', function()
 
 	it('#isInsertI18NHandler', function()
 	{
-		var info = i18nc('var a = "中文"', {isInsertI18NHandler: false});
+		var info = i18nc('var a = "中文"', {codeModifiedArea: {I18NHandler: false}});
 
 		var otherCode = requireAfterWrite('func_code_no_insert_i18n_hanlder.js', info.code, {readMode: 'string'});
 
