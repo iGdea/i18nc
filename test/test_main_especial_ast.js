@@ -1,24 +1,46 @@
+var debug  = require('debug')('i18nc-core:test_main_especial_ast');
 var expect = require('expect.js');
 var i18nc  = require('../');
 
 
 describe('#main especial ast', function()
 {
-	it('#regexp', function()
+	describe('#regexp', function()
 	{
-		var info = i18nc('var a = /简。体\s/g',
-			{
-				isClosureWhenInsertedHead: false,
-			});
-		expect(info.code).to.be('var a = /简。体\s/g');
+		it('#no replace', function()
+		{
+			var info = i18nc('var a = /\\ds/g',
+				{
+					isInsertI18NHandler: false,
+				});
+
+			expect(info.code).to.be('var a = /\\ds/g');
+		});
+
+		it('#replace', function()
+		{
+			var code = 'var a = /%%%d简。体%s/g'.replace(/%/g, '\\');
+			var otherCode = "var a = new RegExp(I18N('%%%%%%d简。') + I18N('体%%s'), 'g')".replace(/%/g, '\\');
+			debug('orignal code:%s, expect code: %s', code, otherCode);
+
+			var info = i18nc(code,
+				{
+					isInsertI18NHandler: false,
+				});
+
+			expect(info.code).to.be(otherCode);
+		});
 	});
 
-	it('#object key', function()
+	describe('#object key', function()
 	{
-		var info = i18nc('var a = {"中。文": 1}',
-			{
-				isClosureWhenInsertedHead: false,
-			});
-		expect(info.code).to.be('var a = {"中。文": 1}');
+		it('#no replace', function()
+		{
+			var info = i18nc('var a = {"中。文": 1}',
+				{
+					isInsertI18NHandler: false,
+				});
+			expect(info.code).to.be('var a = {"中。文": 1}');
+		});
 	});
 });
