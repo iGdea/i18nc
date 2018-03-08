@@ -12,7 +12,7 @@ describe('#options', function()
 			});
 
 		expect(newOptions.I18NHandlerName).to.be('I18N');
-		expect(newOptions.codeModifiedArea).to.eql(['I18NHandler', 'TranslateWord', 'I18NHandlerAlias']);
+		expect(newOptions.codeModifiedArea).to.eql(['I18NHandler', 'TranslateWord', 'TranslateWord:RegExp', 'I18NHandlerAlias']);
 		expect(optionsUtils.extend().I18NHandlerName).to.be('I18N');
 		expect(optionsUtils.extend({somekey: true}).somekey).to.be(undefined);
 

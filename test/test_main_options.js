@@ -123,6 +123,16 @@ describe('#main_options', function()
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 		});
 
+		it('#no regexp', function()
+		{
+			var info = i18nc('var dd = /中文/;',
+			{
+				isInsertI18NHandler: false,
+				codeModifiedArea: []
+			});
+			expect(info.code).to.be('var dd = /中文/;');
+		});
+
 		it('#empty', function()
 		{
 			var info = i18nc(exampleCode,
