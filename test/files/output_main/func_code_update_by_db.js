@@ -1,6 +1,6 @@
 function code()
 			{
-				console.log(I18N('简体'));
+				println(I18N('简体'));
 				function I18N()
 				{
 					var self = I18N;

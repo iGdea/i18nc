@@ -14,14 +14,14 @@ describe('#main_options', function()
 		{
 			function somefunc()
 			{
-				console.log('中文 in some func');
+				println('中文 in some func');
 			}
 
 			somefunc('中文 run some func');
 
 			function otherfunc()
 			{
-				console.log('中文 in other func');
+				println('中文 in other func');
 			}
 
 			otherfunc('中文 run other func');
@@ -197,7 +197,7 @@ describe('#main_options', function()
 			};
 
 			codeData = '\nvar codeJSON='+JSON.stringify(codeData, null, '\t');
-			// console.log(codeData);
+			// println(codeData);
 
 			var info = i18nc(code.toString()+codeData,
 				{
@@ -215,7 +215,7 @@ describe('#main_options', function()
 
 	it('#pickFileLanguages', function()
 	{
-		var code = 'console.log("不可能存在的中文翻译词组");';
+		var code = 'println("不可能存在的中文翻译词组");';
 		var info = i18nc(code,
 			{
 				pickFileLanguages: ['en-US']

@@ -157,7 +157,7 @@ describe('#main', function()
 	{
 		describe('#no db', function()
 		{
-			var code = 'console.log("不可能存在的中文翻译词组");';
+			var code = 'println("不可能存在的中文翻译词组");';
 
 			it('#noanything', function()
 			{
@@ -209,7 +209,7 @@ describe('#main', function()
 		{
 			var code = function code()
 			{
-				console.log("不可能存在的中文翻译词组");
+				println("不可能存在的中文翻译词组");
 				function I18N()
 				{
 					self = I18N;
@@ -232,7 +232,7 @@ describe('#main', function()
 		{
 			var code = function code()
 			{
-				console.log("简体");
+				println("简体");
 				function I18N()
 				{
 					var self = I18N;
@@ -265,7 +265,7 @@ describe('#main', function()
 	{
 		it('#width head / end', function()
 		{
-			var info = i18nc('/* begin */\ndefine(function(){console.log("中文")})\n/* end */\n');
+			var info = i18nc('/* begin */\ndefine(function(){println("中文")})\n/* end */\n');
 
 			var otherCode = requireAfterWrite('func_code_head_has_content_output.js', info.code, {readMode: 'string'});
 
@@ -277,7 +277,7 @@ describe('#main', function()
 	{
 		it('#\\n\\r', function()
 		{
-			var info = i18nc('function a(){console.log("\\n\\r"); console.log("\\n")}',
+			var info = i18nc('function a(){println("\\n\\r"); println("\\n")}',
 				{
 					cutWordReg: /\s+/,
 					cutWordBeautify: [],
@@ -297,7 +297,7 @@ describe('#main', function()
 
 		it('#\\u2029', function()
 		{
-			var info = i18nc('function a(){console.log("\\u2029\\u2029"); console.log("\\u2029")}',
+			var info = i18nc('function a(){println("\\u2029\\u2029"); println("\\u2029")}',
 				{
 					cutWordReg: /\u2029+/,
 					cutWordBeautify: [],

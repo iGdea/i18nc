@@ -78,7 +78,7 @@ function I18NHandlerSimpleExampleFile()
 
 function main()
 {
-	console.log('run main');
+	println('run main');
 	I18NHandlerExampleFile();
 	I18NHandlerSimpleExampleFile();
 }

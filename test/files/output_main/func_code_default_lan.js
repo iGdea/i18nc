@@ -1,6 +1,6 @@
 function code()
 			{
-				console.log(I18N('不可能存在的中文翻译词组'));
+				println(I18N('不可能存在的中文翻译词组'));
 				function I18N()
 				{
 					self = I18N;
