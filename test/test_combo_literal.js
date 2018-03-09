@@ -222,11 +222,11 @@ describe('#astComboLiteral', function()
 						combo: [1, 2, 'a3'],
 						comboCode: '1+2+a3'
 					},
-					ALL_I18N:
-					{
-						combo: [1, 2, 'a3'],
-						comboCode: '1+2+a3'
-					}
+					// ALL_I18N:
+					// {
+					// 	combo: [1, 2, 'a3'],
+					// 	comboCode: '1+2+a3'
+					// }
 				});
 
 			_checkAll('1+2+a+I18N(b)',
@@ -241,11 +241,11 @@ describe('#astComboLiteral', function()
 						combo: [1, 2, 'ab'],
 						comboCode: '1+2+ab'
 					},
-					ALL_I18N:
-					{
-						combo: [1, 2, 'ab'],
-						comboCode: '1+2+ab'
-					}
+					// ALL_I18N:
+					// {
+					// 	combo: [1, 2, 'ab'],
+					// 	comboCode: '1+2+ab'
+					// }
 				});
 
 			_checkAll('1+I18N(2)+3+a',
@@ -260,11 +260,11 @@ describe('#astComboLiteral', function()
 						combo: ['123a'],
 						comboCode: '123a'
 					},
-					ALL_I18N:
-					{
-						combo: ['123a'],
-						comboCode: '123a'
-					}
+					// ALL_I18N:
+					// {
+					// 	combo: ['123a'],
+					// 	comboCode: '123a'
+					// }
 				});
 
 			_checkAll('1+2+a+I18N(Var1)',
@@ -279,11 +279,11 @@ describe('#astComboLiteral', function()
 						combo: [1, 2, 'a', '[callee]I18N'],
 						comboCode: '1+2+a+I18N(Var1)'
 					},
-					ALL_I18N:
-					{
-						combo: [1, 2, 'a', '[callee]I18N'],
-						comboCode: '1+2+a+I18N(Var1)'
-					}
+					// ALL_I18N:
+					// {
+					// 	combo: [1, 2, 'a', '[callee]I18N'],
+					// 	comboCode: '1+2+a+I18N(Var1)'
+					// }
 				});
 
 			_checkAll('1+2+a+I18N(b,subtype)',
@@ -298,11 +298,11 @@ describe('#astComboLiteral', function()
 						combo: [1, 2, 'a', '[callee]I18N'],
 						comboCode: '1+2+a+I18N(b,subtype)'
 					},
-					ALL_I18N:
-					{
-						combo: [1, 2, 'ab'],
-						comboCode: '1+2+ab'
-					}
+					// ALL_I18N:
+					// {
+					// 	combo: [1, 2, 'ab'],
+					// 	comboCode: '1+2+ab'
+					// }
 				});
 		});
 	});
