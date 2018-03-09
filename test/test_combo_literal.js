@@ -64,7 +64,11 @@ describe('#astComboLiteral', function()
 			debug('new code:%s', code);
 
 			var data = i18nc.parse(code).body[0].expression;
-			var options = optionsUtils.extend({comboLiteralMode: mode});
+			var options = optionsUtils.extend(
+				{
+					comboLiteralMode: mode,
+					I18NHandlerAlias: ['I18N_ALIAS']
+				});
 
 
 			it('#plusBinaryExpressionAst2arrWidthClear', function()
@@ -297,6 +301,25 @@ describe('#astComboLiteral', function()
 					{
 						combo: [1, 2, 'a', '[callee]I18N'],
 						comboCode: '1+2+a+I18N(b,subtype)'
+					},
+					// ALL_I18N:
+					// {
+					// 	combo: [1, 2, 'ab'],
+					// 	comboCode: '1+2+ab'
+					// }
+				});
+
+			_checkAll('1+2+a+I18N_ALIAS(b)',
+				{
+					LITERAL:
+					{
+						combo: [1, 2, 'a', '[callee]I18N_ALIAS'],
+						comboCode: '1+2+a+I18N_ALIAS(b)'
+					},
+					I18N:
+					{
+						combo: [1, 2, 'ab'],
+						comboCode: '1+2+ab'
 					},
 					// ALL_I18N:
 					// {
