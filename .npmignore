@@ -11,11 +11,5 @@ package-lock.json
 .tags*
 .DS_Store
 
-appveyor.yml
-
 test
 coverage
-
-webpack.config.js
-sauce_connect.log
-karma.conf.js
