@@ -8,29 +8,25 @@ var requireAfterWrite	= autoTestUtils.requireAfterWrite('output_main_options');
 
 describe('#main_options', function()
 {
-	it('#ignoreScanHandlerNames', function()
+	describe('#ignoreScanHandlerNames', function()
 	{
-		var code = function code()
+		it('#ignore simple callee', function()
 		{
-			function somefunc()
-			{
-				println('中文 in some func');
-			}
+			var info = i18nc('somefunc("中文")', {ignoreScanHandlerNames: ['somefunc']});
+			expect(autoTestUtils.getCodeTranslateAllWords(info)).to.be.empty();
+		});
 
-			somefunc('中文 run some func');
+		it('#ignore MemberExpression callee', function()
+		{
+			var info = i18nc('obj.log("中文")', {ignoreScanHandlerNames: ['obj.log']});
+			expect(autoTestUtils.getCodeTranslateAllWords(info)).to.be.empty();
+		});
 
-			function otherfunc()
-			{
-				println('中文 in other func');
-			}
-
-			otherfunc('中文 run other func');
-		};
-
-		var info = i18nc(code.toString(), {ignoreScanHandlerNames: ['somefunc']});
-
-		expect(autoTestUtils.getCodeTranslateAllWords(info))
-			.to.eql(['中文 in other func', '中文 run other func'].sort());
+		it('#ignore define', function()
+		{
+			var info = i18nc('function somefunc(){println("中文")}', {ignoreScanHandlerNames: ['somefunc']});
+			expect(autoTestUtils.getCodeTranslateAllWords(info)).to.be.empty();
+		});
 	});
 
 	it('#comboLiteralMode', function()
