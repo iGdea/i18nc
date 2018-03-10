@@ -20,6 +20,9 @@ describe('#main_options', function()
 		{
 			var info = i18nc('obj.log("中文")', {ignoreScanHandlerNames: ['obj.log']});
 			expect(autoTestUtils.getCodeTranslateAllWords(info)).to.be.empty();
+
+			var info = i18nc('obj.obj.log("中文")', {ignoreScanHandlerNames: ['obj.obj.log']});
+			expect(autoTestUtils.getCodeTranslateAllWords(info)).to.be.empty();
 		});
 
 		it('#ignore define', function()
