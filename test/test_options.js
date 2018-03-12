@@ -16,6 +16,10 @@ describe('#options', function()
 		{
 			expect(optionsUtils.extend({I18NHandlerName: null}).I18NHandlerName)
 				.to.be('I18N');
+
+			// 对cutWordReg 特殊处理
+			expect(optionsUtils.extend({cutWordReg: null}).cutWordReg)
+				.to.be(null);
 		});
 
 		it('#no extend', function()
