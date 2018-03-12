@@ -9,39 +9,6 @@ describe('#cutword', function()
 	var options = optionsUtils.extend();
 	var literalHandler = new LiteralHandler(options);
 
-	it('#split', function()
-	{
-		expect(literalHandler.split('')).to.be(undefined);
-		expect(literalHandler.split('11')).to.be(undefined);
-		expect(literalHandler.split('中文')).to.eql(
-			[
-				{translateWord: false, value: '', ignore: false, disconnected: false},
-				{translateWord: true, value: '中文', ignore: false, disconnected: false},
-				{translateWord: false, value: '', ignore: false, disconnected: false}
-			]);
-		expect(literalHandler.split('中文11')).to.eql(
-			[
-				{translateWord: false, value: '', ignore: false, disconnected: false},
-				{translateWord: true, value: '中文11', ignore: false, disconnected: false},
-				{translateWord: false, value: '', ignore: false, disconnected: false}
-			]);
-		expect(literalHandler.split('中文 11')).to.eql(
-			[
-				{translateWord: false, value: '', ignore: false, disconnected: false},
-				{translateWord: true, value: '中文 11', ignore: false, disconnected: false},
-				{translateWord: false, value: '', ignore: false, disconnected: false}
-			]);
-		expect(literalHandler.split('11<span>中文</span>中文11')).to.eql(
-			[
-				{translateWord: false, value: '11<span>', ignore: false, disconnected: false},
-				{translateWord: true, value: '中文', ignore: false, disconnected: false},
-				{translateWord: false, value: '</span>', ignore: false, disconnected: false},
-				{translateWord: true, value: '中文11', ignore: false, disconnected: false},
-				{translateWord: false, value: '', ignore: false, disconnected: false}
-			]);
-	});
-
-
 	it('#ast', function()
 	{
 		function txt2code(val)
