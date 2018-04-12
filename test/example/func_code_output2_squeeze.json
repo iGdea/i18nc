@@ -4,7 +4,9 @@
 		"*"
 	],
 	"subScopeDatas": [],
-	"dirtyWords": [],
+	"dirtyWords": [
+		"'中文key in object'"
+	],
 	"words": {
 		"codeTranslateWords": {
 			"DEFAULTS": [

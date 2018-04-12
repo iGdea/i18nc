@@ -5,7 +5,7 @@ function code()
 				{
 					self = I18N;
 					self.__FILE_KEY__ = "default_file_key";
-					self.__FUNCTION_VERSION__ = "6";
+					self.__FUNCTION_VERSION__ = "7";
 					self.__TRANSLATE_JSON__ =
 					{
 						'en-US': {
