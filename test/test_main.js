@@ -79,23 +79,23 @@ describe('#main', function()
 
 		it('#define', function()
 		{
-			var exampleCode = require('./files/casefile_main/func_code_noi18n_define').toString();
+			var exampleCode = require('./files/casefile_main/func_code_i18n_define').toString();
 			var info = i18nc(exampleCode);
 
-			var otherCode = requireAfterWrite('func_code_noi18n_define_output.js', info.code, {readMode: 'string'});
+			var otherCode = requireAfterWrite('func_code_i18n_define_output.js', info.code, {readMode: 'string'});
 
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 		});
 
 		it('#define not_define', function()
 		{
-			var exampleCode = require('./files/casefile_main/func_code_noi18n_define').toString();
+			var exampleCode = require('./files/casefile_main/func_code_i18n_define').toString();
 			var info = i18nc(exampleCode,
 				{
 					isInsertToDefineHalder: false
 				});
 
-			var otherCode = requireAfterWrite('func_code_noi18n_define_output_notdefine.js', info.code, {readMode: 'string'});
+			var otherCode = requireAfterWrite('func_code_i18n_define_output_notdefine.js', info.code, {readMode: 'string'});
 
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 		});
@@ -136,7 +136,7 @@ describe('#main', function()
 					}
 				});
 
-			var otherCode = requireAfterWrite('func_code_i18n_define_output.js', info.code, {readMode: 'string'});
+			var otherCode = requireAfterWrite('func_code_i18n_define_output_words.js', info.code, {readMode: 'string'});
 
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 		});

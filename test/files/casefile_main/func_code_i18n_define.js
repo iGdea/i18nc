@@ -1,18 +1,46 @@
 module.exports = function code()
 {
-	var work = "global 中文1";
+	var word = 'out define 中文';
+
 	define(function()
 	{
-		var word = 'define1 中文';
+		word = '中文';
 	});
 
 	define('define2', function()
 	{
-		var word = 'define2 中文';
-		function I18N(){}
+		word = 'define2 中文';
 	});
 
-	function I18N(){}
-	var work = "global 中文2";
-	function I18N(){}
+	// define 的中文包含在subscope，本身不包含中文
+	define('define3', function()
+	{
+		function somehadler()
+		{
+			word = 'define3 中文'
+		}
+	});
+
+	define('define4', function()
+	{
+		// define 嵌套
+		word = 'define4 中文';
+
+		define('define5', function()
+		{
+			word = 'define5 中文';
+		});
+	});
+
+
+	// 预先定义了I18N函数
+	function somehadler()
+	{
+		function I18N(){}
+
+		define('define6', function()
+		{
+			word = 'define6 中文';
+		});
+	}
 }
