@@ -326,5 +326,26 @@ describe('#main_options', function()
 				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 			});
 		});
+
+
+		// 没有处理前，会报closure myself错误
+		describe('#FunctionExpression closure', function()
+		{
+			var code = '(function(){var words = "中文"})();';
+
+			it('#use', function()
+			{
+				var info = i18nc(code, {isClosureWhenInsertedHead: true});
+				var otherCode = requireAfterWrite('func_code_closure_funcexp_closure.js', info.code, {readMode: 'string'});
+				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+			});
+
+			it('#no use', function()
+			{
+				var info = i18nc(code, {isClosureWhenInsertedHead: false});
+				var otherCode = requireAfterWrite('func_code_closure_funcexp_noclosure.js', info.code, {readMode: 'string'});
+				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+			});
+		});
 	});
 });
