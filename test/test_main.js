@@ -161,7 +161,7 @@ describe('#main', function()
 
 			it('#noanything', function()
 			{
-				var info = i18nc(code);
+				var info = i18nc(code, {isClosureWhenInsertedHead: false});
 
 				var otherCode = requireAfterWrite('func_code_no_db.js', info.code, {readMode: 'string'});
 
@@ -172,6 +172,7 @@ describe('#main', function()
 			{
 				var info = i18nc(code,
 					{
+						isClosureWhenInsertedHead: false,
 						dbTranslateWords:
 						{
 							en:
@@ -190,6 +191,7 @@ describe('#main', function()
 			{
 				var info = i18nc(code,
 					{
+						isClosureWhenInsertedHead: false,
 						dbTranslateWords:
 						{
 							en:
@@ -333,7 +335,7 @@ describe('#main', function()
 
 				var info = i18nc(code.toString());
 
-				expect(info.squeeze().dirtyWords.toArray()).to.eql(["'中文key'"]);
+				expect(info.allDirtyWords().toArray()).to.eql(["'中文key'"]);
 			});
 		});
 	});

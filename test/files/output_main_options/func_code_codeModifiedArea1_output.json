@@ -7,9 +7,7 @@
 			"中文key",
 			"中文val",
 			"中文key",
-			"print信息，",
 			"argv中文",
-			"中文case",
 			"中文case",
 			"中文if",
 			"中午true",
@@ -36,9 +34,7 @@
 		"中文key",
 		"中文val",
 		"中文key",
-		"print信息，",
 		"argv中文",
-		"中文case",
 		"中文case",
 		"中文if",
 		"中午true",
@@ -47,7 +43,40 @@
 	"originalFileKeys": [
 		"*"
 	],
-	"subScopeDatas": [],
+	"subScopeDatas": [
+		{
+			"codeTranslateWords": {
+				"DEFAULTS": [
+					"print信息，"
+				],
+				"SUBTYPES": {}
+			},
+			"currentFileKey": "*",
+			"funcTranslateWords": {},
+			"newWord4codeTranslateWords": [
+				"print信息，"
+			],
+			"originalFileKeys": [],
+			"subScopeDatas": [],
+			"usedTranslateWords": {}
+		},
+		{
+			"codeTranslateWords": {
+				"DEFAULTS": [
+					"中文case"
+				],
+				"SUBTYPES": {}
+			},
+			"currentFileKey": "*",
+			"funcTranslateWords": {},
+			"newWord4codeTranslateWords": [
+				"中文case"
+			],
+			"originalFileKeys": [],
+			"subScopeDatas": [],
+			"usedTranslateWords": {}
+		}
+	],
 	"usedTranslateWords": {
 		"zh-TW": {
 			"DEFAULTS": {
