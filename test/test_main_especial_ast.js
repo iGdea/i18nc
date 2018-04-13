@@ -17,18 +17,48 @@ describe('#main especial ast', function()
 			expect(info.code).to.be('var a = /\\ds/g');
 		});
 
-		it('#replace', function()
+		describe('#replace', function()
 		{
-			var code = 'var a = /%%%d简。体%s/g'.replace(/%/g, '\\');
-			var otherCode = "var a = new RegExp(I18N('%%%%%%d简。') + I18N('体%%s'), 'g')".replace(/%/g, '\\');
-			debug('orignal code:%s, expect code: %s', code, otherCode);
+			it('#base', function()
+			{
+				var code = 'var a = /%%%d简体%u4e2d%u6587%s/g'.replace(/%/g, '\\');
+				var otherCode = "var a = new RegExp(I18N('%%%%%%d简体%%u4e2d%%u6587%%s'), 'g')".replace(/%/g, '\\');
+				debug('orignal code:%s, expect code: %s', code, otherCode);
 
-			var info = i18nc(code,
-				{
-					codeModifiedArea: {I18NHandler: false},
-				});
+				var info = i18nc(code,
+					{
+						codeModifiedArea: {I18NHandler: false},
+					});
 
-			expect(info.code).to.be(otherCode);
+				expect(info.code).to.be(otherCode);
+			});
+
+			it('#no beautify', function()
+			{
+				var code = 'var a = /%%%d简。体%s/g'.replace(/%/g, '\\');
+				var otherCode = "var a = new RegExp(I18N('%%%%%%d简。体%%s'), 'g')".replace(/%/g, '\\');
+				debug('orignal code:%s, expect code: %s', code, otherCode);
+
+				var info = i18nc(code,
+					{
+						codeModifiedArea: {I18NHandler: false},
+					});
+
+				expect(info.code).to.be(otherCode);
+			});
+
+			it('#split words', function()
+			{
+				var code = 'var a = /简>体/g';
+				var otherCode = "var a = new RegExp(I18N('简') + '>' + I18N('体'), 'g')";
+
+				var info = i18nc(code,
+					{
+						codeModifiedArea: {I18NHandler: false},
+					});
+
+				expect(info.code).to.be(otherCode);
+			});
 		});
 	});
 
