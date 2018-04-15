@@ -8,74 +8,99 @@ describe('#ASTCollector', function()
 {
 	describe('#block modifier', function()
 	{
-		it('#skip_scan', function()
+		describe('#types', function()
 		{
-			var code = function code()
+			it('#skip_scan', function()
 			{
-				var v1 = '中文';
-
+				var code = function code()
 				{
+					var v1 = '中文';
+
+					{
+						"[i18nc] skip_scan"
+						var v2 = "跳过这个中文";
+					}
+				}
+
+				var scope = getFinalCollect(code);
+				expect(getScopeCodeTranslateWord(scope)).to.eql(['中文']);
+			});
+
+			it('#skip_repalce', function()
+			{
+				var code = function code()
+				{
+					var v1 = '中文';
+
+					{
+						"[i18nc] skip_repalce"
+						var v2 = "这个中文还在";
+					}
+				}
+
+				var scope = getFinalCollect(code);
+				expect(!!astUtils.checkAstFlag(scope.translateWordAsts[0], astUtils.AST_FLAGS.SKIP_REPLACE)).to.be(false);
+				expect(!!astUtils.checkAstFlag(scope.translateWordAsts[1], astUtils.AST_FLAGS.SKIP_REPLACE)).to.be(true);
+				expect(getScopeCodeTranslateWord(scope)).to.eql(['中文', '这个中文还在'].sort());
+			});
+
+			it('#skip_scan@I18N', function()
+			{
+				var code = function code()
+				{
+					var v1 = '中文';
+
+					{
+						"[i18nc] skip_scan@I18N"
+						var v2 = "跳过这个中文";
+					}
+				}
+
+				var scope = getFinalCollect(code);
+				expect(getScopeCodeTranslateWord(scope)).to.eql(['中文']);
+			});
+
+			it('#skip_repalce@I18N', function()
+			{
+				var code = function code()
+				{
+					var v1 = '中文';
+
+					{
+						"[i18nc] skip_repalce@I18N"
+						var v2 = "这个中文还在";
+					}
+				}
+
+				var scope = getFinalCollect(code);
+				expect(!!astUtils.checkAstFlag(scope.translateWordAsts[0], astUtils.AST_FLAGS.SKIP_REPLACE)).to.be(false);
+				expect(!!astUtils.checkAstFlag(scope.translateWordAsts[1], astUtils.AST_FLAGS.SKIP_REPLACE)).to.be(true);
+				expect(getScopeCodeTranslateWord(scope)).to.eql(['中文', '这个中文还在'].sort());
+			});
+		});
+
+		describe('#check', function()
+		{
+			it('#in top', function()
+			{
+				var code = '"[i18nc] skip_scan"\nvar v1 = "中文";'
+				var scope = getFinalCollect(code);
+				expect(getScopeCodeTranslateWord(scope)).to.eql([]);
+			});
+
+			it('#not first item', function()
+			{
+				var code = function code()
+				{
+					var v1 = '中文';
+
 					"[i18nc] skip_scan"
-					var v2 = "跳过这个中文";
+					var v2 = "跳不过这个中文";
 				}
-			}
-
-			var scope = getFinalCollect(code);
-			expect(getScopeCodeTranslateWord(scope)).to.eql(['中文']);
+				var scope = getFinalCollect(code);
+				expect(getScopeCodeTranslateWord(scope)).to.eql(['中文', '跳不过这个中文']);
+			});
 		});
-
-		it('#skip_repalce', function()
-		{
-			var code = function code()
-			{
-				var v1 = '中文';
-
-				{
-					"[i18nc] skip_repalce"
-					var v2 = "这个中文还在";
-				}
-			}
-
-			var scope = getFinalCollect(code);
-			expect(!!astUtils.checkAstFlag(scope.translateWordAsts[0], astUtils.AST_FLAGS.SKIP_REPLACE)).to.be(false);
-			expect(!!astUtils.checkAstFlag(scope.translateWordAsts[1], astUtils.AST_FLAGS.SKIP_REPLACE)).to.be(true);
-			expect(getScopeCodeTranslateWord(scope)).to.eql(['中文', '这个中文还在'].sort());
-		});
-
-		it('#skip_scan@I18N', function()
-		{
-			var code = function code()
-			{
-				var v1 = '中文';
-
-				{
-					"[i18nc] skip_scan@I18N"
-					var v2 = "跳过这个中文";
-				}
-			}
-
-			var scope = getFinalCollect(code);
-			expect(getScopeCodeTranslateWord(scope)).to.eql(['中文']);
-		});
-
-		it('#skip_repalce@I18N', function()
-		{
-			var code = function code()
-			{
-				var v1 = '中文';
-
-				{
-					"[i18nc] skip_repalce@I18N"
-					var v2 = "这个中文还在";
-				}
-			}
-
-			var scope = getFinalCollect(code);
-			expect(!!astUtils.checkAstFlag(scope.translateWordAsts[0], astUtils.AST_FLAGS.SKIP_REPLACE)).to.be(false);
-			expect(!!astUtils.checkAstFlag(scope.translateWordAsts[1], astUtils.AST_FLAGS.SKIP_REPLACE)).to.be(true);
-			expect(getScopeCodeTranslateWord(scope)).to.eql(['中文', '这个中文还在'].sort());
-		});
-
 	});
 
 
