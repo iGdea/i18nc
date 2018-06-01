@@ -1,5 +1,6 @@
 var fs = require('fs');
 var DEF = require('../lib/def');
+var optionsUtils = require('../lib/options');
 var i18nTpl = require('../lib/i18n_func/render');
 
 
@@ -41,8 +42,7 @@ function I18NHandlerExampleCode()
 			handlerName			: 'I18N',
 			FILE_KEY			: 'i18n_handler_example',
 			FUNCTION_VERSION	: DEF.I18NFunctionVersion,
-			GetGlobalCode		: 'typeof window == "object" ? window : typeof global == "object" && global',
-			LanguageVarName		: '__i18n_lan__',
+			GetLanguageCode		: 'global.__i18n_lan__ || " " || ',
 			TRANSLATE_JSON_CODE	: JSON.stringify(TRANSLATE_JSON, null, '\t').replace(/\n/g, '\n\t'),
 		});
 }

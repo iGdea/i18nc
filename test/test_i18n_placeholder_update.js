@@ -7,7 +7,7 @@ var i18nTpl = require('../lib/i18n_func/render');
 var I18NPlaceholder = require('../lib/i18n_placeholder').I18NPlaceholder;
 
 
-describe('#i18n_func_update', function()
+describe('#i18n_placeholder_update', function()
 {
 	describe('#check', function()
 	{
@@ -54,8 +54,7 @@ describe('#i18n_func_update', function()
 					handlerName: 'I18N',
 					FILE_KEY: '*',
 					FUNCTION_VERSION: 0,
-					GetGlobalCode : 'window',
-					LanguageVarName : '__i18n_lan__',
+					GetLanguageCode: 'GetLanGlobal',
 					TRANSLATE_JSON_CODE : '{}'
 				});
 			checkEmptyJSONCode(code, 'complete');
@@ -69,8 +68,7 @@ describe('#i18n_func_update', function()
 					handlerName: 'I18N',
 					FILE_KEY: '',
 					FUNCTION_VERSION: DEF.I18NFunctionVersion,
-					GetGlobalCode : 'window',
-					LanguageVarName : '__i18n_lan__',
+					GetLanguageCode : 'GetLanGlobal',
 					TRANSLATE_JSON_CODE : '{}'
 				});
 			checkEmptyJSONCode(code, 'original');
@@ -173,7 +171,7 @@ describe('#i18n_func_update', function()
 		{
 			var ast = esprima.parse(code, optionsUtils.esprimaOptions);
 			var I18NPlaceholderNew = new I18NPlaceholder(
-					{}, code, optionsUtils.extend(), ast.body[0]
+					{}, code, optionsUtils.extend({I18NhandlerTpl_GetLanguageCode: 'GetLanguageCode'}), ast.body[0]
 				);
 
 			I18NPlaceholderNew.renderType = 'complete';
@@ -183,8 +181,7 @@ describe('#i18n_func_update', function()
 					handlerName         : options.I18NHandlerName,
 					FILE_KEY            : 'file_key',
 					FUNCTION_VERSION    : DEF.I18NFunctionVersion,
-					GetGlobalCode       : options.I18NhandlerTpl_GetGlobalCode,
-					LanguageVarName     : options.I18NhandlerTpl_LanguageVarName,
+					GetLanguageCode		: 'GetLanguageCode',
 					TRANSLATE_JSON_CODE : '{}'
 				});
 			expect(func2codeArr(I18NPlaceholderNew)).to.eql(code2arr(otherCode));
