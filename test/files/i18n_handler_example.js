@@ -1,7 +1,7 @@
 module.exports = I18N;
 function I18N(h,f,i){
 	/*eslint-disable*/
-	var a=I18N;if(!a.data)a.data={};var d=global.__i18n_lan__ || " " || (a.data);if(!f||!f.join){i=f;f=[]}if(d){if(a.__TRANSLATE_LAN__!=d){a.__FILE_KEY__='i18n_handler_example';a.__FUNCTION_VERSION__='8';a.__TRANSLATE_JSON__={
+	var a=I18N;if(!a.data)a.data={};var d=(function(){return global.__i18n_lan__})(a.data);if(!f||!f.join){i=f;f=[]}if(d){if(a.__TRANSLATE_LAN__!=d){a.__FILE_KEY__='i18n_handler_example';a.__FUNCTION_VERSION__='8';a.__TRANSLATE_JSON__={
 		"en-US": {
 			"DEFAULTS": {
 				"简体": "simplified",

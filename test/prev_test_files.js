@@ -42,7 +42,7 @@ function I18NHandlerExampleCode()
 			handlerName			: 'I18N',
 			FILE_KEY			: 'i18n_handler_example',
 			FUNCTION_VERSION	: DEF.I18NFunctionVersion,
-			GetLanguageCode		: 'global.__i18n_lan__ || " " || ',
+			GetLanguageCode		: '(function(){return global.__i18n_lan__})',
 			TRANSLATE_JSON_CODE	: JSON.stringify(TRANSLATE_JSON, null, '\t').replace(/\n/g, '\n\t'),
 		});
 }
