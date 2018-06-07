@@ -1,3 +1,5 @@
+'use strict';
+
 var expect			= require('expect.js');
 var astTpl			= require('../lib/ast_tpl');
 var escodegen		= require('escodegen');

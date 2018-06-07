@@ -1,3 +1,5 @@
+'use strict';
+
 exports = module.exports = require('./lib/main');
 exports.version = require('./package.json').version;
 

@@ -1,3 +1,5 @@
+'use strict';
+
 var expect			= require('expect.js');
 var escodegen		= require('escodegen');
 var optionsUtils	= require('../lib/options');

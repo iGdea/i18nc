@@ -1,3 +1,5 @@
+'use strict';
+
 var fs					= require('fs');
 var expect				= require('expect.js');
 var i18nc				= require('../');

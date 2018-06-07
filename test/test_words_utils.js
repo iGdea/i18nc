@@ -1,3 +1,5 @@
+'use strict';
+
 var expect			= require('expect.js');
 var optionsUtils	= require('../lib/options');
 var wordsUtils		= require('../lib/words_utils');

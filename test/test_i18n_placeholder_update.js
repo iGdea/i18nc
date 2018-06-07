@@ -1,3 +1,5 @@
+'use strict';
+
 var expect = require('expect.js');
 var esprima = require('esprima');
 var DEF = require('../lib/def');

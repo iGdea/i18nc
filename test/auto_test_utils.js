@@ -1,3 +1,5 @@
+'use strict';
+
 var _ = require('lodash');
 var fs = require('fs');
 var mkdirp = require('mkdirp');
@@ -73,7 +75,7 @@ exports.JsonOfI18ncRet = function JsonOfI18ncRet(info)
 			subScopeDatas				: _.map(info.subScopeDatas, exports.JsonOfI18ncRet),
 		});
 
-	result = {};
+	var result = {};
 
 	Object.keys(obj).sort().forEach(function(key)
 	{

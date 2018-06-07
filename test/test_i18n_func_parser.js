@@ -1,3 +1,5 @@
+'use strict';
+
 var expect				= require('expect.js');
 var esprima				= require('esprima');
 var i18nParser			= require('../lib/i18n_func/parser');

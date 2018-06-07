@@ -1,3 +1,5 @@
+'use strict';
+
 var fs					= require('fs');
 var expect				= require('expect.js');
 var i18nc				= require('../');
@@ -126,7 +128,6 @@ describe('#main_options', function()
 		{
 			var info = i18nc('var dd = /中文/;',
 			{
-				codeModifiedArea: {I18NHandler: false},
 				codeModifiedArea: []
 			});
 			expect(info.code).to.be('var dd = /中文/;');

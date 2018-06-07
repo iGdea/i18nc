@@ -1,3 +1,5 @@
+'use strict';
+
 var expect			= require('expect.js');
 var ASTCollector	= require('../lib/ast_collector').ASTCollector;
 var optionsUtils	= require('../lib/options');

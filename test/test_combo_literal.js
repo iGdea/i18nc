@@ -1,3 +1,5 @@
+'use strict';
+
 var _				= require('lodash');
 var debug			= require('debug')('i18nc-core:test_combo_literal');
 var expect			= require('expect.js');

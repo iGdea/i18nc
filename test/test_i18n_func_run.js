@@ -1,3 +1,5 @@
+'use strict';
+
 var expect = require('expect.js');
 
 describe('#i18n_func_run', function()
