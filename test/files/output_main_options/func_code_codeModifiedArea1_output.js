@@ -29,7 +29,7 @@ module.exports = function code()
 
 	switch_print('中文case');
 
-	if (!!'中文if')
+	if ('中文if')
 	{
 		result += true ? '中午true' : '中文false'
 	}

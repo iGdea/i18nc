@@ -68,7 +68,7 @@ module.exports = function code()
 
 	switch_print(I18NNew('中文case'));
 
-	if (!!I18NNew('中文if'))
+	if (I18NNew('中文if'))
 	{
 		result += true ? I18NNew('中午true') : I18NNew('中文false')
 	}

@@ -29,7 +29,7 @@ module.exports = function code()
 
 	switch_print(I18N('中文case'));
 
-	if (!!I18N('中文if'))
+	if (I18N('中文if'))
 	{
 		result += true ? I18N('中午true') : I18N('中文false')
 	}

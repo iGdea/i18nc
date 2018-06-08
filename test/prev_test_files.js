@@ -2,7 +2,6 @@
 
 var fs = require('fs');
 var DEF = require('../lib/def');
-var optionsUtils = require('../lib/options');
 var i18nTpl = require('../lib/i18n_func/render');
 
 

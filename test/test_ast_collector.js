@@ -1,3 +1,6 @@
+/* global describe it define I18N afterEach */
+/* eslint no-unused-vars: off */
+
 'use strict';
 
 var expect			= require('expect.js');
@@ -159,7 +162,7 @@ describe('#ASTCollector', function()
 				function func2()
 				{
 					var v1 = "中文2";
-				};
+				}
 			};
 
 			var scope = getFinalCollect(code);
@@ -175,7 +178,7 @@ describe('#ASTCollector', function()
 				function func2()
 				{
 					var v1 = "中文2";
-				};
+				}
 
 				function I18N(){}
 			};
@@ -193,14 +196,14 @@ describe('#ASTCollector', function()
 				function func2()
 				{
 					var v1 = "中文2";
-				};
+				}
 
 				define(function()
 				{
 					var v1 = "中文3"
 				});
-				function I18N(){};
-			};
+				function I18N(){}
+			}
 
 			var scope = getFinalCollect(code);
 			expect(getScopeCodeTranslateWord(scope.subScopes[0])).to.eql(['中文1','中文2','中文3'].sort());
@@ -215,7 +218,7 @@ describe('#ASTCollector', function()
 				function func2()
 				{
 					var v1 = "中文2";
-				};
+				}
 
 				define(function()
 				{
@@ -227,7 +230,7 @@ describe('#ASTCollector', function()
 					var v1 = "中文4"
 				});
 
-				function I18N(){};
+				function I18N(){}
 			};
 
 			var scope = getFinalCollect(code);
