@@ -6,6 +6,7 @@ package-lock.json
 .travis.yml
 .gitattributes
 .eslintrc
+.eslintignore
 .editorconfig
 .npmignore
 .tags*
