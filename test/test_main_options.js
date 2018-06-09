@@ -36,7 +36,7 @@ describe('#main_options', function()
 
 	it('#comboLiteralMode', function()
 	{
-		var code = require('./files/casefile_main/func_code_combo_literal');
+		var code = require('./files/casefile/func_code/func_code_combo_literal');
 		var info = i18nc(code.toString(), {comboLiteralMode: 'I18N'});
 
 		var otherCode = requireAfterWrite('func_code_combo_literal_output.js', info.code, {readMode: 'string'});
@@ -189,8 +189,8 @@ describe('#main_options', function()
 
 		it('#partialUpdate', function()
 		{
-			var code = require('./files/i18n_handler_example.js');
-			var funcInfo = require('./files/i18n_handler_example_output.json');
+			var code = require('./files/casefile/i18n_handler/i18n_handler_example.js');
+			var funcInfo = require('./files/casefile/i18n_handler/i18n_handler_example_output.json');
 			var codeData =
 			{
 				DEFAULTS: Object.keys(funcInfo.__TRANSLATE_JSON__['en-US'].DEFAULTS),
@@ -232,7 +232,7 @@ describe('#main_options', function()
 	{
 		describe('#RemoveTplComment', function()
 		{
-			var code = require('./files/casefile_main/func_code_tpl_comment').toString();
+			var code = require('./files/casefile/func_code/func_code_tpl_comment').toString();
 
 			it('#remove', function()
 			{
@@ -261,7 +261,7 @@ describe('#main_options', function()
 
 			it('#nokey', function()
 			{
-				var code = require('./files/casefile_main/func_code_tpl_comment_nokey').toString();
+				var code = require('./files/casefile/func_code/func_code_tpl_comment_nokey').toString();
 				var info = i18nc(code,
 					{
 						cutWordBeautify: ['RemoveTplComment']
@@ -286,8 +286,6 @@ describe('#main_options', function()
 
 	describe('#isClosureWhenInsertedHead', function()
 	{
-		var code1 = 'var words = "中文"';
-
 		describe('#closure', function()
 		{
 			var code = 'function code(){var words = "中文"}';

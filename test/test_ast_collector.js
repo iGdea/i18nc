@@ -1,6 +1,3 @@
-/* global describe it define I18N afterEach */
-/* eslint no-unused-vars: off */
-
 'use strict';
 
 var expect			= require('expect.js');

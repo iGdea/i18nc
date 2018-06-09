@@ -1,4 +1,4 @@
-var funcInfo = require('./i18n_handler_example_output.json');
+var funcInfo = require('./casefile/i18n_handler/i18n_handler_example_output.json');
 
 module.exports =
 {

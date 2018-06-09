@@ -1,6 +1,5 @@
 'use strict';
 
-var fs					= require('fs');
 var expect				= require('expect.js');
 var i18nc				= require('../');
 var DEF					= require('../lib/def');
@@ -12,7 +11,7 @@ describe('#main', function()
 {
 	describe('#widthdb funcData', function()
 	{
-		var exampleCode = require('./files/i18n_handler_example.js');
+		var exampleCode = require('./files/casefile/i18n_handler/i18n_handler_example.js');
 		exampleCode = 'module.exports = I18N;\n'+exampleCode.toString();
 
 		it('#nocode', function()
@@ -31,7 +30,7 @@ describe('#main', function()
 
 		it('#withcode', function()
 		{
-			var funcInfo = require('./files/i18n_handler_example_output.json');
+			var funcInfo = require('./files/casefile/i18n_handler/i18n_handler_example_output.json');
 			var codeData =
 			{
 				DEFAULTS: Object.keys(funcInfo.__TRANSLATE_JSON__['en-US'].DEFAULTS),
@@ -61,7 +60,7 @@ describe('#main', function()
 	{
 		it('#noI18N', function()
 		{
-			var exampleCode = require('./files/casefile_main/func_code_noi18n').toString();
+			var exampleCode = require('./files/casefile/func_code/func_code_noi18n').toString();
 			var info = i18nc(exampleCode);
 
 			var otherCode = requireAfterWrite('func_code_noi18n_output.js', info.code, {readMode: 'string'});
@@ -71,7 +70,7 @@ describe('#main', function()
 
 		it('#noI18N noclosure', function()
 		{
-			var exampleCode = require('./files/casefile_main/func_code_noi18n').toString();
+			var exampleCode = require('./files/casefile/func_code/func_code_noi18n').toString();
 			var info = i18nc(exampleCode, {isClosureWhenInsertedHead: false});
 
 			var otherCode = requireAfterWrite('func_code_noi18n_output_noclosure.js', info.code, {readMode: 'string'});
@@ -81,7 +80,7 @@ describe('#main', function()
 
 		it('#define', function()
 		{
-			var exampleCode = require('./files/casefile_main/func_code_i18n_define').toString();
+			var exampleCode = require('./files/casefile/func_code/func_code_i18n_define').toString();
 			var info = i18nc(exampleCode);
 
 			var otherCode = requireAfterWrite('func_code_i18n_define_output.js', info.code, {readMode: 'string'});
@@ -91,7 +90,7 @@ describe('#main', function()
 
 		it('#define not_define', function()
 		{
-			var exampleCode = require('./files/casefile_main/func_code_i18n_define').toString();
+			var exampleCode = require('./files/casefile/func_code/func_code_i18n_define').toString();
 			var info = i18nc(exampleCode,
 				{
 					isInsertToDefineHalder: false
@@ -107,7 +106,7 @@ describe('#main', function()
 	{
 		it('#one i18n', function()
 		{
-			var exampleCode = require('./files/casefile_main/func_code_i18n').toString();
+			var exampleCode = require('./files/casefile/func_code/func_code_i18n').toString();
 			var info = i18nc(exampleCode);
 
 			var otherCode = requireAfterWrite('func_code_i18n_output.js', info.code, {readMode: 'string'});
@@ -117,7 +116,7 @@ describe('#main', function()
 
 		it('#define and scope', function()
 		{
-			var exampleCode = require('./files/casefile_main/func_code_i18n_define').toString();
+			var exampleCode = require('./files/casefile/func_code/func_code_i18n_define').toString();
 			var info = i18nc(exampleCode,
 				{
 					dbTranslateWords:
@@ -146,7 +145,7 @@ describe('#main', function()
 
 		it('#no words', function()
 		{
-			var exampleCode = require('./files/casefile_main/func_code_i18n_nowords').toString();
+			var exampleCode = require('./files/casefile/func_code/func_code_i18n_nowords').toString();
 			var info = i18nc(exampleCode);
 
 			var otherCode = requireAfterWrite('func_code_i18n_nowords_output.js', info.code, {readMode: 'string'});
@@ -216,7 +215,7 @@ describe('#main', function()
 				println("不可能存在的中文翻译词组");
 				function I18N()
 				{
-					self = I18N;
+					var self = I18N;
 					self.__FILE_KEY__ = "default_file_key";
 					self.__FUNCTION_VERSION__ = "$FUNCTION_VERSION$";
 					self.__TRANSLATE_JSON__ =

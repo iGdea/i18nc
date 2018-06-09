@@ -3,7 +3,7 @@ function code()
 				println(I18N('不可能存在的中文翻译词组'));
 				function I18N()
 				{
-					self = I18N;
+					var self = I18N;
 					self.__FILE_KEY__ = "default_file_key";
 					self.__FUNCTION_VERSION__ = "9";
 					self.__TRANSLATE_JSON__ =

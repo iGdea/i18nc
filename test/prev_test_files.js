@@ -53,7 +53,7 @@ function I18NHandlerExampleFile()
 	var content = 'module.exports = I18N;\n';
 	content += I18NHandlerExampleCode();
 
-	fs.writeFileSync(__dirname+'/files/i18n_handler_example.js', content);
+	fs.writeFileSync(__dirname+'/files/casefile/i18n_handler/i18n_handler_example.js', content);
 }
 
 
@@ -74,7 +74,7 @@ function I18NHandlerSimpleExampleFile()
 	var content = 'module.exports = I18N;\n';
 	content += I18NHandlerSimpleExampleCode();
 
-	fs.writeFileSync(__dirname+'/files/i18n_handler_simple_example.js', content);
+	fs.writeFileSync(__dirname+'/files/casefile/i18n_handler/i18n_handler_simple_example.js', content);
 }
 
 function main()
