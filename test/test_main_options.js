@@ -5,7 +5,7 @@ var expect				= require('expect.js');
 var i18nc				= require('../');
 var dbTranslateWords	= require('./example/translate_words_db');
 var autoTestUtils		= require('./auto_test_utils');
-var requireAfterWrite	= autoTestUtils.requireAfterWrite('output_main_options');
+var requireAfterWrite	= autoTestUtils.requireAfterWrite('main_options');
 
 
 describe('#main_options', function()

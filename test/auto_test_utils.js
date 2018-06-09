@@ -19,7 +19,7 @@ exports.requireAfterWrite = function requireAfterWrite(subpath)
 		file_path = SUB_PATHS[subpath];
 		if (!file_path)
 		{
-			file_path = 'files/'+subpath;
+			file_path = 'files/output/'+subpath;
 		}
 	}
 

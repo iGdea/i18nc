@@ -6,7 +6,7 @@ var i18nc				= require('../');
 var DEF					= require('../lib/def');
 var dbTranslateWords	= require('./example/translate_words_db');
 var autoTestUtils		= require('./auto_test_utils');
-var requireAfterWrite	= autoTestUtils.requireAfterWrite('output_main');
+var requireAfterWrite	= autoTestUtils.requireAfterWrite('main');
 
 describe('#main', function()
 {
