@@ -9,13 +9,14 @@ I18NC-CORE
 [![NPM License][license-image]][npm-url]
 
 # Install
+
 ```
 npm install i18nc-core --save
 ```
 
 # Useage
 
-```
+```javascript
 var i18nc = require('i18nc-core');
 var ret = i18nc(code, options);
 
@@ -33,7 +34,7 @@ ret.subScopeDatas
 
 ### Input Code
 
-```
+```javascript
 var word = "中文1";
 define(function()
 {
@@ -48,7 +49,7 @@ function I18N(){}
 
 ### Output Code
 
-```
+```javascript
 var word = I18N('中文1');
 define(function()
 {
