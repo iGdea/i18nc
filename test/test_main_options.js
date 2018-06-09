@@ -6,7 +6,7 @@ var i18nc				= require('../');
 var dbTranslateWords	= require('./example/translate_words_db');
 var autoTestUtils		= require('./auto_test_utils');
 var requireAfterWrite	= autoTestUtils.requireAfterWrite('main_options');
-
+var collectFuncs		= require('./files/casefile/func_code/func_code_collect');
 
 describe('#main_options', function()
 {
@@ -47,10 +47,7 @@ describe('#main_options', function()
 
 	it('#cutword', function()
 	{
-		var code = function code()
-		{
-			var v1 = '1234';
-		};
+		var code = collectFuncs.no_words;
 
 		var info = i18nc(code.toString(),
 			{
@@ -74,11 +71,7 @@ describe('#main_options', function()
 
 	it('#isInjectAllTranslateWords', function()
 	{
-		var code = function code()
-		{
-			var v1 = '简体';
-		};
-
+		var code = collectFuncs.has_words;
 		var info = i18nc(code.toString(),
 			{
 				isInjectAllTranslateWords: false
@@ -154,11 +147,7 @@ describe('#main_options', function()
 	{
 		it('#base', function()
 		{
-			var code = function code()
-			{
-				var v1 = '简体';
-			};
-
+			var code = collectFuncs.has_words;
 			var info = i18nc(code.toString(),
 				{
 					isMinFuncTranslateCode: true
@@ -171,11 +160,7 @@ describe('#main_options', function()
 
 		it('#wdithdb', function()
 		{
-			var code = function code()
-			{
-				var v1 = '简体';
-			};
-
+			var code = collectFuncs.has_words;
 			var info = i18nc(code.toString(),
 				{
 					dbTranslateWords: dbTranslateWords,
@@ -232,7 +217,8 @@ describe('#main_options', function()
 	{
 		describe('#RemoveTplComment', function()
 		{
-			var code = require('./files/casefile/func_code/func_code_tpl_comment').toString();
+			var tplCommentFunc = require('./files/casefile/func_code/func_code_tpl_comment');
+			var code = tplCommentFunc.has_words.toString();
 
 			it('#remove', function()
 			{
@@ -261,7 +247,7 @@ describe('#main_options', function()
 
 			it('#nokey', function()
 			{
-				var code = require('./files/casefile/func_code/func_code_tpl_comment_nokey').toString();
+				var code = tplCommentFunc.no_words.toString();
 				var info = i18nc(code,
 					{
 						cutWordBeautify: ['RemoveTplComment']

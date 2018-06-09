@@ -1,3 +1,6 @@
 coverage/
-test/
+test/tmp/
+test/output/
+test/example/
+test/files/
 lib/i18n_func/tpl/
