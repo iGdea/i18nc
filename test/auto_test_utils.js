@@ -13,14 +13,10 @@ var SUB_PATHS =
 
 exports.requireAfterWrite = function requireAfterWrite(subpath)
 {
-	var file_path = 'files';
-	if (subpath)
+	var file_path = SUB_PATHS[subpath];
+	if (!file_path)
 	{
-		file_path = SUB_PATHS[subpath];
-		if (!file_path)
-		{
-			file_path = 'files/output/'+subpath;
-		}
+		file_path = 'files/output/'+subpath;
 	}
 
 	return function(filename, data, options)

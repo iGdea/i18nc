@@ -3,7 +3,7 @@
 var expect				= require('expect.js');
 var esprima				= require('esprima');
 var i18nParser			= require('../lib/i18n_func/parser');
-var requireAfterWrite	= require('./auto_test_utils').requireAfterWrite();
+var requireAfterWrite	= require('./auto_test_utils').requireAfterWrite('i18n_func_parser');
 
 describe('#i18n_func_parser', function()
 {

@@ -333,4 +333,9 @@ describe('#main_options', function()
 			});
 		});
 	});
+
+	// it('#isIgnoreI18NHandlerTranslateWords', function()
+	// {
+	//
+	// });
 });
