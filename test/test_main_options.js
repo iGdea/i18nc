@@ -334,8 +334,20 @@ describe('#main_options', function()
 		});
 	});
 
-	// it('#isIgnoreI18NHandlerTranslateWords', function()
-	// {
-	//
-	// });
+	it('#isIgnoreI18NHandlerTranslateWords', function()
+	{
+		var code = require('./example/func_code_output').toString();
+		var info = i18nc(code,
+			{
+				isIgnoreI18NHandlerTranslateWords: true,
+				dbTranslateWords:
+				{
+					'zh-TW': {
+						'*': {DEFAULTS: {'简体': '簡體'}}
+					}
+				}
+			});
+		var otherCode = requireAfterWrite('func_code_ignore_func_words.js', info.code, {readMode: 'string'});
+		expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+	});
 });
