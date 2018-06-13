@@ -33,20 +33,20 @@ describe('#options', function()
 		{
 			var newOptions = optionsUtils.extend(
 				{
-					cutWordBeautify: {KeyTrim: false}
+					codeModifiedArea: {I18NHandler: false}
 				});
-			expect(newOptions.cutWordBeautify.KeyTrim).to.be(false);
-			expect(newOptions.cutWordBeautify.RemoveTplComment).to.be(true);
+			expect(newOptions.codeModifiedArea.I18NHandler).to.be(false);
+			expect(newOptions.codeModifiedArea.TranslateWord).to.be(true);
 		});
 
 		it('#arr2obj', function()
 		{
 			var newOptions = optionsUtils.extend(
 				{
-					cutWordBeautify: ['RemoveTplComment']
+					codeModifiedArea: ['I18NHandler']
 				});
-			expect(!!newOptions.cutWordBeautify.KeyTrim).to.be(false);
-			expect(!!newOptions.cutWordBeautify.RemoveTplComment).to.be(true);
+			expect(!!newOptions.codeModifiedArea.TranslateWord).to.be(false);
+			expect(!!newOptions.codeModifiedArea.I18NHandler).to.be(true);
 		});
 
 		it('#originalOptions', function()

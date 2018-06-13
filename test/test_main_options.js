@@ -34,16 +34,6 @@ describe('#main_options', function()
 		});
 	});
 
-	it('#comboLiteralMode', function()
-	{
-		var code = require('./files/casefile/func_code/func_code_combo_literal');
-		var info = i18nc(code.toString(), {comboLiteralMode: 'I18N'});
-
-		var otherCode = requireAfterWrite('func_code_combo_literal_output.js', info.code, {readMode: 'string'});
-
-		expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
-	});
-
 
 	it('#cutword', function()
 	{
@@ -210,54 +200,6 @@ describe('#main_options', function()
 		var otherCode = requireAfterWrite('func_code_no_db_set_lans.js', info.code, {readMode: 'string'});
 
 		expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
-	});
-
-
-	describe('#cutwordBeautify', function()
-	{
-		describe('#RemoveTplComment', function()
-		{
-			var tplCommentFunc = require('./files/casefile/func_code/func_code_tpl_comment');
-			var code = tplCommentFunc.has_words.toString();
-
-			it('#remove', function()
-			{
-				var info = i18nc(code,
-					{
-						cutWordBeautify: ['RemoveTplComment']
-					});
-
-				var otherCode = requireAfterWrite('func_code_tpl_comment_remove.js', info.code, {readMode: 'string'});
-
-				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
-			});
-
-			it('#keep', function()
-			{
-				var info = i18nc(code,
-					{
-						cutWordBeautify: []
-					});
-
-				var otherCode = requireAfterWrite('func_code_tpl_comment_keep.js', info.code, {readMode: 'string'});
-
-				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
-			});
-
-
-			it('#nokey', function()
-			{
-				var code = tplCommentFunc.no_words.toString();
-				var info = i18nc(code,
-					{
-						cutWordBeautify: ['RemoveTplComment']
-					});
-
-				var otherCode = requireAfterWrite('func_code_tpl_comment_nokey.js', info.code, {readMode: 'string'});
-
-				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
-			});
-		});
 	});
 
 

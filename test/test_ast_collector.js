@@ -66,35 +66,6 @@ describe('#ASTCollector', function()
 		});
 	});
 
-
-	describe('#options', function()
-	{
-		describe('#comboLiteralMode', function()
-		{
-			var collectFuncs = require('./files/casefile/func_code/func_code_collect');
-			var code = collectFuncs.mulit_words;
-
-			it('#normal', function()
-			{
-				var scope = getFinalCollect(code);
-				expect(getScopeCodeTranslateWord(scope)).to.eql(['中文', '简体', '词典'].sort());
-			});
-
-			it('#LITERAL', function()
-			{
-				var scope = getFinalCollect(code, {comboLiteralMode: 'LITERAL'});
-				expect(getScopeCodeTranslateWord(scope)).to.eql(['123中文','简体', '词典'].sort());
-			});
-
-			it('#I18N', function()
-			{
-				var scope = getFinalCollect(code, {comboLiteralMode: 'I18N'});
-				expect(getScopeCodeTranslateWord(scope)).to.eql(['123中文abc', '简体', '词典'].sort());
-			});
-		});
-	});
-
-
 	describe('#scopes', function()
 	{
 		var scopesFuncs = require('./files/casefile/func_code/func_code_scopes');
