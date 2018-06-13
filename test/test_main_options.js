@@ -53,7 +53,7 @@ describe('#main_options', function()
 				}
 			});
 
-		var otherCode = requireAfterWrite('func_code_cutWord_output.js', info.code, {readMode: 'string'});
+		var otherCode = requireAfterWrite('func_code_cutword_output.js', info.code, {readMode: 'string'});
 
 		expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 	});
