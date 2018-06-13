@@ -35,13 +35,13 @@ describe('#main_options', function()
 	});
 
 
-	it('#cutword', function()
+	it('#cutWord', function()
 	{
 		var code = collectFuncs.no_words;
 
 		var info = i18nc(code.toString(),
 			{
-				cutword: function(emitData)
+				cutWord: function(emitData)
 				{
 					emitData.lineStrings =
 					[
@@ -53,7 +53,7 @@ describe('#main_options', function()
 				}
 			});
 
-		var otherCode = requireAfterWrite('func_code_cutword_output.js', info.code, {readMode: 'string'});
+		var otherCode = requireAfterWrite('func_code_cutWord_output.js', info.code, {readMode: 'string'});
 
 		expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 	});

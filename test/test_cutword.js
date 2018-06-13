@@ -6,7 +6,7 @@ var escodegen		= require('escodegen');
 var optionsUtils	= require('../lib/options');
 var LiteralHandler	= require('../lib/ast_literal_handler').LiteralHandler;
 
-describe('#cutword', function()
+describe('#cutWord', function()
 {
 	var options = optionsUtils.extend();
 	var literalHandler = new LiteralHandler(options);
