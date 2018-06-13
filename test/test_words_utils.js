@@ -101,12 +101,12 @@ describe('#words_utils', function()
 	});
 
 
-	it('#unescape4escodegen', function()
-	{
-		var ast = esprima.parse('"。；"');
-		var code = escodegen.generate(ast);
-
-		expect(code).to.be("'\\u3002\\uFF1B';");
-		expect(wordsUtils.unescape4escodegen(code)).to.be("'。；';");
-	});
+	// it('#unescape4escodegen', function()
+	// {
+	// 	var ast = esprima.parse('"。；"');
+	// 	var code = escodegen.generate(ast);
+	//
+	// 	expect(code).to.be("'\\u3002\\uFF1B';");
+	// 	expect(wordsUtils.unescape4escodegen(code)).to.be("'。；';");
+	// });
 });
