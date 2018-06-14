@@ -7,7 +7,7 @@ function getCacheVarByFunc()
 {
 	var self = getCacheVarByFunc;
 	var cache = self.data || (self.data = {});
-	var value = (function(cache){if (cache.gb){return cache.gb.lan}else{cache.gb = {}}})(cache);
+	var value = (function(cache){if (cache.gb){return cache.gb.lan}else if(typeof process == 'object'){cache.db = process}else{cache.gb = {}}})(cache);
 	return value;
 }
 
@@ -15,14 +15,14 @@ function getCacheVarByVarAndFunc()
 {
 	var self = getCacheVarByVarAndFunc;
 	var cache = self.data || (self.data = {});
-	var value = cache.gb && cache.gb.lan || (function(cache){if (cache.gb){return cache.gb.lan}else{cache.gb = {}}})(cache);
+	var value = cache.gb && cache.gb.lan || (function(cache){if (cache.gb){return cache.gb.lan}else if(typeof process == 'object'){cache.db = process}else{cache.gb = {}}})(cache);
 	return value;
 }
 
 function getCacheVarByVar()
 {
 	var self = getCacheVarByVar;
-	var cache = self.data || (self.data = {gb: {}});
+	var cache = self.data || (self.data = {gb: typeof process == 'object' ? process : {}});
 	var value = cache.gb && cache.gb.lan;
 	return value;
 }
