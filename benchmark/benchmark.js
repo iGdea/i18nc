@@ -19,14 +19,43 @@ function getCacheVarByVarAndFunc()
 	return value;
 }
 
-function getCacheVarByVar()
+function getCacheVarByEmptyVar()
 {
-	var self = getCacheVarByVar;
-	var cache = self.data || (self.data = {gb: typeof process == 'object' ? process : {}});
+	var self = getCacheVarByEmptyVar;
+	var cache = self.data || (self.data = {});
 	var value = cache.gb && cache.gb.lan;
 	return value;
 }
 
+function getCacheVarByInitVar()
+{
+	var self = getCacheVarByInitVar;
+	var cache = self.data || (self.data = {gb:{}});
+	var value = cache.gb && cache.gb.lan;
+	return value;
+}
+
+function getCacheVarBySetVar()
+{
+	var self = getCacheVarBySetVar;
+	var cache = self.data || (self.data = {});
+	if (!cache.gb) cache.gb = {};
+	var value = cache.gb && cache.gb.lan;
+	return value;
+}
+
+function globalFunc(cache)
+{
+	if (cache.gb){return cache.gb.lan}else if(typeof process == 'object'){cache.db = process}else{cache.gb = {}}
+}
+
+function getCacheVarByFunc()
+{
+	var self = getCacheVarByFunc;
+	var cache = self.data || (self.data = {});
+	var value = globalFunc(cache);
+	return value;
+}
 
 var suite = new Benchmark.Suite;
 suite.add('var&func', function()
@@ -37,9 +66,21 @@ suite.add('var&func', function()
 	{
 		getCacheVarByFunc();
 	})
-	.add('var', function()
+	.add('setvar', function()
 	{
-		getCacheVarByVar();
+		getCacheVarBySetVar();
+	})
+	.add('initvar', function()
+	{
+		getCacheVarByInitVar();
+	})
+	.add('emptyvar', function()
+	{
+		getCacheVarByEmptyVar();
+	})
+	.add('globalfunc', function()
+	{
+		getCacheVarByFunc();
 	})
 	.on('cycle', function(event)
 	{
