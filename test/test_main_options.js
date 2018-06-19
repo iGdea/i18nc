@@ -35,13 +35,13 @@ describe('#main_options', function()
 	});
 
 
-	it('#cutWord', function()
+	it('#cutword', function()
 	{
 		var code = collectFuncs.no_words;
 
 		var info = i18nc(code.toString(),
 			{
-				cutWord: function(emitData)
+				cutword: function(emitData)
 				{
 					emitData.result =
 					[

@@ -108,9 +108,9 @@ describe('#ASTCollector', function()
 			i18nc.off();
 		});
 
-		it('#cutWord', function()
+		it('#cutword', function()
 		{
-			i18nc.on('cutWord', function(emitData)
+			i18nc.on('cutword', function(emitData)
 			{
 				emitData.result =
 				[

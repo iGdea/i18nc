@@ -8,7 +8,7 @@ describe('#words_utils', function()
 {
 	describe('#splitValue2lineStrings', function()
 	{
-		describe('#width cutWordReg', function()
+		describe('#width cutwordReg', function()
 		{
 			var options = optionsUtils.extend();
 
@@ -57,7 +57,7 @@ describe('#words_utils', function()
 			});
 		});
 
-		describe('#widthout cutWordReg', function()
+		describe('#widthout cutwordReg', function()
 		{
 			console.log('#@todo');
 		});
