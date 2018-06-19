@@ -47,7 +47,7 @@ describe('#main_options', function()
 					[
 						{
 							translateWord: true,
-							value: emitData.value
+							value: emitData.originalString
 						}
 					];
 				}

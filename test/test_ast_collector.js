@@ -116,7 +116,7 @@ describe('#ASTCollector', function()
 				[
 					{
 						translateWord: true,
-						value: emitData.value
+						value: emitData.originalString
 					}
 				];
 			});
