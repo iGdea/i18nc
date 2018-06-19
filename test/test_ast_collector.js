@@ -112,7 +112,7 @@ describe('#ASTCollector', function()
 		{
 			i18nc.on('cutWord', function(emitData)
 			{
-				emitData.lineStrings =
+				emitData.result =
 				[
 					{
 						translateWord: true,

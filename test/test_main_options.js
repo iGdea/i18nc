@@ -43,7 +43,7 @@ describe('#main_options', function()
 			{
 				cutWord: function(emitData)
 				{
-					emitData.lineStrings =
+					emitData.result =
 					[
 						{
 							translateWord: true,
