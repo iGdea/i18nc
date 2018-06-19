@@ -6,5 +6,6 @@ module.exports =
 	{
 		'no-console': 'off',
 		'no-redeclare': 'off',
+		'no-control-regex': 'off',
 	},
 }

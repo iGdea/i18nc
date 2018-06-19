@@ -10,6 +10,7 @@ node_js:
   - unstable
 
 script:
+  - npm run-script test-eslint
   - npm run-script test-travis
 
 after_script:
