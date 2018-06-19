@@ -7,10 +7,9 @@ node_js:
   - '0.12'
   - lts/*
   - stable
-  - unstable
 
 script:
-  - npm run-script test-eslint
+  # - npm run-script test-eslint
   - npm run-script test-travis
 
 after_script:
