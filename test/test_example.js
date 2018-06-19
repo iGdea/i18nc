@@ -73,17 +73,12 @@ describe('#example', function()
 					&& ast.arguments[0].type == 'Literal')
 				{
 					var file = __dirname+'/example/cases/use_require/'+ast.arguments[0].value;
-					var newAst = i18nc.parse(fs.readFileSync(file).toString());
-
-					var retAst = newAst.body
-						&& newAst.body[0]
-						&& newAst.body[0].expression
-						&& newAst.body[0].expression.right;
-
-					if (retAst)
-					{
-						emitData.ast = retAst;
-					}
+					emitData.result = require(file);
+					expect(emitData.result['en-US']).to.be.an('object');
+				}
+				else
+				{
+					expect().fail();
 				}
 			},
 			newTranslateJSON: function(emitData)
