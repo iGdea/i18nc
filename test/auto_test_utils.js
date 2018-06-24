@@ -2,39 +2,35 @@
 
 var _ = require('lodash');
 var fs = require('fs');
+var path =  require('path');
 var mkdirp = require('mkdirp');
-
-
-var SUB_PATHS =
-{
-	example: 'example',
-	use_require: 'example/cases/use_require'
-};
 
 exports.requireAfterWrite = function requireAfterWrite(subpath)
 {
-	var file_path = SUB_PATHS[subpath];
-	if (!file_path)
-	{
-		file_path = 'files/output/'+subpath;
-	}
+	var file_path = 'files/output/'+subpath;
 
 	return function(filename, data, options)
 	{
-		var file = __dirname+'/'+file_path+'/'+filename;
+		var file = file_path+'/'+filename;
+		return requireAfterWriteReal(file, data, options);
+	};
+}
 
-		if (!process.env.TEST_BUILD) return _requireOrFs(file, options);
+exports.requireAfterWriteReal = requireAfterWriteReal;
+function requireAfterWriteReal(file, data, options)
+{
+	file = path.join(__dirname, file);
+	if (!process.env.TEST_BUILD) return _requireOrFs(file, options);
 
-		if (typeof data == 'object')
-		{
-			data = JSON.stringify(data, null, '\t');
-		}
-
-		mkdirp.sync(__dirname+'/'+file_path);
-		fs.writeFileSync(file, data);
-
-		return _requireOrFs(file, options);
+	if (typeof data == 'object')
+	{
+		data = JSON.stringify(data, null, '\t');
 	}
+
+	mkdirp.sync(path.dirname(file));
+	fs.writeFileSync(file, data);
+
+	return _requireOrFs(file, options);
 }
 
 function _requireOrFs(file, options)
