@@ -4,12 +4,11 @@ os:
 language: node_js
 
 node_js:
-  - '0.12'
   - lts/*
   - stable
 
 script:
-  # - npm run lint
+  - npm run lint
   - npm run test-travis
 
 after_script:
