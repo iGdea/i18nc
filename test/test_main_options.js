@@ -77,7 +77,7 @@ describe('#main_options', function()
 	{
 		var exampleCode = fs.readFileSync(__dirname+'/example/func_code.js').toString();
 
-		it('#only i18nHanlder', function()
+		it('#only I18NHandler', function()
 		{
 			var info = i18nc(exampleCode,
 			{
@@ -193,7 +193,7 @@ describe('#main_options', function()
 		var code = 'println("不可能存在的中文翻译词组");';
 		var info = i18nc(code,
 			{
-				isClosureWhenInsertedHead: false,
+				isCheckClosureForNewI18NHandler: false,
 				pickFileLanguages: ['en-US']
 			});
 
@@ -212,7 +212,7 @@ describe('#main_options', function()
 		expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 	});
 
-	describe('#isClosureWhenInsertedHead', function()
+	describe('#isCheckClosureForNewI18NHandler', function()
 	{
 		describe('#closure', function()
 		{
@@ -220,14 +220,14 @@ describe('#main_options', function()
 
 			it('#use', function()
 			{
-				var info = i18nc(code, {isClosureWhenInsertedHead: true});
+				var info = i18nc(code, {isCheckClosureForNewI18NHandler: true});
 				var otherCode = requireAfterWrite('func_code_closure_closure.js', info.code, {readMode: 'string'});
 				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 			});
 
 			it('#no use', function()
 			{
-				var info = i18nc(code, {isClosureWhenInsertedHead: false});
+				var info = i18nc(code, {isCheckClosureForNewI18NHandler: false});
 				var otherCode = requireAfterWrite('func_code_closure_noclosure.js', info.code, {readMode: 'string'});
 				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 			});
@@ -241,14 +241,14 @@ describe('#main_options', function()
 			{
 				expect(function()
 					{
-						i18nc(code, {isClosureWhenInsertedHead: true});
+						i18nc(code, {isCheckClosureForNewI18NHandler: true});
 					})
 					.to.throwError(/closure youself/);
 			});
 
 			it('#no use', function()
 			{
-				var info = i18nc(code, {isClosureWhenInsertedHead: false});
+				var info = i18nc(code, {isCheckClosureForNewI18NHandler: false});
 				var otherCode = requireAfterWrite('func_code_noclosure_noclosure.js', info.code, {readMode: 'string'});
 				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 			});
@@ -262,14 +262,14 @@ describe('#main_options', function()
 
 			it('#use', function()
 			{
-				var info = i18nc(code, {isClosureWhenInsertedHead: true});
+				var info = i18nc(code, {isCheckClosureForNewI18NHandler: true});
 				var otherCode = requireAfterWrite('func_code_closure_funcexp_closure.js', info.code, {readMode: 'string'});
 				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 			});
 
 			it('#no use', function()
 			{
-				var info = i18nc(code, {isClosureWhenInsertedHead: false});
+				var info = i18nc(code, {isCheckClosureForNewI18NHandler: false});
 				var otherCode = requireAfterWrite('func_code_closure_funcexp_noclosure.js', info.code, {readMode: 'string'});
 				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 			});

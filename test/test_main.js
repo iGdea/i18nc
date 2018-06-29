@@ -71,7 +71,7 @@ describe('#main', function()
 		it('#noI18N noclosure', function()
 		{
 			var exampleCode = require('./files/casefile/func_code/func_code_noi18n').toString();
-			var info = i18nc(exampleCode, {isClosureWhenInsertedHead: false});
+			var info = i18nc(exampleCode, {isCheckClosureForNewI18NHandler: false});
 
 			var otherCode = requireAfterWrite('func_code_noi18n_output_noclosure.js', info.code, {readMode: 'string'});
 
@@ -175,7 +175,7 @@ describe('#main', function()
 
 			it('#noanything', function()
 			{
-				var info = i18nc(code, {isClosureWhenInsertedHead: false});
+				var info = i18nc(code, {isCheckClosureForNewI18NHandler: false});
 
 				var otherCode = requireAfterWrite('func_code_no_db.js', info.code, {readMode: 'string'});
 
@@ -186,7 +186,7 @@ describe('#main', function()
 			{
 				var info = i18nc(code,
 					{
-						isClosureWhenInsertedHead: false,
+						isCheckClosureForNewI18NHandler: false,
 						dbTranslateWords:
 						{
 							en:
@@ -205,7 +205,7 @@ describe('#main', function()
 			{
 				var info = i18nc(code,
 					{
-						isClosureWhenInsertedHead: false,
+						isCheckClosureForNewI18NHandler: false,
 						dbTranslateWords:
 						{
 							en:
