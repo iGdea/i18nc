@@ -173,7 +173,7 @@ describe('#i18n_placeholder_update', function()
 		{
 			var ast = esprima.parse(code, optionsUtils.esprimaOptions);
 			var I18NPlaceholderNew = new I18NPlaceholder(
-					{}, code, optionsUtils.extend({I18NhandlerTpl_GetLanguageCode: 'GetLanguageCode'}), ast.body[0]
+					{}, code, optionsUtils.extend({I18NHandlerTPL_GetLanguageCode: 'GetLanguageCode'}), ast.body[0]
 				);
 
 			I18NPlaceholderNew.renderType = 'complete';

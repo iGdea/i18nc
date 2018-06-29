@@ -1,12 +1,11 @@
 'use strict';
 
+var _ = require('lodash');
 var fs = require('fs');
 var DEF = require('../lib/def');
 var i18nTpl = require('../lib/i18n_func/render');
 
-
-exports.I18NHandlerExampleCode = I18NHandlerExampleCode;
-function I18NHandlerExampleCode()
+function I18NHandlerConfig()
 {
 	var TRANSLATE_JSON =
 	{
@@ -38,28 +37,28 @@ function I18NHandlerExampleCode()
 		}
 	};
 
-	return i18nTpl.render(
-		{
-			handlerName			: 'I18N',
-			FILE_KEY			: 'i18n_handler_example',
-			FUNCTION_VERSION	: DEF.I18NFunctionVersion,
-			GetLanguageCode		: '(function(){return global.__i18n_lan__})',
-			TRANSLATE_JSON_CODE	: JSON.stringify(TRANSLATE_JSON, null, '\t').replace(/\n/g, '\n\t'),
-		});
+	return {
+		handlerName			: 'I18N',
+		FILE_KEY			: 'i18n_handler_example',
+		FUNCTION_VERSION	: DEF.I18NFunctionVersion,
+		GetLanguageCode		: '(function(){return global.__i18n_lan__})',
+		TRANSLATE_JSON_CODE	: JSON.stringify(TRANSLATE_JSON, null, '\t').replace(/\n/g, '\n\t'),
+	};
 }
 
-function I18NHandlerExampleFile()
+exports.I18NHandlerExampleCode = function I18NHandlerExampleCode()
 {
-	var content = 'module.exports = I18N;\n';
-	content += I18NHandlerExampleCode();
+	return i18nTpl.render(I18NHandlerConfig());
+};
 
-	fs.writeFileSync(__dirname+'/files/casefile/i18n_handler/i18n_handler_example.js', content);
-}
+exports.I18NHandlerGlobalExampleCode = function I18NHandlerGlobalExampleCode()
+{
+	var config = I18NHandlerConfig();
+	config.globalHandlerName = 'I18N.topI18N';
+	return i18nTpl.renderGlobal(config);
+};
 
-
-
-exports.I18NHandlerSimpleExampleCode = I18NHandlerSimpleExampleCode;
-function I18NHandlerSimpleExampleCode()
+exports.I18NHandlerSimpleExampleCode = function I18NHandlerSimpleExampleCode()
 {
 	return i18nTpl.renderSimple(
 		{
@@ -67,21 +66,26 @@ function I18NHandlerSimpleExampleCode()
 			FILE_KEY			: 'i18n_handler_example',
 			FUNCTION_VERSION	: DEF.I18NFunctionVersion,
 		});
-}
-
-function I18NHandlerSimpleExampleFile()
-{
-	var content = 'module.exports = I18N;\n';
-	content += I18NHandlerSimpleExampleCode();
-
-	fs.writeFileSync(__dirname+'/files/casefile/i18n_handler/i18n_handler_simple_example.js', content);
-}
+};
 
 function main()
 {
 	console.log('run main');
-	I18NHandlerExampleFile();
-	I18NHandlerSimpleExampleFile();
+
+	var filemap =
+	{
+		i18n_handler_example		: exports.I18NHandlerExampleCode,
+		i18n_handler_simple_example	: exports.I18NHandlerSimpleExampleCode,
+		i18n_handler_global_example	: exports.I18NHandlerGlobalExampleCode
+	};
+
+	_.each(filemap, function(handler, basename)
+		{
+			var content = 'module.exports = I18N;\n';
+			content += handler();
+
+			fs.writeFileSync(__dirname+'/files/casefile/i18n_handler/'+basename+'.js', content);
+		});
 }
 
 if (process.mainModule === module) main();

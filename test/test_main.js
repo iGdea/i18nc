@@ -154,6 +154,19 @@ describe('#main', function()
 		});
 	});
 
+	describe('#global i18n', function()
+	{
+		it('#new code', function()
+		{
+			var exampleCode = require('./files/casefile/func_code/func_code_i18n_global_hanlder').toString();
+			var info = i18nc(exampleCode);
+
+			var otherCode = requireAfterWrite('func_code_i18n_global_hanlder_output.js', info.code, {readMode: 'string'});
+
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+		});
+	});
+
 	describe('#dbTranslate', function()
 	{
 		describe('#no db', function()

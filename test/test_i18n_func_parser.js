@@ -25,6 +25,29 @@ describe('#i18n_func_parser', function()
 		expect(result).to.eql(outputJSON);
 	});
 
+	describe('#globalHandlerName', function()
+	{
+		it('#base', function()
+		{
+			var code = require('./files/casefile/i18n_handler/i18n_handler_global_example').toString();
+			var ast = esprima.parse(code);
+			var result = i18nParser.parse(ast.body[0]);
+			var outputJSON = requireAfterWrite('i18n_handler_global_example_output.json', result);
+			expect(result).to.eql(outputJSON);
+			expect(result.globalHandlerName).to.be('I18N.topI18N');
+		});
+
+		it('#dev code', function()
+		{
+			var code = require('./files/casefile/i18n_handler/i18n_handler_global_dev').toString();
+			var ast = esprima.parse(code);
+			var result = i18nParser.parse(ast.body[0]);
+			var outputJSON = requireAfterWrite('i18n_handler_global_dev_output.json', result);
+			expect(result).to.eql(outputJSON);
+			expect(result.globalHandlerName).to.be('window.topI18N');
+		});
+	});
+
 	describe('#mulit VKD', function()
 	{
 		var i18ncVirtual = require('./files/casefile/i18n_handler/i18n_handler_virtual');

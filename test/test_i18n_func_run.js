@@ -255,4 +255,22 @@ describe('#i18n_func_run', function()
 		});
 	});
 
+
+	describe('#global', function()
+	{
+		var I18N = require('./files/casefile/i18n_handler/i18n_handler_global_example');
+
+		it('#base', function()
+		{
+			I18N.topI18N = function(msg, args, translateJSON, version, cache, I18N)
+			{
+				expect(translateJSON).to.be.an('object');
+				expect(I18N).to.be.an('function');
+				return 'ret:'+msg;
+			}
+
+			expect(I18N('中文')).to.be('ret:中文');
+		});
+	});
+
 });
