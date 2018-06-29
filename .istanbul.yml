@@ -1,0 +1,7 @@
+instrumentation:
+  root: .
+  extensions:
+    - .js
+  default-excludes: true
+  excludes:
+    - lib/i18n_func/tpl/**
