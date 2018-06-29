@@ -52,13 +52,13 @@ describe('#i18n_placeholder_update', function()
 		it('#diff version', function()
 		{
 			var code = i18nTpl.render(
-				{
-					handlerName: 'I18N',
-					FILE_KEY: '*',
-					FUNCTION_VERSION: 0,
-					GetLanguageCode: 'GetLanGlobal',
-					TRANSLATE_JSON_CODE : '{}'
-				});
+			{
+				handlerName: 'I18N',
+				FILE_KEY: '*',
+				FUNCTION_VERSION: 0,
+				GetLanguageCode: 'GetLanGlobal',
+				TRANSLATE_JSON_CODE : '{}'
+			});
 			checkEmptyJSONCode(code, 'complete');
 			checkWidthJSONCode(code, 'complete');
 		});
@@ -66,13 +66,13 @@ describe('#i18n_placeholder_update', function()
 		it('#no file_key', function()
 		{
 			var code = i18nTpl.render(
-				{
-					handlerName: 'I18N',
-					FILE_KEY: '',
-					FUNCTION_VERSION: DEF.I18NFunctionVersion,
-					GetLanguageCode : 'GetLanGlobal',
-					TRANSLATE_JSON_CODE : '{}'
-				});
+			{
+				handlerName: 'I18N',
+				FILE_KEY: '',
+				FUNCTION_VERSION: DEF.I18NFunctionVersion,
+				GetLanguageCode : 'GetLanGlobal',
+				TRANSLATE_JSON_CODE : '{}'
+			});
 			checkEmptyJSONCode(code, 'original');
 			checkWidthJSONCode(code, 'complete');
 		});

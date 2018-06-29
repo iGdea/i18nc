@@ -292,4 +292,33 @@ describe('#main_options', function()
 		var otherCode = requireAfterWrite('func_code_ignore_func_words.js', info.code, {readMode: 'string'});
 		expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 	});
+
+	describe('#proxyGlobalHandler', function()
+	{
+		it('#isProxyGlobalHandler', function()
+		{
+			var code = require('./files/casefile/func_code/func_code_noi18n').toString();
+			var info = i18nc(code,
+				{
+					isProxyGlobalHandler: true,
+				});
+			var otherCode = requireAfterWrite('func_code_noi18n_proxy_global.js', info.code, {readMode: 'string'});
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+		});
+
+		it('#isIgnoreCodeProxyGlobalHandlerName', function()
+		{
+			var code = require('./files/casefile/func_code/func_code_i18n_global_handler').toString();
+			var info = i18nc(code,
+				{
+					isProxyGlobalHandler: true,
+					isIgnoreCodeProxyGlobalHandlerName: true,
+					proxyGlobalHandlerName: 'topI18N2'
+				});
+			var otherCode = requireAfterWrite('func_code_i18n_global_handler_ignore_code.js', info.code, {readMode: 'string'});
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+		});
+	});
+
+
 });
