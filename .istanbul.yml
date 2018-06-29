@@ -5,3 +5,4 @@ instrumentation:
   default-excludes: true
   excludes:
     - lib/i18n_func/tpl/**
+    - lib/upgrade/getlanguagecode_handler.js
