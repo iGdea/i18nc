@@ -1,6 +1,5 @@
 'use strict';
 
-var fs					= require('fs');
 var expect				= require('expect.js');
 var i18nc				= require('../');
 var dbTranslateWords	= require('./example/translate_words_db');
@@ -75,7 +74,7 @@ describe('#main_options', function()
 
 	describe('#codeModifiedArea', function()
 	{
-		var exampleCode = fs.readFileSync(__dirname+'/example/func_code.js').toString();
+		var exampleCode = 'module.exports = '+require('./example/func_code.js').toString();
 
 		it('#only I18NHandler', function()
 		{
