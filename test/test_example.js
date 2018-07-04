@@ -2,6 +2,7 @@
 
 var fs					= require('fs');
 var path				= require('path');
+var debug				= require('debug')('i18nc-core:test_example');
 var expect				= require('expect.js');
 var i18nc				= require('../');
 var autoTestUtils		= require('./auto_test_utils');
@@ -59,7 +60,7 @@ describe('#example', function()
 	it('#use require', function()
 	{
 		var mainFile = './example/use_require/func_code.js';
-		var requireAfterWrite	= autoTestUtils.requireAfterWrite('example/use_require');
+		var requireAfterWrite = autoTestUtils.requireAfterWrite('example/use_require');
 		var i18nOptions =
 		{
 			mainFile: mainFile,
@@ -75,7 +76,9 @@ describe('#example', function()
 					&& ast.arguments[0]
 					&& ast.arguments[0].type == 'Literal')
 				{
-					var file = path.dirname(emitData.options.originalOptions.mainFile)+'/'+ast.arguments[0].value;
+					var p = path.dirname(emitData.options.originalOptions.mainFile);
+					var file = p+'/'+ast.arguments[0].value;
+					debug('loadTranslateJSON:%s', file);
 					emitData.result = require(file);
 					expect(emitData.result['en-US']).to.be.an('object');
 				}
@@ -86,11 +89,16 @@ describe('#example', function()
 			},
 			newTranslateJSON: function(emitData)
 			{
-				var content = 'module.exports = '+emitData.result;
-				var otherContent = autoTestUtils.requireAfterWriteReal(path.dirname(emitData.options.originalOptions.mainFile)+'/require_data.js', content, {readMode: 'string'});
+				debug('newTranslateJSON:%s', emitData.result);
+				var content = 'module.exports = function code(){\n// just fot test\nreturn '+emitData.result+';\n}';
+				var p = path.dirname(emitData.options.originalOptions.mainFile);
+				var otherContent = autoTestUtils.requireAfterWriteReal(p+'/require_data.js', content, {readMode: 'string'});
 				expect(autoTestUtils.code2arr(content)).to.eql(autoTestUtils.code2arr(otherContent.toString()));
 
-				emitData.result = 'require("./require_data.js")';
+				var otherJSON = autoTestUtils.requireAfterWriteReal(p+'/require_data.json', emitData.originalJSON);
+				expect(emitData.originalJSON).to.be.eql(otherJSON);
+
+				emitData.result = 'require("./require_data.json")';
 			},
 		};
 
