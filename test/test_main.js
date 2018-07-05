@@ -301,7 +301,7 @@ describe('#main', function()
 		{
 			var info = i18nc('function a(){println("\\n\\r"); println("\\n")}',
 				{
-					cutwordReg: /\s+/,
+					cutwordReg: /\s+/g,
 					dbTranslateWords:
 					{
 						'en-US':
@@ -320,7 +320,7 @@ describe('#main', function()
 		{
 			var info = i18nc('function a(){println("\\u2029\\u2029"); println("\\u2029")}',
 				{
-					cutwordReg: /\u2029+/,
+					cutwordReg: /\u2029+/g,
 					dbTranslateWords:
 					{
 						'en-US':
