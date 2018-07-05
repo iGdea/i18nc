@@ -22,9 +22,7 @@ describe('#words_utils', function()
 			{
 				expect(wordsUtils.splitValue2lineStrings('中文', 'string', options)).to.eql(
 					[
-						{translateWord: false, value: '', ignore: false, disconnected: false},
-						{translateWord: true, value: '中文', ignore: false, disconnected: false},
-						{translateWord: false, value: '', ignore: false, disconnected: false}
+						{translateWord: true, value: '中文', ignore: false, disconnected: false}
 					]);
 			});
 
@@ -32,15 +30,11 @@ describe('#words_utils', function()
 			{
 				expect(wordsUtils.splitValue2lineStrings('中文11', 'string', options)).to.eql(
 					[
-						{translateWord: false, value: '', ignore: false, disconnected: false},
-						{translateWord: true, value: '中文11', ignore: false, disconnected: false},
-						{translateWord: false, value: '', ignore: false, disconnected: false}
+						{translateWord: true, value: '中文11', ignore: false, disconnected: false}
 					]);
 				expect(wordsUtils.splitValue2lineStrings('中文 11', 'string', options)).to.eql(
 					[
-						{translateWord: false, value: '', ignore: false, disconnected: false},
-						{translateWord: true, value: '中文 11', ignore: false, disconnected: false},
-						{translateWord: false, value: '', ignore: false, disconnected: false}
+						{translateWord: true, value: '中文 11', ignore: false, disconnected: false}
 					]);
 			});
 
@@ -51,8 +45,25 @@ describe('#words_utils', function()
 						{translateWord: false, value: '11<span>', ignore: false, disconnected: false},
 						{translateWord: true, value: '中文', ignore: false, disconnected: false},
 						{translateWord: false, value: '</span>', ignore: false, disconnected: false},
-						{translateWord: true, value: '中文11', ignore: false, disconnected: false},
-						{translateWord: false, value: '', ignore: false, disconnected: false}
+						{translateWord: true, value: '中文11', ignore: false, disconnected: false}
+					]);
+			});
+		});
+
+		describe('#err cutwordReg', function()
+		{
+			it('#with capture', function()
+			{
+				var options = optionsUtils.extend(
+					{
+						cutwordReg: /(\W+)/g
+					});
+				expect(wordsUtils.splitValue2lineStrings('11中文11词典', 'string', options)).to.eql(
+					[
+						{translateWord: false, value: '11', ignore: false, disconnected: false},
+						{translateWord: true, value: '中文', ignore: false, disconnected: false},
+						{translateWord: false, value: '11', ignore: false, disconnected: false},
+						{translateWord: true, value: '词典', ignore: false, disconnected: false}
 					]);
 			});
 		});
