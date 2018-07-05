@@ -13,7 +13,11 @@ describe('#main especial ast', function()
 		{
 			var info = i18nc('var a = /\\ds/g',
 				{
-					codeModifiedArea: {I18NHandler: false},
+					codeModifiedArea:
+					{
+						I18NHandler: false,
+						TranslateWord_RegExp: true,
+					},
 				});
 
 			expect(info.code).to.be('var a = /\\ds/g');
@@ -29,7 +33,11 @@ describe('#main especial ast', function()
 
 				var info = i18nc(code,
 					{
-						codeModifiedArea: {I18NHandler: false},
+						codeModifiedArea:
+						{
+							I18NHandler: false,
+							TranslateWord_RegExp: true
+						},
 					});
 
 				expect(info.code).to.be(otherCode);
@@ -43,7 +51,11 @@ describe('#main especial ast', function()
 
 				var info = i18nc(code,
 					{
-						codeModifiedArea: {I18NHandler: false},
+						codeModifiedArea:
+						{
+							I18NHandler: false,
+							TranslateWord_RegExp: true,
+						},
 					});
 
 				expect(info.code).to.be(otherCode);
@@ -56,7 +68,11 @@ describe('#main especial ast', function()
 
 				var info = i18nc(code,
 					{
-						codeModifiedArea: {I18NHandler: false},
+						codeModifiedArea:
+						{
+							I18NHandler: false,
+							TranslateWord_RegExp: true
+						},
 					});
 
 				expect(info.code).to.be(otherCode);
