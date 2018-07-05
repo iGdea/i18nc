@@ -17,10 +17,9 @@ describe('#I18N_handler_alias', function()
 				I18NHandlerAlias: ['I18N'],
 			});
 
-		var content = 'module.exports = '+info.code;
-		var otherContent = requireAfterWrite('i18n_alias_update.js', content);
+		var otherContent = requireAfterWrite('i18n_alias_update.js', info.code);
 
-		expect(autoTestUtils.code2arr(content)).to.eql(autoTestUtils.code2arr(otherContent));
+		expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherContent));
 	});
 
 	it('#no_update', function()
@@ -32,9 +31,8 @@ describe('#I18N_handler_alias', function()
 				codeModifiedArea: ['I18NHandler', 'TranslateWord'],
 			});
 
-		var content = 'module.exports = '+info.code;
-		var otherContent = requireAfterWrite('i18n_alias_no_update.js', content);
+		var otherContent = requireAfterWrite('i18n_alias_no_update.js', info.code);
 
-		expect(autoTestUtils.code2arr(content)).to.eql(autoTestUtils.code2arr(otherContent));
+		expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherContent));
 	});
 });

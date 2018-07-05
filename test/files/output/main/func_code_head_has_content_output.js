@@ -1,4 +1,5 @@
-module.exports = function testWrapCode(){
+module.exports = function textWrapCode(){
+
 /* begin */
 define(function(){
 
@@ -20,5 +21,6 @@ define(function(){
 
 println(I18N('中文'))})
 /* end */
+
 
 }

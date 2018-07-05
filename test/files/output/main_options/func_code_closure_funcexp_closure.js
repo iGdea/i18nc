@@ -1,4 +1,5 @@
-module.exports = function testWrapCode(){
+module.exports = function textWrapCode(){
+
 (function(){
 
 
@@ -18,4 +19,5 @@ module.exports = function testWrapCode(){
 
 
 var words = I18N('中文')})();
+
 }

@@ -1,4 +1,6 @@
-module.exports = {
+module.exports = function textWrapCode(){
+
+var json = {
 	'en-US': {
 		'DEFAULTS': {
 			'%s美好%s生活': '%sgood%s life',
@@ -9,4 +11,6 @@ module.exports = {
 		'SUBTYPES': { 'subtype': { '简体': 'simplified subtype' } }
 	},
 	'zh-TW': { 'DEFAULTS': { '简体': '簡體' } }
+}
+
 }

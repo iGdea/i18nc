@@ -2,6 +2,7 @@ module.exports = function textWrapCode(){
 
 
 
+
 /* eslint-disable */
 function I18N(c,e,l){
 	var a=I18N;var p=a.$||(a.$={});var d=(function(a){if(!a.global){a.global=typeof window=='object'&&window||typeof global=='object'&&global||{}}return a.global.__i18n_lan__})(p);if(!e||!e.join){l=e;e=[]}if(d&&d.split){var g,b,h,f;if(a.L!=d){a.K='*';a.V='b';a.D={
@@ -23,4 +24,5 @@ function code()
 	var word = I18N('中文');
 	consol.log(word, I18N('中文2'));
 }
+
 }

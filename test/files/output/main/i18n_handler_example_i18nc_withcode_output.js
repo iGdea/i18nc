@@ -1,4 +1,5 @@
-module.exports = I18N;
+module.exports = function textWrapCode(){
+
 function I18N(c,e,l){
 	var a=I18N;var p=a.$||(a.$={});var d=(function(){return global.__i18n_lan__})(p);if(!e||!e.join){l=e;e=[]}if(d&&d.split){var g,b,h,f;if(a.L!=d){a.K='i18n_handler_example';a.V='b';a.D={
 		'en-US': {
@@ -32,4 +33,6 @@ var codeJSON = {
 			I18N('简体')
 		]
 	}
+}
+
 }

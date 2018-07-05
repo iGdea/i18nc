@@ -54,7 +54,7 @@ describe('#main_options', function()
 
 		var otherCode = requireAfterWrite('func_code_cutword_output.js', info.code);
 
-		expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+		expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 	});
 
 
@@ -68,7 +68,7 @@ describe('#main_options', function()
 
 		var otherCode = requireAfterWrite('func_code_no_notused_words_output.js', info.code);
 
-		expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+		expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 	});
 
 
@@ -88,7 +88,7 @@ describe('#main_options', function()
 			var otherCode = requireAfterWrite('func_code_codeModifiedArea1_output.js', info.code);
 
 			expect(autoTestUtils.JsonOfI18ncRet(info)).to.eql(outputJSON);
-			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 		});
 
 		it('#only translateWord', function()
@@ -103,7 +103,7 @@ describe('#main_options', function()
 			var otherCode = requireAfterWrite('func_code_codeModifiedArea2_output.js', info.code);
 
 			expect(autoTestUtils.JsonOfI18ncRet(info)).to.eql(outputJSON);
-			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 		});
 
 		it('#no regexp', function()
@@ -127,7 +127,7 @@ describe('#main_options', function()
 			var otherCode = requireAfterWrite('func_code_codeModifiedArea3_output.js', info.code);
 
 			expect(autoTestUtils.JsonOfI18ncRet(info)).to.eql(outputJSON);
-			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 		});
 	});
 
@@ -144,7 +144,7 @@ describe('#main_options', function()
 
 			var otherCode = requireAfterWrite('func_code_min_i18n_output_base.js', info.code);
 
-			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 		});
 
 		it('#wdithdb', function()
@@ -158,7 +158,7 @@ describe('#main_options', function()
 
 			var otherCode = requireAfterWrite('func_code_min_i18n_output_widthdb.js', info.code);
 
-			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 		});
 
 		it('#partialUpdate', function()
@@ -178,10 +178,10 @@ describe('#main_options', function()
 					dbTranslateWords: dbTranslateWords,
 					isMinFuncTranslateCode: true
 				});
-			var wrapCode = 'function testWrapCode(){\n'+info.code+'\n}';
+			var wrapCode = autoTestUtils.wrapCode4pkg(info.code);
 			var otherCode = requireAfterWrite('func_code_min_i18n_output_partiaupdate.js', wrapCode);
 
-			expect(autoTestUtils.code2arr(wrapCode)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 		});
 
 	});
@@ -196,10 +196,10 @@ describe('#main_options', function()
 				pickFileLanguages: ['en-US']
 			});
 
-		var wrapCode = 'function testWrapCode(){\n'+info.code+'\n}';
+		var wrapCode = autoTestUtils.wrapCode4pkg(info.code);
 		var otherCode = requireAfterWrite('func_code_no_db_set_lans.js', wrapCode);
 
-		expect(autoTestUtils.code2arr(wrapCode)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+		expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 	});
 
 
@@ -207,10 +207,10 @@ describe('#main_options', function()
 	{
 		var info = i18nc('var a = "中文"', {codeModifiedArea: {I18NHandler: false}});
 
-		var wrapCode = 'function testWrapCode(){\n'+info.code+'\n}';
+		var wrapCode = autoTestUtils.wrapCode4pkg(info.code);
 		var otherCode = requireAfterWrite('func_code_no_insert_i18n_hanlder.js', wrapCode);
 
-		expect(autoTestUtils.code2arr(wrapCode)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+		expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 	});
 
 	describe('#isCheckClosureForNewI18NHandler', function()
@@ -223,15 +223,15 @@ describe('#main_options', function()
 			{
 				var info = i18nc(code, {isCheckClosureForNewI18NHandler: true});
 				var otherCode = requireAfterWrite('func_code_closure_closure.js', info.code);
-				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 			});
 
 			it('#no use', function()
 			{
 				var info = i18nc(code, {isCheckClosureForNewI18NHandler: false});
-				var wrapCode = 'function testWrapCode(){\n'+info.code+'\n}';
+				var wrapCode = autoTestUtils.wrapCode4pkg(info.code);
 				var otherCode = requireAfterWrite('func_code_closure_noclosure.js', wrapCode);
-				expect(autoTestUtils.code2arr(wrapCode)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 			});
 		});
 
@@ -251,9 +251,9 @@ describe('#main_options', function()
 			it('#no use', function()
 			{
 				var info = i18nc(code, {isCheckClosureForNewI18NHandler: false});
-				var wrapCode = 'function testWrapCode(){\n'+info.code+'\n}';
+				var wrapCode = autoTestUtils.wrapCode4pkg(info.code);
 				var otherCode = requireAfterWrite('func_code_noclosure_noclosure.js', wrapCode);
-				expect(autoTestUtils.code2arr(wrapCode)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 			});
 		});
 
@@ -266,17 +266,17 @@ describe('#main_options', function()
 			it('#use', function()
 			{
 				var info = i18nc(code, {isCheckClosureForNewI18NHandler: true});
-				var wrapCode = 'function testWrapCode(){\n'+info.code+'\n}';
+				var wrapCode = autoTestUtils.wrapCode4pkg(info.code);
 				var otherCode = requireAfterWrite('func_code_closure_funcexp_closure.js', wrapCode);
-				expect(autoTestUtils.code2arr(wrapCode)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 			});
 
 			it('#no use', function()
 			{
 				var info = i18nc(code, {isCheckClosureForNewI18NHandler: false});
-				var wrapCode = 'function testWrapCode(){\n'+info.code+'\n}';
+				var wrapCode = autoTestUtils.wrapCode4pkg(info.code);
 				var otherCode = requireAfterWrite('func_code_closure_funcexp_noclosure.js', wrapCode);
-				expect(autoTestUtils.code2arr(wrapCode)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 			});
 		});
 	});
@@ -295,7 +295,7 @@ describe('#main_options', function()
 				}
 			});
 		var otherCode = requireAfterWrite('func_code_ignore_func_words.js', info.code);
-		expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+		expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 	});
 
 	describe('#proxyGlobalHandler', function()
@@ -308,7 +308,7 @@ describe('#main_options', function()
 					isProxyGlobalHandler: true,
 				});
 			var otherCode = requireAfterWrite('func_code_noi18n_proxy_global.js', info.code);
-			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 		});
 
 		it('#isIgnoreCodeProxyGlobalHandlerName', function()
@@ -321,7 +321,7 @@ describe('#main_options', function()
 					proxyGlobalHandlerName: 'topI18N2'
 				});
 			var otherCode = requireAfterWrite('func_code_i18n_global_handler_ignore_code.js', info.code);
-			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 		});
 	});
 

@@ -57,9 +57,7 @@ describe('#i18n_func_generator', function()
 	{
 		var data = require('./files/output/i18nc_func_generator/merge_translate_data_output.json');
 		var resultAst = i18nGeneratorTest._translateJSON2ast(data);
-		var resultCode = escodegen.generate(resultAst, optionsUtils.escodegenOptions);
-
-		resultCode = 'module.exports = '+resultCode;
+		var resultCode = 'var json = '+escodegen.generate(resultAst, optionsUtils.escodegenOptions);
 
 		var otherCode = requireAfterWrite('merge_translate_data_output.js', resultCode);
 

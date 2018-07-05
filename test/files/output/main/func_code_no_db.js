@@ -1,4 +1,5 @@
-module.exports = function testWrapCode(){
+module.exports = function textWrapCode(){
+
 
 
 
@@ -18,4 +19,5 @@ function I18N(c,e,l){
 
 
 println(I18N('不可能存在的中文翻译词组'));
+
 }

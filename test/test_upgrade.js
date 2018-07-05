@@ -18,7 +18,7 @@ describe('#upgrade', function()
 					cutWordReg: /中/g,
 				});
 			var otherCode = requireAfterWrite('func_code_noi18n_rename.js', info.code);
-			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 		});
 
 		it('#new style', function()
@@ -30,7 +30,7 @@ describe('#upgrade', function()
 					I18NhandlerTpl_LanguageVarName: '_lan_'
 				});
 			var otherCode = requireAfterWrite('func_code_noi18n_new_style.js', info.code);
-			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 		});
 	});
 });

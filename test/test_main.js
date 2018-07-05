@@ -12,7 +12,7 @@ describe('#main', function()
 	describe('#widthdb funcData', function()
 	{
 		var exampleCode = require('./files/casefile/i18n_handler/i18n_handler_example.js');
-		exampleCode = 'module.exports = I18N;\n'+exampleCode.toString();
+		exampleCode = exampleCode.toString();
 
 		it('#nocode', function()
 		{
@@ -25,7 +25,7 @@ describe('#main', function()
 			var otherCode = requireAfterWrite('i18n_handler_example_i18nc_nocode_output.js', info.code);
 
 			expect(autoTestUtils.JsonOfI18ncRet(info)).to.eql(outputJSON);
-			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 		});
 
 		it('#withcode', function()
@@ -48,10 +48,11 @@ describe('#main', function()
 			});
 
 			var outputJSON = requireAfterWrite('i18n_handler_example_i18nc_withcode_output.json', autoTestUtils.JsonOfI18ncRet(info));
-			var otherCode = requireAfterWrite('i18n_handler_example_i18nc_withcode_output.js', info.code);
+			var wrapCode = autoTestUtils.wrapCode4pkg(info.code);
+			var otherCode = requireAfterWrite('i18n_handler_example_i18nc_withcode_output.js', wrapCode);
 
 			expect(autoTestUtils.JsonOfI18ncRet(info)).to.eql(outputJSON);
-			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 		});
 	});
 
@@ -65,7 +66,7 @@ describe('#main', function()
 
 			var otherCode = requireAfterWrite('func_code_noi18n_output.js', info.code);
 
-			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 		});
 
 		it('#noI18N noclosure', function()
@@ -73,10 +74,10 @@ describe('#main', function()
 			var exampleCode = require('./files/casefile/func_code/func_code_noi18n').toString();
 			var info = i18nc(exampleCode, {isCheckClosureForNewI18NHandler: false});
 
-			var wrapCode = 'function testWrapCode(){\n'+info.code+'\n}';
+			var wrapCode = autoTestUtils.wrapCode4pkg(info.code);
 			var otherCode = requireAfterWrite('func_code_noi18n_output_noclosure.js', wrapCode);
 
-			expect(autoTestUtils.code2arr(wrapCode)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 		});
 
 		it('#define', function()
@@ -86,7 +87,7 @@ describe('#main', function()
 
 			var otherCode = requireAfterWrite('func_code_i18n_define_output.js', info.code);
 
-			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 		});
 
 		it('#define not_define', function()
@@ -99,7 +100,7 @@ describe('#main', function()
 
 			var otherCode = requireAfterWrite('func_code_i18n_define_output_notdefine.js', info.code);
 
-			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 		});
 	});
 
@@ -112,7 +113,7 @@ describe('#main', function()
 
 			var otherCode = requireAfterWrite('func_code_i18n_output.js', info.code);
 
-			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 		});
 
 		it('#define and scope', function()
@@ -140,7 +141,7 @@ describe('#main', function()
 
 			var otherCode = requireAfterWrite('func_code_i18n_define_output_words.js', info.code);
 
-			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 		});
 
 
@@ -151,7 +152,7 @@ describe('#main', function()
 
 			var otherCode = requireAfterWrite('func_code_i18n_nowords_output.js', info.code);
 
-			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 		});
 	});
 
@@ -164,7 +165,7 @@ describe('#main', function()
 
 			var otherCode = requireAfterWrite('func_code_i18n_global_handler_output.js', info.code);
 
-			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 		});
 	});
 
@@ -178,10 +179,10 @@ describe('#main', function()
 			{
 				var info = i18nc(code, {isCheckClosureForNewI18NHandler: false});
 
-				var wrapCode = 'function testWrapCode(){\n'+info.code+'\n}';
+				var wrapCode = autoTestUtils.wrapCode4pkg(info.code);
 				var otherCode = requireAfterWrite('func_code_no_db.js', wrapCode);
 
-				expect(autoTestUtils.code2arr(wrapCode)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 			});
 
 			it('#only lan', function()
@@ -198,10 +199,10 @@ describe('#main', function()
 						}
 					});
 
-				var wrapCode = 'function testWrapCode(){\n'+info.code+'\n}';
+				var wrapCode = autoTestUtils.wrapCode4pkg(info.code);
 				var otherCode = requireAfterWrite('func_code_no_db_only_lan.js', wrapCode);
 
-				expect(autoTestUtils.code2arr(wrapCode)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 			});
 
 			it('#other_db', function()
@@ -218,10 +219,10 @@ describe('#main', function()
 						}
 					});
 
-				var wrapCode = 'function testWrapCode(){\n'+info.code+'\n}';
+				var wrapCode = autoTestUtils.wrapCode4pkg(info.code);
 				var otherCode = requireAfterWrite('func_code_no_db_other_db.js', wrapCode);
 
-				expect(autoTestUtils.code2arr(wrapCode)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 			});
 		});
 
@@ -245,7 +246,7 @@ describe('#main', function()
 			var info = i18nc(code);
 			var otherCode = requireAfterWrite('func_code_default_lan.js', info.code);
 
-			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 		});
 
 		it('#update lan by db', function()
@@ -277,7 +278,7 @@ describe('#main', function()
 				});
 			var otherCode = requireAfterWrite('func_code_update_by_db.js', info.code);
 
-			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 		});
 	});
 
@@ -287,10 +288,10 @@ describe('#main', function()
 		{
 			var info = i18nc('/* begin */\ndefine(function(){println("中文")})\n/* end */\n');
 
-			var wrapCode = 'function testWrapCode(){\n'+info.code+'\n}';
+			var wrapCode = autoTestUtils.wrapCode4pkg(info.code);
 			var otherCode = requireAfterWrite('func_code_head_has_content_output.js', wrapCode);
 
-			expect(autoTestUtils.code2arr(wrapCode)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 		});
 	});
 
@@ -312,7 +313,7 @@ describe('#main', function()
 			var otherCode = requireAfterWrite('func_code_special_chars1.js', info.code);
 			eval(info.code);
 
-			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 		});
 
 		it('#\\u2029', function()
@@ -331,7 +332,7 @@ describe('#main', function()
 			var otherCode = requireAfterWrite('func_code_special_chars2.js', info.code);
 			eval(info.code);
 
-			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 		});
 	});
 

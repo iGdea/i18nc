@@ -26,12 +26,11 @@ describe('#example', function()
 			delete json.code;
 			requireAfterWrite('func_code_output_squeeze.json', json);
 
-			var content = 'module.exports = '+info.code;
-			var otherContent = autoTestUtils.requireAfterWriteReal('example/func_code_output.js', content);
+			var otherContent = autoTestUtils.requireAfterWriteReal('example/func_code_output.js', info.code);
 			var translateWords = autoTestUtils.getCodeTranslateAllWords(info);
 			var otherTranslateWords = requireAfterWrite('translate_words_code.json', translateWords);
 
-			expect(autoTestUtils.code2arr(content)).to.eql(autoTestUtils.code2arr(otherContent));
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherContent));
 			expect(translateWords).to.eql(otherTranslateWords);
 		});
 
@@ -90,10 +89,10 @@ describe('#example', function()
 			newTranslateJSON: function(emitData)
 			{
 				debug('newTranslateJSON:%s', emitData.result);
-				var content = 'module.exports = function code(){\n// just fot test\nreturn '+emitData.result+';\n}';
+				var content = 'function code(){\n// just fot test\nreturn '+emitData.result+';\n}';
 				var p = path.dirname(emitData.options.originalOptions.mainFile);
 				var otherContent = autoTestUtils.requireAfterWriteReal(p+'/require_data.js', content);
-				expect(autoTestUtils.code2arr(content)).to.eql(autoTestUtils.code2arr(otherContent.toString()));
+				expect(autoTestUtils.code2arr(content)).to.eql(autoTestUtils.code2arr(otherContent));
 
 				var otherJSON = autoTestUtils.requireAfterWriteReal(p+'/require_data.json', emitData.originalJSON);
 				expect(emitData.originalJSON).to.be.eql(otherJSON);
@@ -102,10 +101,10 @@ describe('#example', function()
 			},
 		};
 
-		var exampleCode = require(mainFile);
+		var exampleCode = require('./example/use_require/func_code.js');
 		var info = i18nc(exampleCode.toString(), i18nOptions);
 		var otherCode = autoTestUtils.requireAfterWriteReal(path.dirname(mainFile)+'/func_code_output.js', 'module.exports = '+info.code);
 
-		expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+		expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 	});
 });

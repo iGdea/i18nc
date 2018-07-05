@@ -13,3 +13,39 @@ script:
 
 after_script:
   - npm install coveralls@2 && cat ./coverage/lcov.info | coveralls
+
+env:
+  global:
+    - secure: m3bDACx6Yb8synZAP41W0ip4XK41sLVjbYguyIX7NEUpnQx1cwP8Cj6PYW2N+/X4knvEDWBTSpN5Uq5sMioMoYUn/Ag539xJ+2IjrQlWPA6LYduQMA6YLRTbkEaa4tWNkaGrIil7OV2s32pvaKbH7J/3J7qQFEZoiItcyJoH7InXbc6Hd5zDxZGv+rvQI2KK2AUVwRUlLFM++bU2wzPu54cZvMiYKajcyX34svLTzvZPLRkHKwvFtYb3MxUpkoTlXgO2vVCjpC31kmRxuWHXoxmyKm2rPBbpJTFgwsJLZEoH9Q0v9GVdtJG6j68zkoS6UpIFoUwsj24HlFfUlXkskzC1E6Q1UYGI8GY26Yt+PopRfpPTf2DWnkPeKxyZxFf8DUH/PkvtS+CQoefJ+jDr5aqzNe9A7taBH5PAWnh8kXxozLvt2zwmrsy3B8IkNrhgy0qoaVJ85K01ehWOIe3VwWl7gOsxKWuIN5yP09UYkYfciYGOrmuysv52iZQI4vTwIenvJTaxb14AQ1yA5LCrM2pcU8nOWqescG7yco2HF5HDnmLMUGzOyXOsWrc8Mutl8vh36U8gr48lxEixSazf8YAnNzchBP//hueQk73msTEEBY16UdUPBKbEc0XEzXVrsB7net9nEGl0Zk8zi3IhBkq0vBO2+pKkuqvTPWXZHX0=
+    - secure: ndp7SeE26xfjMzglg6I08lVsqoBsW7pmZZ3CTOVyoKLPcC/pMmvBV6KZhCoKHJrU/0Vt40BodrU5VaBQxvvUY12T+v7qhaHnD1UGWDq/shdRNau5Iy+gLRCmB8RhCq9Sx4vfJluGg1vbdCM3WBXDUbw8jMFKyYG8xwgACeY8O8cveYZTuIhKGVeXRj12HFixUZZ5EZK8VzcCzX+ZXifiM9ZqwMNS5IGBNPaRmXB1CqxhnQOmLl1jb3yDzD4C18zhgav/gzqB84Mmms0qdmwauHrqopRRQh/c+3UIgXQA70JQ4YAtZLdXPg791DKSCp5H1MqmFZOSeUM2SAdmqE9TBEAto8HjxGYWFfzNeFATJ21tt34qAy5KCrFKpwTKBgtS5cyzWoGpR4Ff12B3ECwj3LA3vwh2t4u9ycndeHZjW9iIA6ocaK8sogCeqxyC3WuhRUGZcWp/wm9dFMUrVTKuBdjN9xMEZuNEvXZuzWdmyVb4Uz2l2yhvbCqIcMn9GoSybhG90RxNb5mMAy7q3hKPVKZasb5Mok5hYjvfaEv1952peMIVmD0hnX7oiLb3A5tsNit5xRRGIjcyKmzSELc/35GrCK5Eci8myBp8qY2UZAWcRxENxdVUZc5mrdbZu09yFJu8ncET7og6L7W5PyY6oFblk9sgiV088w8GDZlJYFI=
+
+addons:
+  sauce_connect: false
+  chrome: false
+
+matrix:
+  include:
+    - node_js: stable
+      # master 分支不执行sauce的编译
+      before_install:
+        - 'if [ "$TRAVIS_BRANCH" = "master" ]; then exit; fi'
+      # 设置一个环境变量，方便做失败忽略
+      env: sauce_travis=true
+      addons:
+        sauce_connect: true
+      script:
+        - npm run test-e2e travis
+        - npm run test-e2e travis-oldie
+      after_script: # 删除之前配置
+
+    - node_js: stable
+      dist: trusty
+      addons:
+        chrome: stable
+      script:
+        - npm run test-e2e Chrome_travis_ci
+      after_script: # 删除之前配置
+
+  fast_finish: true
+  allow_failures:
+    - env: sauce_travis=true

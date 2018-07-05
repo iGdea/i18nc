@@ -5,6 +5,11 @@ var fs = require('fs');
 var path =  require('path');
 var mkdirp = require('mkdirp');
 
+exports.wrapCode4pkg = function(code)
+{
+	return 'module.exports = function textWrapCode(){\n\n'+code+'\n\n}\n';
+};
+
 exports.requireAfterWrite = function requireAfterWrite(subpath)
 {
 	var file_path = 'files/output/'+subpath;
@@ -36,14 +41,14 @@ function requireAfterWriteReal(file, data)
 			if (data.substr(0, 14) != 'module.exports')
 			{
 				if (data.substr(0, 8) == 'function')
-					data = 'module.exports = '+data;
+					data = 'module.exports = '+data+'\n';
 				else
-					data = 'module.exports = function textWrapCode(){\n'+data+'\n}';
+					data = exports.wrapCode4pkg(data);
 			}
 			break;
 
 		case 'function':
-			data = 'module.exports = '+data.toString();
+			data = 'module.exports = '+data.toString()+'\n';
 			break;
 	}
 
@@ -58,12 +63,13 @@ function _require(file)
 	// var data = require(__dirname+'/'+file);
 	// for browserify require key
 	var data = require(path.normalize(__dirname+'/'+file));
+
 	if (typeof data == 'function')
 	{
 		var tmp = data.toString();
 		if (tmp.substr(0, 24) == 'function textWrapCode(){')
 		{
-			return tmp.substr(25, data.length-27);
+			return tmp.substr(25, tmp.length-28);
 		}
 	}
 
@@ -73,7 +79,7 @@ function _require(file)
 
 exports.code2arr = function code2arr(code)
 {
-	return code.split('\n')
+	return code.toString().split('\n')
 		.filter(function(val)
 		{
 			return val.trim();
