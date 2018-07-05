@@ -55,7 +55,9 @@ function requireAfterWriteReal(file, data)
 
 function _require(file)
 {
-	var data = require('./'+file);
+	// var data = require(__dirname+'/'+file);
+	// for browserify require key
+	var data = require(path.normalize(__dirname+'/'+file));
 	if (typeof data == 'function')
 	{
 		var tmp = data.toString();
