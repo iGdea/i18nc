@@ -22,7 +22,7 @@ describe('#main', function()
 			});
 
 			var outputJSON = requireAfterWrite('i18n_handler_example_i18nc_nocode_output.json', autoTestUtils.JsonOfI18ncRet(info));
-			var otherCode = requireAfterWrite('i18n_handler_example_i18nc_nocode_output.js', info.code, {readMode: 'string'});
+			var otherCode = requireAfterWrite('i18n_handler_example_i18nc_nocode_output.js', info.code);
 
 			expect(autoTestUtils.JsonOfI18ncRet(info)).to.eql(outputJSON);
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
@@ -48,7 +48,7 @@ describe('#main', function()
 			});
 
 			var outputJSON = requireAfterWrite('i18n_handler_example_i18nc_withcode_output.json', autoTestUtils.JsonOfI18ncRet(info));
-			var otherCode = requireAfterWrite('i18n_handler_example_i18nc_withcode_output.js', info.code, {readMode: 'string'});
+			var otherCode = requireAfterWrite('i18n_handler_example_i18nc_withcode_output.js', info.code);
 
 			expect(autoTestUtils.JsonOfI18ncRet(info)).to.eql(outputJSON);
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
@@ -63,7 +63,7 @@ describe('#main', function()
 			var exampleCode = require('./files/casefile/func_code/func_code_noi18n').toString();
 			var info = i18nc(exampleCode);
 
-			var otherCode = requireAfterWrite('func_code_noi18n_output.js', info.code, {readMode: 'string'});
+			var otherCode = requireAfterWrite('func_code_noi18n_output.js', info.code);
 
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 		});
@@ -73,9 +73,10 @@ describe('#main', function()
 			var exampleCode = require('./files/casefile/func_code/func_code_noi18n').toString();
 			var info = i18nc(exampleCode, {isCheckClosureForNewI18NHandler: false});
 
-			var otherCode = requireAfterWrite('func_code_noi18n_output_noclosure.js', info.code, {readMode: 'string'});
+			var wrapCode = 'function testWrapCode(){\n'+info.code+'\n}';
+			var otherCode = requireAfterWrite('func_code_noi18n_output_noclosure.js', wrapCode);
 
-			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+			expect(autoTestUtils.code2arr(wrapCode)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 		});
 
 		it('#define', function()
@@ -83,7 +84,7 @@ describe('#main', function()
 			var exampleCode = require('./files/casefile/func_code/func_code_i18n_define').toString();
 			var info = i18nc(exampleCode);
 
-			var otherCode = requireAfterWrite('func_code_i18n_define_output.js', info.code, {readMode: 'string'});
+			var otherCode = requireAfterWrite('func_code_i18n_define_output.js', info.code);
 
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 		});
@@ -96,7 +97,7 @@ describe('#main', function()
 					isInsertToDefineHalder: false
 				});
 
-			var otherCode = requireAfterWrite('func_code_i18n_define_output_notdefine.js', info.code, {readMode: 'string'});
+			var otherCode = requireAfterWrite('func_code_i18n_define_output_notdefine.js', info.code);
 
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 		});
@@ -109,7 +110,7 @@ describe('#main', function()
 			var exampleCode = require('./files/casefile/func_code/func_code_i18n').toString();
 			var info = i18nc(exampleCode);
 
-			var otherCode = requireAfterWrite('func_code_i18n_output.js', info.code, {readMode: 'string'});
+			var otherCode = requireAfterWrite('func_code_i18n_output.js', info.code);
 
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 		});
@@ -137,7 +138,7 @@ describe('#main', function()
 					}
 				});
 
-			var otherCode = requireAfterWrite('func_code_i18n_define_output_words.js', info.code, {readMode: 'string'});
+			var otherCode = requireAfterWrite('func_code_i18n_define_output_words.js', info.code);
 
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 		});
@@ -148,7 +149,7 @@ describe('#main', function()
 			var exampleCode = require('./files/casefile/func_code/func_code_i18n_nowords').toString();
 			var info = i18nc(exampleCode);
 
-			var otherCode = requireAfterWrite('func_code_i18n_nowords_output.js', info.code, {readMode: 'string'});
+			var otherCode = requireAfterWrite('func_code_i18n_nowords_output.js', info.code);
 
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 		});
@@ -161,7 +162,7 @@ describe('#main', function()
 			var exampleCode = require('./files/casefile/func_code/func_code_i18n_global_handler').toString();
 			var info = i18nc(exampleCode);
 
-			var otherCode = requireAfterWrite('func_code_i18n_global_handler_output.js', info.code, {readMode: 'string'});
+			var otherCode = requireAfterWrite('func_code_i18n_global_handler_output.js', info.code);
 
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 		});
@@ -177,9 +178,10 @@ describe('#main', function()
 			{
 				var info = i18nc(code, {isCheckClosureForNewI18NHandler: false});
 
-				var otherCode = requireAfterWrite('func_code_no_db.js', info.code, {readMode: 'string'});
+				var wrapCode = 'function testWrapCode(){\n'+info.code+'\n}';
+				var otherCode = requireAfterWrite('func_code_no_db.js', wrapCode);
 
-				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+				expect(autoTestUtils.code2arr(wrapCode)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 			});
 
 			it('#only lan', function()
@@ -196,9 +198,10 @@ describe('#main', function()
 						}
 					});
 
-				var otherCode = requireAfterWrite('func_code_no_db_only_lan.js', info.code, {readMode: 'string'});
+				var wrapCode = 'function testWrapCode(){\n'+info.code+'\n}';
+				var otherCode = requireAfterWrite('func_code_no_db_only_lan.js', wrapCode);
 
-				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+				expect(autoTestUtils.code2arr(wrapCode)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 			});
 
 			it('#other_db', function()
@@ -215,9 +218,10 @@ describe('#main', function()
 						}
 					});
 
-				var otherCode = requireAfterWrite('func_code_no_db_other_db.js', info.code, {readMode: 'string'});
+				var wrapCode = 'function testWrapCode(){\n'+info.code+'\n}';
+				var otherCode = requireAfterWrite('func_code_no_db_other_db.js', wrapCode);
 
-				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+				expect(autoTestUtils.code2arr(wrapCode)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 			});
 		});
 
@@ -239,7 +243,7 @@ describe('#main', function()
 			};
 			code = code.toString().replace(/\$FUNCTION_VERSION\$/, DEF.I18NFunctionVersion);
 			var info = i18nc(code);
-			var otherCode = requireAfterWrite('func_code_default_lan.js', info.code, {readMode: 'string'});
+			var otherCode = requireAfterWrite('func_code_default_lan.js', info.code);
 
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 		});
@@ -271,7 +275,7 @@ describe('#main', function()
 						}
 					}
 				});
-			var otherCode = requireAfterWrite('func_code_update_by_db.js', info.code, {readMode: 'string'});
+			var otherCode = requireAfterWrite('func_code_update_by_db.js', info.code);
 
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 		});
@@ -283,9 +287,10 @@ describe('#main', function()
 		{
 			var info = i18nc('/* begin */\ndefine(function(){println("中文")})\n/* end */\n');
 
-			var otherCode = requireAfterWrite('func_code_head_has_content_output.js', info.code, {readMode: 'string'});
+			var wrapCode = 'function testWrapCode(){\n'+info.code+'\n}';
+			var otherCode = requireAfterWrite('func_code_head_has_content_output.js', wrapCode);
 
-			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+			expect(autoTestUtils.code2arr(wrapCode)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 		});
 	});
 
@@ -304,7 +309,7 @@ describe('#main', function()
 						}
 					}
 				});
-			var otherCode = requireAfterWrite('func_code_special_chars1.js', info.code, {readMode: 'string'});
+			var otherCode = requireAfterWrite('func_code_special_chars1.js', info.code);
 			eval(info.code);
 
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
@@ -323,7 +328,7 @@ describe('#main', function()
 						}
 					}
 				});
-			var otherCode = requireAfterWrite('func_code_special_chars2.js', info.code, {readMode: 'string'});
+			var otherCode = requireAfterWrite('func_code_special_chars2.js', info.code);
 			eval(info.code);
 
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));

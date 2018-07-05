@@ -1,4 +1,4 @@
-function code()
+module.exports = function code()
 {
 
 

@@ -1,4 +1,4 @@
-function code()
+module.exports = function code()
 			{
 				println(I18N('不可能存在的中文翻译词组'));
 				function I18N()

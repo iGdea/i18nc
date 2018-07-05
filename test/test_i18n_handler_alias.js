@@ -18,7 +18,7 @@ describe('#I18N_handler_alias', function()
 			});
 
 		var content = 'module.exports = '+info.code;
-		var otherContent = requireAfterWrite('i18n_alias_update.js', content, {readMode: 'string'});
+		var otherContent = requireAfterWrite('i18n_alias_update.js', content);
 
 		expect(autoTestUtils.code2arr(content)).to.eql(autoTestUtils.code2arr(otherContent));
 	});
@@ -33,7 +33,7 @@ describe('#I18N_handler_alias', function()
 			});
 
 		var content = 'module.exports = '+info.code;
-		var otherContent = requireAfterWrite('i18n_alias_no_update.js', content, {readMode: 'string'});
+		var otherContent = requireAfterWrite('i18n_alias_no_update.js', content);
 
 		expect(autoTestUtils.code2arr(content)).to.eql(autoTestUtils.code2arr(otherContent));
 	});

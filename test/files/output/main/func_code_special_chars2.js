@@ -1,4 +1,4 @@
-function a(){
+module.exports = function a(){
 
 
 	/* eslint-disable */

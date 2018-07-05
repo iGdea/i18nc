@@ -17,34 +17,55 @@ exports.requireAfterWrite = function requireAfterWrite(subpath)
 }
 
 exports.requireAfterWriteReal = requireAfterWriteReal;
-function requireAfterWriteReal(file, data, options)
+function requireAfterWriteReal(file, data)
 {
-	file = path.join(__dirname, file);
-	if (!process.env.TEST_BUILD) return _requireOrFs(file, options);
+	if (!process.env.TEST_BUILD) return _require(file);
 
-	if (typeof data == 'object')
+	var type = typeof data;
+	switch(type)
 	{
-		data = JSON.stringify(data, null, '\t');
+		case 'object':
+			data = JSON.stringify(data, null, '\t');
+			if (path.extname(file) == '.js')
+			{
+				data = 'module.exports = '+data;
+			}
+			break;
+
+		case 'string':
+			if (data.substr(0, 14) != 'module.exports')
+			{
+				if (data.substr(0, 8) == 'function')
+					data = 'module.exports = '+data;
+				else
+					data = 'module.exports = function textWrapCode(){\n'+data+'\n}';
+			}
+			break;
+
+		case 'function':
+			data = 'module.exports = '+data.toString();
+			break;
 	}
 
 	mkdirp.sync(path.dirname(file));
-	fs.writeFileSync(file, data);
+	fs.writeFileSync(path.join(__dirname, file), data);
 
-	return _requireOrFs(file, options);
+	return _require(file);
 }
 
-function _requireOrFs(file, options)
+function _require(file)
 {
-	options || (options = {});
-
-	switch(options.readMode)
+	var data = require('./'+file);
+	if (typeof data == 'function')
 	{
-		case 'string':
-			return fs.readFileSync(file, {encoding: 'utf8'});
-
-		default:
-			return require(file);
+		var tmp = data.toString();
+		if (tmp.substr(0, 24) == 'function textWrapCode(){')
+		{
+			return tmp.substr(25, data.length-27);
+		}
 	}
+
+	return data;
 }
 
 

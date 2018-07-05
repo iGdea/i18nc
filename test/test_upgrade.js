@@ -17,7 +17,7 @@ describe('#upgrade', function()
 					handlerName: 'oldI18N',
 					cutWordReg: /中/g,
 				});
-			var otherCode = requireAfterWrite('func_code_noi18n_rename.js', info.code, {readMode: 'string'});
+			var otherCode = requireAfterWrite('func_code_noi18n_rename.js', info.code);
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 		});
 
@@ -29,7 +29,7 @@ describe('#upgrade', function()
 					I18NhandlerTpl_GetGlobalCode: 'window.settings',
 					I18NhandlerTpl_LanguageVarName: '_lan_'
 				});
-			var otherCode = requireAfterWrite('func_code_noi18n_new_style.js', info.code, {readMode: 'string'});
+			var otherCode = requireAfterWrite('func_code_noi18n_new_style.js', info.code);
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 		});
 	});

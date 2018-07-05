@@ -27,7 +27,7 @@ describe('#example', function()
 			requireAfterWrite('func_code_output_squeeze.json', json);
 
 			var content = 'module.exports = '+info.code;
-			var otherContent = autoTestUtils.requireAfterWriteReal('example/func_code_output.js', content, {readMode: 'string'});
+			var otherContent = autoTestUtils.requireAfterWriteReal('example/func_code_output.js', content);
 			var translateWords = autoTestUtils.getCodeTranslateAllWords(info);
 			var otherTranslateWords = requireAfterWrite('translate_words_code.json', translateWords);
 
@@ -92,7 +92,7 @@ describe('#example', function()
 				debug('newTranslateJSON:%s', emitData.result);
 				var content = 'module.exports = function code(){\n// just fot test\nreturn '+emitData.result+';\n}';
 				var p = path.dirname(emitData.options.originalOptions.mainFile);
-				var otherContent = autoTestUtils.requireAfterWriteReal(p+'/require_data.js', content, {readMode: 'string'});
+				var otherContent = autoTestUtils.requireAfterWriteReal(p+'/require_data.js', content);
 				expect(autoTestUtils.code2arr(content)).to.eql(autoTestUtils.code2arr(otherContent.toString()));
 
 				var otherJSON = autoTestUtils.requireAfterWriteReal(p+'/require_data.json', emitData.originalJSON);

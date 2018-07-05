@@ -1,4 +1,4 @@
-function code()
+module.exports = function code()
 			{
 				println(I18N('简体'));
 				function I18N()

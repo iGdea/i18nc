@@ -61,7 +61,7 @@ describe('#i18n_func_generator', function()
 
 		resultCode = 'module.exports = '+resultCode;
 
-		var otherCode = requireAfterWrite('merge_translate_data_output.js', resultCode, {readMode: 'string'});
+		var otherCode = requireAfterWrite('merge_translate_data_output.js', resultCode);
 
 		expect(autoTestUtils.code2arr(resultCode)).to.eql(autoTestUtils.code2arr(otherCode));
 	});

@@ -52,9 +52,9 @@ describe('#main_options', function()
 				}
 			});
 
-		var otherCode = requireAfterWrite('func_code_cutword_output.js', info.code, {readMode: 'string'});
+		var otherCode = requireAfterWrite('func_code_cutword_output.js', info.code);
 
-		expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
+		expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 	});
 
 
@@ -66,15 +66,15 @@ describe('#main_options', function()
 				isInjectAllTranslateWords: false
 			});
 
-		var otherCode = requireAfterWrite('func_code_no_notused_words_output.js', info.code, {readMode: 'string'});
+		var otherCode = requireAfterWrite('func_code_no_notused_words_output.js', info.code);
 
-		expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
+		expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 	});
 
 
 	describe('#codeModifiedArea', function()
 	{
-		var exampleCode = 'module.exports = '+require('./example/func_code.js').toString();
+		var exampleCode = require('./example/func_code.js').toString();
 
 		it('#only I18NHandler', function()
 		{
@@ -85,7 +85,7 @@ describe('#main_options', function()
 			});
 
 			var outputJSON = requireAfterWrite('func_code_codeModifiedArea1_output.json', autoTestUtils.JsonOfI18ncRet(info));
-			var otherCode = requireAfterWrite('func_code_codeModifiedArea1_output.js', info.code, {readMode: 'string'});
+			var otherCode = requireAfterWrite('func_code_codeModifiedArea1_output.js', info.code);
 
 			expect(autoTestUtils.JsonOfI18ncRet(info)).to.eql(outputJSON);
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
@@ -100,7 +100,7 @@ describe('#main_options', function()
 			});
 
 			var outputJSON = requireAfterWrite('func_code_codeModifiedArea2_output.json', autoTestUtils.JsonOfI18ncRet(info));
-			var otherCode = requireAfterWrite('func_code_codeModifiedArea2_output.js', info.code, {readMode: 'string'});
+			var otherCode = requireAfterWrite('func_code_codeModifiedArea2_output.js', info.code);
 
 			expect(autoTestUtils.JsonOfI18ncRet(info)).to.eql(outputJSON);
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
@@ -124,7 +124,7 @@ describe('#main_options', function()
 			});
 
 			var outputJSON = requireAfterWrite('func_code_codeModifiedArea3_output.json', autoTestUtils.JsonOfI18ncRet(info));
-			var otherCode = requireAfterWrite('func_code_codeModifiedArea3_output.js', info.code, {readMode: 'string'});
+			var otherCode = requireAfterWrite('func_code_codeModifiedArea3_output.js', info.code);
 
 			expect(autoTestUtils.JsonOfI18ncRet(info)).to.eql(outputJSON);
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
@@ -142,9 +142,9 @@ describe('#main_options', function()
 					isMinFuncTranslateCode: true
 				});
 
-			var otherCode = requireAfterWrite('func_code_min_i18n_output_base.js', info.code, {readMode: 'string'});
+			var otherCode = requireAfterWrite('func_code_min_i18n_output_base.js', info.code);
 
-			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 		});
 
 		it('#wdithdb', function()
@@ -156,9 +156,9 @@ describe('#main_options', function()
 					isMinFuncTranslateCode: true
 				});
 
-			var otherCode = requireAfterWrite('func_code_min_i18n_output_widthdb.js', info.code, {readMode: 'string'});
+			var otherCode = requireAfterWrite('func_code_min_i18n_output_widthdb.js', info.code);
 
-			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 		});
 
 		it('#partialUpdate', function()
@@ -178,10 +178,10 @@ describe('#main_options', function()
 					dbTranslateWords: dbTranslateWords,
 					isMinFuncTranslateCode: true
 				});
+			var wrapCode = 'function testWrapCode(){\n'+info.code+'\n}';
+			var otherCode = requireAfterWrite('func_code_min_i18n_output_partiaupdate.js', wrapCode);
 
-			var otherCode = requireAfterWrite('func_code_min_i18n_output_partiaupdate.js', info.code, {readMode: 'string'});
-
-			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
+			expect(autoTestUtils.code2arr(wrapCode)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 		});
 
 	});
@@ -196,9 +196,10 @@ describe('#main_options', function()
 				pickFileLanguages: ['en-US']
 			});
 
-		var otherCode = requireAfterWrite('func_code_no_db_set_lans.js', info.code, {readMode: 'string'});
+		var wrapCode = 'function testWrapCode(){\n'+info.code+'\n}';
+		var otherCode = requireAfterWrite('func_code_no_db_set_lans.js', wrapCode);
 
-		expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+		expect(autoTestUtils.code2arr(wrapCode)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 	});
 
 
@@ -206,9 +207,10 @@ describe('#main_options', function()
 	{
 		var info = i18nc('var a = "中文"', {codeModifiedArea: {I18NHandler: false}});
 
-		var otherCode = requireAfterWrite('func_code_no_insert_i18n_hanlder.js', info.code, {readMode: 'string'});
+		var wrapCode = 'function testWrapCode(){\n'+info.code+'\n}';
+		var otherCode = requireAfterWrite('func_code_no_insert_i18n_hanlder.js', wrapCode);
 
-		expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+		expect(autoTestUtils.code2arr(wrapCode)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 	});
 
 	describe('#isCheckClosureForNewI18NHandler', function()
@@ -220,15 +222,16 @@ describe('#main_options', function()
 			it('#use', function()
 			{
 				var info = i18nc(code, {isCheckClosureForNewI18NHandler: true});
-				var otherCode = requireAfterWrite('func_code_closure_closure.js', info.code, {readMode: 'string'});
+				var otherCode = requireAfterWrite('func_code_closure_closure.js', info.code);
 				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 			});
 
 			it('#no use', function()
 			{
 				var info = i18nc(code, {isCheckClosureForNewI18NHandler: false});
-				var otherCode = requireAfterWrite('func_code_closure_noclosure.js', info.code, {readMode: 'string'});
-				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+				var wrapCode = 'function testWrapCode(){\n'+info.code+'\n}';
+				var otherCode = requireAfterWrite('func_code_closure_noclosure.js', wrapCode);
+				expect(autoTestUtils.code2arr(wrapCode)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 			});
 		});
 
@@ -248,8 +251,9 @@ describe('#main_options', function()
 			it('#no use', function()
 			{
 				var info = i18nc(code, {isCheckClosureForNewI18NHandler: false});
-				var otherCode = requireAfterWrite('func_code_noclosure_noclosure.js', info.code, {readMode: 'string'});
-				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+				var wrapCode = 'function testWrapCode(){\n'+info.code+'\n}';
+				var otherCode = requireAfterWrite('func_code_noclosure_noclosure.js', wrapCode);
+				expect(autoTestUtils.code2arr(wrapCode)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 			});
 		});
 
@@ -262,15 +266,17 @@ describe('#main_options', function()
 			it('#use', function()
 			{
 				var info = i18nc(code, {isCheckClosureForNewI18NHandler: true});
-				var otherCode = requireAfterWrite('func_code_closure_funcexp_closure.js', info.code, {readMode: 'string'});
-				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+				var wrapCode = 'function testWrapCode(){\n'+info.code+'\n}';
+				var otherCode = requireAfterWrite('func_code_closure_funcexp_closure.js', wrapCode);
+				expect(autoTestUtils.code2arr(wrapCode)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 			});
 
 			it('#no use', function()
 			{
 				var info = i18nc(code, {isCheckClosureForNewI18NHandler: false});
-				var otherCode = requireAfterWrite('func_code_closure_funcexp_noclosure.js', info.code, {readMode: 'string'});
-				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
+				var wrapCode = 'function testWrapCode(){\n'+info.code+'\n}';
+				var otherCode = requireAfterWrite('func_code_closure_funcexp_noclosure.js', wrapCode);
+				expect(autoTestUtils.code2arr(wrapCode)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 			});
 		});
 	});
@@ -288,7 +294,7 @@ describe('#main_options', function()
 					}
 				}
 			});
-		var otherCode = requireAfterWrite('func_code_ignore_func_words.js', info.code, {readMode: 'string'});
+		var otherCode = requireAfterWrite('func_code_ignore_func_words.js', info.code);
 		expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 	});
 
@@ -301,7 +307,7 @@ describe('#main_options', function()
 				{
 					isProxyGlobalHandler: true,
 				});
-			var otherCode = requireAfterWrite('func_code_noi18n_proxy_global.js', info.code, {readMode: 'string'});
+			var otherCode = requireAfterWrite('func_code_noi18n_proxy_global.js', info.code);
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 		});
 
@@ -314,7 +320,7 @@ describe('#main_options', function()
 					isIgnoreCodeProxyGlobalHandlerName: true,
 					proxyGlobalHandlerName: 'topI18N2'
 				});
-			var otherCode = requireAfterWrite('func_code_i18n_global_handler_ignore_code.js', info.code, {readMode: 'string'});
+			var otherCode = requireAfterWrite('func_code_i18n_global_handler_ignore_code.js', info.code);
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode.toString()));
 		});
 	});

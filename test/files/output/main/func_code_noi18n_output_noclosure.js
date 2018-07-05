@@ -1,3 +1,4 @@
+module.exports = function textWrapCode(){
 
 
 
@@ -21,4 +22,5 @@ function code()
 {
 	var word = I18N('中文');
 	consol.log(word, I18N('中文2'));
+}
 }

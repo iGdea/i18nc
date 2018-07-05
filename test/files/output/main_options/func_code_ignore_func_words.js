@@ -1,4 +1,4 @@
-function code()
+module.exports = function code()
 {
 	var result;       // 中文注释
 	result = I18N('中文0');
