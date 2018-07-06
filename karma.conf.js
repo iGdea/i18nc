@@ -13,8 +13,8 @@ module.exports = function(config)
 
 	config.set(
 	{
-		files: ['test_*.js'],
-		preprocessors: {'test_*.js': ['browserify']},
+		files: ['allplatform/test_*.js'],
+		preprocessors: {'allplatform/test_*.js': ['browserify']},
 		browserify:
 		{
 			debug: true,

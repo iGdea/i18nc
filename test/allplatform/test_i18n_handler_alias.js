@@ -1,14 +1,14 @@
 'use strict';
 
 var expect				= require('expect.js');
-var i18nc				= require('../');
-var autoTestUtils		= require('./auto_test_utils');
+var i18nc				= require('../../');
+var autoTestUtils		= require('../auto_test_utils');
 var requireAfterWrite	= autoTestUtils.requireAfterWrite('I18N_alias');
 
 
 describe('#I18N_handler_alias', function()
 {
-	var exampleCode = require('./example/func_code').toString();
+	var exampleCode = require('../example/func_code').toString();
 	it('#update', function()
 	{
 		var info = i18nc(exampleCode,

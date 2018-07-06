@@ -6,7 +6,7 @@ describe('#i18n_func_run', function()
 {
 	describe('#full', function()
 	{
-		var I18N = require('./files/casefile/i18n_handler/i18n_handler_example');
+		var I18N = require('../files/casefile/i18n_handler/i18n_handler_example');
 
 		describe('#lan:en-US', function()
 		{
@@ -160,7 +160,7 @@ describe('#i18n_func_run', function()
 
 	describe('#simple', function()
 	{
-		var I18N = require('./files/casefile/i18n_handler/i18n_handler_simple_example');
+		var I18N = require('../files/casefile/i18n_handler/i18n_handler_simple_example');
 
 		describe('#lan:en-US', function()
 		{
@@ -258,7 +258,7 @@ describe('#i18n_func_run', function()
 
 	describe('#global', function()
 	{
-		var I18N = require('./files/casefile/i18n_handler/i18n_handler_global_example');
+		var I18N = require('../files/casefile/i18n_handler/i18n_handler_global_example');
 
 		it('#base', function()
 		{

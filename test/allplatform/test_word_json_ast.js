@@ -1,12 +1,12 @@
 'use strict';
 
-var expect			= require('expect.js');
-var escodegen		= require('escodegen');
-var optionsUtils	= require('../lib/options');
-var i18nParser		= require('../lib/i18n_func/parser');
-var i18nGenerator	= require('../lib/i18n_func/generator');
-var i18nGeneratorTest = i18nGenerator._test;
-var i18nParserTest = i18nParser._test;
+var expect				= require('expect.js');
+var escodegen			= require('escodegen');
+var optionsUtils		= require('../../lib/options');
+var i18nParser			= require('../../lib/i18n_func/parser');
+var i18nGenerator		= require('../../lib/i18n_func/generator');
+var i18nGeneratorTest	= i18nGenerator._test;
+var i18nParserTest		= i18nParser._test;
 
 
 describe('#word_json_ast', function()

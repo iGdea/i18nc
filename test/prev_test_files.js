@@ -1,9 +1,9 @@
 'use strict';
 
-var _ = require('lodash');
-var fs = require('fs');
-var DEF = require('../lib/def');
-var i18nTpl = require('../lib/i18n_func/render');
+var _		= require('lodash');
+var fs		= require('fs');
+var DEF		= require('../lib/def');
+var i18nTpl	= require('../lib/i18n_func/render');
 
 function I18NHandlerConfig()
 {

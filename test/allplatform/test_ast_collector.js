@@ -1,11 +1,11 @@
 'use strict';
 
 var expect				= require('expect.js');
-var ASTCollector		= require('../lib/ast_collector').ASTCollector;
-var optionsUtils		= require('../lib/options');
-var astUtils			= require('../lib/ast_utils');
-var i18nc				= require('../');
-var blockModifierFuncs	= require('./files/casefile/func_code/func_code_block_modifier');
+var ASTCollector		= require('../../lib/ast_collector').ASTCollector;
+var optionsUtils		= require('../../lib/options');
+var astUtils			= require('../../lib/ast_utils');
+var i18nc				= require('../../');
+var blockModifierFuncs	= require('../files/casefile/func_code/func_code_block_modifier');
 
 describe('#ASTCollector', function()
 {
@@ -68,7 +68,7 @@ describe('#ASTCollector', function()
 
 	describe('#scopes', function()
 	{
-		var scopesFuncs = require('./files/casefile/func_code/func_code_scopes');
+		var scopesFuncs = require('../files/casefile/func_code/func_code_scopes');
 		it('#scopes', function()
 		{
 			var code = scopesFuncs.base;
@@ -121,7 +121,7 @@ describe('#ASTCollector', function()
 				];
 			});
 
-			var code = require('./files/casefile/func_code/func_code_collect').no_words;
+			var code = require('../files/casefile/func_code/func_code_collect').no_words;
 			var scope = getFinalCollect(code);
 			expect(getScopeCodeTranslateWord(scope)).to.eql(['1234']);
 		});

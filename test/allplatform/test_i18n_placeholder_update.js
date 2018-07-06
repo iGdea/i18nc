@@ -1,12 +1,12 @@
 'use strict';
 
-var expect = require('expect.js');
-var esprima = require('esprima');
-var DEF = require('../lib/def');
-var optionsUtils = require('../lib/options');
-var prevTestFiles = require('./prev_test_files');
-var i18nTpl = require('../lib/i18n_func/render');
-var I18NPlaceholder = require('../lib/i18n_placeholder').I18NPlaceholder;
+var expect			= require('expect.js');
+var esprima			= require('esprima');
+var prevTestFiles	= require('../prev_test_files');
+var DEF				= require('../../lib/def');
+var optionsUtils	= require('../../lib/options');
+var i18nTpl			= require('../../lib/i18n_func/render');
+var I18NPlaceholder	= require('../../lib/i18n_placeholder').I18NPlaceholder;
 
 
 describe('#i18n_placeholder_update', function()

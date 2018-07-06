@@ -4,16 +4,16 @@ var fs					= require('fs');
 var path				= require('path');
 var debug				= require('debug')('i18nc-core:test_example');
 var expect				= require('expect.js');
-var i18nc				= require('../');
-var autoTestUtils		= require('./auto_test_utils');
-var dbTranslateWords	= require('./example/translate_words_db');
+var i18nc				= require('../../');
+var autoTestUtils		= require('../auto_test_utils');
+var dbTranslateWords	= require('../example/translate_words_db');
 
 describe('#example', function()
 {
 	describe('#func_code', function()
 	{
 		var requireAfterWrite	= autoTestUtils.requireAfterWrite('example');
-		var exampleCode			= require('./example/func_code');
+		var exampleCode			= require('../example/func_code');
 
 		it('#first', function()
 		{
@@ -37,7 +37,7 @@ describe('#example', function()
 
 		it('#retry', function()
 		{
-			var exampleCode_output = require('./example/func_code_output').toString();
+			var exampleCode_output = require('../example/func_code_output').toString();
 			var info = i18nc(exampleCode_output,
 				{
 					dbTranslateWords: dbTranslateWords
@@ -58,7 +58,7 @@ describe('#example', function()
 
 	it('#use require', function()
 	{
-		var mainFile = './example/use_require/func_code.js';
+		var mainFile = '../example/use_require/func_code.js';
 		var requireAfterWrite = autoTestUtils.requireAfterWrite('example/use_require');
 		var i18nOptions =
 		{
@@ -75,8 +75,8 @@ describe('#example', function()
 					&& ast.arguments[0]
 					&& ast.arguments[0].type == 'Literal')
 				{
-					var p = path.dirname(emitData.options.originalOptions.mainFile);
-					var file = p+'/'+ast.arguments[0].value;
+					expect(emitData.options.originalOptions.mainFile).to.be(mainFile);
+					var file = '../example/use_require/'+ast.arguments[0].value;
 					debug('loadTranslateJSON:%s', file);
 					emitData.result = require(file);
 					expect(emitData.result['en-US']).to.be.an('object');
@@ -89,21 +89,22 @@ describe('#example', function()
 			newTranslateJSON: function(emitData)
 			{
 				debug('newTranslateJSON:%s', emitData.result);
+				expect(emitData.options.originalOptions.mainFile).to.be(mainFile);
 				var content = 'function code(){\n// just fot test\nreturn '+emitData.result+';\n}';
-				var p = path.dirname(emitData.options.originalOptions.mainFile);
-				var otherContent = autoTestUtils.requireAfterWriteReal(p+'/require_data.js', content);
+
+				var otherContent = autoTestUtils.requireAfterWriteReal('example/use_require/require_data.js', content);
 				expect(autoTestUtils.code2arr(content)).to.eql(autoTestUtils.code2arr(otherContent));
 
-				var otherJSON = autoTestUtils.requireAfterWriteReal(p+'/require_data.json', emitData.originalJSON);
+				var otherJSON = autoTestUtils.requireAfterWriteReal('example/use_require/require_data.json', emitData.originalJSON);
 				expect(emitData.originalJSON).to.be.eql(otherJSON);
 
 				emitData.result = 'require("./require_data.json")';
 			},
 		};
 
-		var exampleCode = require('./example/use_require/func_code.js');
+		var exampleCode = require(mainFile);
 		var info = i18nc(exampleCode.toString(), i18nOptions);
-		var otherCode = autoTestUtils.requireAfterWriteReal(path.dirname(mainFile)+'/func_code_output.js', 'module.exports = '+info.code);
+		var otherCode = autoTestUtils.requireAfterWriteReal('example/use_require/func_code_output.js', 'module.exports = '+info.code);
 
 		expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 	});

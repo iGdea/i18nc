@@ -1,11 +1,11 @@
 'use strict';
 
 var expect				= require('expect.js');
-var i18nc				= require('../');
-var dbTranslateWords	= require('./example/translate_words_db');
-var autoTestUtils		= require('./auto_test_utils');
+var i18nc				= require('../../');
+var dbTranslateWords	= require('../example/translate_words_db');
+var autoTestUtils		= require('../auto_test_utils');
 var requireAfterWrite	= autoTestUtils.requireAfterWrite('main_options');
-var collectFuncs		= require('./files/casefile/func_code/func_code_collect');
+var collectFuncs		= require('../files/casefile/func_code/func_code_collect');
 
 describe('#main_options', function()
 {
@@ -74,7 +74,7 @@ describe('#main_options', function()
 
 	describe('#codeModifiedArea', function()
 	{
-		var exampleCode = require('./example/func_code.js').toString();
+		var exampleCode = require('../example/func_code.js').toString();
 
 		it('#only I18NHandler', function()
 		{
@@ -163,8 +163,8 @@ describe('#main_options', function()
 
 		it('#partialUpdate', function()
 		{
-			var code = require('./files/casefile/i18n_handler/i18n_handler_example.js');
-			var funcInfo = require('./files/casefile/i18n_handler/i18n_handler_example_output.json');
+			var code = require('../files/casefile/i18n_handler/i18n_handler_example.js');
+			var funcInfo = require('../files/casefile/i18n_handler/i18n_handler_example_output.json');
 			var codeData =
 			{
 				DEFAULTS: Object.keys(funcInfo.__TRANSLATE_JSON__['en-US'].DEFAULTS),
@@ -283,7 +283,7 @@ describe('#main_options', function()
 
 	it('#isIgnoreI18NHandlerTranslateWords', function()
 	{
-		var code = require('./example/func_code_output').toString();
+		var code = require('../example/func_code_output').toString();
 		var info = i18nc(code,
 			{
 				isIgnoreI18NHandlerTranslateWords: true,
@@ -302,7 +302,7 @@ describe('#main_options', function()
 	{
 		it('#isProxyGlobalHandler', function()
 		{
-			var code = require('./files/casefile/func_code/func_code_noi18n').toString();
+			var code = require('../files/casefile/func_code/func_code_noi18n').toString();
 			var info = i18nc(code,
 				{
 					isProxyGlobalHandler: true,
@@ -313,7 +313,7 @@ describe('#main_options', function()
 
 		it('#isIgnoreCodeProxyGlobalHandlerName', function()
 		{
-			var code = require('./files/casefile/func_code/func_code_i18n_global_handler').toString();
+			var code = require('../files/casefile/func_code/func_code_i18n_global_handler').toString();
 			var info = i18nc(code,
 				{
 					isProxyGlobalHandler: true,

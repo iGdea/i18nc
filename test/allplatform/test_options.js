@@ -1,7 +1,7 @@
 'use strict';
 
-var expect = require('expect.js');
-var optionsUtils = require('../lib/options');
+var expect			= require('expect.js');
+var optionsUtils	= require('../../lib/options');
 
 describe('#options', function()
 {
