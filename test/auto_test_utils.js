@@ -52,8 +52,9 @@ function requireAfterWriteReal(file, data)
 			break;
 	}
 
-	mkdirp.sync(path.dirname(file));
-	fs.writeFileSync(path.join(__dirname, file), data);
+	var realfile = path.join(__dirname, file);
+	mkdirp.sync(path.dirname(realfile));
+	fs.writeFileSync(realfile, data);
 
 	return _require(file);
 }
