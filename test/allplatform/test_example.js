@@ -102,7 +102,7 @@ describe('#example', function()
 			},
 		};
 
-		var exampleCode = require(mainFile);
+		var exampleCode = require('../example/use_require/func_code.js');
 		var info = i18nc(exampleCode.toString(), i18nOptions);
 		var otherCode = autoTestUtils.requireAfterWriteReal('example/use_require/func_code_output.js', 'module.exports = '+info.code);
 
