@@ -46,19 +46,19 @@ function I18NHandlerConfig()
 	};
 }
 
-exports.I18NHandlerExampleCode = function I18NHandlerExampleCode()
+exports.I18NHandlerExampleCode = function I18NHandlerExampleCode(isMin)
 {
-	return i18nTpl.render(I18NHandlerConfig(), true);
+	return i18nTpl.render(I18NHandlerConfig(), isMin);
 };
 
-exports.I18NHandlerGlobalExampleCode = function I18NHandlerGlobalExampleCode()
+exports.I18NHandlerGlobalExampleCode = function I18NHandlerGlobalExampleCode(isMin)
 {
 	var config = I18NHandlerConfig();
 	config.globalHandlerName = 'I18N.topI18N';
-	return i18nTpl.renderGlobal(config, true);
+	return i18nTpl.renderGlobal(config, isMin);
 };
 
-exports.I18NHandlerSimpleExampleCode = function I18NHandlerSimpleExampleCode()
+exports.I18NHandlerSimpleExampleCode = function I18NHandlerSimpleExampleCode(isMin)
 {
 	var config =
 	{
@@ -66,7 +66,7 @@ exports.I18NHandlerSimpleExampleCode = function I18NHandlerSimpleExampleCode()
 		FILE_KEY			: 'i18n_handler_example',
 		FUNCTION_VERSION	: DEF.I18NFunctionVersion,
 	};
-	return i18nTpl.renderSimple(config, true);
+	return i18nTpl.renderSimple(config, isMin);
 };
 
 function main()

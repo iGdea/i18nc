@@ -3,17 +3,31 @@ module.exports = function code()
 
 
 	/* eslint-disable */
-	function I18N(c){
-		var a=I18N;var b=a.$;if(!b){b=a.$={};a.K='*';a.V='b.g';a.D={
-			'en-US': {
-				'DEFAULTS': {
-					// '中文':
-					// '中文2':
-					'<e.g.> translate word': null
+	function I18N(msg)
+	{
+		var self = I18N;
+		var data = self.$;
+
+		if (!data)
+		{
+			data = self.$ = {};
+		
+		
+		
+			self.K = '*';
+			self.V = 'b.g';
+			self.D = {
+				'en-US': {
+					'DEFAULTS': {
+						// '中文':
+						// '中文2':
+						'<e.g.> translate word': null
+					}
 				}
-			}
+			};
 		}
-		}return''+topI18N(c,arguments,a.D,a.K,b,a)
+
+		return ''+topI18N(msg, arguments, self.D, self.K, data, self);
 	}
 	/* eslint-enable */
 
