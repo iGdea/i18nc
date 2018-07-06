@@ -132,14 +132,14 @@ describe('#main_options', function()
 	});
 
 
-	describe('#isMinFuncTranslateCode', function()
+	describe('#minTranslateFuncCode', function()
 	{
 		it('#base', function()
 		{
 			var code = collectFuncs.has_words;
 			var info = i18nc(code.toString(),
 				{
-					isMinFuncTranslateCode: true
+					minTranslateFuncCode: 'all'
 				});
 
 			var otherCode = requireAfterWrite('func_code_min_i18n_output_base.js', info.code);
@@ -153,7 +153,7 @@ describe('#main_options', function()
 			var info = i18nc(code.toString(),
 				{
 					dbTranslateWords: dbTranslateWords,
-					isMinFuncTranslateCode: true
+					minTranslateFuncCode: 'all'
 				});
 
 			var otherCode = requireAfterWrite('func_code_min_i18n_output_widthdb.js', info.code);
@@ -176,7 +176,7 @@ describe('#main_options', function()
 			var info = i18nc(code.toString()+codeData,
 				{
 					dbTranslateWords: dbTranslateWords,
-					isMinFuncTranslateCode: true
+					minTranslateFuncCode: 'all'
 				});
 			var wrapCode = autoTestUtils.wrapCode4pkg(info.code);
 			var otherCode = requireAfterWrite('func_code_min_i18n_output_partiaupdate.js', wrapCode);

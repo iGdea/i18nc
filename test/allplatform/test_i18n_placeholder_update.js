@@ -166,7 +166,7 @@ describe('#i18n_placeholder_update', function()
 					handlerName: 'I18N',
 					FILE_KEY: 'file_key',
 					FUNCTION_VERSION: DEF.I18NFunctionVersion+'.'+DEF.I18NFunctionSubVersion.SIMPLE,
-				})));
+				}, true)));
 		});
 
 		it('#complete', function()
@@ -185,7 +185,7 @@ describe('#i18n_placeholder_update', function()
 					FUNCTION_VERSION    : DEF.I18NFunctionVersion,
 					GetLanguageCode		: 'GetLanguageCode',
 					TRANSLATE_JSON_CODE : '{}'
-				});
+				}, true);
 			expect(func2codeArr(I18NPlaceholderNew)).to.eql(code2arr(otherCode));
 		});
 	});

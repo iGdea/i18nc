@@ -48,24 +48,25 @@ function I18NHandlerConfig()
 
 exports.I18NHandlerExampleCode = function I18NHandlerExampleCode()
 {
-	return i18nTpl.render(I18NHandlerConfig());
+	return i18nTpl.render(I18NHandlerConfig(), true);
 };
 
 exports.I18NHandlerGlobalExampleCode = function I18NHandlerGlobalExampleCode()
 {
 	var config = I18NHandlerConfig();
 	config.globalHandlerName = 'I18N.topI18N';
-	return i18nTpl.renderGlobal(config);
+	return i18nTpl.renderGlobal(config, true);
 };
 
 exports.I18NHandlerSimpleExampleCode = function I18NHandlerSimpleExampleCode()
 {
-	return i18nTpl.renderSimple(
-		{
-			handlerName			: 'I18N',
-			FILE_KEY			: 'i18n_handler_example',
-			FUNCTION_VERSION	: DEF.I18NFunctionVersion,
-		});
+	var config =
+	{
+		handlerName			: 'I18N',
+		FILE_KEY			: 'i18n_handler_example',
+		FUNCTION_VERSION	: DEF.I18NFunctionVersion,
+	};
+	return i18nTpl.renderSimple(config, true);
 };
 
 function main()
