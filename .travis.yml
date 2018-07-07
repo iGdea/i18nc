@@ -16,7 +16,6 @@ after_script:
 
 addons:
   sauce_connect: false
-  chrome: false
 
 matrix:
   include:
