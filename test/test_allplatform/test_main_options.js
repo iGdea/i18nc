@@ -132,61 +132,6 @@ describe('#main_options', function()
 	});
 
 
-	describe('#minTranslateFuncCode', function()
-	{
-		it('#base', function()
-		{
-			var code = collectFuncs.has_words;
-			var info = i18nc(code.toString(),
-				{
-					minTranslateFuncCode: 'all'
-				});
-
-			var otherCode = requireAfterWrite('func_code_min_i18n_output_base.js', info.code);
-
-			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
-		});
-
-		it('#wdithdb', function()
-		{
-			var code = collectFuncs.has_words;
-			var info = i18nc(code.toString(),
-				{
-					dbTranslateWords: dbTranslateWords,
-					minTranslateFuncCode: 'all'
-				});
-
-			var otherCode = requireAfterWrite('func_code_min_i18n_output_widthdb.js', info.code);
-
-			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
-		});
-
-		it('#partialUpdate', function()
-		{
-			var code = require('../files/casefile/i18n_handler/i18n_handler_example.js');
-			var funcInfo = require('../files/casefile/i18n_handler/i18n_handler_example_output.json');
-			var codeData =
-			{
-				DEFAULTS: Object.keys(funcInfo.__TRANSLATE_JSON__['en-US'].DEFAULTS),
-			};
-
-			codeData = '\nvar codeJSON='+JSON.stringify(codeData, null, '\t');
-			// println(codeData);
-
-			var info = i18nc(code.toString()+codeData,
-				{
-					dbTranslateWords: dbTranslateWords,
-					minTranslateFuncCode: 'all'
-				});
-			var wrapCode = autoTestUtils.wrapCode4pkg(info.code);
-			var otherCode = requireAfterWrite('func_code_min_i18n_output_partiaupdate.js', wrapCode);
-
-			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
-		});
-
-	});
-
-
 	it('#pickFileLanguages', function()
 	{
 		var code = 'println("不可能存在的中文翻译词组");';
