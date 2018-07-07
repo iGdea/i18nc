@@ -35,47 +35,62 @@ describe('#i18n_placeholder_update', function()
 			expect(I18NPlaceholderNew.getRenderType()).to.be(renderType);
 		}
 
-		it('#example', function()
+		describe('#tpls', function()
 		{
-			var code = prevTestFiles.I18NHandlerExampleCode();
-			checkEmptyJSONCode(code, 'partial');
-			checkWidthJSONCode(code, 'partial');
-		});
-
-		it('#simple', function()
-		{
-			var code = prevTestFiles.I18NHandlerSimpleExampleCode();
-			checkEmptyJSONCode(code, 'complete');
-			checkWidthJSONCode(code, 'complete');
-		});
-
-		it('#diff version', function()
-		{
-			var code = i18nTpl.render(
+			it('#full', function()
 			{
-				handlerName: 'I18N',
-				FILE_KEY: '*',
-				FUNCTION_VERSION: 0,
-				GetLanguageCode: 'GetLanGlobal',
-				TRANSLATE_JSON_CODE : '{}'
+				var code = prevTestFiles.I18NHandlerExampleCode();
+				checkEmptyJSONCode(code, 'partial');
+				checkWidthJSONCode(code, 'partial');
 			});
-			checkEmptyJSONCode(code, 'complete');
-			checkWidthJSONCode(code, 'complete');
+
+			it('#simple', function()
+			{
+				var code = prevTestFiles.I18NHandlerSimpleExampleCode();
+				checkEmptyJSONCode(code, 'complete');
+				checkWidthJSONCode(code, 'complete');
+			});
+
+			it('#global', function()
+			{
+				var code = prevTestFiles.I18NHandlerGlobalExampleCode();
+				checkEmptyJSONCode(code, 'partial');
+				checkWidthJSONCode(code, 'partial');
+			});
 		});
 
-		it('#no file_key', function()
+		describe('#triggers', function()
 		{
-			var code = i18nTpl.render(
+			it('#diff version', function()
 			{
-				handlerName: 'I18N',
-				FILE_KEY: '',
-				FUNCTION_VERSION: DEF.I18NFunctionVersion,
-				GetLanguageCode : 'GetLanGlobal',
-				TRANSLATE_JSON_CODE : '{}'
+				var code = i18nTpl.render(
+				{
+					handlerName: 'I18N',
+					FILE_KEY: '*',
+					FUNCTION_VERSION: 0,
+					GetLanguageCode: 'GetLanGlobal',
+					TRANSLATE_JSON_CODE : '{}'
+				});
+				checkEmptyJSONCode(code, 'complete');
+				checkWidthJSONCode(code, 'complete');
 			});
-			checkEmptyJSONCode(code, 'original');
-			checkWidthJSONCode(code, 'complete');
+
+			it('#no file_key', function()
+			{
+				var code = i18nTpl.render(
+				{
+					handlerName: 'I18N',
+					FILE_KEY: '',
+					FUNCTION_VERSION: DEF.I18NFunctionVersion,
+					GetLanguageCode : 'GetLanGlobal',
+					TRANSLATE_JSON_CODE : '{}'
+				});
+				checkEmptyJSONCode(code, 'original');
+				checkWidthJSONCode(code, 'complete');
+			});
 		});
+
+
 	});
 
 
@@ -89,7 +104,8 @@ describe('#i18n_placeholder_update', function()
 			self.__TRANSLATE_JSON__ = {DEFAULTS: {key: 1}};
 		}
 		var code = I18N.toString();
-		var codeTranslateWords = {
+		var codeTranslateWords =
+		{
 			DEFAULTS: ['中文']
 		};
 
