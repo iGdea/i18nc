@@ -3214,6 +3214,13 @@ module.exports = function(options)
 			});
 		}
 	}
+
+	if (!('minTranslateFuncCode' in options) && ('isMinFuncTranslateCode' in options))
+	{
+		options.minTranslateFuncCode = options.isMinFuncTranslateCode ? 'all' : 'onlyFunc';
+		deprecate('use `minTranslateFuncCode='+options.minTranslateFuncCode
+			+'` instead of `isMinFuncTranslateCode='+options.isMinFuncTranslateCode+'`');
+	}
 }
 
 },{"./tpl/depd_getlanguagecode_handler":20,"depd":25,"lodash":88}],20:[function(require,module,exports){

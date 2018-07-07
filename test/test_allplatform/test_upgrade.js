@@ -21,7 +21,7 @@ describe('#upgrade', function()
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 		});
 
-		it('#new style', function()
+		it('#I18NhandlerTpl', function()
 		{
 			var code = require('../files/casefile/func_code/func_code_noi18n').toString();
 			var info = i18nc(code,
@@ -31,6 +31,40 @@ describe('#upgrade', function()
 				});
 			var otherCode = requireAfterWrite('func_code_noi18n_new_style.js', info.code);
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
+		});
+
+		describe('#isMinFuncTranslateCode', function()
+		{
+			var code = require('../files/casefile/func_code/func_code_noi18n').toString();
+			it('#true', function()
+			{
+				var info = i18nc(code,
+				{
+					isMinFuncTranslateCode: true
+				});
+
+				var info2 = i18nc(code,
+				{
+					minTranslateFuncCode: 'all'
+				});
+
+				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(info2.code));
+			});
+
+			it('#false', function()
+			{
+				var info = i18nc(code,
+				{
+					isMinFuncTranslateCode: false
+				});
+
+				var info2 = i18nc(code,
+				{
+					minTranslateFuncCode: 'onlyFunc'
+				});
+
+				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(info2.code));
+			});
 		});
 	});
 });
