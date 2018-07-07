@@ -58,7 +58,7 @@ function getCacheVarByFunc()
 }
 
 var suite = new Benchmark.Suite;
-suite.add('var&func', function()
+module.exports = suite.add('var&func', function()
 	{
 		getCacheVarByVarAndFunc();
 	})
@@ -89,5 +89,4 @@ suite.add('var&func', function()
 	.on('complete', function()
 	{
 		console.log('Fastest is ' + this.filter('fastest').map('name'));
-	})
-	.run();
+	});
