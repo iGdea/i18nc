@@ -1,3 +1,5 @@
+/* global println */
+
 'use strict';
 
 var expect				= require('expect.js');
@@ -230,7 +232,7 @@ describe('#main', function()
 		{
 			var code = function code()
 			{
-				println("不可能存在的中文翻译词组");
+				println("不可能存在的中文翻译词组", I18N);
 				function I18N()
 				{
 					var self = I18N;
@@ -253,7 +255,7 @@ describe('#main', function()
 		{
 			var code = function code()
 			{
-				println("简体");
+				println("简体", I18N);
 				function I18N()
 				{
 					var self = I18N;
@@ -345,10 +347,12 @@ describe('#main', function()
 			{
 				var code = function code()
 				{
-					var v1 =
+					var d =
 					{
 						"中文key": "中文val"
 					};
+
+					console.log(d);
 				};
 
 				var info = i18nc(code.toString());

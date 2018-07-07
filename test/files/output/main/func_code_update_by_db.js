@@ -1,6 +1,6 @@
 module.exports = function code()
 			{
-				println(I18N('简体'));
+				println(I18N('简体'), I18N);
 				function I18N()
 				{
 					var self = I18N;

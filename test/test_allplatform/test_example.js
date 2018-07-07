@@ -1,7 +1,5 @@
 'use strict';
 
-var fs					= require('fs');
-var path				= require('path');
 var debug				= require('debug')('i18nc-core:test_example');
 var expect				= require('expect.js');
 var i18nc				= require('../../');
@@ -59,7 +57,6 @@ describe('#example', function()
 	it('#use require', function()
 	{
 		var mainFile = '../example/use_require/func_code.js';
-		var requireAfterWrite = autoTestUtils.requireAfterWrite('example/use_require');
 		var i18nOptions =
 		{
 			mainFile: mainFile,

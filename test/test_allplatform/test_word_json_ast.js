@@ -57,10 +57,11 @@ describe('#word_json_ast', function()
 						// 'word_3':
 						'<e.g.> translate word': null
 					}
+					console.log(d);
 				}
 				var resultAst = i18nGeneratorTest._wordJson2ast(astData);
 				var resultCode = escodegen.generate(resultAst, optionsUtils.escodegenOptions);
-				expect(code2arr(resultCode)).to.eql(func2codeArr(code).slice(1));
+				expect(code2arr(resultCode)).to.eql(func2codeArr(code).slice(1, -1));
 			});
 
 			it('#first', function()
@@ -79,10 +80,11 @@ describe('#word_json_ast', function()
 						// 'word_2':
 						'word_3': 'word_3'
 					}
+					console.log(d);
 				}
 				var resultAst = i18nGeneratorTest._wordJson2ast(astData);
 				var resultCode = escodegen.generate(resultAst, optionsUtils.escodegenOptions);
-				expect(code2arr(resultCode)).to.eql(func2codeArr(code).slice(1));
+				expect(code2arr(resultCode)).to.eql(func2codeArr(code).slice(1, -1));
 			});
 
 			it('#middle', function()
@@ -101,10 +103,11 @@ describe('#word_json_ast', function()
 						// 'word_3':
 						'word_2': 'word_2'
 					}
+					console.log(d);
 				}
 				var resultAst = i18nGeneratorTest._wordJson2ast(astData);
 				var resultCode = escodegen.generate(resultAst, optionsUtils.escodegenOptions);
-				expect(code2arr(resultCode)).to.eql(func2codeArr(code).slice(1));
+				expect(code2arr(resultCode)).to.eql(func2codeArr(code).slice(1, -1));
 			});
 
 			it('#last', function()
@@ -123,10 +126,11 @@ describe('#word_json_ast', function()
 						// 'word_2':
 						'word_3': 'word_3'
 					}
+					console.log(d);
 				}
 				var resultAst = i18nGeneratorTest._wordJson2ast(astData);
 				var resultCode = escodegen.generate(resultAst, optionsUtils.escodegenOptions);
-				expect(code2arr(resultCode)).to.eql(func2codeArr(code).slice(1));
+				expect(code2arr(resultCode)).to.eql(func2codeArr(code).slice(1, -1));
 			});
 		});
 	});
