@@ -62,10 +62,11 @@ var word = I18N('%s中文%s课堂', ['<span>', '</span>']);
 function I18N(h,f,i){
     var a=I18N;
     ...
-    a.__FILE_KEY__='*';a.__FUNCTION_VERSION__='5';a.__TRANSLATE_JSON__={};
+    // a.__FILE_KEY__='*';a.__FUNCTION_VERSION__='5';a.__TRANSLATE_JSON__={};
+    a.K='*';a.V='5';a.D={};
     ...
     var q=l||k||h;var p=0;
-    return(''+q).replace(/(%s)|(%\{(.+?)\})/g,function(){var a=f[p++];return a===undefined||a===null?'':a;});
+    return(''+q).replace(/%s|%\{.+?\}/g,function(){var a=f[p++];return a===undefined||a===null?'':a;});
 }
 ```
 
