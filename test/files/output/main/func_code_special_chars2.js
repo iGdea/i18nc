@@ -80,11 +80,12 @@ module.exports = function a(){
 			else if (resultDefault) msg = resultDefault;
 		}
 
+		msg += '';
 	
-		if (!tpldata.length) return ''+msg;
+		if (!tpldata.length || msg.indexOf('%') == -1) return msg;
 
 		var replace_index = 0;
-		return (''+msg).replace(/(%s)|(%\{(.+?)\})/g, function(all)
+		return msg.replace(/%s|%\{.+?\}/g, function(all)
 		{
 			var newVal = tpldata[replace_index++];
 			return newVal === undefined || newVal === null ? all : newVal;

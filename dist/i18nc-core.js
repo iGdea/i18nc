@@ -2024,11 +2024,12 @@ module.exports = function $handlerName(msg, tpldata, subtype)
 		else if (resultDefault) msg = resultDefault;
 	}
 
+	msg += '';
 	// 不需要替换，直接返回
-	if (!tpldata.length) return ''+msg;
+	if (!tpldata.length || msg.indexOf('%') == -1) return msg;
 
 	var replace_index = 0;
-	return (''+msg).replace(/(%s)|(%\{(.+?)\})/g, function(all)
+	return msg.replace(/%s|%\{.+?\}/g, function(all)
 	{
 		var newVal = tpldata[replace_index++];
 		return newVal === undefined || newVal === null ? all : newVal;
@@ -2064,7 +2065,8 @@ module.exports = function $handlerName(msg)
 
 module.exports = function $handlerName(msg, tpldata)
 {
-	if (!tpldata || !tpldata.join) return ''+msg;
+	msg += '';
+	if (!tpldata || !tpldata.length || msg.indexOf('%') == -1) return msg;
 
 	var self = $handlerName;
 
@@ -2074,7 +2076,7 @@ module.exports = function $handlerName(msg, tpldata)
 	self.V = '$FUNCTION_VERSION';
 
 	var replace_index = 0;
-	return (''+msg).replace(/(%s)|(%\{(.+?)\})/g, function(all)
+	return msg.replace(/%s|%\{.+?\}/g, function(all)
 	{
 		var newVal = tpldata[replace_index++];
 		return newVal === undefined || newVal === null ? all : newVal;
@@ -46470,6 +46472,7 @@ module.exports={
   "scripts": {
     "prepublish": "npm ls",
     "build": "node test/build/i18nc-core",
+    "bench": "node benchmark/index",
     "lint": "eslint .",
     "test": "cross-env DEBUG=i18nc-core* mocha test/test_*/test_*",
     "test-cov": "istanbul cover _mocha -- test/test_*/test_* --reporter dot",
