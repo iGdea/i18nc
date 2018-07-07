@@ -46496,7 +46496,7 @@ module.exports={
     "benchmark": "^2.1.4",
     "cross-env": "^5.2.0",
     "eslint": "^5.0.1",
-    "eslint-config-brcjs": "^0.1.0",
+    "eslint-config-brcjs": "^0.2.0",
     "expect.js": "^0.3.1",
     "glob": "^7.1.2",
     "istanbul": "^0.4.5",
