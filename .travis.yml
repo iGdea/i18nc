@@ -14,32 +14,14 @@ script:
 after_script:
   - npm install coveralls@2 && cat ./coverage/lcov.info | coveralls
 
-addons:
-  sauce_connect: false
-
 matrix:
   include:
-    - node_js: stable
-      # master 分支不执行sauce的编译
-      before_install:
-        - 'if [ "$TRAVIS_BRANCH" = "master" ]; then exit; fi'
-      # 设置一个环境变量，方便做失败忽略
-      env: sauce_travis=true
-      addons:
-        sauce_connect: true
-      script:
-        - npm run test-e2e travis
-        - npm run test-e2e travis-oldie
-      after_script: # 删除之前配置
-
     - node_js: stable
       dist: trusty
       addons:
         chrome: stable
+        firefox: latest
       script:
         - npm run test-e2e Chrome_travis_ci
+        - npm run test-e2e Firefox
       after_script: # 删除之前配置
-
-  fast_finish: true
-  allow_failures:
-    - env: sauce_travis=true
