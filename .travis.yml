@@ -5,6 +5,7 @@ language: node_js
 
 node_js:
   - lts/*
+  - stable
 
 script:
   - npm run lint
@@ -23,6 +24,5 @@ matrix:
         chrome: stable
         firefox: latest
       script:
-        - npm run lint
-        - npm run test-travis
         - npm run test-e2e ChromeHeadlessNoSandbox,FirefoxHeadless
+      after_script:
