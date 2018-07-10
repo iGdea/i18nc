@@ -5,7 +5,6 @@ language: node_js
 
 node_js:
   - lts/*
-  - stable
 
 script:
   - npm run lint
@@ -18,10 +17,12 @@ matrix:
   include:
     - node_js: stable
       dist: trusty
+      env:
+        - MOZ_HEADLESS=1
       addons:
         chrome: stable
         firefox: latest
       script:
-        - npm run test-e2e Chrome_travis_ci
-        - npm run test-e2e Firefox
-      after_script: # 删除之前配置
+        - npm run lint
+        - npm run test-travis
+        - npm run test-e2e ChromeHeadlessNoSandbox,FirefoxHeadless
