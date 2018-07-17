@@ -4,6 +4,7 @@ var expect				= require('expect.js');
 var autoTestUtils		= require('../auto_test_utils');
 var requireAfterWrite	= autoTestUtils.requireAfterWrite('upgrade');
 var i18nc				= require('../../');
+var optionsUtils		= require('../../lib/options');
 
 describe('#upgrade', function()
 {
@@ -19,6 +20,14 @@ describe('#upgrade', function()
 				});
 			var otherCode = requireAfterWrite('func_code_noi18n_rename.js', info.code);
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
+		});
+
+		it('#rename for obj', function()
+		{
+			var newOptions = optionsUtils.extend();
+			expect(newOptions.I18NHandler.insert.checkClosure).to.be(true);
+			newOptions = optionsUtils.extend({isCheckClosureForNewI18NHandler: false});
+			expect(newOptions.I18NHandler.insert.checkClosure).to.be(false);
 		});
 
 		it('#I18NhandlerTpl', function()
