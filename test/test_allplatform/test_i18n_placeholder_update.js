@@ -66,9 +66,9 @@ describe('#i18n_placeholder_update', function()
 				var code = i18nTpl.render(
 				{
 					handlerName: 'I18N',
+					getLanguageCode: 'GetLanGlobal',
 					FILE_KEY: '*',
 					FUNCTION_VERSION: 0,
-					GetLanguageCode: 'GetLanGlobal',
 					TRANSLATE_JSON_CODE : '{}'
 				});
 				checkEmptyJSONCode(code, 'complete');
@@ -80,9 +80,9 @@ describe('#i18n_placeholder_update', function()
 				var code = i18nTpl.render(
 				{
 					handlerName: 'I18N',
+					getLanguageCode : 'GetLanGlobal',
 					FILE_KEY: '',
 					FUNCTION_VERSION: DEF.I18NFunctionVersion,
-					GetLanguageCode : 'GetLanGlobal',
 					TRANSLATE_JSON_CODE : '{}'
 				});
 				checkEmptyJSONCode(code, 'original');
@@ -197,9 +197,9 @@ describe('#i18n_placeholder_update', function()
 			var otherCode = i18nTpl.render(
 				{
 					handlerName         : options.I18NHandlerName,
+					getLanguageCode		: 'GetLanguageCode',
 					FILE_KEY            : 'file_key',
 					FUNCTION_VERSION    : DEF.I18NFunctionVersion,
-					GetLanguageCode		: 'GetLanguageCode',
 					TRANSLATE_JSON_CODE : '{}'
 				});
 			expect(func2codeArr(I18NPlaceholderNew)).to.eql(code2arr(otherCode));

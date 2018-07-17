@@ -39,9 +39,9 @@ function I18NHandlerConfig()
 
 	return {
 		handlerName			: 'I18N',
+		getLanguageCode		: '(function(){return global.__i18n_lan__})',
 		FILE_KEY			: 'i18n_handler_example',
 		FUNCTION_VERSION	: DEF.I18NFunctionVersion,
-		GetLanguageCode		: '(function(){return global.__i18n_lan__})',
 		TRANSLATE_JSON_CODE	: JSON.stringify(TRANSLATE_JSON, null, '\t'),
 	};
 }
