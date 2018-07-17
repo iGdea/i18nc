@@ -121,11 +121,10 @@ _.extend(ASTCollector.prototype,
 				{
 					if (handlerName == self.options.I18NHandlerName)
 					{
-						scope.I18NHanlderAsts.push(ast);
+						scope.I18NHandlerAsts.push(ast);
 						return;
 					}
-					else if (self.options.ignoreScanHandlerNames
-						&& self.options.ignoreScanHandlerNames.indexOf(handlerName) != -1)
+					else if (self.options.ignoreScanHandlerNames[handlerName])
 					{
 						debug('ignore scan function body %s.%s', handlerName, astUtils.getAstLocStr(ast));
 						return;
@@ -134,7 +133,7 @@ _.extend(ASTCollector.prototype,
 						&& self.options.I18NHandlerAlias.indexOf(handlerName) != -1)
 					{
 						astUtils.setAstFlag(ast, AST_FLAGS.I18N_ALIAS);
-						scope.I18NHanlderAsts.push(ast);
+						scope.I18NHandlerAsts.push(ast);
 						return;
 					}
 				}
@@ -192,8 +191,7 @@ _.extend(ASTCollector.prototype,
 
 				if (!calleeName) break;
 
-				if (self.options.ignoreScanHandlerNames
-					&& self.options.ignoreScanHandlerNames.indexOf(calleeName) != -1)
+				if (self.options.ignoreScanHandlerNames[calleeName])
 				{
 					debug('ignore scan function args %s.%s', calleeName, astUtils.getAstLocStr(ast));
 					return;
@@ -530,7 +528,7 @@ function ASTScope(ast, type)
 	this.type	= type;
 
 	this.I18NArgs			= [];
-	this.I18NHanlderAsts	= [];
+	this.I18NHandlerAsts	= [];
 	this.translateWordAsts	= [];
 
 	this.subScopes	= [];
@@ -556,7 +554,7 @@ _.extend(ASTScope.prototype,
 
 		if (!self.subScopes.length) return self;
 		// 如果已经定义了I18N函数，则不进行define的闭包
-		if (self.I18NHanlderAsts.length) isKeepDefineFactoryScope = false;
+		if (self.I18NHandlerAsts.length) isKeepDefineFactoryScope = false;
 		// 只保留一层define，嵌套的不处理
 		if (self.type == 'define factory') isKeepDefineFactoryScope = false;
 
@@ -568,11 +566,11 @@ _.extend(ASTScope.prototype,
 			var scope2 = scope.squeeze(isKeepDefineFactoryScope, options);
 
 			// 已经有I18N函数
-			if (scope2.I18NHanlderAsts.length
+			if (scope2.I18NHandlerAsts.length
 				// 对define函数调用进行特殊处理
 				|| (isKeepDefineFactoryScope && scope2.type == 'define factory')
 				// 如果是顶层，又希望闭包的时候，把I18N函数插入到第二层
-				|| (self.type == 'top' && options.isCheckClosureForNewI18NHandler))
+				|| (self.type == 'top' && options.I18NHandler.insert.checkClosure))
 			{
 				newScope.subScopes.push(scope2);
 			}
@@ -596,7 +594,7 @@ _.extend(ASTScope.prototype,
 		// 不合并subScopes
 		// subScopes会在后续进行判断之后看需要进行合并
 		ArrayPush.apply(this.I18NArgs, scope.I18NArgs);
-		ArrayPush.apply(this.I18NHanlderAsts, scope.I18NHanlderAsts);
+		ArrayPush.apply(this.I18NHandlerAsts, scope.I18NHandlerAsts);
 		ArrayPush.apply(this.translateWordAsts, scope.translateWordAsts);
 	},
 
@@ -689,14 +687,14 @@ _.extend(ASTScope.prototype,
 		var IGNORE_I18NHANLERALIAS	= !options.codeModifiedArea.I18NHandlerAlias;
 
 		// 预处理 I18N函数 begin
-		var I18NHanlderAsts = scope.I18NHanlderAsts.sort(function(a, b)
+		var I18NHandlerAsts = scope.I18NHandlerAsts.sort(function(a, b)
 			{
 				return a.range[0] > b.range[0] ? 1 : -1;
 			});
-		var lastI18NHanlderAst, lastI18NHandlerAliasAsts = {};
-		for(var i = I18NHanlderAsts.length; i--;)
+		var lastI18NHandlerAst, lastI18NHandlerAliasAsts = {};
+		for(var i = I18NHandlerAsts.length; i--;)
 		{
-			var item = I18NHanlderAsts[i];
+			var item = I18NHandlerAsts[i];
 			if (astUtils.checkAstFlag(item, AST_FLAGS.I18N_ALIAS))
 			{
 				var handlerName = item.id && item.id.name;
@@ -707,11 +705,11 @@ _.extend(ASTScope.prototype,
 			}
 			else
 			{
-				if (!lastI18NHanlderAst) lastI18NHanlderAst = item;
+				if (!lastI18NHandlerAst) lastI18NHandlerAst = item;
 			}
 		}
 
-		I18NHanlderAsts.forEach(function(ast)
+		I18NHandlerAsts.forEach(function(ast)
 		{
 			dealAst.push({type: 'I18NHandler', value: ast});
 		});
@@ -803,7 +801,7 @@ _.extend(ASTScope.prototype,
 							);
 
 						var handlerName = ast.id && ast.id.name;
-						if (ast !== lastI18NHanlderAst
+						if (ast !== lastI18NHandlerAst
 							&& ast !== lastI18NHandlerAliasAsts[handlerName])
 						{
 							// 函数保留，但翻译数据全部不要
@@ -852,9 +850,9 @@ _.extend(ASTScope.prototype,
 		// 如果作用域中，已经有I18N函数
 		// 那么头部插入的函数就不需要了
 		if ((!IGNORE_I18NHANLERALIAS && I18NPlaceholders.length)
-			|| (IGNORE_I18NHANLERALIAS && lastI18NHanlderAst))
+			|| (IGNORE_I18NHANLERALIAS && lastI18NHandlerAst))
 		{
-			debug('ignore insert new I18NHanlder');
+			debug('ignore insert new I18NHandler');
 			I18NPlaceholderNew.renderType = 'empty';
 		}
 
@@ -862,7 +860,7 @@ _.extend(ASTScope.prototype,
 		var resultCode = newCode.join('')+tmpCode;
 
 		if (I18NPlaceholderNew.getRenderType() == 'complete'
-			&& options.isCheckClosureForNewI18NHandler
+			&& options.I18NHandler.insert.checkClosure
 			&& scope.type == 'top')
 		{
 			throw new Error('closure youself');
@@ -878,13 +876,13 @@ _.extend(ASTScope.prototype,
 			selfFuncTranslateWords.add(FILE_KEY, info.__TRANSLATE_JSON__);
 		});
 
-		var currentI18NHanlder = I18NPlaceholders[I18NPlaceholders.length - 1] || I18NPlaceholderNew;
+		var currentI18NHandler = I18NPlaceholders[I18NPlaceholders.length - 1] || I18NPlaceholderNew;
 		var usedTranslateWords = new UsedTranslateWords();
-		usedTranslateWords.add(currentI18NHanlder.parse().__FILE_KEY__, currentI18NHanlder.getTranslateJSON());
+		usedTranslateWords.add(currentI18NHandler.parse().__FILE_KEY__, currentI18NHandler.getTranslateJSON());
 		var selfScopeData = new CodeInfoResult(
 		{
 			code             : resultCode,
-			currentFileKey   : currentI18NHanlder.parse().__FILE_KEY__,
+			currentFileKey   : currentI18NHandler.parse().__FILE_KEY__,
 			originalFileKeys : originalFileKeys,
 			subScopeDatas    : subScopeDatas,
 			// 脏数据
@@ -1336,10 +1334,10 @@ function _translateJSON2ast(mainData)
 }
 
 exports.fillNoUsedCodeTranslateWords = fillNoUsedCodeTranslateWords;
-function fillNoUsedCodeTranslateWords(translateDataJSON, codeTranslateWords, defaultTranslateLanguage)
+function fillNoUsedCodeTranslateWords(translateDataJSON, codeTranslateWords, defaultLanguage)
 {
 	var lans = Object.keys(translateDataJSON);
-	if (!lans.length) lans = [defaultTranslateLanguage];
+	if (!lans.length) lans = [defaultLanguage];
 
 	var DEFAULTS_WORDS = _.uniq(codeTranslateWords.DEFAULTS);
 	if (DEFAULTS_WORDS.length)
@@ -1469,16 +1467,16 @@ function _getOneTypeListData(maintype, word, mainData, FILE_KEY, subtype)
 	var dbNormalTranslates = {};
 	var dbFileKeyTranslates = {};
 	var lans = {};
-	var pickFileLanguages = mainData.pickFileLanguages
-			&& mainData.pickFileLanguages.length
-			&& mainData.pickFileLanguages;
+	var onlyTheseLanguages = mainData.onlyTheseLanguages
+			&& mainData.onlyTheseLanguages.length
+			&& mainData.onlyTheseLanguages;
 
-	debug('pickFileLanguages:%o', pickFileLanguages);
+	debug('onlyTheseLanguages:%o', onlyTheseLanguages);
 
 	_.each(mainData.dbTranslateWords, function(lanInfo, lan)
 	{
 		if (!lanInfo) return;
-		if (pickFileLanguages && pickFileLanguages.indexOf(lan) == -1) return;
+		if (onlyTheseLanguages && onlyTheseLanguages.indexOf(lan) == -1) return;
 
 		var subLanInfo = lanInfo['*'] && lanInfo['*'][maintype];
 		if (subtype && subLanInfo) subLanInfo = subLanInfo[subtype];
@@ -1503,7 +1501,7 @@ function _getOneTypeListData(maintype, word, mainData, FILE_KEY, subtype)
 	_.each(mainData.funcTranslateWords, function(lanInfo, lan)
 	{
 		if (!lanInfo) return;
-		if (pickFileLanguages && pickFileLanguages.indexOf(lan) == -1) return;
+		if (onlyTheseLanguages && onlyTheseLanguages.indexOf(lan) == -1) return;
 
 		var subLanInfo = lanInfo[maintype];
 		if (subtype && subLanInfo) subLanInfo = subLanInfo[subtype];
@@ -1905,7 +1903,7 @@ function tpl2render(code)
 	var minJsonCodeIndent = '\t';
 	var originalJsonCodeIndent = originalCode.match(/(\t+)([^\t]*?)\$TRANSLATE_JSON_CODE/);
 	originalJsonCodeIndent = originalJsonCodeIndent ? originalJsonCodeIndent[1] : '';
-	var originalGetLanguageCodeIndent = originalCode.match(/(\t+)([^\t]*?)\$GetLanguageCode/);
+	var originalGetLanguageCodeIndent = originalCode.match(/(\t+)([^\t]*?)\$getLanguageCode/);
 	originalGetLanguageCodeIndent = originalGetLanguageCodeIndent
 		? originalGetLanguageCodeIndent[1] : '';
 	debug('originalJsonCodeIndent:%d originalGetLanguageCodeIndent:%d',
@@ -1925,7 +1923,7 @@ function tpl2render(code)
 			{
 				val = val.split(/\n\r?/).join('\n'+codeIndent);
 			}
-			else if (!isMin && key == 'GetLanguageCode')
+			else if (!isMin && key == 'getLanguageCode')
 			{
 				val = val.split(/\n\r?/).join('\n'+originalGetLanguageCodeIndent);
 			}
@@ -1959,7 +1957,7 @@ exports.renderSimple = tpl2render(require('./tpl/simple.js').toString());
 exports.renderGlobal = tpl2render(require('./tpl/global.js').toString());
 
 },{"./tpl/full.js":12,"./tpl/global.js":13,"./tpl/simple.js":14,"debug":23,"escodegen":26,"esmangle":33,"esprima":73}],12:[function(require,module,exports){
-/* global $GetLanguageCode $TRANSLATE_JSON_CODE */
+/* global $getLanguageCode $TRANSLATE_JSON_CODE */
 
 'use strict';
 
@@ -1967,7 +1965,7 @@ module.exports = function $handlerName(msg, tpldata, subtype)
 {
 	var self = $handlerName;
 	var data = self.$ || (self.$ = {});
-	var LAN = $GetLanguageCode(data);
+	var LAN = $getLanguageCode(data);
 	if (!tpldata || !tpldata.join)
 	{
 		subtype = tpldata;
@@ -2140,9 +2138,9 @@ _.extend(I18NPlaceholder.prototype,
 				if (!this.originalAst)
 				{
 					newCode = '\n'
-						+ options.I18NHandlerTPL_NewHeaderCode
+						+ options.I18NHandler.tpl.newHeaderCode
 						+ newCode
-						+ options.I18NHandlerTPL_NewFooterCode
+						+ options.I18NHandler.tpl.newFooterCode
 						+ '\n';
 				}
 
@@ -2156,7 +2154,7 @@ _.extend(I18NPlaceholder.prototype,
 		if (!options.codeModifiedArea.I18NHandler) return 'original';
 
 		var funcInfo = this.parse();
-		if (funcInfo.isNotI18NHanlder)
+		if (funcInfo.isNotI18NHandler)
 		{
 			// 判断是否不需要插入新的i18n函数，直接使用原来代码
 			var codeTranslateWords = this.codeTranslateWords || {};
@@ -2173,20 +2171,22 @@ _.extend(I18NPlaceholder.prototype,
 		}
 		else
 		{
+			var proxyGlobalHandlerConfig = options.I18NHandler.style.proxyGlobalHandler;
 			// 只更新翻译数据
 			// 值为true，则此项安全，可以进行局部更新
 			var checkPartialItems =
 			{
-				options					: options.isPartialUpdate,
+				options					: options.I18NHandler.upgrade.partial,
 				originalAst				: this.originalAst,
 				translateJSON			: funcInfo.__TRANSLATE_JSON__ast,
 				handlerName				: !this.handlerName || funcInfo.handlerName == this.handlerName,
-				I18NFunctionVersion		: funcInfo.__FUNCTION_VERSION__
+				I18NFunctionVersion		: options.I18NHandler.upgrade.version
+					&& funcInfo.__FUNCTION_VERSION__
 					&& funcInfo.__FUNCTION_VERSION__.split('.')[0] == DEF.I18NFunctionVersion,
-				proxyGlobalHandlerName	: !(options.isProxyGlobalHandler
-					&& options.isIgnoreCodeProxyGlobalHandlerName
+				proxyGlobalHandlerName	: !(proxyGlobalHandlerConfig.enable
+					&& proxyGlobalHandlerConfig.ignoreFuncCode
 					&& funcInfo.globalHandlerName
-					&& funcInfo.globalHandlerName != options.proxyGlobalHandlerName)
+					&& funcInfo.globalHandlerName != proxyGlobalHandlerConfig.name)
 			};
 			var ret = _.some(checkPartialItems, function(val, name)
 			{
@@ -2207,8 +2207,7 @@ _.extend(I18NPlaceholder.prototype,
 
 					case 'proxyGlobalHandlerName':
 						debug('not partial, because %s <funcInfo:%s option:%s>',
-							name, funcInfo.globalHandlerName,
-							options.proxyGlobalHandlerName);
+							name, funcInfo.globalHandlerName, proxyGlobalHandlerConfig.name);
 						break;
 
 					default:
@@ -2239,10 +2238,10 @@ _.extend(I18NPlaceholder.prototype,
 			{
 				this._parseResult =
 				{
-					isNotI18NHanlder		: true,
+					isNotI18NHandler		: true,
 					handlerName				: options.I18NHandlerName,
 					globalHandlerName		: this._parseResult && this._parseResult.globalHandlerName,
-					__FILE_KEY__			: options.defaultFileKey,
+					__FILE_KEY__			: options.I18NHandler.data.defaultFileKey,
 					__FUNCTION_VERSION__	: DEF.I18NFunctionVersion,
 					__TRANSLATE_JSON__		: {},
 				};
@@ -2259,12 +2258,12 @@ _.extend(I18NPlaceholder.prototype,
 	{
 		var options = this.options;
 		var translateJSON = this.getTranslateJSON();
-		if (options.isInjectAllTranslateWords)
+		if (options.I18NHandler.style.comment4nowords)
 		{
 			i18nGenerator.fillNoUsedCodeTranslateWords(
 				translateJSON,
 				this.codeTranslateWords,
-				options.defaultTranslateLanguage
+				options.I18NHandler.data.defaultLanguage
 			);
 		}
 		var translateJSONCode = i18nGenerator.genTranslateJSONCode(translateJSON);
@@ -2285,11 +2284,11 @@ _.extend(I18NPlaceholder.prototype,
 	{
 		var options = this.options;
 		var funcInfo = this.parse();
-		var noFuncTranslateWords = options.isIgnoreI18NHandlerTranslateWords;
+		var noFuncTranslateWords = options.I18NHandler.data.ignoreFuncWords;
 
 		return {
 			FILE_KEY			: funcInfo.__FILE_KEY__,
-			pickFileLanguages	: options.pickFileLanguages,
+			onlyTheseLanguages	: options.I18NHandler.data.onlyTheseLanguages,
 			funcTranslateWords	: noFuncTranslateWords ? null : funcInfo.__TRANSLATE_JSON__,
 			dbTranslateWords	: options.dbTranslateWords,
 			codeTranslateWords	: this.codeTranslateWords
@@ -2302,18 +2301,22 @@ _.extend(I18NPlaceholder.prototype,
 
 		// 压缩这个代码的时候，需要加上()
 		// 不然esprima会报错
-		newJSONCode = this._beautifyCode('('+newJSONCode+')', funcInfo.__TRANSLATE_JSON__ast).slice(1);
-
-		// 删除添加的)的时候，要考虑到escodegen会多加一个;
-		// 所以用一个for循环来删除最后的)
-		for(var i = newJSONCode.length; i--;)
+		if (this.options.I18NHandler.style.minFuncJSON)
 		{
-			if (newJSONCode[i] == ')')
+			newJSONCode = astUtils.mincode('('+newJSONCode+')').slice(1);
+			// 删除添加的)的时候，要考虑到escodegen会多加一个;
+			// 所以用一个for循环来删除最后的)
+			for(var i = newJSONCode.length; i--;)
 			{
-				newJSONCode = newJSONCode.slice(0, i);
-				break;
+				if (newJSONCode[i] == ')')
+				{
+					newJSONCode = newJSONCode.slice(0, i);
+					break;
+				}
 			}
 		}
+
+		newJSONCode = this._beautifyCode(newJSONCode, funcInfo.__TRANSLATE_JSON__ast);
 
 		var json_ast_range = funcInfo.__TRANSLATE_JSON__ast.range;
 		var newCode = this.completedCode.slice(this.originalAst.range[0], json_ast_range[0])
@@ -2325,36 +2328,35 @@ _.extend(I18NPlaceholder.prototype,
 	_updateTotalCode: function()
 	{
 		var options = this.options;
-		var isMinCode = options.minTranslateFuncCode == 'all'
-			|| options.minTranslateFuncCode == 'onlyFunc';
+		var isMinCode = options.I18NHandler.style.minFuncCode;
 		var funcInfo = this.parse();
 		var TRANSLATE_JSON_CODE = this._getRenderTranslateJSONCode();
 
 		// 添加的代码缩进：多一个tab
 		// 将这个tab放到了render函数中做
 		// TRANSLATE_JSON_CODE = TRANSLATE_JSON_CODE.split('\n').join('\n\t');
-		var GetLanguageCode = options.I18NHandlerTPL_GetLanguageCode;
+		var getLanguageCode = options.I18NHandler.tpl.getLanguageCode;
 
-		if (typeof GetLanguageCode == 'function')
+		if (typeof getLanguageCode == 'function')
 		{
-			GetLanguageCode = GetLanguageCode.toString();
+			getLanguageCode = getLanguageCode.toString();
 		}
-		GetLanguageCode = GetLanguageCode.trim();
+		getLanguageCode = getLanguageCode.trim();
 
 		if (isMinCode)
 		{
-			GetLanguageCode = i18nTpl.min(GetLanguageCode.replace(/^function\s*\(/, 'function a('));
+			getLanguageCode = i18nTpl.min(getLanguageCode.replace(/^function\s*\(/, 'function a('));
 		}
 
-		GetLanguageCode = GetLanguageCode.replace(/^function \s*[\w$]+\s*\(/, 'function(');
-		if (GetLanguageCode.substr(0, 9) == 'function(')
+		getLanguageCode = getLanguageCode.replace(/^function \s*[\w$]+\s*\(/, 'function(');
+		if (getLanguageCode.substr(0, 9) == 'function(')
 		{
-			GetLanguageCode = '('+GetLanguageCode+')';
+			getLanguageCode = '('+getLanguageCode+')';
 		}
 
 
-		var LanguageVars = options.I18NHandlerTPL_LanguageVars || {};
-		GetLanguageCode = GetLanguageCode.replace(/\$LanguageVars\.([\w$]+)\$/g, function(all, name)
+		var LanguageVars = options.I18NHandler.tpl.languageVars || {};
+		getLanguageCode = getLanguageCode.replace(/\$LanguageVars\.([\w$]+)\$/g, function(all, name)
 		{
 			return LanguageVars[name];
 		});
@@ -2364,23 +2366,25 @@ _.extend(I18NPlaceholder.prototype,
 		var renderData =
 		{
 			handlerName			: this.handlerName || funcInfo.handlerName || options.I18NHandlerName,
+			getLanguageCode		: getLanguageCode,
 			FILE_KEY			: funcInfo.__FILE_KEY__,
 			FUNCTION_VERSION	: DEF.I18NFunctionVersion,
-			GetLanguageCode		: GetLanguageCode,
 			TRANSLATE_JSON_CODE	: TRANSLATE_JSON_CODE,
 		};
 
 		var newCode;
+		var proxyGlobalHandlerConfig = options.I18NHandler.style.proxyGlobalHandler;
+		var enableProxyGlobalHandler = proxyGlobalHandlerConfig.enable;
 
 		if (funcInfo.globalHandlerName
 			// 初始化的时候，使用global进行初始化
-			|| (options.isProxyGlobalHandler && funcInfo.isNotI18NHanlder)
+			|| (enableProxyGlobalHandler && funcInfo.isNotI18NHandler)
 			// 启动全量更新，同时启动globalHandler
-			|| (options.isProxyGlobalHandler && !options.isPartialUpdate))
+			|| (enableProxyGlobalHandler && !options.I18NHandler.upgrade.partial))
 		{
-			renderData.globalHandlerName = options.isIgnoreCodeProxyGlobalHandlerName
-				? options.proxyGlobalHandlerName
-				: funcInfo.globalHandlerName || options.proxyGlobalHandlerName;
+			renderData.globalHandlerName = proxyGlobalHandlerConfig.ignoreFuncCode
+				? proxyGlobalHandlerConfig.name
+				: funcInfo.globalHandlerName || proxyGlobalHandlerConfig.name;
 			renderData.FUNCTION_VERSION = renderData.FUNCTION_VERSION.split('.')[0]
 				+ '.' + DEF.I18NFunctionSubVersion.GLOBAL;
 
@@ -2405,8 +2409,7 @@ _.extend(I18NPlaceholder.prototype,
 	_updateSimpleFunctionCode: function()
 	{
 		var options = this.options;
-		var isMinCode = options.minTranslateFuncCode == 'all'
-			|| options.minTranslateFuncCode == 'onlyFunc';
+		var isMinCode = options.I18NHandler.style.minFuncCode;
 		var funcInfo = this.parse();
 		var SIMPLE_VERSION = DEF.I18NFunctionVersion+'.'
 				+ DEF.I18NFunctionSubVersion.SIMPLE;
@@ -2431,11 +2434,6 @@ _.extend(I18NPlaceholder.prototype,
 
 	_beautifyCode: function(code, ast)
 	{
-		if (this.options.minTranslateFuncCode == 'all')
-		{
-			return astUtils.mincode(code);
-		}
-
 		// 获取原来代码锁进
 		var codeIndent = '';
 		if (ast)
@@ -2463,12 +2461,12 @@ module.exports = function(code, options)
 
 	var tmpEmitter = emitter.new();
 
-	if (typeof options.loadTranslateJSON == 'function')
-		tmpEmitter.addListener('loadTranslateJSON', options.loadTranslateJSON);
-	if (typeof options.newTranslateJSON == 'function')
-		tmpEmitter.addListener('newTranslateJSON', options.newTranslateJSON);
-	if (typeof options.cutword == 'function')
-		tmpEmitter.addListener('cutword', options.cutword);
+	if (typeof options.events.loadTranslateJSON == 'function')
+		tmpEmitter.addListener('loadTranslateJSON', options.events.loadTranslateJSON);
+	if (typeof options.events.newTranslateJSON == 'function')
+		tmpEmitter.addListener('newTranslateJSON', options.events.newTranslateJSON);
+	if (typeof options.events.cutword == 'function')
+		tmpEmitter.addListener('cutword', options.events.cutword);
 
 	var result = mainHandler(code, options);
 	return result;
@@ -2481,7 +2479,7 @@ function mainHandler(code, options)
 	// 设置scope type为top，表明是code开始处理的顶层作用区间
 	var scope	= new ASTCollector(options).collect(ast, 'top');
 
-	scope = scope.squeeze(options.isInsertToDefineHalder, options);
+	scope = scope.squeeze(options.I18NHandler.insert.priorityDefineHalder, options);
 
 	var startPos = scope.ast.range[0];
 	var result;
@@ -2509,9 +2507,11 @@ function mainHandler(code, options)
 'use strict';
 
 var _ = require('lodash');
+var extend = require('extend');
 var debug = require('debug')('i18nc-core:options');
 var depdOptions = require('./upgrade/depd_options');
-var GetLanguageCodeHandler = require('./upgrade/tpl/getlanguagecode_handler');
+var getLanguageCodeHandler = require('./upgrade/tpl/getlanguagecode_handler');
+var ObjectToString = ({}).toString;
 
 exports.defaults =
 {
@@ -2529,28 +2529,84 @@ exports.defaults =
 	// 注意：I18NHandlerAlias优先级比ignoreScanHandlerNames低
 	I18NHandlerAlias: [],
 
-	// 在I18N函数体内，调用此函数，代替插入过多代码
-	// 即使不使用此参数，也可以使用如下特定的写法，告诉工具，生成globalfunc 代替 fullfunc
-	// function I18N(msg){return ''+topI18NHanlder(msg, arguments);}
-	// 注意：此配置只会影响没有进行插装，如果要全部更新，需要配置isPartialUpdate false
-	// 注意：更新函数版本号，不会触发此更新
-	isProxyGlobalHandler: false,
-	proxyGlobalHandlerName: 'topI18N',
-	// 忽略源代码中解析出来的原来的proxyGlobalHandlerName，强制使用配置文件的值
-	// 如果原来有值，但不同，会触发更新；原来没有，则不会进行更新
-	isIgnoreCodeProxyGlobalHandlerName: false,
+	// 导入翻译数据
+	// @see test/exmaple/translate_words_db.json
+	dbTranslateWords: null,
 
-	// 默认的filekey，一般用文件的相对路径
-	// 可以针对filekey，打包特别的翻译
-	defaultFileKey: '*',
+	I18NHandler:
+	{
+		data:
+		{
+			// 默认的filekey，一般用文件的相对路径
+			// 可以针对filekey，打包特别的翻译
+			defaultFileKey: '*',
+			// 当没有找到任何语言包 & 启动了 I18NHandler.style.comment4nowords
+			// 使用这个语言，作为代码中的语言包
+			// 由于没有任何实际数据，对代码结果无影响
+			defaultLanguage: 'en-US',
+			// 单单只打包这个语言包到文件
+			onlyTheseLanguages: [],
+			// 翻译的时候，不参考I18N里面的数据（dbTranslateWords没有数据的时候，直接删除翻译）
+			ignoreFuncWords: false,
+		},
+		upgrade:
+		{
+			// 对I18N函数优先进行局部更新（只更新翻译数据）
+			partial: true,
+			// 函数版本号不同的时候，更新函数体
+			version: true,
+		},
+		style:
+		{
+			// 对插入的I18N进行代码压缩
+			minFuncCode: false,
+			// 设置true，会导致 I18NHandler.style.comment4nowords 失效
+			minFuncJSON: false,
+			// 在源代码中，输出所有提取的关键字
+			// 没有翻译结果的关键字，以注释的形式插入
+			comment4nowords: true,
 
-	// 在源代码中，输出所有提取的关键字
-	// 没有翻译结果的关键字，以注释的形式插入
-	isInjectAllTranslateWords: true,
-	// 当没有找到任何语言包 & 启动了isInjectAllTranslateWords
-	// 使用这个语言，作为代码中的语言包
-	// 由于没有任何实际数据，对代码结果无影响
-	defaultTranslateLanguage: 'en-US',
+			proxyGlobalHandler:
+			{
+				// 在I18N函数体内，调用此函数，代替插入过多代码
+				// 即使不使用此参数，也可以使用如下特定的写法，告诉工具，生成globalfunc 代替 fullfunc
+				// function I18N(msg){return ''+topI18NHandler(msg, arguments);}
+				// 注意：此配置只会影响没有进行插装，如果要全部更新，需要配置 upgrade.partial false
+				// 注意：更新函数版本号，不会触发此更新
+				enable: false,
+				name: 'topI18N',
+				// 忽略源代码中解析出来的原来的I18NHandler.style.proxyGlobalHandler.name，强制使用配置文件的值
+				// 如果原来有值，但不同，会触发更新；原来没有，则不会进行更新
+				ignoreFuncCode: false,
+			},
+		},
+		insert: Object.freeze(
+		{
+			// 插入I18N函数前，检查所在位置，是否闭包
+			checkClosure: true,
+			// 如果需要插入I18N函数，优先插入到define函数中
+			priorityDefineHalder: true,
+		}),
+		tpl:
+		{
+			// js代码中，获取当前语言包的代码
+			// 可以是function 也可以是string，
+			// 		string，即全局的函数调用
+			// 		function，必须是可被序列化成字符串，能独立运行
+			getLanguageCode: getLanguageCodeHandler,
+			// 对GetLanguageCode中的变量$LanguageVars.name$进行替换
+			languageVars:
+			{
+				// 通用name
+				name: '__i18n_lan__',
+				// cookie 字段特殊化
+				cookie: 'proj.i18n_lan',
+			},
+			// 新插入的I18N函数包裹内容
+			newHeaderCode: '\n\n/* eslint-disable */\n',
+			newFooterCode: '\n/* eslint-enable */\n\n',
+		},
+	},
 
 	// 修改code范围
 	// 如果删除，则这些特性在输出的code里面不会被修改
@@ -2561,11 +2617,11 @@ exports.defaults =
 	// 如果去掉TranslateWord，
 	// 配合最后输出的I18NArgsTranslateWords和codeTranslateWords，
 	// 可以实现check效果
-	codeModifiedArea:
+	codeModifiedArea: new FeatureEnableOnly(
 	{
 		// 修改及插入已经插入到代码中的I18N函数体
 		// 如果不插入i18n函数定义
-		// 那么下面的isCheckClosureForNewI18NHandler 均无效
+		// 那么下面的 I18NHandler.insert.checkClosure 均无效
 		I18NHandler: true,
 		// 将分词的结果，用I18N函数包裹起来
 		TranslateWord: true,
@@ -2573,144 +2629,76 @@ exports.defaults =
 		TranslateWord_RegExp: false,
 		// 将alias统一成handlerName
 		I18NHandlerAlias: true
-	},
+	}),
 
 	// 这些函数里面的调用，或则声明（如果有）不进行扫描
 	// 注意：如果带有. 则进行函数调用拆分
-	ignoreScanHandlerNames:
-	[
-		'console.log',
-		'console.warn',
-		'console.trace',
-		'console.info',
-		'console.error',
-		'console.dir',
-		'console.table'
-	],
-
-	// 导入翻译数据
-	// @see test/exmaple/translate_words_db.json
-	dbTranslateWords: null,
-	// 翻译的时候，不参考I18N里面的数据（dbTranslateWords没有数据的时候，直接删除翻译）
-	isIgnoreI18NHandlerTranslateWords: false,
-
-	// 如果需要插入I18N函数，优先插入到define函数中
-	isInsertToDefineHalder: true,
-
-	// 插入I18N函数前，检查所在位置，是否闭包
-	isCheckClosureForNewI18NHandler: true,
-
-	// 对I18N函数优先进行局部更新（只更新翻译数据）
-	isPartialUpdate: true,
-
-	// 单单只打包这个语言包到文件
-	pickFileLanguages: [],
-
-	// 对插入的I18N进行代码压缩
-	// 设置true，会导致isInjectAllTranslateWords失效
-	// 值:
-	// onlyFunc: 函数压缩，json不压缩
-	// all: 所有都压缩
-	// none: 所有都不压缩
-	minTranslateFuncCode: 'none',
+	ignoreScanHandlerNames: new FeatureEnableMore(
+	{
+		'console.log'	: true,
+		'console.warn'	: true,
+		'console.trace'	: true,
+		'console.info'	: true,
+		'console.error'	: true,
+		'console.dir'	: true,
+		'console.table'	: true,
+	}),
 
 	// 插件配置注入
-	pluginEnabled: {},
+	pluginEnabled: new FeatureEnableOnly({}),
 	pluginSettings: {},
 
-	// js代码中，获取当前语言包的代码
-	// 可以是function 也可以是string，
-	// 		string，即全局的函数调用
-	// 		function，必须是可被序列化成字符串，能独立运行
-	I18NHandlerTPL_GetLanguageCode: GetLanguageCodeHandler,
-	// 对GetLanguageCode中的变量$LanguageVars.name$进行替换
-	I18NHandlerTPL_LanguageVars:
+	events:
 	{
-		// 通用name
-		name: '__i18n_lan__',
-		// cookie 字段特殊化
-		cookie: 'proj.i18n_lan',
+		loadTranslateJSON: null,
+		newTranslateJSON: null,
+		beforeScan: null,
+		cutword: null,
+		assignLineStrings: null,
 	},
-	// 新插入的I18N函数包裹内容
-	I18NHandlerTPL_NewHeaderCode: '\n\n/* eslint-disable */\n',
-	I18NHandlerTPL_NewFooterCode: '\n/* eslint-enable */\n\n',
-
-	// events
-	loadTranslateJSON: null,
-	newTranslateJSON: null,
-	beforeScan: null,
-	cutword: null,
-	assignLineStrings: null,
 };
+
+
+if (Object.freeze)
+{
+	_.each(exports.defaults, function(val, key)
+	{
+		if (key != 'pluginEnabled' && key != 'pluginSettings')
+		{
+			deepFreeze(val);
+		}
+	});
+
+	Object.freeze(exports.defaults);
+}
 
 
 exports.extend = function(options)
 {
 	if (!options) return _.extend({}, exports.defaults);
-	var result = {};
 
 	depdOptions(options);
 
-	_.each(exports.defaults, function(defaultVal, key)
-	{
-		if (options.hasOwnProperty(key))
-		{
-			var newVal = options[key];
-			if (newVal || typeof defaultVal == 'boolean')
-			{
-				if (key == 'codeModifiedArea' || key == 'pluginEnabled')
-				{
-					// 进行arr转obj的特殊处理
-					if (_.isArray(newVal))
-					{
-						var tmp = {};
-						newVal.forEach(function(subkey)
-						{
-							tmp[subkey] = true;
-						});
-						result[key] = tmp;
-					}
-					else if (typeof newVal == 'object')
-					{
-						result[key] = _.extend({}, defaultVal, newVal);
-					}
-					else
-					{
-						debug('not array or object for key:%s, optionsVal:%s', key, newVal);
-					}
-				}
-				else
-				{
-					result[key] = newVal;
-				}
-			}
-			else if (key == 'cutwordReg')
-			{
-				debug('cutwordReg is empty: %s', newVal);
-				result[key] = newVal;
-			}
-			else
-			{
-				result[key] = defaultVal;
-				debug('use default val, key:%s, optionsVal:%s', key, newVal);
-			}
-		}
-		else
-		{
-			result[key] = defaultVal;
-		}
-	});
+	var result = _extendDefault(exports.defaults, options);
 
 	if (!result.codeModifiedArea.I18NHandler)
 	{
-		result.isCheckClosureForNewI18NHandler = false;
+		if (result.I18NHandler.insert === exports.defaults.I18NHandler.insert)
+		{
+			result = extend(true, {}, result);
+		}
+		result.I18NHandler.insert.checkClosure = false;
 	}
 
 	// 直接设置为false
 	// 避免生成无用的key
-	if (result.minTranslateFuncCode == 'all')
+	if (result.I18NHandler.style.minFuncJSON)
 	{
-		result.isInjectAllTranslateWords = false;
+		if (result.I18NHandler.style === exports.defaults.I18NHandler.style)
+		{
+			result = extend(true, {}, result);
+		}
+		result.I18NHandler.style.comment4nowords = false;
 	}
 
 	// for emitter
@@ -2727,7 +2715,6 @@ exports.extend = function(options)
 
 	return result;
 }
-
 
 exports.escodegenOptions =
 {
@@ -2769,7 +2756,151 @@ exports.esprimaOptions =
 	loc: true
 };
 
-},{"./upgrade/depd_options":19,"./upgrade/tpl/getlanguagecode_handler":21,"debug":23,"lodash":88}],18:[function(require,module,exports){
+
+
+
+
+
+function deepFreeze(obj)
+{
+	if (!obj) return;
+
+	if (checkFreeze(obj))
+	{
+		_.each(obj, function(val)
+		{
+			if (checkFreeze(val)) Object.freeze(val);
+		});
+		Object.freeze(obj);
+	}
+}
+
+function checkFreeze(val)
+{
+	var type = ObjectToString.call(val);
+	return type == '[object Object]' || type == '[object Array]';
+}
+
+
+function FeatureEnableOnly(settings)
+{
+	_.extend(this, settings);
+}
+
+FeatureEnableOnly.prototype._arr2json = function(arr)
+{
+	var self = this;
+	var result = {};
+	arr.forEach(function(name)
+	{
+		if (typeof self[name] == 'boolean')
+			result[name] = true;
+		else
+			debug('ignore key <%s>, which are not defined in defaults.', name);
+	});
+	return result;
+}
+
+function FeatureEnableMore(settings)
+{
+	_.extend(this, settings);
+}
+
+FeatureEnableMore.prototype._arr2json = function(arr)
+{
+	var result = {};
+	arr.forEach(function(name)
+	{
+		result[name] = true;
+	});
+	return result;
+}
+
+
+function _extendDefault(defaults, object)
+{
+	if (!object) return _.extend({}, defaults);
+
+	var result = {};
+	_.each(defaults, function(defaultVal, key)
+	{
+		if (object.hasOwnProperty(key))
+		{
+			var newVal = object[key];
+			var defaultType = typeof defaultVal;
+
+			switch(defaultType)
+			{
+				case 'object':
+					// 如果默认值为null或者undefined，那么运行newVal为任意值
+					if (!defaultVal)
+					{
+						result[key] = newVal;
+					}
+					else if (defaultVal instanceof RegExp)
+					{
+						if (newVal === null)
+						{
+							debug('clear regexp options');
+							result[key] = null;
+						}
+						else if (newVal instanceof RegExp)
+						{
+							result[key] = newVal;
+						}
+						else
+						{
+							debug('ignore regexp val, key:%s, val:%o', key, newVal);
+						}
+					}
+					else if (Array.isArray(newVal))
+					{
+						if (defaultVal._arr2json)
+						{
+							result[key] = defaultVal._arr2json(newVal);
+						}
+						else if (Array.isArray(defaultVal))
+						{
+							result[key] = newVal;
+						}
+						else
+						{
+							debug('ignore array data:%s', key);
+							result[key] = defaultVal;
+						}
+					}
+					else
+					{
+						result[key] = _extendDefault(defaultVal, newVal);
+					}
+					break;
+
+				case 'boolean':
+					result[key] = newVal;
+					break;
+
+				default:
+					if (newVal)
+					{
+						result[key] = newVal;
+					}
+					else
+					{
+						result[key] = defaultVal;
+						debug('ignore options val, key:%s', key);
+					}
+			}
+		}
+		else
+		{
+			result[key] = defaultVal;
+		}
+	});
+
+	return result;
+}
+
+},{"./upgrade/depd_options":19,"./upgrade/tpl/getlanguagecode_handler":21,"debug":23,"extend":87,"lodash":88}],18:[function(require,module,exports){
 'use strict';
 
 var _				= require('lodash');
@@ -3157,72 +3288,194 @@ _.extend(CodeInfoResult.prototype,
 
 var _ = require('lodash');
 var deprecate = require('depd')('i18nc-core:options');
-var GetLanguageCodeDepd = require('./tpl/depd_getlanguagecode_handler');
+var GetLanguageCodeDepd = require('./tpl/depd_getlanguagecode_handler').toString();
 
 var OPTIONS_OLDKEY_MAP =
 {
 	cutWordReg: 'cutwordReg',
 	handlerName: 'I18NHandlerName',
-	isClosureWhenInsertedHead: 'isCheckClosureForNewI18NHandler',
+
+	defaultFileKey: 'I18NHandler.data.defaultFileKey',
+	defaultTranslateLanguage: 'I18NHandler.data.defaultLanguage',
+	pickFileLanguages: 'I18NHandler.data.onlyTheseLanguages',
+	isIgnoreI18NHandlerTranslateWords: 'I18NHandler.data.ignoreFuncWords',
+
+	isPartialUpdate: 'I18NHandler.upgrade.partial',
+
+	// minTranslateFuncCode: 'I18NHandler.style.minFuncCode',
+	// minTranslateFuncCode: 'I18NHandler.style.minFuncJSON',
+	// isMinFuncTranslateCode: 'I18NHandler.style.minFuncJSON',
+	isInjectAllTranslateWords: 'I18NHandler.style.comment4nowords',
+
+	isProxyGlobalHandler: 'I18NHandler.style.proxyGlobalHandler.enable',
+	proxyGlobalHandlerName: 'I18NHandler.style.proxyGlobalHandler.name',
+	isIgnoreCodeProxyGlobalHandlerName: 'I18NHandler.style.proxyGlobalHandler.ignoreFuncCode',
+
+
+	isCheckClosureForNewI18NHandler: 'I18NHandler.insert.checkClosure',
+	isClosureWhenInsertedHead: 'I18NHandler.insert.checkClosure',
+	isInsertToDefineHalder: 'I18NHandler.insert.priorityDefineHalder',
+
+
+	I18NHandlerTPL_GetLanguageCode: 'I18NHandler.tpl.getLanguageCode',
+	I18NHandlerTPL_LanguageVars: 'I18NHandler.tpl.languageVars',
+	I18NHandlerTPL_NewHeaderCode: 'I18NHandler.tpl.newHeaderCode',
+	I18NHandlerTPL_NewFooterCode: 'I18NHandler.tpl.newFooterCode',
+
+	I18NhandlerTpl_GetLanguageCode: 'I18NHandler.tpl.getLanguageCode',
+	I18NhandlerTpl_LanguageVars: 'I18NHandler.tpl.languageVars',
+	I18NhandlerTpl_NewHeaderCode: 'I18NHandler.tpl.newHeaderCode',
+	I18NhandlerTpl_NewFooterCode: 'I18NHandler.tpl.newFooterCode',
+
+	I18NhandlerTpl_LanguageVarName: 'I18NHandler.tpl.languageVars.name',
+	'I18NhandlerTpl:LanguageVarName': 'I18NHandler.tpl.languageVars.name',
+
+	I18NhandlerTpl_GetGlobalCode: 'I18NHandler.tpl.getLanguageCode',
+	'I18NhandlerTpl:GetGlobalCode': 'I18NHandler.tpl.getLanguageCode',
+
+	loadTranslateJSON: 'events.loadTranslateJSON',
+	newTranslateJSON: 'events.newTranslateJSON',
+	beforeScan: 'events.beforeScan',
+	cutword: 'events.cutword',
+	assignLineStrings: 'events.assignLineStrings',
 };
 
-['GetLanguageCode', 'LanguageVars', 'NewHeaderCode', 'NewFooterCode'].forEach(function(name)
+
+var KEY_ARRS = {};
+[
+	'I18NHandler.style.minFuncCode',
+	'I18NHandler.style.minFuncJSON'
+]
+.forEach(function(key)
 {
-	OPTIONS_OLDKEY_MAP['I18NhandlerTpl_'+name] = 'I18NHandlerTPL_'+name;
+	KEY_ARRS[key] = key.split('.');
 });
+
+_.each(OPTIONS_OLDKEY_MAP, function(val, key)
+{
+	if (!KEY_ARRS[val]) KEY_ARRS[val] = val.split('.');
+	if (!KEY_ARRS[key]) KEY_ARRS[key] = key.split('.');
+});
+
+
+var rename_1to1 = (function()
+{
+	var checkMap = {};
+	_.each(OPTIONS_OLDKEY_MAP, function(newKey, oldKey)
+	{
+		var config = checkMap[newKey] || (checkMap[newKey] = []);
+		config.push(oldKey);
+	});
+
+
+	function repalceKeyValHandler(newKey, oldKey, val)
+	{
+		switch(oldKey)
+		{
+			case 'I18NhandlerTpl_GetGlobalCode':
+			case 'I18NhandlerTpl:GetGlobalCode':
+				val = GetLanguageCodeDepd.replace(/\$GetLanguageCode/, ''+val);
+				break;
+		}
+
+		deprecate('use `'+newKey+'` instead of `'+oldKey+'`');
+		return val;
+	}
+
+	return function(options)
+	{
+		_.each(checkMap, function(oldKeys, newKey)
+		{
+			keyVal1ToKeyVal2(options, newKey, oldKeys, repalceKeyValHandler);
+		});
+	};
+})();
 
 
 module.exports = function(options)
 {
-	_.each(OPTIONS_OLDKEY_MAP, function(newKey, oldKey)
+	rename_1to1(options);
+
+	// 老的key，一个对应新的多个key，需要单独处理
+	if (!checkKeyVal(options, 'I18NHandler.style.minFuncCode').exists
+		&& !checkKeyVal(options, 'I18NHandler.style.minFuncJSON').exists)
 	{
-		if (oldKey in options && !(newKey in options))
+		if ('minTranslateFuncCode' in options)
 		{
-			options[newKey] = options[oldKey];
-			deprecate('use `'+newKey+'` instead of `'+oldKey+'`');
+			if (options.minTranslateFuncCode == 'all')
+			{
+				setKeyVal(options, 'I18NHandler.style.minFuncCode', true);
+				setKeyVal(options, 'I18NHandler.style.minFuncJSON', true);
+			}
+			else if (options.minTranslateFuncCode == 'onlyFunc')
+			{
+				setKeyVal(options, 'I18NHandler.style.minFuncCode', true);
+				setKeyVal(options, 'I18NHandler.style.minFuncJSON', false);
+			}
+
+			deprecate('use `I18NHandler.style.minFuncCode/minFuncJSON` instead of `minTranslateFuncCode`');
+		}
+		else if ('isMinFuncTranslateCode' in options)
+		{
+			setKeyVal(options, 'I18NHandler.style.minFuncJSON', !!options.isMinFuncTranslateCode);
+			setKeyVal(options, 'I18NHandler.style.minFuncCode', true);
+
+			deprecate('use `I18NHandler.style.minFuncCode/minFuncJSON` instead of `isMinFuncTranslateCode`');
+		}
+	}
+}
+
+
+function keyVal1ToKeyVal2(options, newKey, oldKeys, handler)
+{
+	// options已经定义了最新的key
+	if (checkKeyVal(options, newKey).exists) return;
+
+	_.some(oldKeys, function(oldKey)
+	{
+		// 判断老的key，有没有可能存在
+		var info = checkKeyVal(options, oldKey);
+		if (info.exists)
+		{
+			var val = handler(newKey, oldKey, info.value);
+			setKeyVal(options, newKey, val);
+			return true;
 		}
 	});
+}
 
-	if (!('I18NHandlerTPL_GetLanguageCode' in options))
+function checkKeyVal(options, key)
+{
+	var tmpOpt = options;
+	var exists = !_.some(KEY_ARRS[key], function(name)
 	{
-		['I18NhandlerTpl_GetGlobalCode', 'I18NhandlerTpl:GetGlobalCode'].some(function(name)
-		{
-			if (name in options)
-			{
-				options.I18NHandlerTPL_GetLanguageCode = GetLanguageCodeDepd.toString()
-					.replace(/\$GetLanguageCode/, ''+options[name]);
+		if (name in tmpOpt)
+			tmpOpt = tmpOpt[name];
+		else
+			return true;
+	});
 
-				deprecate('use `I18NHandlerTPL_GetLanguageCode` instead of `'+name+'`');
-				return true;
-			}
-		});
+	return {
+		exists: exists,
+		value: exists ? tmpOpt : undefined,
+	};
+}
 
-		// 前提是没有定义GetLanguageCode
-		// 如果有定义，则不要使用此方法，会导致缺少cookie变量
-		if (!('I18NHandlerTPL_LanguageVars' in options))
-		{
-			['I18NhandlerTpl_LanguageVarName', 'I18NhandlerTpl:LanguageVarName'].some(function(name)
-			{
-				if (name in options)
-				{
-					options['I18NHandlerTPL_LanguageVars'] =
-					{
-						name: options[name]
-					};
-
-					deprecate('use `I18NHandlerTPL_LanguageVars` instead of `'+name+'`');
-					return true;
-				}
-			});
-		}
+function setKeyVal(options, key, val)
+{
+	var tmpOpt = options;
+	var i = 0;
+	var items = KEY_ARRS[key];
+	for(var name, t = items.length -1; i < t; i++)
+	{
+		name = items[i];
+		if (!(name in tmpOpt))
+			tmpOpt = tmpOpt[name] = {};
+		else
+			tmpOpt = tmpOpt[name];
 	}
 
-	if (!('minTranslateFuncCode' in options) && ('isMinFuncTranslateCode' in options))
-	{
-		options.minTranslateFuncCode = options.isMinFuncTranslateCode ? 'all' : 'onlyFunc';
-		deprecate('use `minTranslateFuncCode='+options.minTranslateFuncCode
-			+'` instead of `isMinFuncTranslateCode='+options.isMinFuncTranslateCode+'`');
-	}
+	tmpOpt[items[i]] = val;
 }
 
 },{"./tpl/depd_getlanguagecode_handler":20,"depd":25,"lodash":88}],20:[function(require,module,exports){
@@ -46466,7 +46719,7 @@ exports.SourceNode = require('./lib/source-node').SourceNode;
 },{"./lib/source-map-consumer":97,"./lib/source-map-generator":98,"./lib/source-node":99}],102:[function(require,module,exports){
 module.exports={
   "name": "i18nc-core",
-  "version": "10.0.3",
+  "version": "10.1.0",
   "description": "I18N Tool for JS files",
   "main": "index.js",
   "scripts": {
@@ -46501,7 +46754,7 @@ module.exports={
     "glob": "^7.1.2",
     "istanbul": "^0.4.5",
     "karma": "^2.0.4",
-    "karma-config-brcjs": "^0.1.0",
+    "karma-config-brcjs": "^1.0.1",
     "mkdirp": "^0.5.1",
     "mocha": "^5.2.0"
   },
