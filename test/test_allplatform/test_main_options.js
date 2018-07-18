@@ -108,11 +108,23 @@ describe('#main_options', function()
 
 		it('#no regexp', function()
 		{
-			var info = i18nc('var dd = /中文/;',
+			var code = 'var dd = /中文/;'
+			var info = i18nc(code,
 			{
 				codeModifiedArea: []
 			});
 			expect(info.code).to.be('var dd = /中文/;');
+
+			var info2 = i18nc(code,
+			{
+				isCheckClosureForNewI18NHandler: false,
+				codeModifiedArea:
+				{
+					I18NHandler: false,
+					TranslateWord_RegExp: true
+				}
+			});
+			expect(info2.code).to.be("var dd = new RegExp(I18N('中文'));");
 		});
 
 		it('#empty', function()
