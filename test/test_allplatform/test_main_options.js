@@ -75,7 +75,7 @@ describe('#main_options', function()
 	{
 		describe('#upgrade', function()
 		{
-			it('#only I18NHandler', function()
+			it('#enable', function()
 			{
 				var exampleCode = require('../example/func_code.js').toString();
 				var info = i18nc(exampleCode,
@@ -87,8 +87,10 @@ describe('#main_options', function()
 					dbTranslateWords: dbTranslateWords,
 				});
 
-				var otherCode = requireAfterWrite('func_code_upgrade_disabe.js', info.code);
+				var otherCode = requireAfterWrite('func_code_upgrade_disable.js', info.code);
+				var outputJSON = requireAfterWrite('func_code_upgrade_disable.json', autoTestUtils.JsonOfI18ncRet(info));
 				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
+				expect(autoTestUtils.JsonOfI18ncRet(info)).to.eql(outputJSON);
 			});
 		});
 	});
@@ -107,7 +109,9 @@ describe('#main_options', function()
 			});
 
 			var otherCode = requireAfterWrite('func_code_codeModifiedArea2_output.js', info.code);
+			var outputJSON = requireAfterWrite('func_code_codeModifiedArea2_output.json', autoTestUtils.JsonOfI18ncRet(info));
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
+			expect(autoTestUtils.JsonOfI18ncRet(info)).to.eql(outputJSON);
 		});
 
 		it('#no regexp', function()
@@ -140,7 +144,9 @@ describe('#main_options', function()
 			});
 
 			var otherCode = requireAfterWrite('func_code_codeModifiedArea3_output.js', info.code);
+			var outputJSON = requireAfterWrite('func_code_codeModifiedArea3_output.json', autoTestUtils.JsonOfI18ncRet(info));
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
+			expect(autoTestUtils.JsonOfI18ncRet(info)).to.eql(outputJSON);
 		});
 	});
 
