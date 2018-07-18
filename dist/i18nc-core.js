@@ -2188,7 +2188,7 @@ _.extend(I18NPlaceholder.prototype,
 				originalAst				: this.originalAst,
 				translateJSON			: funcInfo.__TRANSLATE_JSON__ast,
 				handlerName				: !this.handlerName || funcInfo.handlerName == this.handlerName,
-				I18NFunctionVersion		: !options.I18NHandler.upgrade.version
+				I18NFunctionVersion		: !options.I18NHandler.upgrade.checkVersion
 					|| funcInfo.__FUNCTION_VERSION__
 					&& funcInfo.__FUNCTION_VERSION__.split('.')[0] == DEF.I18NFunctionVersion,
 				proxyGlobalHandlerName	: !(proxyGlobalHandlerConfig.enable
@@ -2265,6 +2265,51 @@ _.extend(I18NPlaceholder.prototype,
 	_getRenderTranslateJSONCode: function()
 	{
 		var options = this.options;
+		if (options.I18NHandler.upgrade.updateJSON)
+		{
+			return this._getNewRenderTranslateJSONCode();
+		}
+		else
+		{
+			return this._getOldRenderTranslateJSONCode();
+		}
+	},
+	_getOldRenderTranslateJSONCode: function()
+	{
+		var funcInfo = this.parse();
+
+		if (funcInfo.__TRANSLATE_JSON__ast)
+		{
+			var range = funcInfo.__TRANSLATE_JSON__ast.range;
+			var code = this.completedCode.slice(range[0], range[1]);
+
+			// 需要去掉原来的缩进，后面的逻辑会重新计算缩进
+			var codeArr = code.split('\n');
+			if (codeArr.length > 1)
+			{
+				var rmBlank = codeArr[codeArr.length-1].match(/^\s+/);
+				debug('rmBlank:%o', rmBlank);
+				if (rmBlank)
+				{
+					rmBlank = rmBlank[0];
+					var rmBlankLen = rmBlank.length;
+					code = codeArr.map(function(str)
+					{
+						return str.substr(0, rmBlankLen) == rmBlank
+							? str.substr(rmBlankLen) : str;
+					})
+					.join('\n');
+				}
+			}
+
+			return code;
+		}
+
+		return '{}';
+	},
+	_getNewRenderTranslateJSONCode: function()
+	{
+		var options = this.options;
 		var translateJSON = this.getTranslateJSON();
 		if (options.I18NHandler.style.comment4nowords)
 		{
@@ -2292,24 +2337,25 @@ _.extend(I18NPlaceholder.prototype,
 	{
 		var options = this.options;
 		var funcInfo = this.parse();
-		var noFuncTranslateWords = options.I18NHandler.data.ignoreFuncWords;
+		var ignoreFuncWords = options.I18NHandler.data.ignoreFuncWords;
 
 		return {
 			FILE_KEY			: funcInfo.__FILE_KEY__,
 			onlyTheseLanguages	: options.I18NHandler.data.onlyTheseLanguages,
-			funcTranslateWords	: noFuncTranslateWords ? null : funcInfo.__TRANSLATE_JSON__,
+			funcTranslateWords	: ignoreFuncWords ? null : funcInfo.__TRANSLATE_JSON__,
 			dbTranslateWords	: options.dbTranslateWords,
 			codeTranslateWords	: this.codeTranslateWords
 		};
 	},
 	_updatePartialCode: function()
 	{
+		var options = this.options;
 		var funcInfo = this.parse();
 		var newJSONCode = this._getRenderTranslateJSONCode();
 
 		// 压缩这个代码的时候，需要加上()
 		// 不然esprima会报错
-		if (this.options.I18NHandler.style.minFuncJSON)
+		if (options.I18NHandler.style.minFuncJSON)
 		{
 			newJSONCode = astUtils.mincode('('+newJSONCode+')').slice(1);
 			// 删除添加的)的时候，要考虑到escodegen会多加一个;
@@ -2566,7 +2612,11 @@ exports.defaults =
 			// 对I18N函数优先进行局部更新（只更新翻译数据）
 			partial: true,
 			// 函数版本号不同的时候，更新函数体
-			version: true,
+			checkVersion: true,
+			// 更新翻译数据
+			// 在只更新函数的时候，方便做文件版本库校验
+			// 注意：此配置只影响输出代码的结果，不会影响输出的JSON结果
+			updateJSON: true,
 		},
 		style:
 		{
@@ -2594,6 +2644,8 @@ exports.defaults =
 		},
 		insert:
 		{
+			// 是否插入新的I18NHandler函数
+			// enable: true,
 			// 插入I18N函数前，检查所在位置，是否闭包
 			checkClosure: true,
 			// 如果需要插入I18N函数，优先插入到define函数中
@@ -3345,6 +3397,8 @@ var OPTIONS_OLDKEY_MAP =
 	'I18NhandlerTpl:GetGlobalCode': 'I18NHandler.tpl.getLanguageCode',
 
 	'codeModifiedArea.I18NHandler': 'I18NHandler.upgrade.enable',
+
+	'I18NHandler.upgrade.version': 'I18NHandler.upgrade.checkVersion',
 
 	loadTranslateJSON: 'events.loadTranslateJSON',
 	newTranslateJSON: 'events.newTranslateJSON',

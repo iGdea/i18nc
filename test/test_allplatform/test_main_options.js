@@ -92,6 +92,24 @@ describe('#main_options', function()
 				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 				expect(autoTestUtils.JsonOfI18ncRet(info)).to.eql(outputJSON);
 			});
+
+			it('#updateJSON', function()
+			{
+				var code = require('../files/casefile/i18n_handler/i18n_handler_example').toString();
+				var info = i18nc(code,
+				{
+					I18NHandler:
+					{
+						upgrade: {updateJSON: false}
+					},
+					dbTranslateWords: dbTranslateWords,
+				});
+
+				var otherCode = requireAfterWrite('func_code_upgrade_updatejson.js', info.code);
+				var outputJSON = requireAfterWrite('func_code_upgrade_updatejson.json', autoTestUtils.JsonOfI18ncRet(info));
+				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
+				expect(autoTestUtils.JsonOfI18ncRet(info)).to.eql(outputJSON);
+			});
 		});
 	});
 

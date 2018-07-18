@@ -1,0 +1,34 @@
+{
+	"codeTranslateWords": {
+		"DEFAULTS": [],
+		"SUBTYPES": {}
+	},
+	"currentFileKey": "i18n_handler_example",
+	"funcTranslateWords": {
+		"en-US": {
+			"DEFAULTS": {
+				"简体": "simplified",
+				"空白": "",
+				"%s美好%s生活": "%sgood%s life",
+				"%{中文}词典": "%{Chinese} dictionary"
+			},
+			"SUBTYPES": {
+				"subtype": {
+					"简体": "simplified subtype"
+				}
+			}
+		},
+		"zh-TW": {
+			"DEFAULTS": {
+				"简体": "簡體",
+				"无": "無"
+			}
+		}
+	},
+	"newWord4codeTranslateWords": [],
+	"originalFileKeys": [
+		"i18n_handler_example"
+	],
+	"subScopeDatas": [],
+	"usedTranslateWords": {}
+}
