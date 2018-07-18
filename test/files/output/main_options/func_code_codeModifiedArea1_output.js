@@ -64,9 +64,6 @@ module.exports = function code()
 			var lanArr, i, len, lanItem;
 			if (self.L != LAN)
 			{
-				
-				
-				
 				self.K = '*';
 				self.V = 'b';
 				self.D = {
@@ -98,8 +95,6 @@ module.exports = function code()
 						}
 					}
 				};
-				
-				
 	
 				var __TRANSLATE_JSON__ = self.D;
 				var lanKeys = LAN.split(',');
@@ -109,7 +104,6 @@ module.exports = function code()
 					lanItem = __TRANSLATE_JSON__[lanKeys[i]];
 					if (lanItem) lanArr.push(lanItem);
 				}
-				
 				self.L = LAN;
 			}
 	
@@ -125,7 +119,6 @@ module.exports = function code()
 					resultSubject = subtypeJSON && subtypeJSON[msg];
 					if (resultSubject) break;
 				}
-				
 				if (!resultDefault)
 				{
 					alldefaults = lanItem.DEFAULTS;
@@ -138,7 +131,6 @@ module.exports = function code()
 		}
 	
 		msg += '';
-		
 		if (!tpldata.length || msg.indexOf('%') == -1) return msg;
 	
 		var replace_index = 0;

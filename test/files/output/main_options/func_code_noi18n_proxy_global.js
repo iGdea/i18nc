@@ -11,9 +11,6 @@ module.exports = function code()
 		if (!data)
 		{
 			data = self.$ = {};
-		
-		
-		
 			self.K = '*';
 			self.V = 'b.g';
 			self.D = {

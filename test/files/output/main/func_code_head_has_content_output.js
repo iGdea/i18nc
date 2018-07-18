@@ -31,9 +31,6 @@ define(function(){
 			var lanArr, i, len, lanItem;
 			if (self.L != LAN)
 			{
-			
-			
-			
 				self.K = '*';
 				self.V = 'b';
 				self.D = {
@@ -44,8 +41,6 @@ define(function(){
 						}
 					}
 				};
-			
-			
 
 				var __TRANSLATE_JSON__ = self.D;
 				var lanKeys = LAN.split(',');
@@ -55,7 +50,6 @@ define(function(){
 					lanItem = __TRANSLATE_JSON__[lanKeys[i]];
 					if (lanItem) lanArr.push(lanItem);
 				}
-			
 				self.L = LAN;
 			}
 
@@ -71,7 +65,6 @@ define(function(){
 					resultSubject = subtypeJSON && subtypeJSON[msg];
 					if (resultSubject) break;
 				}
-			
 				if (!resultDefault)
 				{
 					alldefaults = lanItem.DEFAULTS;
@@ -84,7 +77,6 @@ define(function(){
 		}
 
 		msg += '';
-	
 		if (!tpldata.length || msg.indexOf('%') == -1) return msg;
 
 		var replace_index = 0;

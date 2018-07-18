@@ -7,9 +7,6 @@ function I18N(msg)
 	if (!data)
 	{
 		data = self.$ = {};
-		
-		
-		
 		self.K = 'i18n_handler_example';
 		self.V = 'b';
 		self.D = {

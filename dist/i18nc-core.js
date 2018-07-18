@@ -1889,7 +1889,7 @@ var debug		= require('debug')('i18nc-core:i18nc_func_render');
 function tpl2render(code)
 {
 	// 删掉注释
-	var originalCode = code.replace(/\/\/[^\n]+/g, '');
+	var originalCode = code.replace(/(\n\r?[\t ]*)?\/\/[^\n]+/g, '');
 		// .replace(/(\$func_header);?/, '$1\n\t')
 		// .replace(/(\$func_footer);?/, '\n\t$1');
 

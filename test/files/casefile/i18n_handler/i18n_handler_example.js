@@ -15,9 +15,6 @@ function I18N(msg, tpldata, subtype)
 		var lanArr, i, len, lanItem;
 		if (self.L != LAN)
 		{
-			
-			
-			
 			self.K = 'i18n_handler_example';
 			self.V = 'b';
 			self.D = {
@@ -42,8 +39,6 @@ function I18N(msg, tpldata, subtype)
 					}
 				}
 			};
-			
-			
 
 			var __TRANSLATE_JSON__ = self.D;
 			var lanKeys = LAN.split(',');
@@ -53,7 +48,6 @@ function I18N(msg, tpldata, subtype)
 				lanItem = __TRANSLATE_JSON__[lanKeys[i]];
 				if (lanItem) lanArr.push(lanItem);
 			}
-			
 			self.L = LAN;
 		}
 
@@ -69,7 +63,6 @@ function I18N(msg, tpldata, subtype)
 				resultSubject = subtypeJSON && subtypeJSON[msg];
 				if (resultSubject) break;
 			}
-			
 			if (!resultDefault)
 			{
 				alldefaults = lanItem.DEFAULTS;
@@ -82,7 +75,6 @@ function I18N(msg, tpldata, subtype)
 	}
 
 	msg += '';
-	
 	if (!tpldata.length || msg.indexOf('%') == -1) return msg;
 
 	var replace_index = 0;

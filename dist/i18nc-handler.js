@@ -5,8 +5,6 @@ function I18N(msg, tpldata)
 
 	var self = I18N;
 
-	
-	
 	self.K = '*';
 	self.V = 'b.s';
 

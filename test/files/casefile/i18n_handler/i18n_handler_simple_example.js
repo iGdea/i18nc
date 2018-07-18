@@ -6,8 +6,6 @@ function I18N(msg, tpldata)
 
 	var self = I18N;
 
-	
-	
 	self.K = 'i18n_handler_example';
 	self.V = 'b';
 
