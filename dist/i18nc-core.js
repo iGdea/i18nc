@@ -240,6 +240,14 @@ _.extend(ASTCollector.prototype,
 				});
 
 				return result.length ? result : undefined;
+
+			case 'TaggedTemplateExpression':
+				var quasiAst = ast.quasi;
+				astUtils.setAstFlag(quasiAst, AST_FLAGS.DIS_REPLACE);
+				return self.scan(scope, quasiAst);
+
+			case 'TemplateLiteral':
+				break;
 		}
 
 
@@ -682,9 +690,9 @@ _.extend(ASTScope.prototype,
 		var selfFuncTranslateWords = new FuncTranslateWords();
 		var originalFileKeys = [];
 
-		var IGNORE_translateWord	= !options.codeModifiedArea.TranslateWord;
-		var IGNORE_regexp			= !options.codeModifiedArea.TranslateWord_RegExp;
-		var IGNORE_I18NHANLERALIAS	= !options.codeModifiedArea.I18NHandlerAlias;
+		var IGNORE_translateWord		= !options.codeModifiedArea.TranslateWord;
+		var IGNORE_regexp				= !options.codeModifiedArea.TranslateWord_RegExp;
+		var IGNORE_I18NHandler_alias	= !options.codeModifiedArea.I18NHandlerAlias;
 
 		// 预处理 I18N函数 begin
 		var I18NHandlerAsts = scope.I18NHandlerAsts.sort(function(a, b)
@@ -716,7 +724,7 @@ _.extend(ASTScope.prototype,
 		// 预处理 I18N函数 end
 
 
-		if (!IGNORE_I18NHANLERALIAS)
+		if (!IGNORE_I18NHandler_alias)
 		{
 			scope.I18NArgs.forEach(function(item)
 			{
@@ -810,7 +818,7 @@ _.extend(ASTScope.prototype,
 						}
 						I18NPlaceholders.push(myI18NPlaceholder);
 
-						if (!IGNORE_I18NHANLERALIAS)
+						if (!IGNORE_I18NHandler_alias)
 						{
 							myI18NPlaceholder.handlerName = options.I18NHandlerName;
 						}
@@ -849,8 +857,8 @@ _.extend(ASTScope.prototype,
 
 		// 如果作用域中，已经有I18N函数
 		// 那么头部插入的函数就不需要了
-		if ((!IGNORE_I18NHANLERALIAS && I18NPlaceholders.length)
-			|| (IGNORE_I18NHANLERALIAS && lastI18NHandlerAst))
+		if ((!IGNORE_I18NHandler_alias && I18NPlaceholders.length)
+			|| (IGNORE_I18NHandler_alias && lastI18NHandlerAst))
 		{
 			debug('ignore insert new I18NHandler');
 			I18NPlaceholderNew.renderType = 'empty';
@@ -2151,7 +2159,7 @@ _.extend(I18NPlaceholder.prototype,
 	{
 		var options = this.options;
 		if (this.renderType) return this.renderType;
-		if (!options.codeModifiedArea.I18NHandler) return 'original';
+		if (!options.I18NHandler.upgrade.enable) return 'original';
 
 		var funcInfo = this.parse();
 		if (funcInfo.isNotI18NHandler)
@@ -2551,6 +2559,10 @@ exports.defaults =
 		},
 		upgrade:
 		{
+			// 函数是否能更新的总开关
+			// 修改及插入已经插入到代码中的I18N函数体
+			// 如果false 那么下面的 I18NHandler.insert.checkClosure 均无效
+			enable: true,
 			// 对I18N函数优先进行局部更新（只更新翻译数据）
 			partial: true,
 			// 函数版本号不同的时候，更新函数体
@@ -2580,13 +2592,13 @@ exports.defaults =
 				ignoreFuncCode: false,
 			},
 		},
-		insert: Object.freeze(
+		insert:
 		{
 			// 插入I18N函数前，检查所在位置，是否闭包
 			checkClosure: true,
 			// 如果需要插入I18N函数，优先插入到define函数中
 			priorityDefineHalder: true,
-		}),
+		},
 		tpl:
 		{
 			// js代码中，获取当前语言包的代码
@@ -2619,10 +2631,8 @@ exports.defaults =
 	// 可以实现check效果
 	codeModifiedArea: new FeatureEnableOnly(
 	{
-		// 修改及插入已经插入到代码中的I18N函数体
-		// 如果不插入i18n函数定义
-		// 那么下面的 I18NHandler.insert.checkClosure 均无效
-		I18NHandler: true,
+		// I18NHandler 已经改名为 I18NHandler.upgrade.enable
+		// I18NHandler: true,
 		// 将分词的结果，用I18N函数包裹起来
 		TranslateWord: true,
 		// TranslateWord中的RegExp类型
@@ -2681,14 +2691,14 @@ exports.extend = function(options)
 
 	var result = _extendDefault(exports.defaults, options);
 
-	if (!result.codeModifiedArea.I18NHandler)
-	{
-		if (result.I18NHandler.insert === exports.defaults.I18NHandler.insert)
-		{
-			result = extend(true, {}, result);
-		}
-		result.I18NHandler.insert.checkClosure = false;
-	}
+	// if (!result.codeModifiedArea.I18NHandler)
+	// {
+	// 	if (result.I18NHandler.insert === exports.defaults.I18NHandler.insert)
+	// 	{
+	// 		result = extend(true, {}, result);
+	// 	}
+	// 	result.I18NHandler.insert.checkClosure = false;
+	// }
 
 	// 直接设置为false
 	// 避免生成无用的key
@@ -3287,6 +3297,7 @@ _.extend(CodeInfoResult.prototype,
 'use strict';
 
 var _ = require('lodash');
+var debug = require('debug')('i18nc-core:depd_options');
 var deprecate = require('depd')('i18nc-core:options');
 var GetLanguageCodeDepd = require('./tpl/depd_getlanguagecode_handler').toString();
 
@@ -3332,6 +3343,8 @@ var OPTIONS_OLDKEY_MAP =
 
 	I18NhandlerTpl_GetGlobalCode: 'I18NHandler.tpl.getLanguageCode',
 	'I18NhandlerTpl:GetGlobalCode': 'I18NHandler.tpl.getLanguageCode',
+
+	'codeModifiedArea.I18NHandler': 'I18NHandler.upgrade.enable',
 
 	loadTranslateJSON: 'events.loadTranslateJSON',
 	newTranslateJSON: 'events.newTranslateJSON',
@@ -3447,39 +3460,62 @@ function keyVal1ToKeyVal2(options, newKey, oldKeys, handler)
 
 function checkKeyVal(options, key)
 {
-	var tmpOpt = options;
-	var exists = !_.some(KEY_ARRS[key], function(name)
+	var prevVal = options;
+	var items = KEY_ARRS[key];
+	var exists = !_.some(items, function(name, index)
 	{
-		if (name in tmpOpt)
-			tmpOpt = tmpOpt[name];
-		else
+		if (!prevVal)
+		{
 			return true;
+		}
+		else if (name in prevVal)
+		{
+			prevVal = prevVal[name];
+		}
+		else if (index == items.length - 1 && Array.isArray(prevVal))
+		{
+			debug('val is exists by array mode, key:%s', key);
+			prevVal = prevVal.indexOf(name) != -1;
+		}
+		else
+		{
+			return true;
+		}
 	});
 
 	return {
 		exists: exists,
-		value: exists ? tmpOpt : undefined,
+		value: exists ? prevVal : undefined,
 	};
 }
 
 function setKeyVal(options, key, val)
 {
-	var tmpOpt = options;
-	var i = 0;
-	var items = KEY_ARRS[key];
-	for(var name, t = items.length -1; i < t; i++)
+	var prevVal = options;
+	var i = 0, name, items = KEY_ARRS[key];
+	for(var tmp, t = items.length -1; i < t; i++)
 	{
 		name = items[i];
-		if (!(name in tmpOpt))
-			tmpOpt = tmpOpt[name] = {};
+		tmp = prevVal[name];
+		if (!tmp || typeof tmp != 'object')
+			prevVal = prevVal[name] = {};
 		else
-			tmpOpt = tmpOpt[name];
+			prevVal = tmp;
 	}
 
-	tmpOpt[items[i]] = val;
+	name = items[i];
+	if (Array.isArray(prevVal) && val === true)
+	{
+		prevVal.push(name);
+		debug('set val in array mode, key:%s', key);
+	}
+	else
+	{
+		prevVal[name] = val;
+	}
 }
 
-},{"./tpl/depd_getlanguagecode_handler":20,"depd":25,"lodash":88}],20:[function(require,module,exports){
+},{"./tpl/depd_getlanguagecode_handler":20,"debug":23,"depd":25,"lodash":88}],20:[function(require,module,exports){
 /* global $GetLanguageCode */
 
 'use strict';
@@ -46731,7 +46767,7 @@ exports.SourceNode = require('./lib/source-node').SourceNode;
 },{"./lib/source-map-consumer":97,"./lib/source-map-generator":98,"./lib/source-node":99}],102:[function(require,module,exports){
 module.exports={
   "name": "i18nc-core",
-  "version": "10.1.0",
+  "version": "10.2.0",
   "description": "I18N Tool for JS files",
   "main": "index.js",
   "scripts": {

@@ -71,25 +71,32 @@ describe('#main_options', function()
 		expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 	});
 
+	describe('#I18NHandler', function()
+	{
+		describe('#upgrade', function()
+		{
+			it('#only I18NHandler', function()
+			{
+				var exampleCode = require('../example/func_code.js').toString();
+				var info = i18nc(exampleCode,
+				{
+					I18NHandler:
+					{
+						upgrade: {enable: false}
+					},
+					dbTranslateWords: dbTranslateWords,
+				});
+
+				var otherCode = requireAfterWrite('func_code_upgrade_disabe.js', info.code);
+				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
+			});
+		});
+	});
+
 
 	describe('#codeModifiedArea', function()
 	{
 		var exampleCode = require('../example/func_code.js').toString();
-
-		it('#only I18NHandler', function()
-		{
-			var info = i18nc(exampleCode,
-			{
-				codeModifiedArea: ['I18NHandler'],
-				dbTranslateWords: dbTranslateWords,
-			});
-
-			var outputJSON = requireAfterWrite('func_code_codeModifiedArea1_output.json', autoTestUtils.JsonOfI18ncRet(info));
-			var otherCode = requireAfterWrite('func_code_codeModifiedArea1_output.js', info.code);
-
-			expect(autoTestUtils.JsonOfI18ncRet(info)).to.eql(outputJSON);
-			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
-		});
 
 		it('#only translateWord', function()
 		{
@@ -99,10 +106,7 @@ describe('#main_options', function()
 				dbTranslateWords: dbTranslateWords,
 			});
 
-			var outputJSON = requireAfterWrite('func_code_codeModifiedArea2_output.json', autoTestUtils.JsonOfI18ncRet(info));
 			var otherCode = requireAfterWrite('func_code_codeModifiedArea2_output.js', info.code);
-
-			expect(autoTestUtils.JsonOfI18ncRet(info)).to.eql(outputJSON);
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 		});
 
@@ -135,10 +139,7 @@ describe('#main_options', function()
 				dbTranslateWords: dbTranslateWords,
 			});
 
-			var outputJSON = requireAfterWrite('func_code_codeModifiedArea3_output.json', autoTestUtils.JsonOfI18ncRet(info));
 			var otherCode = requireAfterWrite('func_code_codeModifiedArea3_output.js', info.code);
-
-			expect(autoTestUtils.JsonOfI18ncRet(info)).to.eql(outputJSON);
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 		});
 	});

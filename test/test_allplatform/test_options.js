@@ -33,9 +33,14 @@ describe('#options', function()
 		{
 			var newOptions = optionsUtils.extend(
 				{
-					codeModifiedArea: {I18NHandler: false}
+					codeModifiedArea:
+					{
+						I18NHandlerAlias_nokey: true,
+						I18NHandlerAlias: false,
+					}
 				});
-			expect(newOptions.codeModifiedArea.I18NHandler).to.be(false);
+			expect(newOptions.codeModifiedArea.I18NHandlerAlias_nokey).to.be(undefined);
+			expect(newOptions.codeModifiedArea.I18NHandlerAlias).to.be(false);
 			expect(newOptions.codeModifiedArea.TranslateWord).to.be(true);
 		});
 
@@ -43,10 +48,10 @@ describe('#options', function()
 		{
 			var newOptions = optionsUtils.extend(
 				{
-					codeModifiedArea: ['I18NHandler']
+					codeModifiedArea: ['I18NHandlerAlias']
 				});
-			expect(!!newOptions.codeModifiedArea.TranslateWord).to.be(false);
-			expect(!!newOptions.codeModifiedArea.I18NHandler).to.be(true);
+			expect(newOptions.codeModifiedArea.TranslateWord).to.be(undefined);
+			expect(newOptions.codeModifiedArea.I18NHandlerAlias).to.be(true);
 		});
 
 		it('#originalOptions', function()

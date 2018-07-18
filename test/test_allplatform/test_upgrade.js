@@ -10,24 +10,45 @@ describe('#upgrade', function()
 {
 	describe('#options', function()
 	{
-		it('#rename', function()
+		describe('#rename', function()
 		{
-			var code = require('../files/casefile/func_code/func_code_noi18n').toString();
-			var info = i18nc(code,
-				{
-					handlerName: 'oldI18N',
-					cutWordReg: /中/g,
-				});
-			var otherCode = requireAfterWrite('func_code_noi18n_rename.js', info.code);
-			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
-		});
+			it('#1keyTo1key', function()
+			{
+				var code = require('../files/casefile/func_code/func_code_noi18n').toString();
+				var info = i18nc(code,
+					{
+						handlerName: 'oldI18N',
+						cutWordReg: /中/g,
+					});
+				var otherCode = requireAfterWrite('func_code_noi18n_rename.js', info.code);
+				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
+			});
 
-		it('#rename for obj', function()
-		{
-			var newOptions = optionsUtils.extend();
-			expect(newOptions.I18NHandler.insert.checkClosure).to.be(true);
-			newOptions = optionsUtils.extend({isCheckClosureForNewI18NHandler: false});
-			expect(newOptions.I18NHandler.insert.checkClosure).to.be(false);
+			it('#rename for obj', function()
+			{
+				var newOptions = optionsUtils.extend();
+				expect(newOptions.I18NHandler.insert.checkClosure).to.be(true);
+				newOptions = optionsUtils.extend({isCheckClosureForNewI18NHandler: false});
+				expect(newOptions.I18NHandler.insert.checkClosure).to.be(false);
+			});
+
+			describe('#rename for arr', function()
+			{
+				it('#arr2obj', function()
+				{
+					var newOptions = optionsUtils.extend();
+					expect(newOptions.I18NHandler.upgrade.enable).to.be(true);
+					newOptions = optionsUtils.extend({codeModifiedArea: []});
+					expect(newOptions.I18NHandler.upgrade.enable).to.be(false);
+					newOptions = optionsUtils.extend({codeModifiedArea: ['I18NHandler']});
+					expect(newOptions.I18NHandler.upgrade.enable).to.be(true);
+				});
+
+				it('#arr2arr', function()
+				{
+					console.log('@todo');
+				});
+			});
 		});
 
 		it('#I18NhandlerTpl', function()
