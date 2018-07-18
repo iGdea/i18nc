@@ -13,24 +13,24 @@ describe('#i18n_placeholder_update', function()
 {
 	describe('#check', function()
 	{
-		function checkEmptyJSONCode(code, renderType)
+		function checkEmptyJSONCode(code, renderType, options)
 		{
 			var ast = esprima.parse(code, optionsUtils.esprimaOptions);
 			var codeTranslateWords = {};
 			var I18NPlaceholderNew = new I18NPlaceholder(
-					codeTranslateWords, code, optionsUtils.extend(), ast.body[0]
+					codeTranslateWords, code, optionsUtils.extend(options), ast.body[0]
 				);
 			expect(I18NPlaceholderNew.getRenderType()).to.be(renderType);
 		}
 
-		function checkWidthJSONCode(code, renderType)
+		function checkWidthJSONCode(code, renderType, options)
 		{
 			var ast = esprima.parse(code, optionsUtils.esprimaOptions);
 			var codeTranslateWords = {
 				DEFAULTS: ['中文']
 			};
 			var I18NPlaceholderNew = new I18NPlaceholder(
-					codeTranslateWords, code, optionsUtils.extend(), ast.body[0]
+					codeTranslateWords, code, optionsUtils.extend(options), ast.body[0]
 				);
 			expect(I18NPlaceholderNew.getRenderType()).to.be(renderType);
 		}
@@ -73,6 +73,9 @@ describe('#i18n_placeholder_update', function()
 				});
 				checkEmptyJSONCode(code, 'complete');
 				checkWidthJSONCode(code, 'complete');
+
+				checkEmptyJSONCode(code, 'partial', {I18NHandler: {upgrade: {version: false}}})
+				checkEmptyJSONCode(code, 'partial', {I18NHandler: {upgrade: {version: false}}})
 			});
 
 			it('#no file_key', function()
