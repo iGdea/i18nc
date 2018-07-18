@@ -254,11 +254,10 @@ describe('#i18n_func_run', function()
 
 		});
 
-
 		describe('#dist', function()
 		{
-			var I18N = require('../../dist/i18nc-handler');
-			it('#base', function()
+			var I18N = require('../../dist/i18nc-handler').I18N;
+			describe('#base', function()
 			{
 				it('#no msg', function()
 				{
@@ -276,7 +275,7 @@ describe('#i18n_func_run', function()
 				});
 			});
 
-			it('#tpldata', function()
+			describe('#tpldata', function()
 			{
 				it('#key %s', function()
 				{
