@@ -61,7 +61,7 @@ describe('#i18n_placeholder_update', function()
 
 		describe('#triggers', function()
 		{
-			it('#diff version', function()
+			describe('#diff version', function()
 			{
 				var code = i18nTpl.render(
 				{
@@ -71,11 +71,19 @@ describe('#i18n_placeholder_update', function()
 					FUNCTION_VERSION: 0,
 					TRANSLATE_JSON_CODE : '{}'
 				});
-				checkEmptyJSONCode(code, 'complete');
-				checkWidthJSONCode(code, 'complete');
 
-				checkEmptyJSONCode(code, 'partial', {I18NHandler: {upgrade: {version: false}}})
-				checkEmptyJSONCode(code, 'partial', {I18NHandler: {upgrade: {version: false}}})
+				it('#enable', function()
+				{
+					checkEmptyJSONCode(code, 'complete');
+					checkWidthJSONCode(code, 'complete');
+				});
+
+				it('#disable', function()
+				{
+					var options = {I18NHandler: {upgrade: {checkVersion: false}}};
+					checkEmptyJSONCode(code, 'partial', options);
+					checkEmptyJSONCode(code, 'partial', options);
+				});
 			});
 
 			it('#no file_key', function()

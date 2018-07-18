@@ -24,12 +24,28 @@ describe('#upgrade', function()
 				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 			});
 
-			it('#rename for obj', function()
+			describe('#rename for obj', function()
 			{
-				var newOptions = optionsUtils.extend();
-				expect(newOptions.I18NHandler.insert.checkClosure).to.be(true);
-				newOptions = optionsUtils.extend({isCheckClosureForNewI18NHandler: false});
-				expect(newOptions.I18NHandler.insert.checkClosure).to.be(false);
+				it('#key2obj', function()
+				{
+					var newOptions = optionsUtils.extend();
+					expect(newOptions.I18NHandler.insert.checkClosure).to.be(true);
+					newOptions = optionsUtils.extend({isCheckClosureForNewI18NHandler: false});
+					expect(newOptions.I18NHandler.insert.checkClosure).to.be(false);
+				});
+
+				it('#obj2obj', function()
+				{
+					var newOptions = optionsUtils.extend();
+					expect(newOptions.I18NHandler.upgrade.checkVersion).to.be(true);
+					newOptions = optionsUtils.extend({I18NHandler: {upgrade: {version: false}}});
+					expect(newOptions.I18NHandler.upgrade.checkVersion).to.be(false);
+				});
+
+				it('#obj2key', function()
+				{
+					console.log('@todo');
+				});
 			});
 
 			describe('#rename for arr', function()
