@@ -19,9 +19,9 @@
   "dependencies": {
     "debug": "^3.1.0",
     "depd": "^1.1.2",
-    "escodegen": "^1.10.0",
+    "escodegen": "^1.11.0",
     "esmangle": "^1.0.1",
-    "esprima": "^4.0.0",
+    "esprima": "^4.0.1",
     "estraverse": "^4.2.0",
     "extend": "^3.0.1",
     "lodash": "^4.17.10"
@@ -29,7 +29,7 @@
   "devDependencies": {
     "benchmark": "^2.1.4",
     "cross-env": "^5.2.0",
-    "eslint": "^5.0.1",
+    "eslint": "^5.1.0",
     "eslint-config-brcjs": "^0.2.0",
     "expect.js": "^0.3.1",
     "glob": "^7.1.2",

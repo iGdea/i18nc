@@ -5015,13 +5015,15 @@ function wrapproperty (obj, prop, message) {
     }
 
     function generateMethodPrefix(prop) {
-        var func = prop.value;
+        var func = prop.value, prefix = '';
         if (func.async) {
-            return generateAsyncPrefix(func, !prop.computed);
-        } else {
-            // avoid space before method name
-            return generateStarSuffix(func) ? '*' : '';
+            prefix += generateAsyncPrefix(func, !prop.computed);
         }
+        if (func.generator) {
+            // avoid space before method name
+            prefix += generateStarSuffix(func) ? '*' : '';
+        }
+        return prefix;
     }
 
     CodeGenerator.prototype.generatePattern = function (node, precedence, flags) {
@@ -6753,26 +6755,26 @@ module.exports={
   "_args": [
     [
       {
-        "raw": "escodegen@^1.10.0",
+        "raw": "escodegen@^1.11.0",
         "scope": null,
         "escapedName": "escodegen",
         "name": "escodegen",
-        "rawSpec": "^1.10.0",
-        "spec": ">=1.10.0 <2.0.0",
+        "rawSpec": "^1.11.0",
+        "spec": ">=1.11.0 <2.0.0",
         "type": "range"
       },
       "/Users/feya/dev/node_modules/i18nc-core"
     ]
   ],
-  "_from": "escodegen@>=1.10.0 <2.0.0",
-  "_id": "escodegen@1.10.0",
+  "_from": "escodegen@>=1.11.0 <2.0.0",
+  "_id": "escodegen@1.11.0",
   "_inCache": true,
   "_installable": true,
   "_location": "/escodegen",
   "_nodeVersion": "10.0.0",
   "_npmOperationalInternal": {
     "host": "s3://npm-registry-packages",
-    "tmp": "tmp/escodegen_1.10.0_1528694551151_0.3013804094278181"
+    "tmp": "tmp/escodegen_1.11.0_1531587077447_0.5928377937540485"
   },
   "_npmUser": {
     "name": "michaelficarra",
@@ -6781,22 +6783,22 @@ module.exports={
   "_npmVersion": "6.0.1",
   "_phantomChildren": {},
   "_requested": {
-    "raw": "escodegen@^1.10.0",
+    "raw": "escodegen@^1.11.0",
     "scope": null,
     "escapedName": "escodegen",
     "name": "escodegen",
-    "rawSpec": "^1.10.0",
-    "spec": ">=1.10.0 <2.0.0",
+    "rawSpec": "^1.11.0",
+    "spec": ">=1.11.0 <2.0.0",
     "type": "range"
   },
   "_requiredBy": [
     "/",
     "/degenerator"
   ],
-  "_resolved": "https://registry.npmjs.org/escodegen/-/escodegen-1.10.0.tgz",
-  "_shasum": "f647395de22519fbd0d928ffcf1d17e0dec2603e",
+  "_resolved": "https://registry.npmjs.org/escodegen/-/escodegen-1.11.0.tgz",
+  "_shasum": "b27a9389481d5bfd5bec76f7bb1eb3f8f4556589",
   "_shrinkwrap": null,
-  "_spec": "escodegen@^1.10.0",
+  "_spec": "escodegen@^1.11.0",
   "_where": "/Users/feya/dev/node_modules/i18nc-core",
   "bin": {
     "esgenerate": "./bin/esgenerate.js",
@@ -6826,12 +6828,12 @@ module.exports={
   },
   "directories": {},
   "dist": {
-    "integrity": "sha512-fjUOf8johsv23WuIKdNQU4P9t9jhQ4Qzx6pC2uW890OloK3Zs1ZAoCNpg/2larNF501jLl3UNy0kIRcF6VI22g==",
-    "shasum": "f647395de22519fbd0d928ffcf1d17e0dec2603e",
-    "tarball": "https://registry.npmjs.org/escodegen/-/escodegen-1.10.0.tgz",
+    "integrity": "sha512-IeMV45ReixHS53K/OmfKAIztN/igDHzTJUhZM3k1jMhIZWjk45SMwAtBsEXiJp3vSPmTcu6CXn7mDvFHRN66fw==",
+    "shasum": "b27a9389481d5bfd5bec76f7bb1eb3f8f4556589",
+    "tarball": "https://registry.npmjs.org/escodegen/-/escodegen-1.11.0.tgz",
     "fileCount": 6,
-    "unpackedSize": 106062,
-    "npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJbHgcZCRA9TVsSAnZWagAAqsAP/imWWxXnAyZSCOY2+kdI\nikaoOP5GWRZfmZrwO37LORVsmikUxj1uDPkLmFRwYfW6Kgqmx2E9XrTHT7yQ\nvH2JSjo7J8V0r5SzUFqlUCJfurP+l5W8Ls5U4un/g9v/dixBX/4A80n6oAp5\nNC79/9H9J0SYGPEQHgRH77XXY6XirKyy2sVqbvteFq/NaT+wF+WC9DIwIYgr\ncKvSbRdTTcu5xgAUjDpKyxkYKeTpb69O2diotkaK4UL3Ya4vmEPK+A1dUxMl\nYKISyk75jXxKV++CASm9LkIJ2uFl4LpmhTH7BWTW6XwtPKZFJL32e6X3FXb4\nZwhQAn874LNTNwrUlisfUvOv/v9T1kzl8MQsPOyF6KU8BH9XjXQcFoUKhsVm\nP9ubV5DSSRC0SjBqsBBLOjVLo1BIs/V/VD4+p0F0BnpReUrwlY81hdOiEDYj\nV+Oe0hAUmuTjUbKTDOx+jOwNNPTSYfzKjb6sL5q/BIpBY8LirB070Mq3LMIy\nT9cbc4UEDzD2tRpB2DjOwfzvHR7PIYIYxpVJcPixY2ONdRNTfRJcBwzJCJpS\nBqNuTsHw/nUHuTknd4A59+eh72HFTNBmkHyXxrQ1kxof4FqjXwf5YKfLbxqP\n/r631qY0pTK7/jY653HmBd2kH96THs3K9x9geJk9PHWV2ucfYkLvg7qMOf46\nlkDH\r\n=VA+P\r\n-----END PGP SIGNATURE-----\r\n"
+    "unpackedSize": 106127,
+    "npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJbSioFCRA9TVsSAnZWagAAK3YP/2FxhiCn16ZHrOPcHm/B\ncHz2/nkx3LigCezwo1/sHjwMelxas2Lq1AyJzwKCYYrPT8AtqqOu8uAPtCAo\nDrA8ZDTgva/yQe4onMA1IdWvyGiESxprZ6eZ/B5fgSS5/tyV8eOAc1172iQe\nyGdKAuaN0OUkPGeTxMCLQoHZHJv87I6S47D1GM1/xYNnQ69vb1Vves1bcpp4\nuFhtT9QtDEqus44ELJliiV7Efhkh4yVQGqG5xBo5dxlFL9l3LY/5Y+eNPo3O\nbcKSkHX4sxCF+SQ4B32aRKrTCzlfm6WSvMxNv6eJCidwTh7TKi6gTCBA/YK2\n6l5288G+L7oaewQIfjNfL8iRPT2MMGCw320Vv1Eu+S7uCJNUtq0Ufj/FdrKI\nN0AdkFoTZXcihaPoiO177iu3rm5SJR5HM+hTpcOtlrc2vcvNxIAdDU/Pc3Mw\nfOhF/WSKM8DhtcWeZqXCJ9xImNpRP9ld9YRV7+SZ5XK65YAtoROGOer6n3cW\nXwVfkV0V6l48SDjnAXI4PfALY5lZWR23OHZP/zwVXmOwSB42snMYuLWy1Z7V\nEcPB/MAt7QIN482wKTZ+wLeJ4XTzryWHG8qUV6ZUwwj/XpawjfomIbmXA6+m\nLm6Ifjv+F7ygAu21VbCxS/MruHVrYCk7JGwgTVyfgyZRZWVvmRFTWVey8rLi\ncRa2\r\n=XpG1\r\n-----END PGP SIGNATURE-----\r\n"
   },
   "engines": {
     "node": ">=4.0"
@@ -6843,7 +6845,7 @@ module.exports={
     "escodegen.js",
     "package.json"
   ],
-  "gitHead": "df614634b41565888d520222cdc4335079b5a0c2",
+  "gitHead": "20a0d3748a25653eb463d9155bbaa3239883717a",
   "homepage": "http://github.com/estools/escodegen",
   "license": "BSD-2-Clause",
   "main": "escodegen.js",
@@ -6874,7 +6876,7 @@ module.exports={
     "test": "gulp travis",
     "unit-test": "gulp test"
   },
-  "version": "1.10.0"
+  "version": "1.11.0"
 }
 
 },{}],28:[function(require,module,exports){
@@ -16088,7 +16090,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var syntax_1 = __webpack_require__(2);
 	exports.Syntax = syntax_1.Syntax;
 	// Sync with *.json manifests.
-	exports.version = '4.0.0';
+	exports.version = '4.0.1';
 
 
 /***/ },
@@ -18025,11 +18027,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	            column: this.startMarker.column
 	        };
 	    };
-	    Parser.prototype.startNode = function (token) {
+	    Parser.prototype.startNode = function (token, lastLineStart) {
+	        if (lastLineStart === void 0) { lastLineStart = 0; }
+	        var column = token.start - token.lineStart;
+	        var line = token.lineNumber;
+	        if (column < 0) {
+	            column += lastLineStart;
+	            line--;
+	        }
 	        return {
 	            index: token.start,
-	            line: token.lineNumber,
-	            column: token.start - token.lineStart
+	            line: line,
+	            column: column
 	        };
 	    };
 	    Parser.prototype.finalize = function (marker, node) {
@@ -18361,7 +18370,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var isGenerator = false;
 	        var node = this.createNode();
 	        var previousAllowYield = this.context.allowYield;
-	        this.context.allowYield = false;
+	        this.context.allowYield = true;
 	        var params = this.parseFormalParameters();
 	        var method = this.parsePropertyMethod(params);
 	        this.context.allowYield = previousAllowYield;
@@ -18431,7 +18440,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.nextToken();
 	            computed = this.match('[');
 	            isAsync = !this.hasLineTerminator && (id === 'async') &&
-	                !this.match(':') && !this.match('(') && !this.match('*');
+	                !this.match(':') && !this.match('(') && !this.match('*') && !this.match(',');
 	            key = isAsync ? this.parseObjectPropertyKey() : this.finalize(node, new Node.Identifier(id));
 	        }
 	        else if (this.match('*')) {
@@ -19030,12 +19039,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	            // Final reduce to clean-up the stack.
 	            var i = stack.length - 1;
 	            expr = stack[i];
-	            markers.pop();
+	            var lastMarker = markers.pop();
 	            while (i > 1) {
-	                var node = this.startNode(markers.pop());
+	                var marker = markers.pop();
+	                var lastLineStart = lastMarker && lastMarker.lineStart;
+	                var node = this.startNode(marker, lastLineStart);
 	                var operator = stack[i - 1];
 	                expr = this.finalize(node, new Node.BinaryExpression(operator, stack[i - 2], expr));
 	                i -= 2;
+	                lastMarker = marker;
 	            }
 	        }
 	        return expr;
@@ -19817,8 +19829,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        var node = this.createNode();
 	        this.expectKeyword('return');
-	        var hasArgument = !this.match(';') && !this.match('}') &&
-	            !this.hasLineTerminator && this.lookahead.type !== 2 /* EOF */;
+	        var hasArgument = (!this.match(';') && !this.match('}') &&
+	            !this.hasLineTerminator && this.lookahead.type !== 2 /* EOF */) ||
+	            this.lookahead.type === 8 /* StringLiteral */ ||
+	            this.lookahead.type === 10 /* Template */;
 	        var argument = hasArgument ? this.parseExpression() : null;
 	        this.consumeSemicolon();
 	        return this.finalize(node, new Node.ReturnStatement(argument));
@@ -20383,7 +20397,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var node = this.createNode();
 	        var isGenerator = false;
 	        var previousAllowYield = this.context.allowYield;
-	        this.context.allowYield = false;
+	        this.context.allowYield = !isGenerator;
 	        var formalParameters = this.parseFormalParameters();
 	        if (formalParameters.params.length > 0) {
 	            this.tolerateError(messages_1.Messages.BadGetterArity);
@@ -20396,7 +20410,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var node = this.createNode();
 	        var isGenerator = false;
 	        var previousAllowYield = this.context.allowYield;
-	        this.context.allowYield = false;
+	        this.context.allowYield = !isGenerator;
 	        var formalParameters = this.parseFormalParameters();
 	        if (formalParameters.params.length !== 1) {
 	            this.tolerateError(messages_1.Messages.BadSetterArity);
@@ -20497,13 +20511,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    isAsync = true;
 	                    token = this.lookahead;
 	                    key = this.parseObjectPropertyKey();
-	                    if (token.type === 3 /* Identifier */) {
-	                        if (token.value === 'get' || token.value === 'set') {
-	                            this.tolerateUnexpectedToken(token);
-	                        }
-	                        else if (token.value === 'constructor') {
-	                            this.tolerateUnexpectedToken(token, messages_1.Messages.ConstructorIsAsync);
-	                        }
+	                    if (token.type === 3 /* Identifier */ && token.value === 'constructor') {
+	                        this.tolerateUnexpectedToken(token, messages_1.Messages.ConstructorIsAsync);
 	                    }
 	                }
 	            }
@@ -20616,6 +20625,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Parser.prototype.parseModule = function () {
 	        this.context.strict = true;
 	        this.context.isModule = true;
+	        this.scanner.isModule = true;
 	        var node = this.createNode();
 	        var body = this.parseDirectivePrologues();
 	        while (this.lookahead.type !== 2 /* EOF */) {
@@ -21044,6 +21054,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.source = code;
 	        this.errorHandler = handler;
 	        this.trackComment = false;
+	        this.isModule = false;
 	        this.length = code.length;
 	        this.index = 0;
 	        this.lineNumber = (code.length > 0) ? 1 : 0;
@@ -21249,7 +21260,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    break;
 	                }
 	            }
-	            else if (ch === 0x3C) {
+	            else if (ch === 0x3C && !this.isModule) {
 	                if (this.source.slice(this.index + 1, this.index + 4) === '!--') {
 	                    this.index += 4; // `<!--`
 	                    var comment = this.skipSingleLineComment(4);
@@ -46739,9 +46750,9 @@ module.exports={
   "dependencies": {
     "debug": "^3.1.0",
     "depd": "^1.1.2",
-    "escodegen": "^1.10.0",
+    "escodegen": "^1.11.0",
     "esmangle": "^1.0.1",
-    "esprima": "^4.0.0",
+    "esprima": "^4.0.1",
     "estraverse": "^4.2.0",
     "extend": "^3.0.1",
     "lodash": "^4.17.10"
@@ -46749,7 +46760,7 @@ module.exports={
   "devDependencies": {
     "benchmark": "^2.1.4",
     "cross-env": "^5.2.0",
-    "eslint": "^5.0.1",
+    "eslint": "^5.1.0",
     "eslint-config-brcjs": "^0.2.0",
     "expect.js": "^0.3.1",
     "glob": "^7.1.2",
