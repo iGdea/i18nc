@@ -2180,8 +2180,8 @@ _.extend(I18NPlaceholder.prototype,
 				originalAst				: this.originalAst,
 				translateJSON			: funcInfo.__TRANSLATE_JSON__ast,
 				handlerName				: !this.handlerName || funcInfo.handlerName == this.handlerName,
-				I18NFunctionVersion		: options.I18NHandler.upgrade.version
-					&& funcInfo.__FUNCTION_VERSION__
+				I18NFunctionVersion		: !options.I18NHandler.upgrade.version
+					|| funcInfo.__FUNCTION_VERSION__
 					&& funcInfo.__FUNCTION_VERSION__.split('.')[0] == DEF.I18NFunctionVersion,
 				proxyGlobalHandlerName	: !(proxyGlobalHandlerConfig.enable
 					&& proxyGlobalHandlerConfig.ignoreFuncCode
@@ -3342,6 +3342,7 @@ var OPTIONS_OLDKEY_MAP =
 
 
 var KEY_ARRS = {};
+
 [
 	'I18NHandler.style.minFuncCode',
 	'I18NHandler.style.minFuncJSON'
@@ -46733,7 +46734,7 @@ module.exports={
     "test-e2e-dev": "cross-env DEBUG=i18nc-core* karma start --auto-watch --no-single-run --browsers=Chrome",
     "test-e2e-sauce": "karma start -- sauce",
     "test-travis": "istanbul cover _mocha --report lcovonly -- test/test_*/test_* --reporter dot",
-    "test-build": "node test/build/i18nc-core; node test/prev_test_files; cross-env TEST_BUILD=true mocha test/test_*/test_*"
+    "test-build": "node test/build; node test/prev_test_files; cross-env TEST_BUILD=true mocha test/test_*/test_*"
   },
   "dependencies": {
     "debug": "^3.1.0",
