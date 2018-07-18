@@ -253,6 +253,46 @@ describe('#i18n_func_run', function()
 			});
 
 		});
+
+
+		describe('#dist', function()
+		{
+			var I18N = require('../../dist/i18nc-handler');
+			it('#base', function()
+			{
+				it('#no msg', function()
+				{
+					expect(I18N()).to.be('undefined');
+				});
+
+				it('#number', function()
+				{
+					expect(I18N(11)).to.be('11');
+				});
+
+				it('#match subtype', function()
+				{
+					expect(I18N('简体', 'subtype')).to.be('简体');
+				});
+			});
+
+			it('#tpldata', function()
+			{
+				it('#key %s', function()
+				{
+					expect(I18N('美好%s生活', [1])).to.be('美好1生活');
+					expect(I18N('美好%s生活', [1,2])).to.be('美好1生活');
+					expect(I18N('%s美好%s生活', [1,2])).to.be('1美好2生活');
+					expect(I18N('%s美好%s生活', [1])).to.be('1美好%s生活');
+				});
+
+				it('#key %{}', function()
+				{
+					expect(I18N('%{中文}词典', ['English'])).to.be('English词典');
+					expect(I18N('%{{中文}}词典', [1])).to.be('1}词典');
+				});
+			});
+		});
 	});
 
 
