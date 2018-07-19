@@ -2709,6 +2709,9 @@ exports.defaults =
 	pluginEnabled: new FeatureEnableOnly({}),
 	pluginSettings: {},
 
+	// 是否忽略向前兼容
+	depdEnable: true,
+
 	events:
 	{
 		loadTranslateJSON: null,
@@ -2737,9 +2740,7 @@ if (Object.freeze)
 exports.extend = function(options)
 {
 	if (!options) return _.extend({}, exports.defaults);
-
-	depdOptions(options);
-
+	if (options.depdEnable !== false) depdOptions(options);
 	var result = _extendDefault(exports.defaults, options);
 
 	// if (!result.codeModifiedArea.I18NHandler)

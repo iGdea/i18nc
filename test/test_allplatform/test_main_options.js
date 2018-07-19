@@ -67,7 +67,19 @@ describe('#main_options', function()
 			});
 
 		var otherCode = requireAfterWrite('func_code_no_notused_words_output.js', info.code);
+		expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
+	});
 
+	it('#depdEnable', function()
+	{
+		var info = i18nc('var dd = "中文"',
+			{
+				cutWordReg: /词典/g,
+				I18NHandler: {insert: {checkClosure: false}},
+				depdEnable: false
+			});
+
+		var otherCode = requireAfterWrite('func_code_no_depdenable_output.js', info.code);
 		expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 	});
 
@@ -122,9 +134,7 @@ describe('#main_options', function()
 				});
 
 				var otherCode = requireAfterWrite('func_code_insert_disable.js', info.code);
-				var outputJSON = requireAfterWrite('func_code_insert_disable.json', autoTestUtils.JsonOfI18ncRet(info));
 				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
-				expect(autoTestUtils.JsonOfI18ncRet(info)).to.eql(outputJSON);
 			});
 		});
 	});
