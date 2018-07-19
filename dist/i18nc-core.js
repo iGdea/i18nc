@@ -690,9 +690,9 @@ _.extend(ASTScope.prototype,
 		var selfFuncTranslateWords = new FuncTranslateWords();
 		var originalFileKeys = [];
 
-		var IGNORE_translateWord		= !options.codeModifiedArea.TranslateWord;
-		var IGNORE_regexp				= !options.codeModifiedArea.TranslateWord_RegExp;
-		var IGNORE_I18NHandler_alias	= !options.codeModifiedArea.I18NHandlerAlias;
+		var IGNORE_translateWord		= !options.codeModifyItems.TranslateWord;
+		var IGNORE_regexp				= !options.codeModifyItems.TranslateWord_RegExp;
+		var IGNORE_I18NHandler_alias	= !options.codeModifyItems.I18NHandlerAlias;
 
 		// 预处理 I18N函数 begin
 		var I18NHandlerAsts = scope.I18NHandlerAsts.sort(function(a, b)
@@ -2680,7 +2680,7 @@ exports.defaults =
 	// 如果去掉TranslateWord，
 	// 配合最后输出的I18NArgsTranslateWords和codeTranslateWords，
 	// 可以实现check效果
-	codeModifiedArea: new FeatureEnableOnly(
+	codeModifyItems: new FeatureEnableOnly(
 	{
 		// I18NHandler 已经改名为 I18NHandler.upgrade.enable
 		// I18NHandler: true,
@@ -2743,7 +2743,7 @@ exports.extend = function(options)
 	if (options.depdEnable !== false) depdOptions(options);
 	var result = _extendDefault(exports.defaults, options);
 
-	// if (!result.codeModifiedArea.I18NHandler)
+	// if (!result.codeModifyItems.I18NHandler)
 	// {
 	// 	if (result.I18NHandler.insert === exports.defaults.I18NHandler.insert)
 	// 	{
@@ -3396,6 +3396,7 @@ var OPTIONS_OLDKEY_MAP =
 	I18NhandlerTpl_GetGlobalCode: 'I18NHandler.tpl.getLanguageCode',
 	'I18NhandlerTpl:GetGlobalCode': 'I18NHandler.tpl.getLanguageCode',
 
+	codeModifiedArea: 'codeModifyItems',
 	'codeModifiedArea.I18NHandler': 'I18NHandler.upgrade.enable',
 
 	'I18NHandler.upgrade.version': 'I18NHandler.upgrade.checkVersion',

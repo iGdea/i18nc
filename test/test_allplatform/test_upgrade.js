@@ -62,7 +62,12 @@ describe('#upgrade', function()
 
 				it('#arr2arr', function()
 				{
-					console.log('@todo');
+					var newOptions = optionsUtils.extend();
+					expect(newOptions.codeModifyItems.I18NHandlerAlias).to.be(true);
+					newOptions = optionsUtils.extend({codeModifiedArea: []});
+					expect(newOptions.codeModifyItems.I18NHandlerAlias).to.be(undefined);
+					newOptions = optionsUtils.extend({codeModifiedArea: ['I18NHandlerAlias']});
+					expect(newOptions.codeModifyItems.I18NHandlerAlias).to.be(true);
 				});
 			});
 		});

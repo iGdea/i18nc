@@ -33,25 +33,25 @@ describe('#options', function()
 		{
 			var newOptions = optionsUtils.extend(
 				{
-					codeModifiedArea:
+					codeModifyItems:
 					{
 						I18NHandlerAlias_nokey: true,
 						I18NHandlerAlias: false,
 					}
 				});
-			expect(newOptions.codeModifiedArea.I18NHandlerAlias_nokey).to.be(undefined);
-			expect(newOptions.codeModifiedArea.I18NHandlerAlias).to.be(false);
-			expect(newOptions.codeModifiedArea.TranslateWord).to.be(true);
+			expect(newOptions.codeModifyItems.I18NHandlerAlias_nokey).to.be(undefined);
+			expect(newOptions.codeModifyItems.I18NHandlerAlias).to.be(false);
+			expect(newOptions.codeModifyItems.TranslateWord).to.be(true);
 		});
 
 		it('#arr2obj', function()
 		{
 			var newOptions = optionsUtils.extend(
 				{
-					codeModifiedArea: ['I18NHandlerAlias']
+					codeModifyItems: ['I18NHandlerAlias']
 				});
-			expect(newOptions.codeModifiedArea.TranslateWord).to.be(undefined);
-			expect(newOptions.codeModifiedArea.I18NHandlerAlias).to.be(true);
+			expect(newOptions.codeModifyItems.TranslateWord).to.be(undefined);
+			expect(newOptions.codeModifyItems.I18NHandlerAlias).to.be(true);
 		});
 
 		it('#originalOptions', function()
