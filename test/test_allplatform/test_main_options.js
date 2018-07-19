@@ -111,6 +111,22 @@ describe('#main_options', function()
 				expect(autoTestUtils.JsonOfI18ncRet(info)).to.eql(outputJSON);
 			});
 		});
+
+		describe('#insert', function()
+		{
+			it('#enable', function()
+			{
+				var info = i18nc('var dd = "中文"',
+				{
+					I18NHandler: {insert: {enable: false}},
+				});
+
+				var otherCode = requireAfterWrite('func_code_insert_disable.js', info.code);
+				var outputJSON = requireAfterWrite('func_code_insert_disable.json', autoTestUtils.JsonOfI18ncRet(info));
+				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
+				expect(autoTestUtils.JsonOfI18ncRet(info)).to.eql(outputJSON);
+			});
+		});
 	});
 
 
@@ -227,7 +243,7 @@ describe('#main_options', function()
 					{
 						i18nc(code, {isCheckClosureForNewI18NHandler: true});
 					})
-					.to.throwError(/closure youself/);
+					.to.throwError(/closure by youself/);
 			});
 
 			it('#no use', function()

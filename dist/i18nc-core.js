@@ -857,7 +857,8 @@ _.extend(ASTScope.prototype,
 
 		// 如果作用域中，已经有I18N函数
 		// 那么头部插入的函数就不需要了
-		if ((!IGNORE_I18NHandler_alias && I18NPlaceholders.length)
+		if (!options.I18NHandler.insert.enable
+			|| (!IGNORE_I18NHandler_alias && I18NPlaceholders.length)
 			|| (IGNORE_I18NHandler_alias && lastI18NHandlerAst))
 		{
 			debug('ignore insert new I18NHandler');
@@ -867,11 +868,12 @@ _.extend(ASTScope.prototype,
 		// 输出最终代码
 		var resultCode = newCode.join('')+tmpCode;
 
-		if (I18NPlaceholderNew.getRenderType() == 'complete'
+		if (options.I18NHandler.insert.enable
 			&& options.I18NHandler.insert.checkClosure
-			&& scope.type == 'top')
+			&& scope.type == 'top'
+			&& I18NPlaceholderNew.getRenderType() == 'complete')
 		{
-			throw new Error('closure youself');
+			throw new Error('closure by youself');
 		}
 
 		// 进行最后的附加数据整理、合并
@@ -2645,7 +2647,7 @@ exports.defaults =
 		insert:
 		{
 			// 是否插入新的I18NHandler函数
-			// enable: true,
+			enable: true,
 			// 插入I18N函数前，检查所在位置，是否闭包
 			checkClosure: true,
 			// 如果需要插入I18N函数，优先插入到define函数中
@@ -2674,9 +2676,6 @@ exports.defaults =
 
 	// 修改code范围
 	// 如果删除，则这些特性在输出的code里面不会被修改
-	// 注意：
-	// 新i18n函数的注入和作用区间的处理，不受这个的影响
-	// 如果介意i18n函数的处理，可以不处理后面输出的code，或则手动添加i18n函数
 	//
 	// 如果去掉TranslateWord，
 	// 配合最后输出的I18NArgsTranslateWords和codeTranslateWords，
@@ -46821,7 +46820,7 @@ exports.SourceNode = require('./lib/source-node').SourceNode;
 },{"./lib/source-map-consumer":97,"./lib/source-map-generator":98,"./lib/source-node":99}],102:[function(require,module,exports){
 module.exports={
   "name": "i18nc-core",
-  "version": "10.2.0",
+  "version": "10.3.0",
   "description": "I18N Tool for JS files",
   "main": "index.js",
   "scripts": {
