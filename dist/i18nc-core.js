@@ -2033,7 +2033,7 @@ module.exports = function $handlerName(msg, tpldata, subtype)
 	}
 
 	msg += '';
-	// 不需要替换，直接返回
+	// 判断是否需要替换：不需要替换，直接返回
 	if (!tpldata.length || msg.indexOf('%') == -1) return msg;
 
 	var replace_index = 0;
@@ -46822,7 +46822,7 @@ exports.SourceNode = require('./lib/source-node').SourceNode;
 },{"./lib/source-map-consumer":97,"./lib/source-map-generator":98,"./lib/source-node":99}],102:[function(require,module,exports){
 module.exports={
   "name": "i18nc-core",
-  "version": "10.3.0",
+  "version": "10.4.0",
   "description": "I18N Tool for JS files",
   "main": "index.js",
   "scripts": {

@@ -1,12 +1,14 @@
-/* global $getLanguageCode $TRANSLATE_JSON_CODE */
+/* global $I18N_getLanguageCode */
 
 'use strict';
 
-module.exports = function $handlerName(msg, tpldata, subtype)
+module.exports = function topI18N(msg, args, translateJSON, fileKey, data, handler)
 {
-	var self = $handlerName;
-	var data = self.$ || (self.$ = {});
-	var LAN = $getLanguageCode(data);
+	var self = handler;
+	// 使用的时候，需要替换此变量，或者全局申明此方法
+	var LAN = $I18N_getLanguageCode(data);
+	var tpldata = args[1];
+	var subtype = args[2];
 	if (!tpldata || !tpldata.join)
 	{
 		subtype = tpldata;
@@ -18,21 +20,11 @@ module.exports = function $handlerName(msg, tpldata, subtype)
 		var lanArr, i, len, lanItem;
 		if (self.L != LAN)
 		{
-			// K: __FILE_KEY__
-			// V: __FUNCTION_VERSION__
-			// D: __TRANSLATE_JSON__
-			self.K = '$FILE_KEY';
-			self.V = '$FUNCTION_VERSION';
-			self.D = $TRANSLATE_JSON_CODE;
-			// 很少遇到LAN切换，没必要为了低概率增加一个if
-			// if (!self.D) self.D = $TRANSLATE_JSON_CODE;
-
-			var __TRANSLATE_JSON__ = self.D;
 			var lanKeys = LAN.split(',');
 			lanArr = self.M = [];
 			for(i = 0, len = lanKeys.length; i < len; i++)
 			{
-				lanItem = __TRANSLATE_JSON__[lanKeys[i]];
+				lanItem = translateJSON[lanKeys[i]];
 				if (lanItem) lanArr.push(lanItem);
 			}
 			// 放到最后，防止前面代码出错，导致if逻辑被保存
@@ -64,7 +56,6 @@ module.exports = function $handlerName(msg, tpldata, subtype)
 	}
 
 	msg += '';
-	// 判断是否需要替换：不需要替换，直接返回
 	if (!tpldata.length || msg.indexOf('%') == -1) return msg;
 
 	var replace_index = 0;
