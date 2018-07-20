@@ -72,6 +72,7 @@ exports.I18NHandlerSimpleExampleCode = function I18NHandlerSimpleExampleCode(isM
 	return i18nTpl.renderSimple(config, isMin);
 };
 
+exports.main = main;
 function main()
 {
 	console.log('run main');
