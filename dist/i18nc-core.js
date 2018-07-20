@@ -23,7 +23,7 @@ exports.registerPlugin = function(name, handler)
 	debug('register plugin:%s', name);
 };
 
-},{"./lib/emitter":8,"./lib/main":16,"./lib/options":17,"./package.json":102,"debug":23}],2:[function(require,module,exports){
+},{"./lib/emitter":8,"./lib/main":16,"./lib/options":17,"./package.json":103,"debug":24}],2:[function(require,module,exports){
 'use strict';
 
 var _					= require('lodash');
@@ -343,7 +343,7 @@ _.extend(ASTCollector.prototype,
 	}
 });
 
-},{"./ast_literal_handler":3,"./ast_scope":4,"./ast_utils":6,"./def":7,"./emitter":8,"debug":23,"estraverse":80,"lodash":88}],3:[function(require,module,exports){
+},{"./ast_literal_handler":3,"./ast_scope":4,"./ast_utils":6,"./def":7,"./emitter":8,"debug":24,"estraverse":81,"lodash":89}],3:[function(require,module,exports){
 'use strict';
 
 var _				= require('lodash');
@@ -351,7 +351,7 @@ var debug			= require('debug')('i18nc-core:ast_literal_handler');
 var emitter			= require('./emitter');
 var astUtils		= require('./ast_utils');
 var astTpl			= require('./ast_tpl');
-var wordsUtils		= require('./words_utils');
+var wordsUtils		= require('./utils/words_utils');
 
 exports.LiteralHandler	= LiteralHandler;
 
@@ -504,7 +504,7 @@ _.extend(LiteralHandler.prototype,
 	},
 });
 
-},{"./ast_tpl":5,"./ast_utils":6,"./emitter":8,"./words_utils":22,"debug":23,"lodash":88}],4:[function(require,module,exports){
+},{"./ast_tpl":5,"./ast_utils":6,"./emitter":8,"./utils/words_utils":23,"debug":24,"lodash":89}],4:[function(require,module,exports){
 'use strict';
 
 var _				= require('lodash');
@@ -905,7 +905,7 @@ _.extend(ASTScope.prototype,
 	}
 });
 
-},{"./ast_tpl":5,"./ast_utils":6,"./i18n_placeholder":15,"./options":17,"./result_object":18,"debug":23,"escodegen":26,"lodash":88}],5:[function(require,module,exports){
+},{"./ast_tpl":5,"./ast_utils":6,"./i18n_placeholder":15,"./options":17,"./result_object":18,"debug":24,"escodegen":27,"lodash":89}],5:[function(require,module,exports){
 'use strict';
 
 var SELF_CREATED_FLAG = require('./def').AST_FLAGS.SELF_CREATED;
@@ -1139,7 +1139,7 @@ exports.astMemberExpression2arr = function astMemberExpression2arr(ast)
 	return result;
 }
 
-},{"./ast_tpl":5,"./def":7,"./options":17,"escodegen":26,"esprima":73}],7:[function(require,module,exports){
+},{"./ast_tpl":5,"./def":7,"./options":17,"escodegen":27,"esprima":74}],7:[function(require,module,exports){
 'use strict';
 
 exports.BLOCK_MODIFIER =
@@ -1238,7 +1238,7 @@ exports.proxy = function(obj)
 	};
 }
 
-},{"debug":23,"events":86}],9:[function(require,module,exports){
+},{"debug":24,"events":87}],9:[function(require,module,exports){
 'use strict';
 
 var _				= require('lodash');
@@ -1619,7 +1619,7 @@ function _wordJson2ast(words)
 	return astTpl.ObjectExpression(result);
 }
 
-},{"../ast_tpl":5,"../ast_utils":6,"../options":17,"debug":23,"escodegen":26,"lodash":88}],10:[function(require,module,exports){
+},{"../ast_tpl":5,"../ast_utils":6,"../options":17,"debug":24,"escodegen":27,"lodash":89}],10:[function(require,module,exports){
 'use strict';
 
 var _			= require('lodash');
@@ -1888,7 +1888,7 @@ function _wordAst2json(ast)
 	return result;
 }
 
-},{"../ast_utils":6,"../emitter":8,"debug":23,"escodegen":26,"lodash":88}],11:[function(require,module,exports){
+},{"../ast_utils":6,"../emitter":8,"debug":24,"escodegen":27,"lodash":89}],11:[function(require,module,exports){
 'use strict';
 
 var esprima		= require('esprima');
@@ -1966,7 +1966,7 @@ exports.render = tpl2render(require('./tpl/full.js').toString());
 exports.renderSimple = tpl2render(require('./tpl/simple.js').toString());
 exports.renderGlobal = tpl2render(require('./tpl/global.js').toString());
 
-},{"./tpl/full.js":12,"./tpl/global.js":13,"./tpl/simple.js":14,"debug":23,"escodegen":26,"esmangle":33,"esprima":73}],12:[function(require,module,exports){
+},{"./tpl/full.js":12,"./tpl/global.js":13,"./tpl/simple.js":14,"debug":24,"escodegen":27,"esmangle":34,"esprima":74}],12:[function(require,module,exports){
 /* global $getLanguageCode $TRANSLATE_JSON_CODE */
 
 'use strict';
@@ -2502,7 +2502,7 @@ _.extend(I18NPlaceholder.prototype,
 	}
 });
 
-},{"./ast_utils":6,"./def":7,"./emitter":8,"./i18n_func/generator":9,"./i18n_func/parser":10,"./i18n_func/render":11,"debug":23,"lodash":88}],16:[function(require,module,exports){
+},{"./ast_utils":6,"./def":7,"./emitter":8,"./i18n_func/generator":9,"./i18n_func/parser":10,"./i18n_func/render":11,"debug":24,"lodash":89}],16:[function(require,module,exports){
 'use strict';
 
 var emitter			= require('./emitter');
@@ -2562,139 +2562,50 @@ function mainHandler(code, options)
 },{"./ast_collector":2,"./ast_utils":6,"./emitter":8,"./options":17}],17:[function(require,module,exports){
 'use strict';
 
-var _ = require('lodash');
-var extend = require('extend');
-var debug = require('debug')('i18nc-core:options');
-var depdOptions = require('./upgrade/depd_options');
 var getLanguageCodeHandler = require('./upgrade/tpl/getlanguagecode_handler');
-var ObjectToString = ({}).toString;
+var utils = require('./utils/options_utils');
+
 
 exports.defaults =
 {
-	// 分词的正则
-	// 前后两个匹配，是为了尽可能匹配多的字符
-	// 排除所有的ascii字符，https://zh.wikipedia.org/wiki/ASCII
-	// 排除 "' 是因为tag标签属性用这个分隔，而本身很少用这两个引号
-	// 排除 <> 是因为html标签
+	/**
+	 * 分词的正则
+	 *
+	 * 前后两个匹配，是为了尽可能匹配多的字符
+ 	 * 排除所有的ascii字符，https://zh.wikipedia.org/wiki/ASCII
+ 	 * 排除 "' 是因为tag标签属性用这个分隔，而本身很少用这两个引号
+ 	 * 排除 <> 是因为html标签
+ 	 *
+	 * @type {RegExp|null}
+	 * @default 排除所有的ascii字符的正则
+	 */
 	cutwordReg: /[^\u0000-\u001F\u007F"'<>]*[^\u0000-\u007F]+[^\u0000-\u001F\u007F"'<>]*/g,
 
-	// 代码中，调用和生成的函数名
+	/**
+	 * 插入和运行时包裹的函数名
+	 *
+	 * @type {String}
+	 */
 	I18NHandlerName: 'I18N',
-	// I18NHandlerName的别名
-	// 一般都是由于修改I18NHandlerName导致的历史数据遗留
-	// 注意：I18NHandlerAlias优先级比ignoreScanHandlerNames低
+
+	/**
+	 * I18NHandlerName的别名
+	 * 一般都是由于修改I18NHandlerName导致的历史数据遗留
+	 *
+	 * @remark I18NHandlerAlias优先级比ignoreScanHandlerNames低
+	 * @type {Array}
+	 * @default []
+	 */
 	I18NHandlerAlias: [],
 
-	// 导入翻译数据
-	// @see test/exmaple/translate_words_db.json
-	dbTranslateWords: null,
-
-	I18NHandler:
-	{
-		data:
-		{
-			// 默认的filekey，一般用文件的相对路径
-			// 可以针对filekey，打包特别的翻译
-			defaultFileKey: '*',
-			// 当没有找到任何语言包 & 启动了 I18NHandler.style.comment4nowords
-			// 使用这个语言，作为代码中的语言包
-			// 由于没有任何实际数据，对代码结果无影响
-			defaultLanguage: 'en-US',
-			// 单单只打包这个语言包到文件
-			onlyTheseLanguages: [],
-			// 翻译的时候，不参考I18N里面的数据（dbTranslateWords没有数据的时候，直接删除翻译）
-			ignoreFuncWords: false,
-		},
-		upgrade:
-		{
-			// 函数是否能更新的总开关
-			// 修改及插入已经插入到代码中的I18N函数体
-			// 如果false 那么下面的 I18NHandler.insert.checkClosure 均无效
-			enable: true,
-			// 对I18N函数优先进行局部更新（只更新翻译数据）
-			partial: true,
-			// 函数版本号不同的时候，更新函数体
-			checkVersion: true,
-			// 更新翻译数据
-			// 在只更新函数的时候，方便做文件版本库校验
-			// 注意：此配置只影响输出代码的结果，不会影响输出的JSON结果
-			updateJSON: true,
-		},
-		style:
-		{
-			// 对插入的I18N进行代码压缩
-			minFuncCode: false,
-			// 设置true，会导致 I18NHandler.style.comment4nowords 失效
-			minFuncJSON: false,
-			// 在源代码中，输出所有提取的关键字
-			// 没有翻译结果的关键字，以注释的形式插入
-			comment4nowords: true,
-
-			proxyGlobalHandler:
-			{
-				// 在I18N函数体内，调用此函数，代替插入过多代码
-				// 即使不使用此参数，也可以使用如下特定的写法，告诉工具，生成globalfunc 代替 fullfunc
-				// function I18N(msg){return ''+topI18NHandler(msg, arguments);}
-				// 注意：此配置只会影响没有进行插装，如果要全部更新，需要配置 upgrade.partial false
-				// 注意：更新函数版本号，不会触发此更新
-				enable: false,
-				name: 'topI18N',
-				// 忽略源代码中解析出来的原来的I18NHandler.style.proxyGlobalHandler.name，强制使用配置文件的值
-				// 如果原来有值，但不同，会触发更新；原来没有，则不会进行更新
-				ignoreFuncCode: false,
-			},
-		},
-		insert:
-		{
-			// 是否插入新的I18NHandler函数
-			enable: true,
-			// 插入I18N函数前，检查所在位置，是否闭包
-			checkClosure: true,
-			// 如果需要插入I18N函数，优先插入到define函数中
-			priorityDefineHalder: true,
-		},
-		tpl:
-		{
-			// js代码中，获取当前语言包的代码
-			// 可以是function 也可以是string，
-			// 		string，即全局的函数调用
-			// 		function，必须是可被序列化成字符串，能独立运行
-			getLanguageCode: getLanguageCodeHandler,
-			// 对GetLanguageCode中的变量$LanguageVars.name$进行替换
-			languageVars:
-			{
-				// 通用name
-				name: '__i18n_lan__',
-				// cookie 字段特殊化
-				cookie: 'proj.i18n_lan',
-			},
-			// 新插入的I18N函数包裹内容
-			newHeaderCode: '\n\n/* eslint-disable */\n',
-			newFooterCode: '\n/* eslint-enable */\n\n',
-		},
-	},
-
-	// 修改code范围
-	// 如果删除，则这些特性在输出的code里面不会被修改
-	//
-	// 如果去掉TranslateWord，
-	// 配合最后输出的I18NArgsTranslateWords和codeTranslateWords，
-	// 可以实现check效果
-	codeModifyItems: new FeatureEnableOnly(
-	{
-		// I18NHandler 已经改名为 I18NHandler.upgrade.enable
-		// I18NHandler: true,
-		// 将分词的结果，用I18N函数包裹起来
-		TranslateWord: true,
-		// TranslateWord中的RegExp类型
-		TranslateWord_RegExp: false,
-		// 将alias统一成handlerName
-		I18NHandlerAlias: true
-	}),
-
-	// 这些函数里面的调用，或则声明（如果有）不进行扫描
-	// 注意：如果带有. 则进行函数调用拆分
-	ignoreScanHandlerNames: new FeatureEnableMore(
+	/**
+	 * 这些函数里面的调用，或则声明不进行扫描
+	 *
+	 * @remark 如果带有. 则进行函数调用拆分
+	 * @type {Object|Array}
+	 * @default [console.xxxx]
+	 */
+	ignoreScanHandlerNames: new utils.FeatureEnableMore(
 	{
 		'console.log'	: true,
 		'console.warn'	: true,
@@ -2705,13 +2616,259 @@ exports.defaults =
 		'console.table'	: true,
 	}),
 
-	// 插件配置注入
-	pluginEnabled: new FeatureEnableOnly({}),
+	/**
+	 * 导入的翻译数据
+	 *
+	 * @see {@link test/exmaple/translate_words_db.json}
+	 * @type {Object}
+	 */
+	dbTranslateWords: null,
+
+	/**
+	 * 注入到代码中的I18N函数的一些配置
+	 *
+	 * @type {Object}
+	 */
+	I18NHandler:
+	{
+		data:
+		{
+			/**
+			 * 翻译代码默认标识key
+			 * 一般用文件的相对路径
+			 *
+			 * @remark 可以针对filekey，打包定制翻译结果
+			 * @type {String}
+			 */
+			defaultFileKey: '*',
+			/**
+			 * 当没有找到任何语言包 & 启动了 I18NHandler.style.comment4nowords, 使用这个语言，作为代码中的语言包
+			 * 由于没有任何实际数据，对代码结果无影响
+			 *
+			 * @type {String}
+			 */
+			defaultLanguage: 'en-US',
+			/**
+			 * 只打包这个列表内语言包到代码中
+			 *
+			 * @remark 数组为空则不受限制
+			 * @type {Array}
+			 */
+			onlyTheseLanguages: [],
+			/**
+			 * 翻译的时候，不参考代码中I18N里面的数据
+			 *
+			 * @remark 启动后，如果dbTranslateWords没有数据，直接删除翻译
+			 * @type {Boolean}
+			 */
+			ignoreFuncWords: false,
+		},
+		upgrade:
+		{
+			/**
+			 * 能否更新已插入代码中I18N函数体的总开关
+			 *
+			 * @type {Boolean}
+			 */
+			enable: true,
+			/**
+			 * 对I18N函数优先进行局部更新（只更新翻译数据）
+			 *
+			 * @type {Boolean}
+			 */
+			partial: true,
+			/**
+			 * 函数版本号不同的时候，是否更新函数体
+			 *
+			 * @type {Boolean}
+			 */
+			checkVersion: true,
+			/**
+			 * 是否更新代码中的翻译结果JSON
+			 * 在只更新函数的时候，方便做文件版本库校验
+			 *
+ 			 * @remark 此配置只影响输出代码的结果，不会影响输出的JSON结果
+			 * @type {Boolean}
+			 */
+			updateJSON: true,
+		},
+		style:
+		{
+			/**
+			 * 对插入的I18N进行代码压缩
+			 *
+			 * @type {Boolean}
+			 */
+			minFuncCode: false,
+			/**
+			 * 压缩插入到代码中的翻译结果JSON
+			 *
+			 * @remark 设置true，会导致 I18NHandler.style.comment4nowords 失效
+			 * @type {Boolean}
+			 */
+			minFuncJSON: false,
+			/**
+			 * 在源代码中，输出所有提取的关键字中，没有翻译结果的关键字，以注释的形式插入
+			 * @type {Boolean}
+			 */
+			comment4nowords: true,
+
+			proxyGlobalHandler:
+			{
+				/**
+				 * 在I18N函数体内，调用外部函数，代替插入过多代码的方式
+				 *
+				 * 即使不使用此参数，也可以使用如下特定的写法，告诉工具，生成globalfunc 代替 fullfunc
+ 				 * function I18N(msg){return ''+topI18NHandler(msg, arguments);}
+ 				 * 注意：此配置只会影响没有进行插装，如果要全部更新，需要配置 upgrade.partial false
+ 				 * 注意：更新函数版本号，不会触发此更新
+				 * @see {@link dist/top-i18nc.js}
+				 * @type {Boolean}
+				 */
+				enable: false,
+				/**
+				 * 调用的外部函数名
+				 *
+				 * @type {String}
+				 */
+				name: 'topI18N',
+				/**
+				 * 忽略源代码中解析出来的原来的函数名，强制使用配置的函数名
+ 				 *
+ 				 * @remark 如果原来有值，但不同，会触发更新；原来没有，则不会进行更新
+				 * @type {Boolean}
+				 */
+				ignoreFuncCode: false,
+			},
+		},
+		insert:
+		{
+			/**
+			 * 是否插入新的I18NHandler函数
+			 *
+			 * @type {Boolean}
+			 */
+			enable: true,
+			/**
+			 * 插入I18N函数前，检查所在位置，是否闭包
+			 *
+			 * @type {Boolean}
+			 */
+			checkClosure: true,
+			/**
+			 * 插入I18N函数时，优先插入到define函数中
+			 *
+			 * @type {Boolean}
+			 */
+			priorityDefineHalder: true,
+		},
+		tpl:
+		{
+			/**
+			 * js代码中，获取当前语言包的代码
+			 *
+			 * string，即全局的函数调用
+ 			 * function，必须是可被序列化成字符串，能独立运行
+ 			 *
+			 * @see {@link i18nc/util/tpl/xxxx}
+			 * @type {String|Function}
+			 */
+			getLanguageCode: getLanguageCodeHandler,
+			/**
+			 * 对GetLanguageCode中的变量$LanguageVars.name$进行替换
+			 *
+			 * @type {Object}
+			 */
+			languageVars:
+			{
+				/**
+				 * 通用语言包变量
+				 *
+				 * @type {String}
+				 */
+				name: '__i18n_lan__',
+				/**
+				 * 通用语言包变量-cookie版
+				 *
+				 * @type {String}
+				 */
+				cookie: 'proj.i18n_lan',
+			},
+			/**
+			 * 新插入的I18N函数外部包裹内容-开始部分
+			 *
+			 * @type {String}
+			 */
+			newHeaderCode: '\n\n/* eslint-disable */\n',
+			/**
+			 * 新插入的I18N函数外部包裹内容-结束部分
+			 *
+			 * @type {String}
+			 */
+			newFooterCode: '\n/* eslint-enable */\n\n',
+		},
+	},
+
+	/**
+	 * 设置修改源码的区间
+	 *
+	 * 如果去掉TranslateWord，
+	 * 配合最后输出的I18NArgsTranslateWords和codeTranslateWords，
+ 	 * 可以实现check效果
+ 	 *
+	 * @remark 空数据则关闭所有，空对象则使用默认
+	 * @type {Object|Array}
+	 */
+	codeModifyItems: new utils.FeatureEnableOnly(
+	{
+		// I18NHandler 已经改名为 I18NHandler.upgrade.enable
+		// I18NHandler: true,
+		/**
+		 * 将分词的结果，用I18N函数包裹起来
+		 *
+		 * @type {Boolean}
+		 */
+		TranslateWord: true,
+		/**
+		 * TranslateWord中的RegExp类型
+		 *
+		 * @type {Boolean}
+		 */
+		TranslateWord_RegExp: false,
+		/**
+		 * 将I18NHandlerAlias统一成I18NHandlerName
+		 *
+		 * @type {Boolean}
+		 */
+		I18NHandlerAlias: true
+	}),
+
+	/**
+	 * 启用的插件
+	 *
+	 * @remark 空数据则关闭所有，空对象则使用默认
+	 * @type {Object|Array}
+	 */
+	pluginEnabled: new utils.FeatureEnableOnly({}),
+	/**
+	 * 插件配置
+	 *
+	 * @type {Object}
+	 */
 	pluginSettings: {},
 
-	// 是否忽略向前兼容
+	/**
+	 * 是否忽略向前兼容逻辑
+	 *
+	 * @type {Boolean}
+	 */
 	depdEnable: true,
 
+	/**
+	 * 对外事件暴露
+	 *
+	 * @type {Object}
+	 */
 	events:
 	{
 		loadTranslateJSON: null,
@@ -2721,62 +2878,6 @@ exports.defaults =
 		assignLineStrings: null,
 	},
 };
-
-
-if (Object.freeze)
-{
-	_.each(exports.defaults, function(val, key)
-	{
-		if (key != 'pluginEnabled' && key != 'pluginSettings')
-		{
-			deepFreeze(val);
-		}
-	});
-
-	Object.freeze(exports.defaults);
-}
-
-
-exports.extend = function(options)
-{
-	if (!options) return _.extend({}, exports.defaults);
-	if (options.depdEnable !== false) depdOptions(options);
-	var result = _extendDefault(exports.defaults, options);
-
-	// if (!result.codeModifyItems.I18NHandler)
-	// {
-	// 	if (result.I18NHandler.insert === exports.defaults.I18NHandler.insert)
-	// 	{
-	// 		result = extend(true, {}, result);
-	// 	}
-	// 	result.I18NHandler.insert.checkClosure = false;
-	// }
-
-	// 直接设置为false
-	// 避免生成无用的key
-	if (result.I18NHandler.style.minFuncJSON)
-	{
-		if (result.I18NHandler.style === exports.defaults.I18NHandler.style)
-		{
-			result = extend(true, {}, result);
-		}
-		result.I18NHandler.style.comment4nowords = false;
-	}
-
-	// for emitter
-	// 回调的时候，可能会带有额外的参数，保留这份
-	result.originalOptions = options;
-
-	var cutwordReg = result.cutwordReg;
-	// 必须lastIndex必须重制为0，且处于global状态
-	if (cutwordReg instanceof RegExp
-		&& (cutwordReg.lastIndex !== 0 || !cutwordReg.global))
-	{
-		throw new Error('Invalid cutwordReg');
-	}
-
-	return result;
-}
 
 exports.escodegenOptions =
 {
@@ -2819,150 +2920,13 @@ exports.esprimaOptions =
 };
 
 
-
-
-
-
-function deepFreeze(obj)
+utils.freeze(exports.defaults);
+exports.extend = function(obj)
 {
-	if (!obj) return;
+	return utils.extend(exports.defaults, obj);
+};
 
-	if (checkFreeze(obj))
-	{
-		_.each(obj, function(val)
-		{
-			if (checkFreeze(val)) Object.freeze(val);
-		});
-		Object.freeze(obj);
-	}
-}
-
-function checkFreeze(val)
-{
-	var type = ObjectToString.call(val);
-	return type == '[object Object]' || type == '[object Array]';
-}
-
-
-function FeatureEnableOnly(settings)
-{
-	_.extend(this, settings);
-}
-
-FeatureEnableOnly.prototype._arr2json = function(arr)
-{
-	var self = this;
-	var result = {};
-	arr.forEach(function(name)
-	{
-		if (typeof self[name] == 'boolean')
-			result[name] = true;
-		else
-			debug('ignore key <%s>, which are not defined in defaults.', name);
-	});
-	return result;
-}
-
-function FeatureEnableMore(settings)
-{
-	_.extend(this, settings);
-}
-
-FeatureEnableMore.prototype._arr2json = function(arr)
-{
-	var result = {};
-	arr.forEach(function(name)
-	{
-		result[name] = true;
-	});
-	return result;
-}
-
-
-function _extendDefault(defaults, object)
-{
-	if (!object) return _.extend({}, defaults);
-
-	var result = {};
-	_.each(defaults, function(defaultVal, key)
-	{
-		if (object.hasOwnProperty(key))
-		{
-			var newVal = object[key];
-			var defaultType = typeof defaultVal;
-
-			switch(defaultType)
-			{
-				case 'object':
-					// 如果默认值为null或者undefined，那么运行newVal为任意值
-					if (!defaultVal)
-					{
-						result[key] = newVal;
-					}
-					else if (defaultVal instanceof RegExp)
-					{
-						if (newVal === null)
-						{
-							debug('clear regexp options');
-							result[key] = null;
-						}
-						else if (newVal instanceof RegExp)
-						{
-							result[key] = newVal;
-						}
-						else
-						{
-							debug('ignore regexp val, key:%s, val:%o', key, newVal);
-						}
-					}
-					else if (Array.isArray(newVal))
-					{
-						if (defaultVal._arr2json)
-						{
-							result[key] = defaultVal._arr2json(newVal);
-						}
-						else if (Array.isArray(defaultVal))
-						{
-							result[key] = newVal;
-						}
-						else
-						{
-							debug('ignore array data:%s', key);
-							result[key] = defaultVal;
-						}
-					}
-					else
-					{
-						result[key] = _extendDefault(defaultVal, newVal);
-					}
-					break;
-
-				case 'boolean':
-					result[key] = newVal;
-					break;
-
-				default:
-					if (newVal)
-					{
-						result[key] = newVal;
-					}
-					else
-					{
-						result[key] = defaultVal;
-						debug('ignore options val, key:%s', key);
-					}
-			}
-		}
-		else
-		{
-			result[key] = defaultVal;
-		}
-	});
-
-	return result;
-}
-
-},{"./upgrade/depd_options":19,"./upgrade/tpl/getlanguagecode_handler":21,"debug":23,"extend":87,"lodash":88}],18:[function(require,module,exports){
+},{"./upgrade/tpl/getlanguagecode_handler":21,"./utils/options_utils":22}],18:[function(require,module,exports){
 'use strict';
 
 var _				= require('lodash');
@@ -3181,11 +3145,14 @@ _.extend(FileKeyTranslateWords.prototype,
 function TranslateWords(codeTranslateWords, funcTranslateWords, usedTranslateWords)
 {
 	// 从代码中获取到的关键字
-	this.codeTranslateWords = codeTranslateWords;
+	this.codeTranslateWords = codeTranslateWords instanceof CodeTranslateWords
+		? codeTranslateWords : new CodeTranslateWords(codeTranslateWords);
 	// 从i18n函数中解出来的翻译数据 数据带filekey
-	this.funcTranslateWords = funcTranslateWords;
+	this.funcTranslateWords = funcTranslateWords instanceof FuncTranslateWords
+		? funcTranslateWords : new FuncTranslateWords(funcTranslateWords);
 	// 处理后，正在使用的翻译数据  数据不带filekey
-	this.usedTranslateWords = usedTranslateWords;
+	this.usedTranslateWords = usedTranslateWords instanceof UsedTranslateWords
+		? usedTranslateWords : new UsedTranslateWords(usedTranslateWords);
 }
 
 _.extend(TranslateWords.prototype,
@@ -3203,7 +3170,30 @@ _.extend(TranslateWords.prototype,
 
 function CodeInfoResult(data)
 {
-	_.extend(this, data);
+	var self = this;
+
+	['code', 'currentFileKey', 'originalFileKeys', 'subScopeDatas', 'currentFileKeys']
+		.forEach(function(name)
+		{
+			self[name] = data[name];
+		});
+
+	self.dirtyWords = data.dirtyWords instanceof DirtyWords
+		? data.dirtyWords : new DirtyWords(data.dirtyWords);
+
+	if (data.words)
+	{
+		self.words = data.words instanceof TranslateWords
+			? data.words : new TranslateWords(
+					data.words.codeTranslateWords,
+					data.words.funcTranslateWords,
+					data.words.usedTranslateWords
+				);
+	}
+	else
+	{
+		self.words = new TranslateWords();
+	}
 }
 
 _.extend(CodeInfoResult.prototype,
@@ -3345,7 +3335,7 @@ _.extend(CodeInfoResult.prototype,
 	},
 });
 
-},{"./ast_utils":6,"./options":17,"debug":23,"escodegen":26,"extend":87,"lodash":88}],19:[function(require,module,exports){
+},{"./ast_utils":6,"./options":17,"debug":24,"escodegen":27,"extend":88,"lodash":89}],19:[function(require,module,exports){
 'use strict';
 
 var _ = require('lodash');
@@ -3570,7 +3560,7 @@ function setKeyVal(options, key, val)
 	}
 }
 
-},{"./tpl/depd_getlanguagecode_handler":20,"debug":23,"depd":25,"lodash":88}],20:[function(require,module,exports){
+},{"./tpl/depd_getlanguagecode_handler":20,"debug":24,"depd":26,"lodash":89}],20:[function(require,module,exports){
 /* global $GetLanguageCode */
 
 'use strict';
@@ -3631,8 +3621,211 @@ module.exports = function GetLanguageCodeHandler(cache)
 },{}],22:[function(require,module,exports){
 'use strict';
 
+var _ = require('lodash');
+var extend = require('extend');
+var debug = require('debug')('i18nc-core:options');
+var depdOptions = require('../upgrade/depd_options');
+var ObjectToString = ({}).toString;
+
+
+exports.extend = function(defaults, options)
+{
+	if (!options) return _.extend({}, defaults);
+	if (options.depdEnable !== false) depdOptions(options);
+	var result = _extendDefault(defaults, options);
+
+	// 直接设置为false
+	// 避免生成无用的key
+	if (result.I18NHandler.style.minFuncJSON)
+	{
+		if (result.I18NHandler.style === defaults.I18NHandler.style)
+		{
+			result = extend(true, {}, result);
+		}
+		result.I18NHandler.style.comment4nowords = false;
+	}
+
+	// for emitter
+	// 回调的时候，可能会带有额外的参数，保留这份
+	result.originalOptions = options;
+
+	var cutwordReg = result.cutwordReg;
+	// 必须lastIndex必须重制为0，且处于global状态
+	if (cutwordReg instanceof RegExp
+		&& (cutwordReg.lastIndex !== 0 || !cutwordReg.global))
+	{
+		throw new Error('Invalid cutwordReg');
+	}
+
+	return result;
+}
+
+
+exports.freeze = function(obj)
+{
+	if (Object.freeze)
+	{
+		_.each(obj, function(val, key)
+		{
+			if (key != 'pluginEnabled' && key != 'pluginSettings')
+			{
+				deepFreeze(val);
+			}
+		});
+
+		Object.freeze(obj);
+	}
+}
+
+
+
+function deepFreeze(obj)
+{
+	if (!obj) return;
+
+	if (checkFreeze(obj))
+	{
+		_.each(obj, function(val)
+		{
+			if (checkFreeze(val)) Object.freeze(val);
+		});
+		Object.freeze(obj);
+	}
+}
+
+function checkFreeze(val)
+{
+	var type = ObjectToString.call(val);
+	return type == '[object Object]' || type == '[object Array]';
+}
+
+exports.FeatureEnableOnly = FeatureEnableOnly;
+
+function FeatureEnableOnly(settings)
+{
+	_.extend(this, settings);
+}
+
+FeatureEnableOnly.prototype._arr2json = function(arr)
+{
+	var self = this;
+	var result = {};
+	arr.forEach(function(name)
+	{
+		if (typeof self[name] == 'boolean')
+			result[name] = true;
+		else
+			debug('ignore key <%s>, which are not defined in defaults.', name);
+	});
+	return result;
+}
+
+exports.FeatureEnableMore = FeatureEnableMore;
+
+function FeatureEnableMore(settings)
+{
+	_.extend(this, settings);
+}
+
+FeatureEnableMore.prototype._arr2json = function(arr)
+{
+	var result = {};
+	arr.forEach(function(name)
+	{
+		result[name] = true;
+	});
+	return result;
+}
+
+
+function _extendDefault(defaults, object)
+{
+	if (!object) return _.extend({}, defaults);
+
+	var result = {};
+	_.each(defaults, function(defaultVal, key)
+	{
+		if (object.hasOwnProperty(key))
+		{
+			var newVal = object[key];
+			var defaultType = typeof defaultVal;
+
+			switch(defaultType)
+			{
+				case 'object':
+					// 如果默认值为null或者undefined，那么运行newVal为任意值
+					if (!defaultVal)
+					{
+						result[key] = newVal;
+					}
+					else if (defaultVal instanceof RegExp)
+					{
+						if (newVal === null)
+						{
+							debug('clear regexp options');
+							result[key] = null;
+						}
+						else if (newVal instanceof RegExp)
+						{
+							result[key] = newVal;
+						}
+						else
+						{
+							debug('ignore regexp val, key:%s, val:%o', key, newVal);
+						}
+					}
+					else if (Array.isArray(newVal))
+					{
+						if (defaultVal._arr2json)
+						{
+							result[key] = defaultVal._arr2json(newVal);
+						}
+						else if (Array.isArray(defaultVal))
+						{
+							result[key] = newVal;
+						}
+						else
+						{
+							debug('ignore array data:%s', key);
+							result[key] = defaultVal;
+						}
+					}
+					else
+					{
+						result[key] = _extendDefault(defaultVal, newVal);
+					}
+					break;
+
+				case 'boolean':
+					result[key] = newVal;
+					break;
+
+				default:
+					if (newVal)
+					{
+						result[key] = newVal;
+					}
+					else
+					{
+						result[key] = defaultVal;
+						debug('ignore options val, key:%s', key);
+					}
+			}
+		}
+		else
+		{
+			result[key] = defaultVal;
+		}
+	});
+
+	return result;
+}
+
+},{"../upgrade/depd_options":19,"debug":24,"extend":88,"lodash":89}],23:[function(require,module,exports){
+'use strict';
+
 var debug			= require('debug')('i18nc-core:words_utils');
-var emitter			= require('./emitter');
+var emitter			= require('../emitter');
 
 exports.splitValue2lineStrings = splitValue2lineStrings;
 
@@ -3729,7 +3922,7 @@ function getTranslateWordsFromLineStrings(lineStrings)
 	return translateWords;
 }
 
-},{"./emitter":8,"debug":23}],23:[function(require,module,exports){
+},{"../emitter":8,"debug":24}],24:[function(require,module,exports){
 (function (process){
 /**
  * This is the web browser implementation of `debug()`.
@@ -3928,7 +4121,7 @@ function localstorage() {
 }
 
 }).call(this,require('_process'))
-},{"./debug":24,"_process":90}],24:[function(require,module,exports){
+},{"./debug":25,"_process":91}],25:[function(require,module,exports){
 
 /**
  * This is the common logic for both the Node.js and web browser
@@ -4155,7 +4348,7 @@ function coerce(val) {
   return val;
 }
 
-},{"ms":89}],25:[function(require,module,exports){
+},{"ms":90}],26:[function(require,module,exports){
 /*!
  * depd
  * Copyright(c) 2015 Douglas Christopher Wilson
@@ -4234,7 +4427,7 @@ function wrapproperty (obj, prop, message) {
   }
 }
 
-},{}],26:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 (function (global){
 /*
   Copyright (C) 2012-2014 Yusuke Suzuki <utatane.tea@gmail.com>
@@ -6841,7 +7034,7 @@ function wrapproperty (obj, prop, message) {
 /* vim: set sw=4 ts=4 et tw=80 : */
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./package.json":27,"estraverse":80,"esutils":85,"source-map":101}],27:[function(require,module,exports){
+},{"./package.json":28,"estraverse":81,"esutils":86,"source-map":102}],28:[function(require,module,exports){
 module.exports={
   "_args": [
     [
@@ -6970,7 +7163,7 @@ module.exports={
   "version": "1.11.0"
 }
 
-},{}],28:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
   Copyright (C) 2013 Alex Seville <hi@alexanderseville.com>
@@ -8094,7 +8287,7 @@ module.exports={
 }, this));
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"estraverse":29}],29:[function(require,module,exports){
+},{"estraverse":30}],30:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
   Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com>
@@ -8935,7 +9128,7 @@ module.exports={
 }(exports));
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./package.json":30}],30:[function(require,module,exports){
+},{"./package.json":31}],31:[function(require,module,exports){
 module.exports={
   "_args": [
     [
@@ -9034,7 +9227,7 @@ module.exports={
   "version": "2.0.0"
 }
 
-},{}],31:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -9203,7 +9396,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./common":32}],32:[function(require,module,exports){
+},{"./common":33}],33:[function(require,module,exports){
 /*
   Copyright (C) 2012 Yusuke Suzuki <utatane.tea@gmail.com>
   Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com>
@@ -9673,7 +9866,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"escope":28,"estraverse":68,"esutils":71}],33:[function(require,module,exports){
+},{"escope":29,"estraverse":69,"esutils":72}],34:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -9863,7 +10056,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../package.json":72,"./annotate-directive":31,"./common":32,"./options":36,"./pass":37,"esshorten":74}],34:[function(require,module,exports){
+},{"../package.json":73,"./annotate-directive":32,"./common":33,"./options":37,"./pass":38,"esshorten":75}],35:[function(require,module,exports){
 /*
   Copyright (C) 2012 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -10229,7 +10422,7 @@ module.exports={
     exports.booleanCondition = booleanCondition;
 }());
 
-},{"./common":32}],35:[function(require,module,exports){
+},{"./common":33}],36:[function(require,module,exports){
 (function (global){
 /*
   Copyright (C) 2012 Yusuke Suzuki <utatane.tea@gmail.com>
@@ -10344,7 +10537,7 @@ module.exports={
 /* vim: set sw=4 ts=4 et tw=80 : */
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],36:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -10435,7 +10628,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./common":32}],37:[function(require,module,exports){
+},{"./common":33}],38:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -10547,7 +10740,7 @@ module.exports={
     ];
 }());
 
-},{"./common":32,"./pass/concatenate-variable-definition":38,"./pass/dead-code-elimination":39,"./pass/drop-variable-definition":40,"./pass/eliminate-duplicate-function-declarations":41,"./pass/hoist-variable-to-arguments":42,"./pass/reduce-branch-jump":43,"./pass/reduce-multiple-if-statements":44,"./pass/reduce-sequence-expression":45,"./pass/remove-context-sensitive-expressions":46,"./pass/remove-empty-statement":47,"./pass/remove-side-effect-free-expressions":48,"./pass/remove-unreachable-branch":49,"./pass/remove-unused-label":50,"./pass/remove-wasted-blocks":51,"./pass/reordering-function-declarations":52,"./pass/transform-branch-to-expression":53,"./pass/transform-dynamic-to-static-property-access":54,"./pass/transform-dynamic-to-static-property-definition":55,"./pass/transform-immediate-function-call":56,"./pass/transform-logical-association":57,"./pass/transform-to-compound-assignment":58,"./pass/transform-to-sequence-expression":59,"./pass/transform-typeof-undefined":60,"./pass/tree-based-constant-folding":61,"./post/omit-parens-in-void-context-iife":62,"./post/rewrite-boolean":63,"./post/rewrite-conditional-expression":64,"./post/transform-infinity":65,"./post/transform-static-to-dynamic-property-access":66,"./query":67}],38:[function(require,module,exports){
+},{"./common":33,"./pass/concatenate-variable-definition":39,"./pass/dead-code-elimination":40,"./pass/drop-variable-definition":41,"./pass/eliminate-duplicate-function-declarations":42,"./pass/hoist-variable-to-arguments":43,"./pass/reduce-branch-jump":44,"./pass/reduce-multiple-if-statements":45,"./pass/reduce-sequence-expression":46,"./pass/remove-context-sensitive-expressions":47,"./pass/remove-empty-statement":48,"./pass/remove-side-effect-free-expressions":49,"./pass/remove-unreachable-branch":50,"./pass/remove-unused-label":51,"./pass/remove-wasted-blocks":52,"./pass/reordering-function-declarations":53,"./pass/transform-branch-to-expression":54,"./pass/transform-dynamic-to-static-property-access":55,"./pass/transform-dynamic-to-static-property-definition":56,"./pass/transform-immediate-function-call":57,"./pass/transform-logical-association":58,"./pass/transform-to-compound-assignment":59,"./pass/transform-to-sequence-expression":60,"./pass/transform-typeof-undefined":61,"./pass/tree-based-constant-folding":62,"./post/omit-parens-in-void-context-iife":63,"./post/rewrite-boolean":64,"./post/rewrite-conditional-expression":65,"./post/transform-infinity":66,"./post/transform-static-to-dynamic-property-access":67,"./query":68}],39:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -10636,7 +10829,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":32}],39:[function(require,module,exports){
+},{"../common":33}],40:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -11198,7 +11391,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":32}],40:[function(require,module,exports){
+},{"../common":33}],41:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -11426,7 +11619,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":32,"../evaluator":34,"escope":28}],41:[function(require,module,exports){
+},{"../common":33,"../evaluator":35,"escope":29}],42:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -11589,7 +11782,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":32,"../map":35}],42:[function(require,module,exports){
+},{"../common":33,"../map":36}],43:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -11773,7 +11966,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":32,"escope":28}],43:[function(require,module,exports){
+},{"../common":33,"escope":29}],44:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -11944,7 +12137,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":32}],44:[function(require,module,exports){
+},{"../common":33}],45:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -12023,7 +12216,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":32}],45:[function(require,module,exports){
+},{"../common":33}],46:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -12217,7 +12410,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":32,"../evaluator":34,"escope":28}],46:[function(require,module,exports){
+},{"../common":33,"../evaluator":35,"escope":29}],47:[function(require,module,exports){
 /*
   Copyright (C) 2012 Mihai Bazon <mihai.bazon@gmail.com>
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
@@ -12578,7 +12771,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":32,"../evaluator":34,"escope":28}],47:[function(require,module,exports){
+},{"../common":33,"../evaluator":35,"escope":29}],48:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -12694,7 +12887,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":32}],48:[function(require,module,exports){
+},{"../common":33}],49:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -12853,7 +13046,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":32,"../evaluator":34,"escope":28}],49:[function(require,module,exports){
+},{"../common":33,"../evaluator":35,"escope":29}],50:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -13051,7 +13244,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":32,"../evaluator":34,"escope":28}],50:[function(require,module,exports){
+},{"../common":33,"../evaluator":35,"escope":29}],51:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -13181,7 +13374,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":32,"../map":35}],51:[function(require,module,exports){
+},{"../common":33,"../map":36}],52:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -13295,7 +13488,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":32}],52:[function(require,module,exports){
+},{"../common":33}],53:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -13384,7 +13577,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":32}],53:[function(require,module,exports){
+},{"../common":33}],54:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -13532,7 +13725,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":32}],54:[function(require,module,exports){
+},{"../common":33}],55:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -13608,7 +13801,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":32}],55:[function(require,module,exports){
+},{"../common":33}],56:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -13688,7 +13881,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":32}],56:[function(require,module,exports){
+},{"../common":33}],57:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -13796,7 +13989,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":32}],57:[function(require,module,exports){
+},{"../common":33}],58:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -13869,7 +14062,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":32}],58:[function(require,module,exports){
+},{"../common":33}],59:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -14006,7 +14199,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":32,"escope":28}],59:[function(require,module,exports){
+},{"../common":33,"escope":29}],60:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -14152,7 +14345,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":32}],60:[function(require,module,exports){
+},{"../common":33}],61:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -14253,7 +14446,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":32,"escope":28}],61:[function(require,module,exports){
+},{"../common":33,"escope":29}],62:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -14449,7 +14642,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":32,"../evaluator":34}],62:[function(require,module,exports){
+},{"../common":33,"../evaluator":35}],63:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -14553,7 +14746,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":32}],63:[function(require,module,exports){
+},{"../common":33}],64:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -14649,7 +14842,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":32}],64:[function(require,module,exports){
+},{"../common":33}],65:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -14723,7 +14916,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":32}],65:[function(require,module,exports){
+},{"../common":33}],66:[function(require,module,exports){
 /*
   Copyright (C) 2012 Michael Ficarra <esmangle.copyright@michael.ficarra.me>
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
@@ -14793,7 +14986,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":32}],66:[function(require,module,exports){
+},{"../common":33}],67:[function(require,module,exports){
 /*
   Copyright (C) 2012 Michael Ficarra <esmangle.copyright@michael.ficarra.me>
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
@@ -14889,7 +15082,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":32}],67:[function(require,module,exports){
+},{"../common":33}],68:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -14947,7 +15140,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./common":32}],68:[function(require,module,exports){
+},{"./common":33}],69:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
   Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com>
@@ -15638,7 +15831,7 @@ module.exports={
 }));
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{}],69:[function(require,module,exports){
+},{}],70:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -15730,7 +15923,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{}],70:[function(require,module,exports){
+},{}],71:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -15849,7 +16042,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./code":69}],71:[function(require,module,exports){
+},{"./code":70}],72:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -15883,7 +16076,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./code":69,"./keyword":70}],72:[function(require,module,exports){
+},{"./code":70,"./keyword":71}],73:[function(require,module,exports){
 module.exports={
   "_args": [
     [
@@ -16005,7 +16198,7 @@ module.exports={
   "version": "1.0.1"
 }
 
-},{}],73:[function(require,module,exports){
+},{}],74:[function(require,module,exports){
 (function webpackUniversalModuleDefinition(root, factory) {
 /* istanbul ignore next */
 	if(typeof exports === 'object' && typeof module === 'object')
@@ -22715,7 +22908,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ ])
 });
 ;
-},{}],74:[function(require,module,exports){
+},{}],75:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -23007,9 +23200,9 @@ return /******/ (function(modules) { // webpackBootstrap
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../package.json":79,"./map":75,"./utility":76,"escope":28,"estraverse":77,"esutils":85}],75:[function(require,module,exports){
-arguments[4][35][0].apply(exports,arguments)
-},{"dup":35}],76:[function(require,module,exports){
+},{"../package.json":80,"./map":76,"./utility":77,"escope":29,"estraverse":78,"esutils":86}],76:[function(require,module,exports){
+arguments[4][36][0].apply(exports,arguments)
+},{"dup":36}],77:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -23120,7 +23313,7 @@ arguments[4][35][0].apply(exports,arguments)
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{}],77:[function(require,module,exports){
+},{}],78:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
   Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com>
@@ -23965,7 +24158,7 @@ arguments[4][35][0].apply(exports,arguments)
 }(exports));
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./package.json":78}],78:[function(require,module,exports){
+},{"./package.json":79}],79:[function(require,module,exports){
 module.exports={
   "_args": [
     [
@@ -24068,7 +24261,7 @@ module.exports={
   "version": "4.1.1"
 }
 
-},{}],79:[function(require,module,exports){
+},{}],80:[function(require,module,exports){
 module.exports={
   "_args": [
     [
@@ -24175,7 +24368,7 @@ module.exports={
   "version": "1.1.1"
 }
 
-},{}],80:[function(require,module,exports){
+},{}],81:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
   Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com>
@@ -25026,7 +25219,7 @@ module.exports={
 }(exports));
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./package.json":81}],81:[function(require,module,exports){
+},{"./package.json":82}],82:[function(require,module,exports){
 module.exports={
   "_args": [
     [
@@ -25139,7 +25332,7 @@ module.exports={
   "version": "4.2.0"
 }
 
-},{}],82:[function(require,module,exports){
+},{}],83:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -25285,7 +25478,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{}],83:[function(require,module,exports){
+},{}],84:[function(require,module,exports){
 /*
   Copyright (C) 2013-2014 Yusuke Suzuki <utatane.tea@gmail.com>
   Copyright (C) 2014 Ivan Nikulin <ifaaan@gmail.com>
@@ -25422,7 +25615,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{}],84:[function(require,module,exports){
+},{}],85:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -25589,7 +25782,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./code":83}],85:[function(require,module,exports){
+},{"./code":84}],86:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -25624,7 +25817,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./ast":82,"./code":83,"./keyword":84}],86:[function(require,module,exports){
+},{"./ast":83,"./code":84,"./keyword":85}],87:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -26149,7 +26342,7 @@ function functionBindPolyfill(context) {
   };
 }
 
-},{}],87:[function(require,module,exports){
+},{}],88:[function(require,module,exports){
 'use strict';
 
 var hasOwn = Object.prototype.hasOwnProperty;
@@ -26237,7 +26430,7 @@ module.exports = function extend() {
 	return target;
 };
 
-},{}],88:[function(require,module,exports){
+},{}],89:[function(require,module,exports){
 (function (global){
 /**
  * @license
@@ -43346,7 +43539,7 @@ module.exports = function extend() {
 }.call(this));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],89:[function(require,module,exports){
+},{}],90:[function(require,module,exports){
 /**
  * Helpers.
  */
@@ -43500,7 +43693,7 @@ function plural(ms, n, name) {
   return Math.ceil(ms / n) + ' ' + name + 's';
 }
 
-},{}],90:[function(require,module,exports){
+},{}],91:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -43686,7 +43879,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],91:[function(require,module,exports){
+},{}],92:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -43809,7 +44002,7 @@ ArraySet.prototype.toArray = function ArraySet_toArray() {
 
 exports.ArraySet = ArraySet;
 
-},{"./util":100}],92:[function(require,module,exports){
+},{"./util":101}],93:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -43951,7 +44144,7 @@ exports.decode = function base64VLQ_decode(aStr, aIndex, aOutParam) {
   aOutParam.rest = aIndex;
 };
 
-},{"./base64":93}],93:[function(require,module,exports){
+},{"./base64":94}],94:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -44020,7 +44213,7 @@ exports.decode = function (charCode) {
   return -1;
 };
 
-},{}],94:[function(require,module,exports){
+},{}],95:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -44133,7 +44326,7 @@ exports.search = function search(aNeedle, aHaystack, aCompare, aBias) {
   return index;
 };
 
-},{}],95:[function(require,module,exports){
+},{}],96:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2014 Mozilla Foundation and contributors
@@ -44214,7 +44407,7 @@ MappingList.prototype.toArray = function MappingList_toArray() {
 
 exports.MappingList = MappingList;
 
-},{"./util":100}],96:[function(require,module,exports){
+},{"./util":101}],97:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -44330,7 +44523,7 @@ exports.quickSort = function (ary, comparator) {
   doQuickSort(ary, comparator, 0, ary.length - 1);
 };
 
-},{}],97:[function(require,module,exports){
+},{}],98:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -45477,7 +45670,7 @@ IndexedSourceMapConsumer.prototype._parseMappings =
 
 exports.IndexedSourceMapConsumer = IndexedSourceMapConsumer;
 
-},{"./array-set":91,"./base64-vlq":92,"./binary-search":94,"./quick-sort":96,"./util":100}],98:[function(require,module,exports){
+},{"./array-set":92,"./base64-vlq":93,"./binary-search":95,"./quick-sort":97,"./util":101}],99:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -45904,7 +46097,7 @@ SourceMapGenerator.prototype.toString =
 
 exports.SourceMapGenerator = SourceMapGenerator;
 
-},{"./array-set":91,"./base64-vlq":92,"./mapping-list":95,"./util":100}],99:[function(require,module,exports){
+},{"./array-set":92,"./base64-vlq":93,"./mapping-list":96,"./util":101}],100:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -46319,7 +46512,7 @@ SourceNode.prototype.toStringWithSourceMap = function SourceNode_toStringWithSou
 
 exports.SourceNode = SourceNode;
 
-},{"./source-map-generator":98,"./util":100}],100:[function(require,module,exports){
+},{"./source-map-generator":99,"./util":101}],101:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -46809,7 +47002,7 @@ function computeSourceURL(sourceRoot, sourceURL, sourceMapURL) {
 }
 exports.computeSourceURL = computeSourceURL;
 
-},{}],101:[function(require,module,exports){
+},{}],102:[function(require,module,exports){
 /*
  * Copyright 2009-2011 Mozilla Foundation and contributors
  * Licensed under the New BSD license. See LICENSE.txt or:
@@ -46819,10 +47012,10 @@ exports.SourceMapGenerator = require('./lib/source-map-generator').SourceMapGene
 exports.SourceMapConsumer = require('./lib/source-map-consumer').SourceMapConsumer;
 exports.SourceNode = require('./lib/source-node').SourceNode;
 
-},{"./lib/source-map-consumer":97,"./lib/source-map-generator":98,"./lib/source-node":99}],102:[function(require,module,exports){
+},{"./lib/source-map-consumer":98,"./lib/source-map-generator":99,"./lib/source-node":100}],103:[function(require,module,exports){
 module.exports={
   "name": "i18nc-core",
-  "version": "10.4.0",
+  "version": "10.4.1",
   "description": "I18N Tool for JS files",
   "main": "index.js",
   "scripts": {
@@ -46850,6 +47043,7 @@ module.exports={
   },
   "devDependencies": {
     "benchmark": "^2.1.4",
+    "comment-parser": "^0.5.0",
     "cross-env": "^5.2.0",
     "eslint": "^5.1.0",
     "eslint-config-brcjs": "^0.2.0",
