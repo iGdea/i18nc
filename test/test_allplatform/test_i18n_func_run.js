@@ -15,6 +15,11 @@ describe('#i18n_func_run', function()
 				global.__i18n_lan__ = 'en-US';
 			});
 
+			afterEach(function()
+			{
+				delete global.__i18n_lan__;
+			});
+
 			it('#no msg', function()
 			{
 				expect(I18N()).to.be('undefined');
@@ -60,6 +65,11 @@ describe('#i18n_func_run', function()
 				global.__i18n_lan__ = 'zh-CN';
 			});
 
+			afterEach(function()
+			{
+				delete global.__i18n_lan__;
+			});
+
 			it('#match default', function()
 			{
 				expect(I18N('简体')).to.be('简体');
@@ -79,6 +89,11 @@ describe('#i18n_func_run', function()
 				global.__i18n_lan__ = 'zh-CN,en-US';
 			});
 
+			afterEach(function()
+			{
+				delete global.__i18n_lan__;
+			});
+
 			it('#match default', function()
 			{
 				expect(I18N('简体')).to.be('simplified');
@@ -95,6 +110,11 @@ describe('#i18n_func_run', function()
 			beforeEach(function()
 			{
 				global.__i18n_lan__ = 'zh-TW,en-US';
+			});
+
+			afterEach(function()
+			{
+				delete global.__i18n_lan__;
 			});
 
 			it('#match default', function()
@@ -117,6 +137,11 @@ describe('#i18n_func_run', function()
 					global.__i18n_lan__ = 'en-US';
 				});
 
+				afterEach(function()
+				{
+					delete global.__i18n_lan__;
+				});
+
 				it('#key %s', function()
 				{
 					expect(I18N('美好%s生活', [1])).to.be('美好1生活');
@@ -137,6 +162,11 @@ describe('#i18n_func_run', function()
 				beforeEach(function()
 				{
 					global.__i18n_lan__ = null;
+				});
+
+				afterEach(function()
+				{
+					delete global.__i18n_lan__;
 				});
 
 				it('#key %s', function()
@@ -167,6 +197,11 @@ describe('#i18n_func_run', function()
 			beforeEach(function()
 			{
 				global.__i18n_lan__ = 'en-US';
+			});
+
+			afterEach(function()
+			{
+				delete global.__i18n_lan__;
 			});
 
 			it('#no msg', function()
@@ -215,6 +250,11 @@ describe('#i18n_func_run', function()
 					global.__i18n_lan__ = 'en-US';
 				});
 
+				afterEach(function()
+				{
+					delete global.__i18n_lan__;
+				});
+
 				it('#key %s', function()
 				{
 					expect(I18N('美好%s生活', [1])).to.be('美好1生活');
@@ -235,6 +275,11 @@ describe('#i18n_func_run', function()
 				beforeEach(function()
 				{
 					global.__i18n_lan__ = null;
+				});
+
+				afterEach(function()
+				{
+					delete global.__i18n_lan__;
 				});
 
 				it('#key %s', function()
@@ -309,6 +354,12 @@ describe('#i18n_func_run', function()
 			}
 
 			expect(I18N('中文')).to.be('ret:中文');
+		});
+
+
+		describe('#dist', function()
+		{
+			console.log('@todo');
 		});
 	});
 
