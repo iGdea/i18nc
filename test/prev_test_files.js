@@ -5,56 +5,59 @@ var fs		= require('fs');
 var DEF		= require('../lib/def');
 var i18nTpl	= require('../lib/i18n_func/render');
 
-function I18NHandlerConfig()
+exports.TRANSLATE_JSON =
 {
-	var TRANSLATE_JSON =
+	"en-US":
 	{
-		"en-US":
+		"DEFAULTS":
 		{
-			"DEFAULTS":
-			{
-				'简体': 'simplified',
-				'空白': [],
-				'无': '',
-				'%s美好%s生活': '%sgood%s life',
-				'%{中文}词典': '%{Chinese} dictionary'
-			},
-			"SUBTYPES":
-			{
-				'subtype':
-				{
-					'简体': 'simplified subtype',
-				}
-			}
+			'简体': 'simplified',
+			'空白': [],
+			'无': '',
+			'%s美好%s生活': '%sgood%s life',
+			'%{中文}词典': '%{Chinese} dictionary'
 		},
-		"zh-TW":
+		"SUBTYPES":
 		{
-			"DEFAULTS":
+			'subtype':
 			{
-				'简体': '簡體',
-				'无': '無',
+				'简体': 'simplified subtype',
 			}
 		}
-	};
+	},
+	"zh-TW":
+	{
+		"DEFAULTS":
+		{
+			'简体': '簡體',
+			'无': '無',
+		}
+	}
+};
 
-	return {
+exports.I18NHandlerExampleCode = function I18NHandlerExampleCode(isMin)
+{
+	var config =
+	{
 		handlerName			: 'I18N',
 		getLanguageCode		: '(function(){return global.__i18n_lan__})',
 		FILE_KEY			: 'i18n_handler_example',
 		FUNCTION_VERSION	: DEF.I18NFunctionVersion,
-		TRANSLATE_JSON_CODE	: JSON.stringify(TRANSLATE_JSON, null, '\t'),
+		TRANSLATE_JSON_CODE	: JSON.stringify(exports.TRANSLATE_JSON, null, '\t'),
 	};
-}
-
-exports.I18NHandlerExampleCode = function I18NHandlerExampleCode(isMin)
-{
-	return i18nTpl.render(I18NHandlerConfig(), isMin);
+	return i18nTpl.render(config, isMin);
 };
 
 exports.I18NHandlerGlobalExampleCode = function I18NHandlerGlobalExampleCode(isMin)
 {
-	var config = I18NHandlerConfig();
-	config.globalHandlerName = 'I18N.topI18N';
+	var config =
+	{
+		handlerName			: 'I18N',
+		globalHandlerName	: 'I18N.topI18N',
+		FILE_KEY			: 'i18n_handler_example_global',
+		FUNCTION_VERSION	: DEF.I18NFunctionVersion+'.'+DEF.I18NFunctionSubVersion.GLOBAL,
+		TRANSLATE_JSON_CODE	: JSON.stringify(exports.TRANSLATE_JSON, null, '\t'),
+	};
 	return i18nTpl.renderGlobal(config, isMin);
 };
 
@@ -63,8 +66,8 @@ exports.I18NHandlerSimpleExampleCode = function I18NHandlerSimpleExampleCode(isM
 	var config =
 	{
 		handlerName			: 'I18N',
-		FILE_KEY			: 'i18n_handler_example',
-		FUNCTION_VERSION	: DEF.I18NFunctionVersion,
+		FILE_KEY			: 'i18n_handler_example_simple',
+		FUNCTION_VERSION	: DEF.I18NFunctionVersion+'.'+DEF.I18NFunctionSubVersion.SIMPLE,
 	};
 	return i18nTpl.renderSimple(config, isMin);
 };

@@ -7,8 +7,8 @@ function I18N(msg)
 	if (!data)
 	{
 		data = self.$ = {};
-		self.K = 'i18n_handler_example';
-		self.V = 'b';
+		self.K = 'i18n_handler_example_global';
+		self.V = 'b.g';
 		self.D = {
 			"en-US": {
 				"DEFAULTS": {

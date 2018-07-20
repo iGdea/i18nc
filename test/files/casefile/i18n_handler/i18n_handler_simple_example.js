@@ -6,8 +6,8 @@ function I18N(msg, tpldata)
 
 	var self = I18N;
 
-	self.K = 'i18n_handler_example';
-	self.V = 'b';
+	self.K = 'i18n_handler_example_simple';
+	self.V = 'b.s';
 
 	var replace_index = 0;
 	return msg.replace(/%s|%\{.+?\}/g, function(all)
