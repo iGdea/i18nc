@@ -17,7 +17,7 @@ after_script:
 addons:
   # for gitsubmodule
   ssh_known_hosts:
-    - github.com
+    - 192.30.253.113
 
 matrix:
   include:
