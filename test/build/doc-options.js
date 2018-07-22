@@ -3,6 +3,7 @@
 var _ = require('lodash');
 var fs = require('fs');
 var esprima = require('esprima');
+var tpl = fs.readFileSync(__dirname+'/doc-tpl/options.tpl').toString();
 var content = fs.readFileSync(__dirname+'/../../lib/options.js').toString();
 var ast = esprima.parse(content, {attachComment: true});
 var ArrayPush = Array.prototype.push;
@@ -75,7 +76,14 @@ astArr.forEach(function(item)
 
 
 
-// 整理数据，输出table格式
+/*
+ 整理数据，输出table格式
+ */
+
+/*
+ * 汇总单个key包含的注释条数
+ * 方便后续计算rowspan
+ */
 var maxCollsLength = 0;
 var tableContentMap = {};
 tableInfo.forEach(function(item)
@@ -109,6 +117,7 @@ var tableContentArr = _.map(tableContentMap, function(item)
 	})
 	.map(function(item)
 	{
+		// 没有注释内容的条数，带有rowspan信息，先收集
 		var nameArr = item.name.split('.');
 		var subitemLen = item.items.length;
 		if (!item.item)
@@ -117,6 +126,8 @@ var tableContentArr = _.map(tableContentMap, function(item)
 			{
 				emptyRowspan.push(
 				{
+					// 没有输出过key名前，标记一下
+					// 避免table 变量一栏，只有最后一个key
 					print: false,
 					index: nameArr.length - 1,
 					length: subitemLen,
@@ -124,6 +135,11 @@ var tableContentArr = _.map(tableContentMap, function(item)
 			}
 			return '';
 		}
+
+
+		// 有注释数据时
+		// 先输出一行完整的变量名
+		// 下一行再计算rowspan
 		var defaultVal = item.item.default;
 		if (defaultVal === undefined) defaultVal = '';
 		var keyname = nameArr[nameArr.length-1];
@@ -201,19 +217,23 @@ var tableContentArr = _.map(tableContentMap, function(item)
 		return arr.join('');
 	});
 
-fs.writeFileSync(__dirname+'/../../doc/zh-CN/options.md',
-	[
-		'<table>',
-		'\t<tr>',
-		'\t\t<th colspan="'+maxCollsLength+'">变量</th>',
-		'\t\t<th>类型</th>',
-		'\t\t<th>默认值</th>',
-		'\t\t<th>描述</th>',
-		'\t\t<th>备注</th>',
-		'\t</tr>',
-		'\t'+tableContentArr.filter(function(val){return val}).join('\n\t'),
-		'</table>'
-	].join('\n'));
+var tableContent =
+[
+	'<table>',
+	'\t<tr>',
+	'\t\t<th colspan="'+maxCollsLength+'">变量</th>',
+	'\t\t<th>类型</th>',
+	'\t\t<th>默认值</th>',
+	'\t\t<th>描述</th>',
+	'\t\t<th>备注</th>',
+	'\t</tr>',
+	'\t'+tableContentArr.filter(function(val){return val}).join('\n\t'),
+	'</table>'
+].join('\n');
+
+var fileContent = tpl.replace(/\$TABLE_DATA/, tableContent);
+
+fs.writeFileSync(__dirname+'/../../doc/zh-CN/options.md', fileContent);
 
 
 function objectAstFind(ast, parentName)
