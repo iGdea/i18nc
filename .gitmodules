@@ -1,3 +1,4 @@
 [submodule "doc"]
 	path = doc
-	url = git@github.com:Bacra/node-i18nc-core.wiki.git
+	url = https://github.com/Bacra/node-i18nc-core.wiki.git
+	#url = git@github.com:Bacra/node-i18nc-core.wiki.git

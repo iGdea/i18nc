@@ -14,10 +14,10 @@ script:
 after_script:
   - npm install coveralls@2 && cat ./coverage/lcov.info | coveralls
 
-addons:
+# addons:
   # for gitsubmodule
-  ssh_known_hosts:
-    - 192.30.253.113
+  # ssh_known_hosts:
+    # - 192.30.253.113
 
 matrix:
   include:
