@@ -2619,7 +2619,6 @@ exports.defaults =
 	/**
 	 * 导入的翻译数据
 	 *
-	 * @see {@link test/exmaple/translate_words_db.json}
 	 * @type {Object}
 	 */
 	dbTranslateWords: null,
@@ -2722,7 +2721,6 @@ exports.defaults =
  				 * function I18N(msg){return ''+topI18NHandler(msg, arguments);}
  				 * 注意：此配置只会影响没有进行插装，如果要全部更新，需要配置 upgrade.partial false
  				 * 注意：更新函数版本号，不会触发此更新
-				 * @see {@link dist/top-i18nc.js}
 				 * @type {Boolean}
 				 */
 				enable: false,
@@ -2770,7 +2768,6 @@ exports.defaults =
 			 * string，即全局的函数调用
  			 * function，必须是可被序列化成字符串，能独立运行
  			 *
-			 * @see {@link i18nc/util/tpl/xxxx}
 			 * @type {String|Function}
 			 */
 			getLanguageCode: getLanguageCodeHandler,
@@ -47043,7 +47040,6 @@ module.exports={
   },
   "devDependencies": {
     "benchmark": "^2.1.4",
-    "comment-parser": "^0.5.0",
     "cross-env": "^5.2.0",
     "eslint": "^5.1.0",
     "eslint-config-brcjs": "^0.2.0",

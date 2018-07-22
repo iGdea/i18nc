@@ -3,8 +3,9 @@ npm-debug.log
 package-lock.json
 
 .gitignore
-.travis.yml
+.gitmodules
 .gitattributes
+.travis.yml
 .eslintrc.js
 .eslintignore
 .editorconfig
@@ -15,3 +16,4 @@ package-lock.json
 test
 coverage
 benchmark
+doc
