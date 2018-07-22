@@ -3339,8 +3339,9 @@ var _ = require('lodash');
 var debug = require('debug')('i18nc-core:depd_options');
 var deprecate = require('depd')('i18nc-core:options');
 var GetLanguageCodeDepd = require('./tpl/depd_getlanguagecode_handler').toString();
+exports = module.exports = main;
 
-var OPTIONS_OLDKEY_MAP =
+var OPTIONS_OLDKEY_MAP = exports.OPTIONS_OLDKEY_MAP =
 {
 	cutWordReg: 'cutwordReg',
 	handlerName: 'I18NHandlerName',
@@ -3448,7 +3449,7 @@ var rename_1to1 = (function()
 })();
 
 
-module.exports = function(options)
+function main(options)
 {
 	rename_1to1(options);
 
@@ -3466,6 +3467,11 @@ module.exports = function(options)
 			else if (options.minTranslateFuncCode == 'onlyFunc')
 			{
 				setKeyVal(options, 'I18NHandler.style.minFuncCode', true);
+				setKeyVal(options, 'I18NHandler.style.minFuncJSON', false);
+			}
+			else if (options.minTranslateFuncCode == 'none')
+			{
+				setKeyVal(options, 'I18NHandler.style.minFuncCode', false);
 				setKeyVal(options, 'I18NHandler.style.minFuncJSON', false);
 			}
 
