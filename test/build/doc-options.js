@@ -60,7 +60,7 @@ astArr.forEach(function(item)
 		}
 		if (!output.description)
 		{
-			output.description = comment.description.split('\n').shift();
+			output.description = comment.description.trim().split('\n').shift();
 		}
 		if (!output.default) output.default = item.default;
 
