@@ -141,7 +141,13 @@ var tableContentArr = _.map(tableContentMap, function(item)
 		// 先输出一行完整的变量名
 		// 下一行再计算rowspan
 		var defaultVal = item.item.default;
-		if (defaultVal === undefined) defaultVal = '';
+		if (defaultVal === undefined)
+			defaultVal = '';
+		else if (typeof defaultVal == 'string')
+			defaultVal = defaultVal.trim();
+		else
+			defaultVal += '';
+
 		var keyname = nameArr[nameArr.length-1];
 		var leftCollsLength = maxCollsLength - nameArr.length;
 		var nameRow = '';
