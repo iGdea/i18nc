@@ -2194,7 +2194,7 @@ _.extend(I18NPlaceholder.prototype,
 					|| funcInfo.__FUNCTION_VERSION__
 					&& funcInfo.__FUNCTION_VERSION__.split('.')[0] == DEF.I18NFunctionVersion,
 				proxyGlobalHandlerName	: !(proxyGlobalHandlerConfig.enable
-					&& proxyGlobalHandlerConfig.ignoreFuncCode
+					&& proxyGlobalHandlerConfig.ignoreFuncCodeName
 					&& funcInfo.globalHandlerName
 					&& funcInfo.globalHandlerName != proxyGlobalHandlerConfig.name)
 			};
@@ -2434,13 +2434,13 @@ _.extend(I18NPlaceholder.prototype,
 		var proxyGlobalHandlerConfig = options.I18NHandler.style.proxyGlobalHandler;
 		var enableProxyGlobalHandler = proxyGlobalHandlerConfig.enable;
 
-		if (funcInfo.globalHandlerName
+		if ((proxyGlobalHandlerConfig.autoConvert && funcInfo.globalHandlerName)
 			// 初始化的时候，使用global进行初始化
 			|| (enableProxyGlobalHandler && funcInfo.isNotI18NHandler)
 			// 启动全量更新，同时启动globalHandler
 			|| (enableProxyGlobalHandler && !options.I18NHandler.upgrade.partial))
 		{
-			renderData.globalHandlerName = proxyGlobalHandlerConfig.ignoreFuncCode
+			renderData.globalHandlerName = proxyGlobalHandlerConfig.ignoreFuncCodeName
 				? proxyGlobalHandlerConfig.name
 				: funcInfo.globalHandlerName || proxyGlobalHandlerConfig.name;
 			renderData.FUNCTION_VERSION = renderData.FUNCTION_VERSION.split('.')[0]
@@ -2714,10 +2714,15 @@ exports.defaults =
 			 */
 			comment4nowords: true,
 
+			/**
+			 * 在I18N函数体内，调用外部函数，代替插入过多代码的方式
+			 *
+			 * @type {Object}
+			 */
 			proxyGlobalHandler:
 			{
 				/**
-				 * 在I18N函数体内，调用外部函数，代替插入过多代码的方式
+				 * 优先使用proxyGlobal风格生成I18N函数体
 				 *
 				 * @type {Boolean}
 				 */
@@ -2729,12 +2734,18 @@ exports.defaults =
 				 */
 				name: 'topI18N',
 				/**
+				 * 将源码中类proxyGlobal写法的I18N函数，转换为标准的proxyGlobalHandler
+				 *
+				 * @type {Boolean}
+				 */
+				autoConvert: true,
+				/**
 				 * 忽略源代码中解析出来的外部函数名，强制使用配置的函数名
  				 *
  				 * @remark 如果原来有值，但不同，会触发更新；原来没有，则不会进行更新
 				 * @type {Boolean}
 				 */
-				ignoreFuncCode: false,
+				ignoreFuncCodeName: false,
 			},
 		},
 		insert:
@@ -3383,7 +3394,7 @@ var OPTIONS_OLDKEY_MAP = exports.OPTIONS_OLDKEY_MAP =
 
 	isProxyGlobalHandler: 'I18NHandler.style.proxyGlobalHandler.enable',
 	proxyGlobalHandlerName: 'I18NHandler.style.proxyGlobalHandler.name',
-	isIgnoreCodeProxyGlobalHandlerName: 'I18NHandler.style.proxyGlobalHandler.ignoreFuncCode',
+	isIgnoreCodeProxyGlobalHandlerName: 'I18NHandler.style.proxyGlobalHandler.ignoreFuncCodeName',
 
 
 	isCheckClosureForNewI18NHandler: 'I18NHandler.insert.checkClosure',
@@ -3411,6 +3422,7 @@ var OPTIONS_OLDKEY_MAP = exports.OPTIONS_OLDKEY_MAP =
 	'codeModifiedArea.I18NHandler': 'I18NHandler.upgrade.enable',
 
 	'I18NHandler.upgrade.version': 'I18NHandler.upgrade.checkVersion',
+	'I18NHandler.style.proxyGlobalHandler.ignoreFuncCode': 'I18NHandler.style.proxyGlobalHandler.ignoreFuncCodeName',
 
 	loadTranslateJSON: 'events.loadTranslateJSON',
 	newTranslateJSON: 'events.newTranslateJSON',

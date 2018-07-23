@@ -308,6 +308,8 @@ describe('#main_options', function()
 
 	describe('#proxyGlobalHandler', function()
 	{
+		var code = require('../files/casefile/func_code/func_code_i18n_global_handler').toString();
+
 		it('#isProxyGlobalHandler', function()
 		{
 			var code = require('../files/casefile/func_code/func_code_noi18n').toString();
@@ -319,9 +321,18 @@ describe('#main_options', function()
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 		});
 
+		it('#isProxyGlobalHandler', function()
+		{
+			var info = i18nc(code,
+				{
+					isProxyGlobalHandler: true,
+				});
+			var otherCode = requireAfterWrite('func_code_noi18n_proxy_global_auto_convert.js', info.code);
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
+		});
+
 		it('#isIgnoreCodeProxyGlobalHandlerName', function()
 		{
-			var code = require('../files/casefile/func_code/func_code_i18n_global_handler').toString();
 			var info = i18nc(code,
 				{
 					isProxyGlobalHandler: true,
@@ -329,6 +340,26 @@ describe('#main_options', function()
 					proxyGlobalHandlerName: 'topI18N2'
 				});
 			var otherCode = requireAfterWrite('func_code_i18n_global_handler_ignore_code.js', info.code);
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
+		});
+
+		it('#no autoConvert', function()
+		{
+			var info = i18nc(code,
+				{
+					I18NHandler:
+					{
+						style:
+						{
+							proxyGlobalHandler:
+							{
+								enable: false,
+								autoConvert: false,
+							}
+						}
+					}
+				});
+			var otherCode = requireAfterWrite('func_code_i18n_global_handler_no_auto_convert.js', info.code);
 			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 		});
 	});

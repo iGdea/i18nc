@@ -4,6 +4,7 @@ var _ = require('lodash');
 var fs = require('fs');
 var path =  require('path');
 var mkdirp = require('mkdirp');
+var debug = require('debug')('i18nc-core:auto_test_utils');
 
 exports.wrapCode4pkg = function(code)
 {
@@ -55,6 +56,8 @@ function requireAfterWriteReal(file, data)
 	var realfile = path.join(__dirname, file);
 	mkdirp.sync(path.dirname(realfile));
 	fs.writeFileSync(realfile, data);
+
+	debug('build write file:%s', realfile);
 
 	return _require(file);
 }
