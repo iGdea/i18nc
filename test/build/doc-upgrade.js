@@ -29,7 +29,7 @@ var tableContent = '| '+oldKeyStr.substr(5)+'老版本'
 	+' | 新版本'+newKeyStr.substr(5)
 	+' |\n'
 	+'|'+new Array(maxOldKeyLen+2).join('-')+':'
-	+'|'+new Array(maxNewKeyLen+3).join('-')
+	+'|:'+new Array(maxNewKeyLen+2).join('-')
 	+'|\n'
 	+tableContentArr.join('\n');
 
