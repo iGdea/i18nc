@@ -18,6 +18,7 @@ npm install i18nc-core --save
 
 ```javascript
 var i18nc = require('i18nc-core');
+// options: https://github.com/Bacra/node-i18nc-core/wiki/options
 var ret = i18nc(code, options);
 
 ret.code    // output code
@@ -28,7 +29,6 @@ ret.usedTranslateWords
 ret.I18NArgsTranslateWords
 ret.subScopeDatas
 ```
-
 
 # Example
 
@@ -69,6 +69,10 @@ function I18N(h,f,i){
     return(''+q).replace(/%s|%\{.+?\}/g,function(){var a=f[p++];return a===undefined||a===null?'':a;});
 }
 ```
+
+### Upgrade
+
+[Wiki](https://github.com/Bacra/node-i18nc-core/wiki/upgrade)
 
 
 
