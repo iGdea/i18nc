@@ -1,4 +1,5 @@
 [submodule "doc"]
 	path = doc
 	url = https://github.com/Bacra/node-i18nc-core.wiki.git
-	#url = git@github.com:Bacra/node-i18nc-core.wiki.git
+	# travis 使用git会导致拉取失败
+	# url = git@github.com:Bacra/node-i18nc-core.wiki.git
