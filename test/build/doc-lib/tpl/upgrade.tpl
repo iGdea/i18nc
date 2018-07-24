@@ -1,42 +1,14 @@
 
 
-## 废弃特性说明
+## 新老参数转换
 
 
-### Options 参数调整
+### 转换对应表
 
-#### minTranslateFuncCode
-
-设置为 `all`，对应新配置
-
- * `I18NHandler.style.minFuncCode` = `true`
- * `I18NHandler.style.minFuncJSON` = `true`
-
-设置为 `onlyFunc`，对应新配置
-
- * `I18NHandler.style.minFuncCode` = `true`
- * `I18NHandler.style.minFuncJSON` = `false`
-
-设置为 `none`，对应新配置
-
- * `I18NHandler.style.minFuncCode` = `false`
- * `I18NHandler.style.minFuncJSON` = `false`
+$OPTIONS_SWITCH_TABLE_DATA
 
 
-#### isMinFuncTranslateCode
-
-设置为 `true`，对应新配置
-
- * `I18NHandler.style.minFuncCode` = `true`
- * `I18NHandler.style.minFuncJSON` = `true`
-
-设置为 `false`，对应新配置
-
- * `I18NHandler.style.minFuncCode` = `false`
- * `I18NHandler.style.minFuncJSON` = `true`
-
-
-#### 参数名新旧对照表
+#### 新旧改名对照表
 
 $OPTIONS_RENAME_TABLE_DATA
 
