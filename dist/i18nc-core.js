@@ -47250,7 +47250,7 @@ exports.SourceNode = require('./lib/source-node').SourceNode;
 },{"./lib/source-map-consumer":99,"./lib/source-map-generator":100,"./lib/source-node":101}],104:[function(require,module,exports){
 module.exports={
   "name": "i18nc-core",
-  "version": "10.5.0",
+  "version": "10.6.0",
   "description": "I18N Tool for JS files",
   "main": "index.js",
   "scripts": {

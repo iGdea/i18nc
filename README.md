@@ -70,7 +70,7 @@ function I18N(h,f,i){
 }
 ```
 
-### Upgrade
+# Upgrade
 
 [Wiki](https://github.com/Bacra/node-i18nc-core/wiki/upgrade)
 

@@ -1,14 +1,12 @@
+# 新老参数转换
 
 
-## 新老参数转换
-
-
-### 转换对应表
+## 转换对应表
 
 $OPTIONS_SWITCH_TABLE_DATA
 
 
-#### 新旧改名对照表
+## 新旧改名对照表
 
 $OPTIONS_RENAME_TABLE_DATA
 
