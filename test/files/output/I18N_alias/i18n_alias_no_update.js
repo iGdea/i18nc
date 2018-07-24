@@ -149,9 +149,9 @@ module.exports = function code()
 	I18N('中文I18N subtype', 'subtype');
 
 	// I18N
-	function I18NNew(msg, tpldata, subtype)
+	function I18N(msg, tpldata, subtype)
 	{
-		var self = I18NNew;
+		var self = I18N;
 		var data = self.$ || (self.$ = {});
 		var LAN = (function(cache)
 		{
