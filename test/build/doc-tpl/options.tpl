@@ -5,16 +5,13 @@
 $TABLE_DATA
 
 
-## 特别说明
+## 一些补充说明
 
-### proxyGlobalHandler.enable
+### proxyGlobalHandler
 
-即使不使用此参数，也可以使用如下写法，告诉工具，使用proxyGlobalHandler模式，生成I18N函数
+即使不使用`I18NHandler.style.codeStyle=proxyGlobalHandler`，
+也可以使用如下写法，告诉工具，使用proxyGlobalHandler模式，生成I18N函数
 
 ```javascript
 function I18N(msg){return ''+topI18NHandler(msg, arguments);}
 ```
-
-同时，
-
- * 此配置只会影响没有进行插装的源码，如果要全部更新，需要配置 `upgrade.partial = false`
