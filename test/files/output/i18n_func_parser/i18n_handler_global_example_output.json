@@ -10,10 +10,10 @@
 	"__FILE_KEY__": "i18n_handler_example_global",
 	"__FUNCTION_VERSION__ast": {
 		"type": "Literal",
-		"value": "b",
-		"raw": "'b'"
+		"value": "bg",
+		"raw": "'bg'"
 	},
-	"__FUNCTION_VERSION__": "b",
+	"__FUNCTION_VERSION__": "bg",
 	"__TRANSLATE_JSON__ast": {
 		"type": "ObjectExpression",
 		"properties": [

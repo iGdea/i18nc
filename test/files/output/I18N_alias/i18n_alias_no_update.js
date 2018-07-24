@@ -30,7 +30,7 @@ module.exports = function code()
 			if (self.L != LAN)
 			{
 				self.K = '*';
-				self.V = 'b';
+				self.V = 'bf';
 				self.D = {
 					'en-US': {
 						'DEFAULTS': {
@@ -176,7 +176,7 @@ module.exports = function code()
 			if (self.L != LAN)
 			{
 				self.K = '*';
-				self.V = 'b';
+				self.V = 'bf';
 				self.D = {
 					'en-US': {
 						'DEFAULTS': {

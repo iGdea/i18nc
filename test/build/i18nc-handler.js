@@ -10,7 +10,7 @@ var options = optionsUtils.extend();
 var code = i18ncTpl.renderSimple(
 	{
 		FILE_KEY: options.I18NHandler.data.defaultFileKey,
-		FUNCTION_VERSION: DEF.I18NFunctionVersion,
+		FUNCTION_VERSION: DEF.I18NFunctionVersion + DEF.I18NFunctionSubVersion.SIMPLE,
 		handlerName: options.I18NHandlerName,
 	});
 

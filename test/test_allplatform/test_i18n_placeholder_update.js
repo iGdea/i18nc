@@ -68,7 +68,7 @@ describe('#i18n_placeholder_update', function()
 					handlerName: 'I18N',
 					getLanguageCode: 'GetLanGlobal',
 					FILE_KEY: '*',
-					FUNCTION_VERSION: 0,
+					FUNCTION_VERSION: '0',
 					TRANSLATE_JSON_CODE : '{}'
 				});
 
@@ -93,7 +93,7 @@ describe('#i18n_placeholder_update', function()
 					handlerName: 'I18N',
 					getLanguageCode : 'GetLanGlobal',
 					FILE_KEY: '',
-					FUNCTION_VERSION: DEF.I18NFunctionVersion,
+					FUNCTION_VERSION: DEF.I18NFunctionVersion+DEF.I18NFunctionSubVersion.FULL,
 					TRANSLATE_JSON_CODE : '{}'
 				});
 				checkEmptyJSONCode(code, 'original');
@@ -192,7 +192,7 @@ describe('#i18n_placeholder_update', function()
 				{
 					handlerName: 'I18N',
 					FILE_KEY: 'file_key',
-					FUNCTION_VERSION: DEF.I18NFunctionVersion,
+					FUNCTION_VERSION: DEF.I18NFunctionVersion+DEF.I18NFunctionSubVersion.SIMPLE,
 				})));
 		});
 
@@ -210,7 +210,7 @@ describe('#i18n_placeholder_update', function()
 					handlerName         : options.I18NHandlerName,
 					getLanguageCode		: 'GetLanguageCode',
 					FILE_KEY            : 'file_key',
-					FUNCTION_VERSION    : DEF.I18NFunctionVersion,
+					FUNCTION_VERSION    : DEF.I18NFunctionVersion+DEF.I18NFunctionSubVersion.FULL,
 					TRANSLATE_JSON_CODE : '{}'
 				});
 			expect(func2codeArr(I18NPlaceholderNew)).to.eql(code2arr(otherCode));

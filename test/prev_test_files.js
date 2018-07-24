@@ -42,7 +42,7 @@ exports.I18NHandlerExampleCode = function I18NHandlerExampleCode(isMin)
 		handlerName			: 'I18N',
 		getLanguageCode		: '(function(){return global.__i18n_lan__})',
 		FILE_KEY			: 'i18n_handler_example',
-		FUNCTION_VERSION	: DEF.I18NFunctionVersion,
+		FUNCTION_VERSION	: DEF.I18NFunctionVersion+DEF.I18NFunctionSubVersion.FULL,
 		TRANSLATE_JSON_CODE	: JSON.stringify(exports.TRANSLATE_JSON, null, '\t'),
 	};
 	return i18nTpl.render(config, isMin);
@@ -55,7 +55,7 @@ exports.I18NHandlerGlobalExampleCode = function I18NHandlerGlobalExampleCode(isM
 		handlerName			: 'I18N',
 		globalHandlerName	: 'I18N.topI18N',
 		FILE_KEY			: 'i18n_handler_example_global',
-		FUNCTION_VERSION	: DEF.I18NFunctionVersion,
+		FUNCTION_VERSION	: DEF.I18NFunctionVersion+DEF.I18NFunctionSubVersion.GLOBAL,
 		TRANSLATE_JSON_CODE	: JSON.stringify(exports.TRANSLATE_JSON, null, '\t'),
 	};
 	return i18nTpl.renderGlobal(config, isMin);
@@ -67,7 +67,7 @@ exports.I18NHandlerSimpleExampleCode = function I18NHandlerSimpleExampleCode(isM
 	{
 		handlerName			: 'I18N',
 		FILE_KEY			: 'i18n_handler_example_simple',
-		FUNCTION_VERSION	: DEF.I18NFunctionVersion,
+		FUNCTION_VERSION	: DEF.I18NFunctionVersion+DEF.I18NFunctionSubVersion.SIMPLE,
 	};
 	return i18nTpl.renderSimple(config, isMin);
 };
