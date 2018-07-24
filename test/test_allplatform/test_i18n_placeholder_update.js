@@ -192,7 +192,7 @@ describe('#i18n_placeholder_update', function()
 				{
 					handlerName: 'I18N',
 					FILE_KEY: 'file_key',
-					FUNCTION_VERSION: DEF.I18NFunctionVersion+'.'+DEF.I18NFunctionSubVersion.SIMPLE,
+					FUNCTION_VERSION: DEF.I18NFunctionVersion,
 				})));
 		});
 

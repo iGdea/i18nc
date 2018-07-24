@@ -1160,11 +1160,6 @@ exports.AST_FLAGS =
 };
 
 exports.I18NFunctionVersion = "b";
-exports.I18NFunctionSubVersion =
-{
-	SIMPLE: 's',
-	GLOBAL: 'g',
-};
 
 },{}],8:[function(require,module,exports){
 'use strict';
@@ -2447,8 +2442,7 @@ _.extend(I18NPlaceholder.prototype,
 			renderData.globalHandlerName = proxyGlobalHandlerConfig.ignoreFuncCodeName
 				? proxyGlobalHandlerConfig.name
 				: funcInfo.globalHandlerName || proxyGlobalHandlerConfig.name;
-			renderData.FUNCTION_VERSION = renderData.FUNCTION_VERSION.split('.')[0]
-				+ '.' + DEF.I18NFunctionSubVersion.GLOBAL;
+			renderData.FUNCTION_VERSION = renderData.FUNCTION_VERSION.split('.')[0];
 
 			debug('i18n global function renderdata: %o', renderData);
 			newCode = i18nTpl.renderGlobal(renderData, isMinCode);
@@ -2473,8 +2467,7 @@ _.extend(I18NPlaceholder.prototype,
 		var options = this.options;
 		var isMinCode = options.I18NHandler.style.minFuncCode;
 		var funcInfo = this.parse();
-		var SIMPLE_VERSION = DEF.I18NFunctionVersion+'.'
-				+ DEF.I18NFunctionSubVersion.SIMPLE;
+		var SIMPLE_VERSION = DEF.I18NFunctionVersion;
 
 		if (funcInfo.__FUNCTION_VERSION__ == SIMPLE_VERSION)
 		{

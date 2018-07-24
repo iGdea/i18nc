@@ -12,7 +12,7 @@ module.exports = function code()
 		{
 			data = self.$ = {};
 			self.K = '*';
-			self.V = 'b.g';
+			self.V = 'b';
 			self.D = {
 				'en-US': {
 					'DEFAULTS': {

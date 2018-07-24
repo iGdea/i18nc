@@ -6,12 +6,11 @@ var optionsUtils = require('../../lib/options');
 var DEF = require('../../lib/def');
 var wrapCode = require('./wrap-code.tpl.js').toString();
 var options = optionsUtils.extend();
-var version = DEF.I18NFunctionVersion+'.'+DEF.I18NFunctionSubVersion.SIMPLE;
 
 var code = i18ncTpl.renderSimple(
 	{
 		FILE_KEY: options.I18NHandler.data.defaultFileKey,
-		FUNCTION_VERSION: version,
+		FUNCTION_VERSION: DEF.I18NFunctionVersion,
 		handlerName: options.I18NHandlerName,
 	});
 

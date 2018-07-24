@@ -55,7 +55,7 @@ exports.I18NHandlerGlobalExampleCode = function I18NHandlerGlobalExampleCode(isM
 		handlerName			: 'I18N',
 		globalHandlerName	: 'I18N.topI18N',
 		FILE_KEY			: 'i18n_handler_example_global',
-		FUNCTION_VERSION	: DEF.I18NFunctionVersion+'.'+DEF.I18NFunctionSubVersion.GLOBAL,
+		FUNCTION_VERSION	: DEF.I18NFunctionVersion,
 		TRANSLATE_JSON_CODE	: JSON.stringify(exports.TRANSLATE_JSON, null, '\t'),
 	};
 	return i18nTpl.renderGlobal(config, isMin);
@@ -67,7 +67,7 @@ exports.I18NHandlerSimpleExampleCode = function I18NHandlerSimpleExampleCode(isM
 	{
 		handlerName			: 'I18N',
 		FILE_KEY			: 'i18n_handler_example_simple',
-		FUNCTION_VERSION	: DEF.I18NFunctionVersion+'.'+DEF.I18NFunctionSubVersion.SIMPLE,
+		FUNCTION_VERSION	: DEF.I18NFunctionVersion,
 	};
 	return i18nTpl.renderSimple(config, isMin);
 };
