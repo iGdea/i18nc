@@ -3,7 +3,8 @@
 var fs = require('fs');
 var tpl = fs.readFileSync(__dirname+'/doc-lib/tpl/upgrade.tpl').toString();
 var upgrade1to1Data = require('./doc-lib/options-upgrade-1to1');
-var upgrade1tonData = require('./doc-lib/options-upgrade-1ton');
+var codeMapTable = require('./doc-lib/codemap-table');
+var depdOptions = require('../../lib/upgrade/depd_options');
 
 var content = tpl.replace(/\$(\w+)/g, function(all, key)
 {
@@ -13,7 +14,7 @@ var content = tpl.replace(/\$(\w+)/g, function(all, key)
 			return upgrade1to1Data;
 
 		case 'OPTIONS_SWITCH_TABLE_DATA':
-			return upgrade1tonData;
+			return codeMapTable.table_1toN(depdOptions.OPTIONS_OLDKEY_MAP, '老配置', '新配置');
 
 		default:
 			return all;
