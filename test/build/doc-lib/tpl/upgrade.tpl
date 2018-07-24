@@ -36,9 +36,9 @@
  * `I18NHandler.style.minFuncJSON` = `true`
 
 
-#### 参数名修改对应表
+#### 参数名新旧对照表
 
-$OPTIONS_UPGRADE
+$OPTIONS_RENAME_TABLE_DATA
 
 **注意**
 
