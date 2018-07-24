@@ -1,7 +1,7 @@
 'use strict';
 
 var fs = require('fs');
-var tpl = fs.readFileSync(__dirname+'/doc-lib/tpl/upgrade.tpl').toString();
+var tpl = fs.readFileSync(__dirname+'/doc-lib/tpl/upgrade.tpl.md').toString();
 var upgrade1to1Data = require('./doc-lib/options-upgrade-1to1');
 var codeMapTable = require('./doc-lib/codemap-table');
 var depdOptions = require('../../lib/upgrade/depd_options');

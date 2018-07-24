@@ -5,7 +5,7 @@ var optionsComment = require('./doc-lib/options-comment');
 var codeMapTable = require('./doc-lib/codemap-table');
 var optionsUtils = require('../../lib/utils/options_utils');
 
-var tpl = fs.readFileSync(__dirname+'/doc-lib/tpl/options.tpl').toString();
+var tpl = fs.readFileSync(__dirname+'/doc-lib/tpl/options.tpl.md').toString();
 var content = fs.readFileSync(__dirname+'/../../lib/options.js').toString();
 
 var fileContent = tpl.replace(/\$(\w+)/g, function(all, key)
