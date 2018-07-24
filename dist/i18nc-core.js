@@ -23,7 +23,7 @@ exports.registerPlugin = function(name, handler)
 	debug('register plugin:%s', name);
 };
 
-},{"./lib/emitter":8,"./lib/main":16,"./lib/options":17,"./package.json":103,"debug":24}],2:[function(require,module,exports){
+},{"./lib/emitter":8,"./lib/main":16,"./lib/options":17,"./package.json":104,"debug":25}],2:[function(require,module,exports){
 'use strict';
 
 var _					= require('lodash');
@@ -343,7 +343,7 @@ _.extend(ASTCollector.prototype,
 	}
 });
 
-},{"./ast_literal_handler":3,"./ast_scope":4,"./ast_utils":6,"./def":7,"./emitter":8,"debug":24,"estraverse":81,"lodash":89}],3:[function(require,module,exports){
+},{"./ast_literal_handler":3,"./ast_scope":4,"./ast_utils":6,"./def":7,"./emitter":8,"debug":25,"estraverse":82,"lodash":90}],3:[function(require,module,exports){
 'use strict';
 
 var _				= require('lodash');
@@ -504,7 +504,7 @@ _.extend(LiteralHandler.prototype,
 	},
 });
 
-},{"./ast_tpl":5,"./ast_utils":6,"./emitter":8,"./utils/words_utils":23,"debug":24,"lodash":89}],4:[function(require,module,exports){
+},{"./ast_tpl":5,"./ast_utils":6,"./emitter":8,"./utils/words_utils":24,"debug":25,"lodash":90}],4:[function(require,module,exports){
 'use strict';
 
 var _				= require('lodash');
@@ -905,7 +905,7 @@ _.extend(ASTScope.prototype,
 	}
 });
 
-},{"./ast_tpl":5,"./ast_utils":6,"./i18n_placeholder":15,"./options":17,"./result_object":18,"debug":24,"escodegen":27,"lodash":89}],5:[function(require,module,exports){
+},{"./ast_tpl":5,"./ast_utils":6,"./i18n_placeholder":15,"./options":17,"./result_object":18,"debug":25,"escodegen":28,"lodash":90}],5:[function(require,module,exports){
 'use strict';
 
 var SELF_CREATED_FLAG = require('./def').AST_FLAGS.SELF_CREATED;
@@ -1139,7 +1139,7 @@ exports.astMemberExpression2arr = function astMemberExpression2arr(ast)
 	return result;
 }
 
-},{"./ast_tpl":5,"./def":7,"./options":17,"escodegen":27,"esprima":74}],7:[function(require,module,exports){
+},{"./ast_tpl":5,"./def":7,"./options":17,"escodegen":28,"esprima":75}],7:[function(require,module,exports){
 'use strict';
 
 exports.BLOCK_MODIFIER =
@@ -1238,7 +1238,7 @@ exports.proxy = function(obj)
 	};
 }
 
-},{"debug":24,"events":87}],9:[function(require,module,exports){
+},{"debug":25,"events":88}],9:[function(require,module,exports){
 'use strict';
 
 var _				= require('lodash');
@@ -1619,7 +1619,7 @@ function _wordJson2ast(words)
 	return astTpl.ObjectExpression(result);
 }
 
-},{"../ast_tpl":5,"../ast_utils":6,"../options":17,"debug":24,"escodegen":27,"lodash":89}],10:[function(require,module,exports){
+},{"../ast_tpl":5,"../ast_utils":6,"../options":17,"debug":25,"escodegen":28,"lodash":90}],10:[function(require,module,exports){
 'use strict';
 
 var _			= require('lodash');
@@ -1888,7 +1888,7 @@ function _wordAst2json(ast)
 	return result;
 }
 
-},{"../ast_utils":6,"../emitter":8,"debug":24,"escodegen":27,"lodash":89}],11:[function(require,module,exports){
+},{"../ast_utils":6,"../emitter":8,"debug":25,"escodegen":28,"lodash":90}],11:[function(require,module,exports){
 'use strict';
 
 var esprima		= require('esprima');
@@ -1966,7 +1966,7 @@ exports.render = tpl2render(require('./tpl/full.js').toString());
 exports.renderSimple = tpl2render(require('./tpl/simple.js').toString());
 exports.renderGlobal = tpl2render(require('./tpl/global.js').toString());
 
-},{"./tpl/full.js":12,"./tpl/global.js":13,"./tpl/simple.js":14,"debug":24,"escodegen":27,"esmangle":34,"esprima":74}],12:[function(require,module,exports){
+},{"./tpl/full.js":12,"./tpl/global.js":13,"./tpl/simple.js":14,"debug":25,"escodegen":28,"esmangle":35,"esprima":75}],12:[function(require,module,exports){
 /* global $getLanguageCode $TRANSLATE_JSON_CODE */
 
 'use strict';
@@ -2181,20 +2181,24 @@ _.extend(I18NPlaceholder.prototype,
 		}
 		else
 		{
-			var proxyGlobalHandlerConfig = options.I18NHandler.style.proxyGlobalHandler;
+			var I18NHandlerConfig = options.I18NHandler;
+			var I18NHandlerStyleConfig = I18NHandlerConfig.style;
+			var proxyGlobalHandlerConfig = I18NHandlerStyleConfig.proxyGlobalHandler;
 			// 只更新翻译数据
 			// 值为true，则此项安全，可以进行局部更新
 			var checkPartialItems =
 			{
-				options					: options.I18NHandler.upgrade.partial,
+				options					: I18NHandlerConfig.upgrade.partial,
 				originalAst				: this.originalAst,
 				translateJSON			: funcInfo.__TRANSLATE_JSON__ast,
-				handlerName				: !this.handlerName || funcInfo.handlerName == this.handlerName,
-				I18NFunctionVersion		: !options.I18NHandler.upgrade.checkVersion
+				handlerName				: !this.handlerName
+					|| funcInfo.handlerName == this.handlerName,
+				I18NFunctionVersion		: !I18NHandlerConfig.upgrade.checkVersion
 					|| funcInfo.__FUNCTION_VERSION__
 					&& funcInfo.__FUNCTION_VERSION__.split('.')[0] == DEF.I18NFunctionVersion,
-				proxyGlobalHandlerName	: !(proxyGlobalHandlerConfig.enable
-					&& proxyGlobalHandlerConfig.ignoreFuncCodeName
+				proxyGlobalHandler		: !funcInfo.globalHandlerName
+					|| proxyGlobalHandlerConfig.keepThisStyle,
+				proxyGlobalHandlerName	: !(proxyGlobalHandlerConfig.ignoreFuncCodeName
 					&& funcInfo.globalHandlerName
 					&& funcInfo.globalHandlerName != proxyGlobalHandlerConfig.name)
 			};
@@ -2432,7 +2436,7 @@ _.extend(I18NPlaceholder.prototype,
 
 		var newCode;
 		var proxyGlobalHandlerConfig = options.I18NHandler.style.proxyGlobalHandler;
-		var enableProxyGlobalHandler = proxyGlobalHandlerConfig.enable;
+		var enableProxyGlobalHandler = options.I18NHandler.style.codeStyle == 'proxyGlobalHandler';
 
 		if ((proxyGlobalHandlerConfig.autoConvert && funcInfo.globalHandlerName)
 			// 初始化的时候，使用global进行初始化
@@ -2451,7 +2455,7 @@ _.extend(I18NPlaceholder.prototype,
 		}
 		else
 		{
-			debug('i18n fucntion renderdata: %o', renderData);
+			debug('i18n full fucntion renderdata: %o', renderData);
 			newCode = i18nTpl.render(renderData, isMinCode);
 		}
 
@@ -2504,7 +2508,7 @@ _.extend(I18NPlaceholder.prototype,
 	}
 });
 
-},{"./ast_utils":6,"./def":7,"./emitter":8,"./i18n_func/generator":9,"./i18n_func/parser":10,"./i18n_func/render":11,"debug":24,"lodash":89}],16:[function(require,module,exports){
+},{"./ast_utils":6,"./def":7,"./emitter":8,"./i18n_func/generator":9,"./i18n_func/parser":10,"./i18n_func/render":11,"debug":25,"lodash":90}],16:[function(require,module,exports){
 'use strict';
 
 var emitter			= require('./emitter');
@@ -2607,7 +2611,7 @@ exports.defaults =
 	 * @type {Object|Array}
 	 * @default [console.xxxx]
 	 */
-	ignoreScanHandlerNames: new utils.FeatureEnableMore(
+	ignoreScanHandlerNames:
 	{
 		'console.log'	: true,
 		'console.warn'	: true,
@@ -2616,7 +2620,7 @@ exports.defaults =
 		'console.error'	: true,
 		'console.dir'	: true,
 		'console.table'	: true,
-	}),
+	},
 
 	/**
 	 * 导入的翻译数据
@@ -2669,6 +2673,7 @@ exports.defaults =
 			/**
 			 * 能否更新已插入代码中I18N函数体的总开关
 			 *
+			 * @remark 已经初始化的I18N函数，不会主动更新
 			 * @type {Boolean}
 			 */
 			enable: true,
@@ -2696,6 +2701,13 @@ exports.defaults =
 		style:
 		{
 			/**
+			 * 优先使用的代码风格（fullHandler/proxyGlobalHandler）
+			 *
+			 * @type {String}
+			 */
+			codeStyle: 'fullHandler',
+
+			/**
 			 * 对插入的I18N进行代码压缩
 			 *
 			 * @type {Boolean}
@@ -2722,12 +2734,6 @@ exports.defaults =
 			proxyGlobalHandler:
 			{
 				/**
-				 * 优先使用proxyGlobal风格生成I18N函数体
-				 *
-				 * @type {Boolean}
-				 */
-				enable: false,
-				/**
 				 * 调用的外部函数名
 				 *
 				 * @type {String}
@@ -2740,12 +2746,35 @@ exports.defaults =
 				 */
 				autoConvert: true,
 				/**
+				 * 已经转的函数，是否维持此状态
+				 *
+				 * @remark 权重高于autoConvert
+				 * @type {Boolean}
+				 */
+				keepThisStyle: true,
+				/**
 				 * 忽略源代码中解析出来的外部函数名，强制使用配置的函数名
  				 *
  				 * @remark 如果原来有值，但不同，会触发更新；原来没有，则不会进行更新
 				 * @type {Boolean}
 				 */
 				ignoreFuncCodeName: false,
+			},
+			fullHandler:
+			{
+				/**
+				 * 将源码中类fullHandler写法的I18N函数，转换为标准的fullHandler
+				 *
+				 * @type {Boolean}
+				 */
+				autoConvert: true,
+				/**
+				 * 已经转的函数，是否维持此状态
+				 *
+				 * @remark 权重高于autoConvert
+				 * @type {Boolean}
+				 */
+				keepThisStyle: true,
 			},
 		},
 		insert:
@@ -2825,7 +2854,7 @@ exports.defaults =
 	 * @remark 空数据则关闭所有，空对象则使用默认
 	 * @type {Object|Array}
 	 */
-	codeModifyItems: new utils.FeatureEnableOnly(
+	codeModifyItems:
 	{
 		// I18NHandler 已经改名为 I18NHandler.upgrade.enable
 		// I18NHandler: true,
@@ -2847,7 +2876,7 @@ exports.defaults =
 		 * @type {Boolean}
 		 */
 		I18NHandlerAlias: true
-	}),
+	},
 
 	/**
 	 * 启用的插件
@@ -2855,7 +2884,7 @@ exports.defaults =
 	 * @remark 空数据则关闭所有，空对象则使用默认
 	 * @type {Object|Array}
 	 */
-	pluginEnabled: new utils.FeatureEnableOnly({}),
+	pluginEnabled: {},
 	/**
 	 * 插件配置
 	 *
@@ -3366,16 +3395,17 @@ _.extend(CodeInfoResult.prototype,
 	},
 });
 
-},{"./ast_utils":6,"./options":17,"debug":24,"escodegen":27,"extend":88,"lodash":89}],19:[function(require,module,exports){
+},{"./ast_utils":6,"./options":17,"debug":25,"escodegen":28,"extend":89,"lodash":90}],19:[function(require,module,exports){
 'use strict';
 
 var _ = require('lodash');
-var debug = require('debug')('i18nc-core:depd_options');
 var deprecate = require('depd')('i18nc-core:options');
 var GetLanguageCodeDepd = require('./tpl/depd_getlanguagecode_handler').toString();
+var valUtils = require('../utils/options_vals.js');
+var OptionsVals = valUtils.OptionsVals;
 exports = module.exports = main;
 
-var OPTIONS_OLDKEY_MAP = exports.OPTIONS_OLDKEY_MAP =
+var OPTIONS_RENAME_MAP = exports.OPTIONS_RENAME_MAP =
 {
 	cutWordReg: 'cutwordReg',
 	handlerName: 'I18NHandlerName',
@@ -3392,7 +3422,7 @@ var OPTIONS_OLDKEY_MAP = exports.OPTIONS_OLDKEY_MAP =
 	// isMinFuncTranslateCode: 'I18NHandler.style.minFuncJSON',
 	isInjectAllTranslateWords: 'I18NHandler.style.comment4nowords',
 
-	isProxyGlobalHandler: 'I18NHandler.style.proxyGlobalHandler.enable',
+	// isProxyGlobalHandler: 'I18NHandler.style.proxyGlobalHandler.enable',
 	proxyGlobalHandlerName: 'I18NHandler.style.proxyGlobalHandler.name',
 	isIgnoreCodeProxyGlobalHandlerName: 'I18NHandler.style.proxyGlobalHandler.ignoreFuncCodeName',
 
@@ -3432,28 +3462,10 @@ var OPTIONS_OLDKEY_MAP = exports.OPTIONS_OLDKEY_MAP =
 };
 
 
-var KEY_ARRS = {};
-
-[
-	'I18NHandler.style.minFuncCode',
-	'I18NHandler.style.minFuncJSON'
-]
-.forEach(function(key)
-{
-	KEY_ARRS[key] = key.split('.');
-});
-
-_.each(OPTIONS_OLDKEY_MAP, function(val, key)
-{
-	if (!KEY_ARRS[val]) KEY_ARRS[val] = val.split('.');
-	if (!KEY_ARRS[key]) KEY_ARRS[key] = key.split('.');
-});
-
-
 var rename_1to1 = (function()
 {
 	var checkMap = {};
-	_.each(OPTIONS_OLDKEY_MAP, function(newKey, oldKey)
+	_.each(OPTIONS_RENAME_MAP, function(newKey, oldKey)
 	{
 		var config = checkMap[newKey] || (checkMap[newKey] = []);
 		config.push(oldKey);
@@ -3474,131 +3486,105 @@ var rename_1to1 = (function()
 		return val;
 	}
 
-	return function(options)
+	return function(optionsVals)
 	{
 		_.each(checkMap, function(oldKeys, newKey)
 		{
-			keyVal1ToKeyVal2(options, newKey, oldKeys, repalceKeyValHandler);
+			// options已经定义了最新的key
+			if (optionsVals.exists(newKey)) return;
+
+			_.some(oldKeys, function(oldKey)
+			{
+				// 判断老的key，有没有可能存在
+				if (optionsVals.exists(oldKey))
+				{
+					var val = repalceKeyValHandler(newKey, oldKey, optionsVals.getVal(oldKey));
+					optionsVals.setVal(newKey, val);
+					return true;
+				}
+			});
 		});
 	};
 })();
 
 
+var OPTIONS_OLDKEY_MAP = exports.OPTIONS_OLDKEY_MAP =
+{
+	'minTranslateFuncCode=all':
+		[
+			'I18NHandler.style.minFuncCode=true',
+			'I18NHandler.style.minFuncJSON=true'
+		],
+	'minTranslateFuncCode=onlyFunc':
+		[
+			'I18NHandler.style.minFuncCode=true',
+			'I18NHandler.style.minFuncJSON=false'
+		],
+	'minTranslateFuncCode=none':
+		[
+			'I18NHandler.style.minFuncCode=false',
+			'I18NHandler.style.minFuncJSON=false'
+		],
+	'isMinFuncTranslateCode=true':
+		[
+			'I18NHandler.style.minFuncCode=true',
+			'I18NHandler.style.minFuncJSON=true'
+		],
+	'isMinFuncTranslateCode=false':
+		[
+			'I18NHandler.style.minFuncCode=true',
+			'I18NHandler.style.minFuncJSON=false'
+		],
+	'I18NHandler.style.proxyGlobalHandler.enable=true':
+		[
+			'I18NHandler.style.codeStyle=proxyGlobalHandler'
+		],
+	'isProxyGlobalHandler=true':
+		[
+			'I18NHandler.style.codeStyle=proxyGlobalHandler'
+		],
+}
+
+function rename_1toN(optionsVals)
+{
+	_.each(OPTIONS_OLDKEY_MAP, function(targetArr, oldKey)
+	{
+		// 老的key是否定义，值是否满足
+		var oldKeyInfo = valUtils.str2keyVal(oldKey);
+		if (!optionsVals.exists(oldKeyInfo.key)
+			|| optionsVals.getVal(oldKeyInfo.key) !== oldKeyInfo.value)
+		{
+			return;
+		}
+
+		// 判断新的是否已经定义
+		var ret = targetArr.some(function(newKey)
+		{
+			return optionsVals.exists(valUtils.str2keyVal(newKey).key);
+		});
+
+		if (ret) return;
+
+		// 值转换
+		targetArr.forEach(function(newKey)
+		{
+			var info = valUtils.str2keyVal(newKey);
+			optionsVals.setVal(info.key, info.value);
+		});
+
+		deprecate('use `'+targetArr.join(';')+'` instead of `'+oldKey+'`');
+	});
+}
+
+
 function main(options)
 {
-	rename_1to1(options);
-
-	// 老的key，一个对应新的多个key，需要单独处理
-	if (!checkKeyVal(options, 'I18NHandler.style.minFuncCode').exists
-		&& !checkKeyVal(options, 'I18NHandler.style.minFuncJSON').exists)
-	{
-		if ('minTranslateFuncCode' in options)
-		{
-			if (options.minTranslateFuncCode == 'all')
-			{
-				setKeyVal(options, 'I18NHandler.style.minFuncCode', true);
-				setKeyVal(options, 'I18NHandler.style.minFuncJSON', true);
-			}
-			else if (options.minTranslateFuncCode == 'onlyFunc')
-			{
-				setKeyVal(options, 'I18NHandler.style.minFuncCode', true);
-				setKeyVal(options, 'I18NHandler.style.minFuncJSON', false);
-			}
-			else if (options.minTranslateFuncCode == 'none')
-			{
-				setKeyVal(options, 'I18NHandler.style.minFuncCode', false);
-				setKeyVal(options, 'I18NHandler.style.minFuncJSON', false);
-			}
-
-			deprecate('use `I18NHandler.style.minFuncCode/minFuncJSON` instead of `minTranslateFuncCode`');
-		}
-		else if ('isMinFuncTranslateCode' in options)
-		{
-			setKeyVal(options, 'I18NHandler.style.minFuncJSON', !!options.isMinFuncTranslateCode);
-			setKeyVal(options, 'I18NHandler.style.minFuncCode', true);
-
-			deprecate('use `I18NHandler.style.minFuncCode/minFuncJSON` instead of `isMinFuncTranslateCode`');
-		}
-	}
+	var optionsVals = new OptionsVals(options);
+	rename_1toN(optionsVals);
+	rename_1to1(optionsVals);
 }
 
-
-function keyVal1ToKeyVal2(options, newKey, oldKeys, handler)
-{
-	// options已经定义了最新的key
-	if (checkKeyVal(options, newKey).exists) return;
-
-	_.some(oldKeys, function(oldKey)
-	{
-		// 判断老的key，有没有可能存在
-		var info = checkKeyVal(options, oldKey);
-		if (info.exists)
-		{
-			var val = handler(newKey, oldKey, info.value);
-			setKeyVal(options, newKey, val);
-			return true;
-		}
-	});
-}
-
-function checkKeyVal(options, key)
-{
-	var prevVal = options;
-	var items = KEY_ARRS[key];
-	var exists = !_.some(items, function(name, index)
-	{
-		if (!prevVal)
-		{
-			return true;
-		}
-		else if (name in prevVal)
-		{
-			prevVal = prevVal[name];
-		}
-		else if (index == items.length - 1 && Array.isArray(prevVal))
-		{
-			debug('val is exists by array mode, key:%s', key);
-			prevVal = prevVal.indexOf(name) != -1;
-		}
-		else
-		{
-			return true;
-		}
-	});
-
-	return {
-		exists: exists,
-		value: exists ? prevVal : undefined,
-	};
-}
-
-function setKeyVal(options, key, val)
-{
-	var prevVal = options;
-	var i = 0, name, items = KEY_ARRS[key];
-	for(var tmp, t = items.length -1; i < t; i++)
-	{
-		name = items[i];
-		tmp = prevVal[name];
-		if (!tmp || typeof tmp != 'object')
-			prevVal = prevVal[name] = {};
-		else
-			prevVal = tmp;
-	}
-
-	name = items[i];
-	if (Array.isArray(prevVal) && val === true)
-	{
-		prevVal.push(name);
-		debug('set val in array mode, key:%s', key);
-	}
-	else
-	{
-		prevVal[name] = val;
-	}
-}
-
-},{"./tpl/depd_getlanguagecode_handler":20,"debug":24,"depd":26,"lodash":89}],20:[function(require,module,exports){
+},{"../utils/options_vals.js":23,"./tpl/depd_getlanguagecode_handler":20,"depd":27,"lodash":90}],20:[function(require,module,exports){
 /* global $GetLanguageCode */
 
 'use strict';
@@ -3663,29 +3649,41 @@ var _ = require('lodash');
 var extend = require('extend');
 var debug = require('debug')('i18nc-core:options');
 var depdOptions = require('../upgrade/depd_options');
+var valUtils = require('./options_vals.js');
+var OptionsVals = valUtils.OptionsVals;
 var ObjectToString = ({}).toString;
 
-
-exports.extend = function(defaults, options)
+var MUST_VALUES =
 {
-	if (!options) return _.extend({}, defaults);
+	'I18NHandler.style.minFuncJSON=true':
+		'I18NHandler.style.comment4nowords=false',
+
+	'I18NHandler.style.codeStyle=fullHandler':
+		'I18NHandler.style.fullHandler.keepThisStyle=true',
+
+	'I18NHandler.style.codeStyle=proxyGlobalHandler':
+		'I18NHandler.style.proxyGlobalHandler.keepThisStyle=true',
+
+	'I18NHandler.style.fullHandler.keepThisStyle=false':
+		'I18NHandler.style.fullHandler.autoConvert=false',
+
+	'I18NHandler.style.proxyGlobalHandler.keepThisStyle=false':
+		'I18NHandler.style.proxyGlobalHandler.autoConvert=false',
+};
+
+
+exports.extend = function(defaults, originalOptions)
+{
+	defaults = extend(true, {}, defaults);
+	if (!originalOptions) return defaults;
+	var options = extend(true, {}, originalOptions);
+
 	if (options.depdEnable !== false) depdOptions(options);
 	var result = _extendDefault(defaults, options);
 
-	// 直接设置为false
-	// 避免生成无用的key
-	if (result.I18NHandler.style.minFuncJSON)
-	{
-		if (result.I18NHandler.style === defaults.I18NHandler.style)
-		{
-			result = extend(true, {}, result);
-		}
-		result.I18NHandler.style.comment4nowords = false;
-	}
-
 	// for emitter
 	// 回调的时候，可能会带有额外的参数，保留这份
-	result.originalOptions = options;
+	result.originalOptions = originalOptions;
 
 	var cutwordReg = result.cutwordReg;
 	// 必须lastIndex必须重制为0，且处于global状态
@@ -3695,7 +3693,30 @@ exports.extend = function(defaults, options)
 		throw new Error('Invalid cutwordReg');
 	}
 
+	_fixOptionsVal(result);
+
 	return result;
+}
+
+function _fixOptionsVal(options)
+{
+	var optionsVals = new OptionsVals(options);
+
+	_.each(MUST_VALUES, function(targetKey, readKey)
+	{
+		var readInfo = valUtils.str2keyVal(readKey);
+
+		if (optionsVals.exists(readInfo.key)
+			&& optionsVals.getVal(readInfo.key) === readInfo.value)
+		{
+			var targetInfo = valUtils.str2keyVal(targetKey);
+			if (optionsVals.getVal(targetInfo.key) !== targetInfo.value)
+			{
+				optionsVals.setVal(targetInfo.key, targetInfo.value);
+				debug('when %s, then %s', readKey, targetKey);
+			}
+		}
+	});
 }
 
 
@@ -3737,20 +3758,12 @@ function checkFreeze(val)
 	return type == '[object Object]' || type == '[object Array]';
 }
 
-exports.FeatureEnableOnly = FeatureEnableOnly;
-
-function FeatureEnableOnly(settings)
+function _arr2jsonOnly(defaults, arr)
 {
-	_.extend(this, settings);
-}
-
-FeatureEnableOnly.prototype._arr2json = function(arr)
-{
-	var self = this;
 	var result = {};
 	arr.forEach(function(name)
 	{
-		if (typeof self[name] == 'boolean')
+		if (typeof defaults[name] == 'boolean')
 			result[name] = true;
 		else
 			debug('ignore key <%s>, which are not defined in defaults.', name);
@@ -3758,14 +3771,7 @@ FeatureEnableOnly.prototype._arr2json = function(arr)
 	return result;
 }
 
-exports.FeatureEnableMore = FeatureEnableMore;
-
-function FeatureEnableMore(settings)
-{
-	_.extend(this, settings);
-}
-
-FeatureEnableMore.prototype._arr2json = function(arr)
+function _arr2jsonMore(arr)
 {
 	var result = {};
 	arr.forEach(function(name)
@@ -3778,7 +3784,7 @@ FeatureEnableMore.prototype._arr2json = function(arr)
 
 function _extendDefault(defaults, object)
 {
-	if (!object) return _.extend({}, defaults);
+	if (!object) return defaults;
 
 	var result = {};
 	_.each(defaults, function(defaultVal, key)
@@ -3814,9 +3820,13 @@ function _extendDefault(defaults, object)
 					}
 					else if (Array.isArray(newVal))
 					{
-						if (defaultVal._arr2json)
+						if (key == 'pluginEnabled' || key == 'codeModifyItems')
 						{
-							result[key] = defaultVal._arr2json(newVal);
+							result[key] = _arr2jsonOnly(defaultVal, newVal);
+						}
+						else if (key == 'ignoreScanHandlerNames')
+						{
+							result[key] = _arr2jsonMore(newVal);
 						}
 						else if (Array.isArray(defaultVal))
 						{
@@ -3859,7 +3869,137 @@ function _extendDefault(defaults, object)
 	return result;
 }
 
-},{"../upgrade/depd_options":19,"debug":24,"extend":88,"lodash":89}],23:[function(require,module,exports){
+},{"../upgrade/depd_options":19,"./options_vals.js":23,"debug":25,"extend":89,"lodash":90}],23:[function(require,module,exports){
+'use strict';
+
+var _ = require('lodash');
+var debug = require('debug')('i18nc-core:options_vals');
+
+
+exports.OptionsVals = OptionsVals;
+
+var KEY_ARRS = {};
+function getKeys(key)
+{
+	return KEY_ARRS[key] || (KEY_ARRS[key] = key.split('.'));
+}
+
+function OptionsVals(options)
+{
+	this.options = options;
+	this._keyCache = {};
+}
+
+_.extend(OptionsVals.prototype,
+{
+	exists: function(key)
+	{
+		var keyCache  = this._keyCache;
+		if (key in keyCache) return true;
+
+		this.getVal(key);
+
+		return key in keyCache;
+	},
+	getVal: function(key)
+	{
+		var keyCache  = this._keyCache;
+		if (key in keyCache) return keyCache[key];
+
+		var key2 = '';
+		var prevVal = this.options;
+		var items = getKeys(key);
+		var exists = !_.some(items, function(name, index)
+		{
+			if (!prevVal) return true;
+
+			if (key2) keyCache[key2] = prevVal;
+			key2 += index === 0 ? name : '.'+name;
+			if (name in prevVal)
+			{
+				prevVal = prevVal[name];
+			}
+			else if (index == items.length - 1 && Array.isArray(prevVal))
+			{
+				debug('val is exists by array mode, key:%s', key);
+				prevVal = prevVal.indexOf(name) != -1;
+			}
+			else
+			{
+				return true;
+			}
+		});
+
+		if (exists)
+		{
+			keyCache[key] = prevVal;
+			return prevVal;
+		}
+	},
+	setVal: function(key, val)
+	{
+		var keyCache = this._keyCache;
+		keyCache[key] = val;
+		var items = getKeys(key);
+		var len = items.length;
+		var prevVal;
+
+		if (len < 3 || !(prevVal = keyCache[items.slice(0, -1).join('.')]))
+		{
+			prevVal = this.options;
+			for(var tmp, name, i = 0, key2 = '', t = len -1; i < t; i++)
+			{
+				name = items[i];
+				key2 += i === 0 ? name : '.'+name;
+				tmp = prevVal[name];
+				if (!tmp || typeof tmp != 'object')
+					prevVal = prevVal[name] = {};
+				else
+					prevVal = tmp;
+
+				keyCache[key2] = prevVal;
+			}
+		}
+
+		var name = items[len -1];
+		if (Array.isArray(prevVal) && val === true)
+		{
+			prevVal.push(name);
+			debug('set val in array mode, key:%s', key);
+		}
+		else
+		{
+			prevVal[name] = val;
+		}
+	}
+});
+
+
+var STR2KEYVAL = {};
+exports.str2keyVal = str2keyVal;
+function str2keyVal(key)
+{
+	var ret = STR2KEYVAL[key];
+
+	if (!ret)
+	{
+		var arr = key.split('=');
+		var val = arr.pop();
+
+		if (val == 'true') val = true;
+		else if (val == 'false') val = false;
+
+		ret = STR2KEYVAL[key] =
+		{
+			key: arr.join('='),
+			value: val
+		};
+	}
+
+	return ret;
+}
+
+},{"debug":25,"lodash":90}],24:[function(require,module,exports){
 'use strict';
 
 var debug			= require('debug')('i18nc-core:words_utils');
@@ -3960,7 +4100,7 @@ function getTranslateWordsFromLineStrings(lineStrings)
 	return translateWords;
 }
 
-},{"../emitter":8,"debug":24}],24:[function(require,module,exports){
+},{"../emitter":8,"debug":25}],25:[function(require,module,exports){
 (function (process){
 /**
  * This is the web browser implementation of `debug()`.
@@ -4159,7 +4299,7 @@ function localstorage() {
 }
 
 }).call(this,require('_process'))
-},{"./debug":25,"_process":91}],25:[function(require,module,exports){
+},{"./debug":26,"_process":92}],26:[function(require,module,exports){
 
 /**
  * This is the common logic for both the Node.js and web browser
@@ -4386,7 +4526,7 @@ function coerce(val) {
   return val;
 }
 
-},{"ms":90}],26:[function(require,module,exports){
+},{"ms":91}],27:[function(require,module,exports){
 /*!
  * depd
  * Copyright(c) 2015 Douglas Christopher Wilson
@@ -4465,7 +4605,7 @@ function wrapproperty (obj, prop, message) {
   }
 }
 
-},{}],27:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 (function (global){
 /*
   Copyright (C) 2012-2014 Yusuke Suzuki <utatane.tea@gmail.com>
@@ -7072,7 +7212,7 @@ function wrapproperty (obj, prop, message) {
 /* vim: set sw=4 ts=4 et tw=80 : */
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./package.json":28,"estraverse":81,"esutils":86,"source-map":102}],28:[function(require,module,exports){
+},{"./package.json":29,"estraverse":82,"esutils":87,"source-map":103}],29:[function(require,module,exports){
 module.exports={
   "_args": [
     [
@@ -7201,7 +7341,7 @@ module.exports={
   "version": "1.11.0"
 }
 
-},{}],29:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
   Copyright (C) 2013 Alex Seville <hi@alexanderseville.com>
@@ -8325,7 +8465,7 @@ module.exports={
 }, this));
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"estraverse":30}],30:[function(require,module,exports){
+},{"estraverse":31}],31:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
   Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com>
@@ -9166,7 +9306,7 @@ module.exports={
 }(exports));
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./package.json":31}],31:[function(require,module,exports){
+},{"./package.json":32}],32:[function(require,module,exports){
 module.exports={
   "_args": [
     [
@@ -9265,7 +9405,7 @@ module.exports={
   "version": "2.0.0"
 }
 
-},{}],32:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -9434,7 +9574,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./common":33}],33:[function(require,module,exports){
+},{"./common":34}],34:[function(require,module,exports){
 /*
   Copyright (C) 2012 Yusuke Suzuki <utatane.tea@gmail.com>
   Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com>
@@ -9904,7 +10044,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"escope":29,"estraverse":69,"esutils":72}],34:[function(require,module,exports){
+},{"escope":30,"estraverse":70,"esutils":73}],35:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -10094,7 +10234,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../package.json":73,"./annotate-directive":32,"./common":33,"./options":37,"./pass":38,"esshorten":75}],35:[function(require,module,exports){
+},{"../package.json":74,"./annotate-directive":33,"./common":34,"./options":38,"./pass":39,"esshorten":76}],36:[function(require,module,exports){
 /*
   Copyright (C) 2012 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -10460,7 +10600,7 @@ module.exports={
     exports.booleanCondition = booleanCondition;
 }());
 
-},{"./common":33}],36:[function(require,module,exports){
+},{"./common":34}],37:[function(require,module,exports){
 (function (global){
 /*
   Copyright (C) 2012 Yusuke Suzuki <utatane.tea@gmail.com>
@@ -10575,7 +10715,7 @@ module.exports={
 /* vim: set sw=4 ts=4 et tw=80 : */
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],37:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -10666,7 +10806,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./common":33}],38:[function(require,module,exports){
+},{"./common":34}],39:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -10778,7 +10918,7 @@ module.exports={
     ];
 }());
 
-},{"./common":33,"./pass/concatenate-variable-definition":39,"./pass/dead-code-elimination":40,"./pass/drop-variable-definition":41,"./pass/eliminate-duplicate-function-declarations":42,"./pass/hoist-variable-to-arguments":43,"./pass/reduce-branch-jump":44,"./pass/reduce-multiple-if-statements":45,"./pass/reduce-sequence-expression":46,"./pass/remove-context-sensitive-expressions":47,"./pass/remove-empty-statement":48,"./pass/remove-side-effect-free-expressions":49,"./pass/remove-unreachable-branch":50,"./pass/remove-unused-label":51,"./pass/remove-wasted-blocks":52,"./pass/reordering-function-declarations":53,"./pass/transform-branch-to-expression":54,"./pass/transform-dynamic-to-static-property-access":55,"./pass/transform-dynamic-to-static-property-definition":56,"./pass/transform-immediate-function-call":57,"./pass/transform-logical-association":58,"./pass/transform-to-compound-assignment":59,"./pass/transform-to-sequence-expression":60,"./pass/transform-typeof-undefined":61,"./pass/tree-based-constant-folding":62,"./post/omit-parens-in-void-context-iife":63,"./post/rewrite-boolean":64,"./post/rewrite-conditional-expression":65,"./post/transform-infinity":66,"./post/transform-static-to-dynamic-property-access":67,"./query":68}],39:[function(require,module,exports){
+},{"./common":34,"./pass/concatenate-variable-definition":40,"./pass/dead-code-elimination":41,"./pass/drop-variable-definition":42,"./pass/eliminate-duplicate-function-declarations":43,"./pass/hoist-variable-to-arguments":44,"./pass/reduce-branch-jump":45,"./pass/reduce-multiple-if-statements":46,"./pass/reduce-sequence-expression":47,"./pass/remove-context-sensitive-expressions":48,"./pass/remove-empty-statement":49,"./pass/remove-side-effect-free-expressions":50,"./pass/remove-unreachable-branch":51,"./pass/remove-unused-label":52,"./pass/remove-wasted-blocks":53,"./pass/reordering-function-declarations":54,"./pass/transform-branch-to-expression":55,"./pass/transform-dynamic-to-static-property-access":56,"./pass/transform-dynamic-to-static-property-definition":57,"./pass/transform-immediate-function-call":58,"./pass/transform-logical-association":59,"./pass/transform-to-compound-assignment":60,"./pass/transform-to-sequence-expression":61,"./pass/transform-typeof-undefined":62,"./pass/tree-based-constant-folding":63,"./post/omit-parens-in-void-context-iife":64,"./post/rewrite-boolean":65,"./post/rewrite-conditional-expression":66,"./post/transform-infinity":67,"./post/transform-static-to-dynamic-property-access":68,"./query":69}],40:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -10867,7 +11007,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33}],40:[function(require,module,exports){
+},{"../common":34}],41:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -11429,7 +11569,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33}],41:[function(require,module,exports){
+},{"../common":34}],42:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -11657,7 +11797,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33,"../evaluator":35,"escope":29}],42:[function(require,module,exports){
+},{"../common":34,"../evaluator":36,"escope":30}],43:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -11820,7 +11960,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33,"../map":36}],43:[function(require,module,exports){
+},{"../common":34,"../map":37}],44:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -12004,7 +12144,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33,"escope":29}],44:[function(require,module,exports){
+},{"../common":34,"escope":30}],45:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -12175,7 +12315,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33}],45:[function(require,module,exports){
+},{"../common":34}],46:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -12254,7 +12394,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33}],46:[function(require,module,exports){
+},{"../common":34}],47:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -12448,7 +12588,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33,"../evaluator":35,"escope":29}],47:[function(require,module,exports){
+},{"../common":34,"../evaluator":36,"escope":30}],48:[function(require,module,exports){
 /*
   Copyright (C) 2012 Mihai Bazon <mihai.bazon@gmail.com>
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
@@ -12809,7 +12949,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33,"../evaluator":35,"escope":29}],48:[function(require,module,exports){
+},{"../common":34,"../evaluator":36,"escope":30}],49:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -12925,7 +13065,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33}],49:[function(require,module,exports){
+},{"../common":34}],50:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -13084,7 +13224,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33,"../evaluator":35,"escope":29}],50:[function(require,module,exports){
+},{"../common":34,"../evaluator":36,"escope":30}],51:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -13282,7 +13422,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33,"../evaluator":35,"escope":29}],51:[function(require,module,exports){
+},{"../common":34,"../evaluator":36,"escope":30}],52:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -13412,7 +13552,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33,"../map":36}],52:[function(require,module,exports){
+},{"../common":34,"../map":37}],53:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -13526,7 +13666,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33}],53:[function(require,module,exports){
+},{"../common":34}],54:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -13615,7 +13755,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33}],54:[function(require,module,exports){
+},{"../common":34}],55:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -13763,7 +13903,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33}],55:[function(require,module,exports){
+},{"../common":34}],56:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -13839,7 +13979,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33}],56:[function(require,module,exports){
+},{"../common":34}],57:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -13919,7 +14059,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33}],57:[function(require,module,exports){
+},{"../common":34}],58:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -14027,7 +14167,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33}],58:[function(require,module,exports){
+},{"../common":34}],59:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -14100,7 +14240,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33}],59:[function(require,module,exports){
+},{"../common":34}],60:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -14237,7 +14377,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33,"escope":29}],60:[function(require,module,exports){
+},{"../common":34,"escope":30}],61:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -14383,7 +14523,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33}],61:[function(require,module,exports){
+},{"../common":34}],62:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -14484,7 +14624,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33,"escope":29}],62:[function(require,module,exports){
+},{"../common":34,"escope":30}],63:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -14680,7 +14820,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33,"../evaluator":35}],63:[function(require,module,exports){
+},{"../common":34,"../evaluator":36}],64:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -14784,7 +14924,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33}],64:[function(require,module,exports){
+},{"../common":34}],65:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -14880,7 +15020,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33}],65:[function(require,module,exports){
+},{"../common":34}],66:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -14954,7 +15094,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33}],66:[function(require,module,exports){
+},{"../common":34}],67:[function(require,module,exports){
 /*
   Copyright (C) 2012 Michael Ficarra <esmangle.copyright@michael.ficarra.me>
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
@@ -15024,7 +15164,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33}],67:[function(require,module,exports){
+},{"../common":34}],68:[function(require,module,exports){
 /*
   Copyright (C) 2012 Michael Ficarra <esmangle.copyright@michael.ficarra.me>
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
@@ -15120,7 +15260,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33}],68:[function(require,module,exports){
+},{"../common":34}],69:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -15178,7 +15318,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./common":33}],69:[function(require,module,exports){
+},{"./common":34}],70:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
   Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com>
@@ -15869,7 +16009,7 @@ module.exports={
 }));
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{}],70:[function(require,module,exports){
+},{}],71:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -15961,7 +16101,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{}],71:[function(require,module,exports){
+},{}],72:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -16080,7 +16220,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./code":70}],72:[function(require,module,exports){
+},{"./code":71}],73:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -16114,7 +16254,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./code":70,"./keyword":71}],73:[function(require,module,exports){
+},{"./code":71,"./keyword":72}],74:[function(require,module,exports){
 module.exports={
   "_args": [
     [
@@ -16236,7 +16376,7 @@ module.exports={
   "version": "1.0.1"
 }
 
-},{}],74:[function(require,module,exports){
+},{}],75:[function(require,module,exports){
 (function webpackUniversalModuleDefinition(root, factory) {
 /* istanbul ignore next */
 	if(typeof exports === 'object' && typeof module === 'object')
@@ -22946,7 +23086,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ ])
 });
 ;
-},{}],75:[function(require,module,exports){
+},{}],76:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -23238,9 +23378,9 @@ return /******/ (function(modules) { // webpackBootstrap
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../package.json":80,"./map":76,"./utility":77,"escope":29,"estraverse":78,"esutils":86}],76:[function(require,module,exports){
-arguments[4][36][0].apply(exports,arguments)
-},{"dup":36}],77:[function(require,module,exports){
+},{"../package.json":81,"./map":77,"./utility":78,"escope":30,"estraverse":79,"esutils":87}],77:[function(require,module,exports){
+arguments[4][37][0].apply(exports,arguments)
+},{"dup":37}],78:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -23351,7 +23491,7 @@ arguments[4][36][0].apply(exports,arguments)
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{}],78:[function(require,module,exports){
+},{}],79:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
   Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com>
@@ -24196,7 +24336,7 @@ arguments[4][36][0].apply(exports,arguments)
 }(exports));
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./package.json":79}],79:[function(require,module,exports){
+},{"./package.json":80}],80:[function(require,module,exports){
 module.exports={
   "_args": [
     [
@@ -24299,7 +24439,7 @@ module.exports={
   "version": "4.1.1"
 }
 
-},{}],80:[function(require,module,exports){
+},{}],81:[function(require,module,exports){
 module.exports={
   "_args": [
     [
@@ -24406,7 +24546,7 @@ module.exports={
   "version": "1.1.1"
 }
 
-},{}],81:[function(require,module,exports){
+},{}],82:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
   Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com>
@@ -25257,7 +25397,7 @@ module.exports={
 }(exports));
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./package.json":82}],82:[function(require,module,exports){
+},{"./package.json":83}],83:[function(require,module,exports){
 module.exports={
   "_args": [
     [
@@ -25370,7 +25510,7 @@ module.exports={
   "version": "4.2.0"
 }
 
-},{}],83:[function(require,module,exports){
+},{}],84:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -25516,7 +25656,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{}],84:[function(require,module,exports){
+},{}],85:[function(require,module,exports){
 /*
   Copyright (C) 2013-2014 Yusuke Suzuki <utatane.tea@gmail.com>
   Copyright (C) 2014 Ivan Nikulin <ifaaan@gmail.com>
@@ -25653,7 +25793,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{}],85:[function(require,module,exports){
+},{}],86:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -25820,7 +25960,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./code":84}],86:[function(require,module,exports){
+},{"./code":85}],87:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -25855,7 +25995,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./ast":83,"./code":84,"./keyword":85}],87:[function(require,module,exports){
+},{"./ast":84,"./code":85,"./keyword":86}],88:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -26380,11 +26520,13 @@ function functionBindPolyfill(context) {
   };
 }
 
-},{}],88:[function(require,module,exports){
+},{}],89:[function(require,module,exports){
 'use strict';
 
 var hasOwn = Object.prototype.hasOwnProperty;
 var toStr = Object.prototype.toString;
+var defineProperty = Object.defineProperty;
+var gOPD = Object.getOwnPropertyDescriptor;
 
 var isArray = function isArray(arr) {
 	if (typeof Array.isArray === 'function') {
@@ -26414,6 +26556,35 @@ var isPlainObject = function isPlainObject(obj) {
 	return typeof key === 'undefined' || hasOwn.call(obj, key);
 };
 
+// If name is '__proto__', and Object.defineProperty is available, define __proto__ as an own property on target
+var setProperty = function setProperty(target, options) {
+	if (defineProperty && options.name === '__proto__') {
+		defineProperty(target, options.name, {
+			enumerable: true,
+			configurable: true,
+			value: options.newValue,
+			writable: true
+		});
+	} else {
+		target[options.name] = options.newValue;
+	}
+};
+
+// Return undefined instead of __proto__ if '__proto__' is not an own property
+var getProperty = function getProperty(obj, name) {
+	if (name === '__proto__') {
+		if (!hasOwn.call(obj, name)) {
+			return void 0;
+		} else if (gOPD) {
+			// In early versions of node, obj['__proto__'] is buggy when obj has
+			// __proto__ as an own property. Object.getOwnPropertyDescriptor() works.
+			return gOPD(obj, name).value;
+		}
+	}
+
+	return obj[name];
+};
+
 module.exports = function extend() {
 	var options, name, src, copy, copyIsArray, clone;
 	var target = arguments[0];
@@ -26438,8 +26609,8 @@ module.exports = function extend() {
 		if (options != null) {
 			// Extend the base object
 			for (name in options) {
-				src = target[name];
-				copy = options[name];
+				src = getProperty(target, name);
+				copy = getProperty(options, name);
 
 				// Prevent never-ending loop
 				if (target !== copy) {
@@ -26453,11 +26624,11 @@ module.exports = function extend() {
 						}
 
 						// Never move original objects, clone them
-						target[name] = extend(deep, clone, copy);
+						setProperty(target, { name: name, newValue: extend(deep, clone, copy) });
 
 					// Don't bring in undefined values
 					} else if (typeof copy !== 'undefined') {
-						target[name] = copy;
+						setProperty(target, { name: name, newValue: copy });
 					}
 				}
 			}
@@ -26468,7 +26639,7 @@ module.exports = function extend() {
 	return target;
 };
 
-},{}],89:[function(require,module,exports){
+},{}],90:[function(require,module,exports){
 (function (global){
 /**
  * @license
@@ -43577,7 +43748,7 @@ module.exports = function extend() {
 }.call(this));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],90:[function(require,module,exports){
+},{}],91:[function(require,module,exports){
 /**
  * Helpers.
  */
@@ -43731,7 +43902,7 @@ function plural(ms, n, name) {
   return Math.ceil(ms / n) + ' ' + name + 's';
 }
 
-},{}],91:[function(require,module,exports){
+},{}],92:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -43917,7 +44088,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],92:[function(require,module,exports){
+},{}],93:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -44040,7 +44211,7 @@ ArraySet.prototype.toArray = function ArraySet_toArray() {
 
 exports.ArraySet = ArraySet;
 
-},{"./util":101}],93:[function(require,module,exports){
+},{"./util":102}],94:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -44182,7 +44353,7 @@ exports.decode = function base64VLQ_decode(aStr, aIndex, aOutParam) {
   aOutParam.rest = aIndex;
 };
 
-},{"./base64":94}],94:[function(require,module,exports){
+},{"./base64":95}],95:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -44251,7 +44422,7 @@ exports.decode = function (charCode) {
   return -1;
 };
 
-},{}],95:[function(require,module,exports){
+},{}],96:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -44364,7 +44535,7 @@ exports.search = function search(aNeedle, aHaystack, aCompare, aBias) {
   return index;
 };
 
-},{}],96:[function(require,module,exports){
+},{}],97:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2014 Mozilla Foundation and contributors
@@ -44445,7 +44616,7 @@ MappingList.prototype.toArray = function MappingList_toArray() {
 
 exports.MappingList = MappingList;
 
-},{"./util":101}],97:[function(require,module,exports){
+},{"./util":102}],98:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -44561,7 +44732,7 @@ exports.quickSort = function (ary, comparator) {
   doQuickSort(ary, comparator, 0, ary.length - 1);
 };
 
-},{}],98:[function(require,module,exports){
+},{}],99:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -45708,7 +45879,7 @@ IndexedSourceMapConsumer.prototype._parseMappings =
 
 exports.IndexedSourceMapConsumer = IndexedSourceMapConsumer;
 
-},{"./array-set":92,"./base64-vlq":93,"./binary-search":95,"./quick-sort":97,"./util":101}],99:[function(require,module,exports){
+},{"./array-set":93,"./base64-vlq":94,"./binary-search":96,"./quick-sort":98,"./util":102}],100:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -46135,7 +46306,7 @@ SourceMapGenerator.prototype.toString =
 
 exports.SourceMapGenerator = SourceMapGenerator;
 
-},{"./array-set":92,"./base64-vlq":93,"./mapping-list":96,"./util":101}],100:[function(require,module,exports){
+},{"./array-set":93,"./base64-vlq":94,"./mapping-list":97,"./util":102}],101:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -46550,7 +46721,7 @@ SourceNode.prototype.toStringWithSourceMap = function SourceNode_toStringWithSou
 
 exports.SourceNode = SourceNode;
 
-},{"./source-map-generator":99,"./util":101}],101:[function(require,module,exports){
+},{"./source-map-generator":100,"./util":102}],102:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -47040,7 +47211,7 @@ function computeSourceURL(sourceRoot, sourceURL, sourceMapURL) {
 }
 exports.computeSourceURL = computeSourceURL;
 
-},{}],102:[function(require,module,exports){
+},{}],103:[function(require,module,exports){
 /*
  * Copyright 2009-2011 Mozilla Foundation and contributors
  * Licensed under the New BSD license. See LICENSE.txt or:
@@ -47050,10 +47221,10 @@ exports.SourceMapGenerator = require('./lib/source-map-generator').SourceMapGene
 exports.SourceMapConsumer = require('./lib/source-map-consumer').SourceMapConsumer;
 exports.SourceNode = require('./lib/source-node').SourceNode;
 
-},{"./lib/source-map-consumer":98,"./lib/source-map-generator":99,"./lib/source-node":100}],103:[function(require,module,exports){
+},{"./lib/source-map-consumer":99,"./lib/source-map-generator":100,"./lib/source-node":101}],104:[function(require,module,exports){
 module.exports={
   "name": "i18nc-core",
-  "version": "10.4.1",
+  "version": "10.5.0",
   "description": "I18N Tool for JS files",
   "main": "index.js",
   "scripts": {
@@ -47076,11 +47247,12 @@ module.exports={
     "esmangle": "^1.0.1",
     "esprima": "^4.0.1",
     "estraverse": "^4.2.0",
-    "extend": "^3.0.1",
+    "extend": "^3.0.2",
     "lodash": "^4.17.10"
   },
   "devDependencies": {
     "benchmark": "^2.1.4",
+    "comment-parser": "^0.5.0",
     "cross-env": "^5.2.0",
     "eslint": "^5.1.0",
     "eslint-config-brcjs": "^0.2.0",
