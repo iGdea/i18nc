@@ -1159,7 +1159,13 @@ exports.AST_FLAGS =
 	OBJECT_KEY				: 1 << 6,
 };
 
-exports.I18NFunctionVersion = "b";
+exports.I18NFunctionVersion = 'b';
+exports.I18NFunctionSubVersion =
+{
+	FULL	: 'f',
+	SIMPLE	: 's',
+	GLOBAL	: 'g',
+};
 
 },{}],8:[function(require,module,exports){
 'use strict';
@@ -1651,6 +1657,8 @@ function paseI18nHandlerInfo(ast, options, result)
 		// 第一次遍历，还要检查return 是否使用了全局变量
 		var funcBodyAst = ast.body && ast.body.body;
 		var lastBodyItem = funcBodyAst[funcBodyAst.length - 1];
+		var firstArgName = ast.params && ast.params[0] && ast.params[0].name;
+		debug('get handlerName:%s, firstArgName: %s', result.handlerName, firstArgName);
 
 		var lastBodyArgument = lastBodyItem && lastBodyItem.argument;
 		if (lastBodyItem
@@ -1660,11 +1668,26 @@ function paseI18nHandlerInfo(ast, options, result)
 			&& lastBodyArgument.operator == '+'
 			&& lastBodyArgument.left
 			&& lastBodyArgument.left.type == 'Literal'
-			&& lastBodyArgument.left.value === ''
-			&& lastBodyArgument.right.type == 'CallExpression')
+			&& lastBodyArgument.left.value === '')
 		{
-			result.globalHandlerName = escodegen.generate(lastBodyArgument.right.callee);
-			debug('get globalhandler:%s', result.globalHandlerName);
+			var rightAst = lastBodyArgument.right;
+
+			if (rightAst.type == 'CallExpression'
+				&& rightAst.arguments
+				&& rightAst.arguments[0]
+				&& rightAst.arguments[0].type == 'Identifier'
+				&& rightAst.arguments[0].name == firstArgName)
+			{
+				result.codeStyle = 'proxyGlobalHandler';
+				result.globalHandlerName = escodegen.generate(lastBodyArgument.right.callee);
+				debug('get globalhandler:%s', result.globalHandlerName);
+			}
+			else if (rightAst.type == 'Identifier'
+				&& rightAst.name == firstArgName)
+			{
+				result.codeStyle = 'fullHandler';
+				debug('this is fullHandler');
+			}
 		}
 	}
 
@@ -2179,6 +2202,8 @@ _.extend(I18NPlaceholder.prototype,
 			var I18NHandlerConfig = options.I18NHandler;
 			var I18NHandlerStyleConfig = I18NHandlerConfig.style;
 			var proxyGlobalHandlerConfig = I18NHandlerStyleConfig.proxyGlobalHandler;
+			var fullHandlerConfig = I18NHandlerStyleConfig.fullHandler;
+			var FUNCTION_VERSION = funcInfo.__FUNCTION_VERSION__ || '';
 			// 只更新翻译数据
 			// 值为true，则此项安全，可以进行局部更新
 			var checkPartialItems =
@@ -2189,10 +2214,13 @@ _.extend(I18NPlaceholder.prototype,
 				handlerName				: !this.handlerName
 					|| funcInfo.handlerName == this.handlerName,
 				I18NFunctionVersion		: !I18NHandlerConfig.upgrade.checkVersion
-					|| funcInfo.__FUNCTION_VERSION__
-					&& funcInfo.__FUNCTION_VERSION__.split('.')[0] == DEF.I18NFunctionVersion,
-				proxyGlobalHandler		: !funcInfo.globalHandlerName
-					|| proxyGlobalHandlerConfig.keepThisStyle,
+					|| FUNCTION_VERSION[0] == DEF.I18NFunctionVersion,
+
+				// 代码风格判断
+				fullHandler				: fullHandlerConfig.keepThisStyle
+					|| FUNCTION_VERSION[1] != DEF.I18NFunctionSubVersion.FULL,
+				proxyGlobalHandler		: proxyGlobalHandlerConfig.keepThisStyle
+					|| FUNCTION_VERSION[1] != DEF.I18NFunctionSubVersion.GLOBAL,
 				proxyGlobalHandlerName	: !(proxyGlobalHandlerConfig.ignoreFuncCodeName
 					&& funcInfo.globalHandlerName
 					&& funcInfo.globalHandlerName != proxyGlobalHandlerConfig.name)
@@ -2245,15 +2273,15 @@ _.extend(I18NPlaceholder.prototype,
 
 			if (!this._parseResult || !this._parseResult.__FILE_KEY__)
 			{
-				this._parseResult =
-				{
-					isNotI18NHandler		: true,
-					handlerName				: options.I18NHandlerName,
-					globalHandlerName		: this._parseResult && this._parseResult.globalHandlerName,
-					__FILE_KEY__			: options.I18NHandler.data.defaultFileKey,
-					__FUNCTION_VERSION__	: DEF.I18NFunctionVersion,
-					__TRANSLATE_JSON__		: {},
-				};
+				this._parseResult = _.extend(
+					{
+						handlerName				: options.I18NHandlerName,
+						__FILE_KEY__			: options.I18NHandler.data.defaultFileKey,
+						__FUNCTION_VERSION__	: DEF.I18NFunctionVersion,
+						__TRANSLATE_JSON__		: {}
+					},
+					this._parseResult,
+					{isNotI18NHandler: true});
 			}
 		}
 
@@ -2425,24 +2453,29 @@ _.extend(I18NPlaceholder.prototype,
 			handlerName			: this.handlerName || funcInfo.handlerName || options.I18NHandlerName,
 			getLanguageCode		: getLanguageCode,
 			FILE_KEY			: funcInfo.__FILE_KEY__,
-			FUNCTION_VERSION	: DEF.I18NFunctionVersion,
+			FUNCTION_VERSION	: DEF.I18NFunctionVersion+DEF.I18NFunctionSubVersion.FULL,
 			TRANSLATE_JSON_CODE	: TRANSLATE_JSON_CODE,
 		};
 
 		var newCode;
-		var proxyGlobalHandlerConfig = options.I18NHandler.style.proxyGlobalHandler;
-		var enableProxyGlobalHandler = options.I18NHandler.style.codeStyle == 'proxyGlobalHandler';
+		var I18NHandlerStyleConfig = options.I18NHandler.style;
+		var proxyGlobalHandlerConfig = I18NHandlerStyleConfig.proxyGlobalHandler;
+		var useFullHanlder = I18NHandlerStyleConfig.fullHandler.autoConvert
+				&& funcInfo.codeStyle == 'fullHandler';
+		var useProxyGlobalHandler = !useFullHanlder
+				&& I18NHandlerStyleConfig.codeStyle == 'proxyGlobalHandler';
 
-		if ((proxyGlobalHandlerConfig.autoConvert && funcInfo.globalHandlerName)
+		if ((proxyGlobalHandlerConfig.autoConvert && funcInfo.codeStyle == 'proxyGlobalHandler')
 			// 初始化的时候，使用global进行初始化
-			|| (enableProxyGlobalHandler && funcInfo.isNotI18NHandler)
+			|| (useProxyGlobalHandler && funcInfo.isNotI18NHandler)
 			// 启动全量更新，同时启动globalHandler
-			|| (enableProxyGlobalHandler && !options.I18NHandler.upgrade.partial))
+			|| (useProxyGlobalHandler && !options.I18NHandler.upgrade.partial))
 		{
 			renderData.globalHandlerName = proxyGlobalHandlerConfig.ignoreFuncCodeName
 				? proxyGlobalHandlerConfig.name
 				: funcInfo.globalHandlerName || proxyGlobalHandlerConfig.name;
-			renderData.FUNCTION_VERSION = renderData.FUNCTION_VERSION.split('.')[0];
+			renderData.FUNCTION_VERSION = DEF.I18NFunctionVersion
+				+ DEF.I18NFunctionSubVersion.GLOBAL;
 
 			debug('i18n global function renderdata: %o', renderData);
 			newCode = i18nTpl.renderGlobal(renderData, isMinCode);
@@ -2467,7 +2500,7 @@ _.extend(I18NPlaceholder.prototype,
 		var options = this.options;
 		var isMinCode = options.I18NHandler.style.minFuncCode;
 		var funcInfo = this.parse();
-		var SIMPLE_VERSION = DEF.I18NFunctionVersion;
+		var SIMPLE_VERSION = DEF.I18NFunctionVersion + DEF.I18NFunctionSubVersion.SIMPLE;
 
 		if (funcInfo.__FUNCTION_VERSION__ == SIMPLE_VERSION)
 		{
@@ -3646,7 +3679,7 @@ var valUtils = require('./options_vals.js');
 var OptionsVals = valUtils.OptionsVals;
 var ObjectToString = ({}).toString;
 
-var MUST_VALUES =
+var LINK_VALUES = exports.LINK_VALUES =
 {
 	'I18NHandler.style.minFuncJSON=true':
 		'I18NHandler.style.comment4nowords=false',
@@ -3695,7 +3728,7 @@ function _fixOptionsVal(options)
 {
 	var optionsVals = new OptionsVals(options);
 
-	_.each(MUST_VALUES, function(targetKey, readKey)
+	_.each(LINK_VALUES, function(targetKey, readKey)
 	{
 		var readInfo = valUtils.str2keyVal(readKey);
 
