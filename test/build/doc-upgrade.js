@@ -2,7 +2,7 @@
 
 var _ = require('lodash');
 var fs = require('fs');
-var tpl = fs.readFileSync(__dirname+'/doc-tpl/upgrade.tpl').toString();
+var tpl = fs.readFileSync(__dirname+'/doc-lib/tpl/upgrade.tpl').toString();
 var depdOptions = require('../../lib/upgrade/depd_options');
 
 var maxNewKeyLen = 0;
