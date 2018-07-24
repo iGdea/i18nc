@@ -7,7 +7,7 @@ var depdOptions = require('../../lib/upgrade/depd_options');
 
 var maxNewKeyLen = 0;
 var maxOldKeyLen = 0;
-var tableContentArr = _.map(depdOptions.OPTIONS_OLDKEY_MAP, function(newKey, oldKey)
+var tableContentArr = _.map(depdOptions.OPTIONS_RENAME_MAP, function(newKey, oldKey)
 	{
 		if (newKey.length > maxNewKeyLen) maxNewKeyLen = newKey.length;
 		if (oldKey.length > maxOldKeyLen) maxOldKeyLen = oldKey.length;
