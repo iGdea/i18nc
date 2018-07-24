@@ -1,5 +1,6 @@
 {
 	"handlerName": "I18N",
+	"codeStyle": "proxyGlobalHandler",
 	"globalHandlerName": "I18N.topI18N",
 	"handlerNameVarName": "self",
 	"__FILE_KEY__ast": {

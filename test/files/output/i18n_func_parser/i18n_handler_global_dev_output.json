@@ -1,4 +1,5 @@
 {
 	"handlerName": "I18N",
+	"codeStyle": "proxyGlobalHandler",
 	"globalHandlerName": "window.topI18N"
 }
