@@ -23,7 +23,7 @@
     "esmangle": "^1.0.1",
     "esprima": "^4.0.1",
     "estraverse": "^4.2.0",
-    "extend": "^3.0.1",
+    "extend": "^3.0.2",
     "lodash": "^4.17.10"
   },
   "devDependencies": {
