@@ -48,6 +48,19 @@ describe('#i18n_func_parser', function()
 		});
 	});
 
+	describe('#fullHanlder', function()
+	{
+		it('#base', function()
+		{
+			var code = require('../files/casefile/i18n_handler/i18n_handler_fullhandler').toString();
+			var ast = esprima.parse(code);
+			var result = i18nParser.parse(ast.body[0]);
+			var outputJSON = requireAfterWrite('i18n_handler_fullhandler_output.json', result);
+			expect(result).to.eql(outputJSON);
+			expect(result.codeStyle).to.be('fullHandler');
+		});
+	});
+
 	describe('#mulit VKD', function()
 	{
 		var i18ncVirtual = require('../files/casefile/i18n_handler/i18n_handler_virtual');

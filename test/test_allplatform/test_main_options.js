@@ -365,4 +365,50 @@ describe('#main_options', function()
 	});
 
 
+	describe('#fullHandler', function()
+	{
+		var code = require('../files/casefile/func_code/func_code_i18n_full_handler').toString();
+
+		it('#autoConvert', function()
+		{
+			var info = i18nc(code,
+				{
+					I18NHandler:
+					{
+						style:
+						{
+							codeStyle: 'proxyGlobalHandler',
+							fullHandler:
+							{
+								autoConvert: true,
+							}
+						}
+					}
+				});
+			var otherCode = requireAfterWrite('func_code_i18n_full_handler_auto_convert.js', info.code);
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
+		});
+
+		it('#no autoConvert', function()
+		{
+			var info = i18nc(code,
+				{
+					I18NHandler:
+					{
+						style:
+						{
+							codeStyle: 'proxyGlobalHandler',
+							fullHandler:
+							{
+								autoConvert: false,
+							}
+						}
+					}
+				});
+			var otherCode = requireAfterWrite('func_code_i18n_full_handler_no_auto_convert.js', info.code);
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
+		});
+	});
+
+
 });
