@@ -3,5 +3,16 @@
 
 @import "{{ site.theme }}";
 
-.page-header a.btn {display: none;}
-.main-content {max-width: none !important;}
+.page-header a.btn {
+	display: none;
+}
+.main-content {
+	max-width: none !important;
+
+	table td {
+		font-size: 0.9rem;
+	}
+	.table_big td {
+		font-size: 0.5rem; word-break: unset;
+	}
+}

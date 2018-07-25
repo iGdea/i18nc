@@ -237,7 +237,7 @@ module.exports = function(content)
 	ArrayPush.apply(tableContentArr, genTableContent(moreKeyItems));
 
 	return [
-		'<table>',
+		'<table class="table_big table_options">',
 		'\t<tr>',
 		'\t\t<th colspan="'+maxCollsLength+'">变量</th>',
 		'\t\t<th>类型</th>',

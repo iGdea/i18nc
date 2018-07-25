@@ -2,7 +2,7 @@
 
 > 文档宽度较大，注意左右滚动阅读
 
-<table>
+<table class="table_big table_options">
 	<tr>
 		<th colspan="4">变量</th>
 		<th>类型</th>

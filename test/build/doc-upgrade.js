@@ -21,4 +21,4 @@ var content = tpl.replace(/\$(\w+)/g, function(all, key)
 	}
 });
 
-fs.writeFileSync(__dirname+'/../../doc/zh-CN/upgrade.md', content);
+fs.writeFileSync(__dirname+'/../../docs/zh-CN/upgrade.md', content);
