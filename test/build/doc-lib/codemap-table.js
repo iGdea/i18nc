@@ -29,52 +29,60 @@ exports.table_1toN = function(mapData, oldTableName, newTableName)
 
 	// var oldKeyStr = new Array(maxOldKeyLen+1).join(' ');
 	// var oldValStr = new Array(maxOldValLen+1).join(' ');
-	var tableContentArr = [];
 
-	_.map(oldKeyMap, function(olds, old_key)
+	var oneItemOldKeyArr = [];
+	var moreItemOldKeyArr = [];
+	_.each(oldKeyMap, function(olds, old_key)
 		{
-			return {
+			var item =
+			{
 				old_key: old_key,
 				olds: olds,
 			};
-		})
-		.sort(function(a, b)
+			if (olds.length > 1)
+				moreItemOldKeyArr.push(item);
+			else
+				oneItemOldKeyArr.push(item);
+		});
+
+	var tableContentArr = oneItemOldKeyArr.sort(function(a, b)
 		{
-			return a.old_key.toLowerCase() > b.old_key.toLowerCase() ? 1 : -1;
+			return a.old_key > b.old_key ? 1 : -1;
+		})
+		.map(function(item)
+		{
+			var firstOldItem = item.olds[0];
+
+			return '<tr>'
+				+'<td colspan="2"><code>'+item.old_key+'</code> = <code>'+firstOldItem.old_value+'</code></td>'
+				+'<td>'+newItemsRender(firstOldItem.news)+'</td>'
+				+'</tr>';
+		});
+
+	moreItemOldKeyArr.sort(function(a, b)
+		{
+			return a.old_key > b.old_key ? 1 : -1;
 		})
 		.forEach(function(item)
 		{
 			var firstOldItem = item.olds[0];
-			if (item.olds.length > 1)
-			{
-				var arr = item.olds.map(function(oldItem, index)
-					{
-						if (!index) return;
+			var arr = item.olds.map(function(oldItem, index)
+				{
+					if (!index) return;
 
-						return '<tr>'
-							+'<td><code>'+oldItem.old_value+'</code></td>'
-							+'<td>'+newItemsRender(oldItem.news)+'</td>'
-							+'</tr>';
-					});
+					return '<tr>'
+						+'<td><code>'+oldItem.old_value+'</code></td>'
+						+'<td>'+newItemsRender(oldItem.news)+'</td>'
+						+'</tr>';
+				});
 
-				arr[0] = '<tr>'
-					+'<td rowspan="'+item.olds.length+'"><code>'+item.old_key+'</code></td>'
-					+'<td><code>'+firstOldItem.old_value+'</code></td>'
-					+'<td>'+newItemsRender(firstOldItem.news)+'</td>'
-					+'</tr>';
+			arr[0] = '<tr>'
+				+'<td rowspan="'+item.olds.length+'"><code>'+item.old_key+'</code></td>'
+				+'<td><code>'+firstOldItem.old_value+'</code></td>'
+				+'<td>'+newItemsRender(firstOldItem.news)+'</td>'
+				+'</tr>';
 
-				ArrayPush.apply(tableContentArr, arr);
-			}
-			else
-			{
-				var str = '<tr>'
-					+'<td><code>'+item.old_key+'</code></td>'
-					+'<td><code>'+firstOldItem.old_value+'</code></td>'
-					+'<td>'+newItemsRender(firstOldItem.news)+'</td>'
-					+'</tr>';
-
-				tableContentArr.push(str);
-			}
+			ArrayPush.apply(tableContentArr, arr);
 		});
 
 	return [
