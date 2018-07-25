@@ -13,7 +13,7 @@ var tableContentArr = _.map(depdOptions.OPTIONS_RENAME_MAP, function(newKey, old
 	})
 	.sort(function(a, b)
 	{
-		return a.old.toLowerCase() > b.old.toLowerCase() ? 1 : -1;
+		return a.old > b.old ? 1 : -1;
 	});
 var newKeyStr = new Array(maxNewKeyLen+1).join(' ');
 var oldKeyStr = new Array(maxOldKeyLen+1).join(' ');
