@@ -65,6 +65,11 @@ exports.table_1toN = function(mapData, oldTableName, newTableName)
 		})
 		.forEach(function(item)
 		{
+			item.olds = item.olds.sort(function(a, b)
+			{
+				return a.old_value > b.old_value ? 1 : -1;
+			});
+
 			var firstOldItem = item.olds[0];
 			var arr = item.olds.map(function(oldItem, index)
 				{
