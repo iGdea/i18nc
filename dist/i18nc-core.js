@@ -39,6 +39,7 @@ var ArrayPush			= Array.prototype.push;
 var VISITOR_KEYS		= estraverse.VisitorKeys;
 var BLOCK_MODIFIER		= DEF.BLOCK_MODIFIER;
 var AST_FLAGS			= astUtils.AST_FLAGS;
+var UNSUPPORT_AST_TYPS	= DEF.UNSUPPORT_AST_TYPS;
 
 exports.ASTCollector	= ASTCollector;
 
@@ -54,7 +55,7 @@ _.extend(ASTCollector.prototype,
 	collect: function(ast, scopeType)
 	{
 		var scope = new ASTScope(ast, scopeType);
-		scope.translateWordAsts = this.scan(scope, ast, []) || [];
+		scope.translateWordAsts = this.scan(scope, ast) || [];
 		return scope;
 	},
 
@@ -87,6 +88,18 @@ _.extend(ASTCollector.prototype,
 	scan: function(scope, ast)
 	{
 		var self = this;
+
+		if (Array.isArray(ast))
+		{
+			var result = [];
+			ast.forEach(function(item)
+			{
+				var result2 = self.scan(scope, item);
+				if (result2 && result2.length) ArrayPush.apply(result, result2);
+			});
+
+			return result;
+		}
 
 		var emitData =
 		{
@@ -166,11 +179,11 @@ _.extend(ASTCollector.prototype,
 
 						case self.options.I18NHandlerName:
 							var I18NArgReulst = self._parseI18NArgs(ast);
+							scope.I18NArgs.push(I18NArgReulst);
 							if (I18NArgReulst.formatArgAsts)
 							{
-								self.scan(scope, I18NArgReulst.formatArgAsts);
+								return self.scan(scope, I18NArgReulst.formatArgAsts);
 							}
-							scope.I18NArgs.push(I18NArgReulst);
 							return;
 					}
 				}
@@ -203,11 +216,11 @@ _.extend(ASTCollector.prototype,
 					astUtils.setAstFlag(ast, AST_FLAGS.I18N_ALIAS);
 
 					var I18NArgReulst = self._parseI18NArgs(ast);
+					scope.I18NArgs.push(I18NArgReulst);
 					if (I18NArgReulst.formatArgAsts)
 					{
-						self.scan(scope, I18NArgReulst.formatArgAsts);
+						return self.scan(scope, I18NArgReulst.formatArgAsts);
 					}
-					scope.I18NArgs.push(I18NArgReulst);
 					return;
 				}
 
@@ -234,26 +247,35 @@ _.extend(ASTCollector.prototype,
 						ArrayPush.apply(result, ret);
 					}
 
-
 					var ret = self.scan(scope, item.value);
 					if (ret && ret.length) ArrayPush.apply(result, ret);
 				});
 
-				return result.length ? result : undefined;
+				return result;
 
-			case 'TaggedTemplateExpression':
-				var quasiAst = ast.quasi;
-				astUtils.setAstFlag(quasiAst, AST_FLAGS.DIS_REPLACE);
-				return self.scan(scope, quasiAst);
-
+			// @todo 归类到脏数据中
+			// var dd = `before ${xxd} middle ${I11(xxx)} after`
+			// function dd() {return <div>xxxdd {this.xxx} {xxx(fff)} </div>}
 			case 'TemplateLiteral':
-				break;
+			case 'JSXElement':
+			case 'TaggedTemplateExpression':
+				var result = self.scan(scope, ast);
+
+				if (result)
+				{
+					var flag = UNSUPPORT_AST_TYPS[ast.type] | AST_FLAGS.DIS_REPLACE;
+					result.forEach(function(item)
+					{
+						astUtils.setAstFlag(item, flag);
+					});
+				}
+
+				return result;
 		}
 
 
 		var blockModifier = self._getBlockModifier(ast);
-		if (self._isBlockModifier(blockModifier, BLOCK_MODIFIER.SKIP_SACN)
-			|| self._isBlockModifier(blockModifier, BLOCK_MODIFIER.SKIP_SACN+'@'+self.options.I18NHandlerName))
+		if (self._isBlockModifier(blockModifier, BLOCK_MODIFIER.SKIP_SACN))
 		{
 			astUtils.setAstFlag(ast, AST_FLAGS.SKIP_SACN);
 			astUtils.setAstFlag(ast.body[0], AST_FLAGS.BLOCK_MODIFIER);
@@ -273,34 +295,14 @@ _.extend(ASTCollector.prototype,
 		var result = [];
 		scanKeys.forEach(function(ast_key)
 		{
-			var item = ast[ast_key];
-			var result2;
-			if (Array.isArray(item))
-			{
-				result2 = [];
-				item.forEach(function(ast2)
-				{
-					var ret = self.scan(scope, ast2);
-
-					if (ret && ret.length)
-					{
-						ArrayPush.apply(result2, ret);
-					}
-				});
-			}
-			else if (typeof item == 'object')
-			{
-				result2 = self.scan(scope, item);
-			}
-
+			var result2 = self.scan(scope, ast[ast_key]);
 			if (result2 && result2.length) ArrayPush.apply(result, result2);
 		});
 
 		if (result.length)
 		{
 			// 不替换成函数
-			if (self._isBlockModifier(blockModifier, BLOCK_MODIFIER.SKIP_REPLACE)
-				|| self._isBlockModifier(blockModifier, BLOCK_MODIFIER.SKIP_REPLACE+'@'+self.options.I18NHandlerName))
+			if (self._isBlockModifier(blockModifier, BLOCK_MODIFIER.SKIP_REPLACE))
 			{
 				result.forEach(function(item)
 				{
@@ -332,8 +334,8 @@ _.extend(ASTCollector.prototype,
 
 	_isBlockModifier: function(blockModifier, flag)
 	{
-		var ret = blockModifier && blockModifier.value == flag;
-		if (ret)
+		var val = blockModifier && blockModifier.value
+		if (val == flag || val == flag+'@'+this.options.I18NHandlerName)
 		{
 			astUtils.setAstFlag(blockModifier.ast, AST_FLAGS.BLOCK_MODIFIER);
 			return true;
@@ -507,15 +509,17 @@ _.extend(LiteralHandler.prototype,
 },{"./ast_tpl":5,"./ast_utils":6,"./emitter":8,"./utils/words_utils":24,"debug":25,"lodash":90}],4:[function(require,module,exports){
 'use strict';
 
-var _				= require('lodash');
-var debug			= require('debug')('i18nc-core:ast_scope');
-var escodegen		= require('escodegen');
-var astUtils		= require('./ast_utils');
-var astTpl			= require('./ast_tpl');
-var optionsUtils	= require('./options');
-var I18NPlaceholder	= require('./i18n_placeholder').I18NPlaceholder;
-var ArrayPush		= Array.prototype.push;
-var AST_FLAGS		= astUtils.AST_FLAGS;
+var _					= require('lodash');
+var debug				= require('debug')('i18nc-core:ast_scope');
+var escodegen			= require('escodegen');
+var astUtils			= require('./ast_utils');
+var astTpl				= require('./ast_tpl');
+var DEF					= require('./def');
+var optionsUtils		= require('./options');
+var I18NPlaceholder		= require('./i18n_placeholder').I18NPlaceholder;
+var ArrayPush			= Array.prototype.push;
+var AST_FLAGS			= DEF.AST_FLAGS;
+var UNSUPPORT_AST_TYPS	= DEF.UNSUPPORT_AST_TYPS;
 
 var ResultObject		= require('./result_object');
 var DirtyWords			= ResultObject.DirtyWords;
@@ -619,10 +623,16 @@ _.extend(ASTScope.prototype,
 		{
 			if (astUtils.checkAstFlag(ast, AST_FLAGS.DIS_REPLACE))
 			{
-				if (astUtils.checkAstFlag(ast, AST_FLAGS.OBJECT_KEY))
-					dirtyWords.add(ast, "Object prototype can't use I18N");
-				else
-					dirtyWords.add(ast, "This ast can't use I18N");
+				var ret = _.some(UNSUPPORT_AST_TYPS, function(flag, name)
+				{
+					if (astUtils.checkAstFlag(ast, flag))
+					{
+						dirtyWords.add(ast, 'Not Support Ast `'+name+'` yet');
+						return true;
+					}
+				});
+
+				if (!ret) dirtyWords.add(ast, "This ast can't use I18N");
 			}
 			else
 			{
@@ -905,7 +915,7 @@ _.extend(ASTScope.prototype,
 	}
 });
 
-},{"./ast_tpl":5,"./ast_utils":6,"./i18n_placeholder":15,"./options":17,"./result_object":18,"debug":25,"escodegen":28,"lodash":90}],5:[function(require,module,exports){
+},{"./ast_tpl":5,"./ast_utils":6,"./def":7,"./i18n_placeholder":15,"./options":17,"./result_object":18,"debug":25,"escodegen":28,"lodash":90}],5:[function(require,module,exports){
 'use strict';
 
 var SELF_CREATED_FLAG = require('./def').AST_FLAGS.SELF_CREATED;
@@ -1148,7 +1158,7 @@ exports.BLOCK_MODIFIER =
 	SKIP_REPLACE	: '[i18nc] skip_repalce',
 };
 
-exports.AST_FLAGS =
+var AST_FLAGS = exports.AST_FLAGS =
 {
 	SKIP_SACN				: 1 << 0,
 	SKIP_REPLACE			: 1 << 1,
@@ -1157,6 +1167,17 @@ exports.AST_FLAGS =
 	BLOCK_MODIFIER			: 1 << 4,
 	I18N_ALIAS				: 1 << 5,
 	OBJECT_KEY				: 1 << 6,
+	TEMPLATE_LITERAL		: 1 << 7,
+	JSX_ELEMENT				: 1 << 8,
+	TAGGED_TEMPLATE_LITERAL	: 1 << 9,
+};
+
+exports.UNSUPPORT_AST_TYPS	=
+{
+	ObjectKey					: AST_FLAGS.OBJECT_KEY,
+	JSXElement					: AST_FLAGS.JSX_ELEMENT,
+	TemplateLiteral				: AST_FLAGS.TEMPLATE_LITERAL,
+	TaggedTemplateExpression	: AST_FLAGS.TAGGED_TEMPLATE_LITERAL,
 };
 
 exports.I18NFunctionVersion = 'b';
@@ -47250,7 +47271,7 @@ exports.SourceNode = require('./lib/source-node').SourceNode;
 },{"./lib/source-map-consumer":99,"./lib/source-map-generator":100,"./lib/source-node":101}],104:[function(require,module,exports){
 module.exports={
   "name": "i18nc-core",
-  "version": "10.6.0",
+  "version": "10.6.1",
   "description": "I18N Tool for JS files",
   "main": "index.js",
   "scripts": {
