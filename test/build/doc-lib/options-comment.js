@@ -1,10 +1,10 @@
 'use strict';
 
 var _ = require('lodash');
-var esprima = require('esprima');
-var ArrayPush = Array.prototype.push;
-var parseComment = require('comment-parser');
 var debug = require('debug')('i18nc-core:doc-lib/options-comment');
+var esprima = require('esprima');
+var parseComment = require('comment-parser');
+var ArrayPush = Array.prototype.push;
 
 module.exports = function(content)
 {
@@ -106,11 +106,9 @@ module.exports = function(content)
 
 
 	var emptyRowspan = [];
-	var tableContentArr = _.map(tableContentMap, function(item)
-		{
-			return item;
-		})
-		.sort(function(a, b)
+	function genTableContent(items)
+	{
+		return items.sort(function(a, b)
 		{
 			return a.name > b.name ? 1 : -1;
 		})
@@ -221,6 +219,22 @@ module.exports = function(content)
 
 			return arr.join('');
 		});
+	}
+
+
+	var oneKeyItems = [];
+	var moreKeyItems = [];
+	_.map(tableContentMap, function(item)
+		{
+			// 不光名字不能包含“.”，也不能有子项
+			if (item.name.split('.').length == 1 && item.items.length == 1)
+				oneKeyItems.push(item);
+			else
+				moreKeyItems.push(item);
+		});
+
+	var tableContentArr = genTableContent(oneKeyItems);
+	ArrayPush.apply(tableContentArr, genTableContent(moreKeyItems));
 
 	return [
 		'<table>',
