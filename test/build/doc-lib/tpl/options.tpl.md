@@ -14,7 +14,10 @@ $OPTIONS_TABLE_DATA
 也可以使用如下写法，告诉工具，使用proxyGlobalHandler模式，生成I18N函数
 
 ```javascript
-function I18N(msg){return ''+topI18NHandler(msg, arguments);}
+function I18N(msg)
+{
+	return ''+topI18NHandler(msg, arguments);
+}
 ```
 
 函数特点：
@@ -31,7 +34,10 @@ function I18N(msg){return ''+topI18NHandler(msg, arguments);}
 也可以使用如下写法，告诉工具，使用fullHandler模式，生成I18N函数
 
 ```javascript
-function I18N(msg){return ''+msg;}
+function I18N(msg)
+{
+	return ''+msg;
+}
 ```
 
 函数提点：
