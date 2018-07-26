@@ -18,7 +18,7 @@ npm install i18nc-core --save
 
 ```javascript
 var i18nc = require('i18nc-core');
-// options: https://github.com/Bacra/node-i18nc-core/wiki/options
+// options: https://bacra.github.io/node-i18nc-core/zh-CN/options
 var ret = i18nc(code, options);
 
 ret.code    // output code
@@ -72,7 +72,7 @@ function I18N(h,f,i){
 
 # Upgrade
 
-[Wiki](https://github.com/Bacra/node-i18nc-core/wiki/upgrade)
+[Wiki](https://bacra.github.io/node-i18nc-core/zh-CN/upgrade)
 
 
 
