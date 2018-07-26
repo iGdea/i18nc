@@ -75,6 +75,8 @@ module.exports = function(content)
 
 
 
+
+
 	/*
 	 整理数据，输出table格式
 	 */
@@ -84,157 +86,150 @@ module.exports = function(content)
 	 * 方便后续计算rowspan
 	 */
 	var maxCollsLength = 0;
-	var tableContentMap = {};
+	function Key(name, parent)
+	{
+		var deep = parent ? parent.deep+1 : -1;
+		this.name = name;
+		this.parent = parent;
+		this.info = null;
+		this.deep = deep;
+		this.maxDeep = deep;
+		this.child_count = 0;
+		this.children = {};
+		this.rendered = parent ? 'none' : 'all';
+	}
+
+	_.extend(Key.prototype,
+	{
+		renderParents: function()
+		{
+			var parent = this.parent;
+			if (!parent) return '';
+
+			return parent.renderSelfName(false);
+
+		},
+		renderSelfName: function(isCloseRight)
+		{
+			var type = this.rendered;
+
+			switch(type)
+			{
+				case 'none':
+					var rowspan = this.child_count;
+					if (this.info) rowspan++;
+					var str;
+					var leftCollsLength = maxCollsLength - this.deep;
+					var colspan = isCloseRight &&  leftCollsLength > 2
+						? ' colspan="'+leftCollsLength+'"' : '';
+
+					if (rowspan == 1)
+					{
+						str = '<td'+colspan+'>'+this.name+'</td>';
+						this.rendered = 'all';
+					}
+					else if (rowspan == 2)
+					{
+						str = '<td rowspan="'+rowspan+'"'+colspan+'>'+this.name+'</td>';
+						this.rendered = 'all';
+					}
+					else
+					{
+						str = '<td'+colspan+'>'+this.name+'</td>';
+						this.rendered = 'onlyone';
+					}
+
+					return this.renderParents()+str;
+
+				case 'onlyone':
+					var rowspan = this.child_count-1;
+					if (this.info) rowspan++;
+					var str = rowspan == 1
+						? '<td></td>'
+						: '<td rowspan="'+rowspan+'"></td>';
+
+					this.rendered = 'all';
+					return this.renderParents()+str;
+
+				case 'all':
+				default:
+					return '';
+			}
+		},
+		render: function()
+		{
+			var self = this;
+			var result = [];
+
+			// 直接输出
+			// 需要计算之前已经输出的row
+			if (self.info)
+			{
+				var defaultVal = self.info.default;
+				if (defaultVal === undefined)
+					defaultVal = '';
+				else if (typeof defaultVal == 'string')
+					defaultVal = defaultVal.trim();
+				else
+					defaultVal += '';
+
+				var str =
+				[
+					'<tr>',
+						self.renderSelfName(true),
+						'<td>'+(self.info.type || '')+'</td>',
+						'<td>'+defaultVal+'</td>',
+						'<td>'+(self.info.description || '')+'</td>',
+						'<td>'+(self.info.remark || '')+'</td>',
+					'</tr>'
+				]
+				.join('');
+
+				result.push(str);
+			}
+
+
+			_.map(self.children, function(item)
+				{
+					return item;
+				})
+				.sort(function(a, b)
+				{
+					if (a.maxDeep == b.maxDeep)
+						return a.name > b.name ? 1 : -1;
+					else
+						return a.maxDeep > b.maxDeep ? 1 : -1;
+				})
+				.forEach(function(item)
+				{
+					ArrayPush.apply(result, item.render());
+				});
+
+			return result;
+		}
+	});
+
+	var tableContentMap = new Key();
 	tableInfo.forEach(function(item)
 	{
 		var nameArr = item.name.split('.');
 		item.nameArr = nameArr;
-		var name2 = '';
-		var tmp;
-		var len = 0;
-		nameArr.forEach(function(name)
+		var tmp = tableContentMap;
+		var nameLen = nameArr.length;
+		maxCollsLength = Math.max(maxCollsLength, nameLen);
+
+		nameArr.forEach(function(subname)
 		{
-			name2 += name2.length ? '.'+name : name;
-			len++;
-			if (maxCollsLength < len) maxCollsLength = len;
-			tmp = tableContentMap[name2];
-			if (!tmp) tmp = tableContentMap[name2] = {name: name2, items: [], length: len};
-			tmp.items.push(item);
+			var tmp2 = tmp.children[subname];
+			if (!tmp2) tmp2 = tmp.children[subname] = new Key(subname, tmp);
+			tmp = tmp2;
+			tmp.child_count++;
+			tmp.maxDeep = Math.max(tmp.maxDeep, nameLen);
 		});
-		tmp.item = item;
+		tmp.child_count--;
+		tmp.info = item;
 	});
 
-
-	var emptyRowspan = [];
-	function genTableContent(items)
-	{
-		return items.sort(function(a, b)
-		{
-			return a.name > b.name ? 1 : -1;
-		})
-		.map(function(item)
-		{
-			// 没有注释内容的条数，带有rowspan信息，先收集
-			var nameArr = item.name.split('.');
-			var subitemLen = item.items.length;
-			if (!item.item)
-			{
-				if (subitemLen)
-				{
-					emptyRowspan.push(
-					{
-						// 没有输出过key名前，标记一下
-						// 避免table 变量一栏，只有最后一个key
-						print: false,
-						index: nameArr.length - 1,
-						length: subitemLen,
-					});
-				}
-				return '';
-			}
-
-
-			// 有注释数据时
-			// 先输出一行完整的变量名
-			// 下一行再计算rowspan
-			var defaultVal = item.item.default;
-			if (defaultVal === undefined)
-				defaultVal = '';
-			else if (typeof defaultVal == 'string')
-				defaultVal = defaultVal.trim();
-			else
-				defaultVal += '';
-
-			var keyname = nameArr[nameArr.length-1];
-			var leftCollsLength = maxCollsLength - nameArr.length;
-			var nameRow = '';
-
-			if (emptyRowspan)
-			{
-				var tmp = emptyRowspan;
-				emptyRowspan = [];
-				tmp.sort(function(a, b)
-					{
-						return a.index > b.index ? 1 : -1;
-					})
-					.forEach(function(item)
-					{
-						if (item.print)
-						{
-							if (item.length == 1)
-								nameRow += '<td></td>';
-							else
-								nameRow += '<td rowspan="'+item.length+'"></td>';
-						}
-						else
-						{
-							nameRow += '<td>'+nameArr[item.index]+'</td>';
-
-							if (item.length -1 > 0)
-							{
-								emptyRowspan.push(
-								{
-									print: true,
-									index: item.index,
-									length: item.length - 1,
-								});
-							}
-						}
-					});
-			}
-
-			if (subitemLen > 1)
-			{
-				emptyRowspan.push(
-				{
-					print: true,
-					index: nameArr.length - 1,
-					length: subitemLen - 1
-				});
-
-				nameRow += '<td>'+keyname+'</td>';
-				if (leftCollsLength == 1)
-					nameRow += '<td></td>';
-				else if (leftCollsLength > 1)
-					nameRow += '<td colspan="'+leftCollsLength+'"></td>';
-			}
-			else
-			{
-				if (leftCollsLength)
-					nameRow += '<td colspan="'+(leftCollsLength+1)+'">'+keyname+'</td>';
-				else
-					nameRow += '<td>'+keyname+'</td>';
-			}
-
-			var arr =
-			[
-				'<tr>',
-					nameRow,
-					'<td>'+(item.item.type || '')+'</td>',
-					'<td>'+defaultVal+'</td>',
-					'<td>'+(item.item.description || '')+'</td>',
-					'<td>'+(item.item.remark || '')+'</td>',
-				'</tr>'
-			];
-
-			return arr.join('');
-		});
-	}
-
-
-	var oneKeyItems = [];
-	var moreKeyItems = [];
-	_.map(tableContentMap, function(item)
-		{
-			// 不光名字不能包含“.”，也不能有子项
-			if (item.name.split('.').length == 1 && item.items.length == 1)
-				oneKeyItems.push(item);
-			else
-				moreKeyItems.push(item);
-		});
-
-	var tableContentArr = genTableContent(oneKeyItems);
-	ArrayPush.apply(tableContentArr, genTableContent(moreKeyItems));
 
 	return [
 		'<table class="table_big table_options">',
@@ -245,7 +240,7 @@ module.exports = function(content)
 		'\t\t<th>描述</th>',
 		'\t\t<th>备注</th>',
 		'\t</tr>',
-		'\t'+tableContentArr.filter(function(val){return val}).join('\n\t'),
+		'\t'+tableContentMap.render().join('\n\t'),
 		'</table>'
 	].join('\n');
 
