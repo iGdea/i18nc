@@ -3,16 +3,23 @@
 
 @import "{{ site.theme }}";
 
-.page-header a.btn {
+.page-header, .site-footer{
 	display: none;
 }
+
 .main-content {
 	max-width: none !important;
 
 	table td {
 		font-size: 0.9rem;
 	}
-	.table_big td {
-		font-size: 0.5rem; word-break: unset;
+	.table_big
+	{
+		table {
+			word-break: unset;
+		}
+		td {
+			font-size: 0.5rem;
+		}
 	}
 }
