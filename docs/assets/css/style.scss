@@ -13,13 +13,14 @@
 	table td {
 		font-size: 0.9rem;
 	}
+	table.table_big {
+		word-break: unset;
+	}
 	.table_big
 	{
-		table {
-			word-break: unset;
-		}
 		td {
 			font-size: 0.5rem;
+			padding: 0.5rem 0.4rem;
 		}
 	}
 }
