@@ -120,7 +120,7 @@ module.exports = function(content)
 					if (this.info) rowspan++;
 					var str;
 					var leftCollsLength = maxCollsLength - this.deep;
-					var colspan = isCloseRight &&  leftCollsLength > 2
+					var colspan = isCloseRight &&  leftCollsLength > 1
 						? ' colspan="'+leftCollsLength+'"' : '';
 
 					if (rowspan == 1)
