@@ -8,8 +8,8 @@ module.exports = function(config)
 	commonConfig(config);
 
 	var files = [];
-	files = files.concat(glob.sync('files/**/*', {cwd: __dirname+'/test/', nodir: true}));
-	files = files.concat(glob.sync('example/**/*', {cwd: __dirname+'/test/', nodir: true}));
+	files = files.concat(glob.sync('files/output/**', {cwd: __dirname+'/test/', nodir: true}));
+	files = files.concat(glob.sync('example/**', {cwd: __dirname+'/test/', nodir: true}));
 
 	config.set(
 	{
