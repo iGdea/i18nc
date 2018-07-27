@@ -11,7 +11,7 @@ var expect				= require('expect.js');
 var i18nc				= require('../../');
 var dbTranslateWords	= require('../example/translate_words_db');
 var autoTestUtils		= require('../auto_test_utils');
-var requireAfterWrite	= autoTestUtils.requireAfterWrite('onlynode/main_options_mincode');
+var requireAfterWrite	= autoTestUtils.requireAfterWrite4node('main_options_mincode');
 var collectFuncs		= require('../files/casefile/func_code/func_code_collect');
 
 

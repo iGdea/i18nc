@@ -22,6 +22,17 @@ exports.requireAfterWrite = function requireAfterWrite(subpath)
 	};
 }
 
+exports.requireAfterWrite4node = function requireAfterWrite4node(subpath)
+{
+	var file_path = 'files/output_node/'+subpath;
+
+	return function(filename, data, options)
+	{
+		var file = file_path+'/'+filename;
+		return requireAfterWriteReal(file, data, options);
+	};
+}
+
 exports.requireAfterWriteReal = requireAfterWriteReal;
 function requireAfterWriteReal(file, data)
 {
