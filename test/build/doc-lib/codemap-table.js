@@ -5,6 +5,159 @@ var valsUtils = require('../../../lib/utils/options_vals');
 var ArrayPush = Array.prototype.push;
 
 
+exports.table_names = table_names;
+/**
+ * @param  {Array}    tableInfo 必须带有name
+ * @param  {Function} render    渲染除了name之后其他的table
+ * @return {Object}
+ */
+function table_names(tableInfo, render)
+{
+	/*
+	 * 汇总单个key包含的注释条数
+	 * 方便后续计算rowspan
+	 */
+	var maxCollsLength = 0;
+	function Key(name, parent)
+	{
+		var deep = parent ? parent.deep+1 : -1;
+		this.name = name;
+		this.parent = parent;
+		this.info = null;
+		this.deep = deep;
+		this.maxDeep = deep;
+		this.child_count = 0;
+		this.children = {};
+		this.rendered = parent ? 'none' : 'all';
+	}
+
+	_.extend(Key.prototype,
+	{
+		renderParents: function()
+		{
+			var parent = this.parent;
+			if (!parent) return '';
+
+			return parent.renderSelfName(false);
+
+		},
+		renderSelfName: function(isCloseRight)
+		{
+			var type = this.rendered;
+
+			switch(type)
+			{
+				case 'none':
+					var rowspan = this.child_count;
+					if (this.info) rowspan++;
+					var str;
+					var leftCollsLength = maxCollsLength - this.deep;
+					var colspan = isCloseRight &&  leftCollsLength > 1
+						? ' colspan="'+leftCollsLength+'"' : '';
+
+					if (rowspan == 1)
+					{
+						str = '<td'+colspan+'>'+this.name+'</td>';
+						this.rendered = 'all';
+					}
+					else if (rowspan == 2)
+					{
+						str = '<td rowspan="'+rowspan+'"'+colspan+'>'+this.name+'</td>';
+						this.rendered = 'all';
+					}
+					else
+					{
+						str = '<td'+colspan+'>'+this.name+'</td>';
+						this.rendered = 'onlyone';
+					}
+
+					return this.renderParents()+str;
+
+				case 'onlyone':
+					var rowspan = this.child_count-1;
+					if (this.info) rowspan++;
+					var str = rowspan == 1
+						? '<td></td>'
+						: '<td rowspan="'+rowspan+'"></td>';
+
+					this.rendered = 'all';
+					return this.renderParents()+str;
+
+				case 'all':
+				default:
+					return '';
+			}
+		},
+		render: function()
+		{
+			var self = this;
+			var result = [];
+
+			// 直接输出
+			// 需要计算之前已经输出的row
+			if (self.info)
+			{
+				var str =
+				[
+					'<tr>',
+						self.renderSelfName(true),
+						render(self.info),
+					'</tr>'
+				]
+				.join('');
+
+				result.push(str);
+			}
+
+
+			_.map(self.children, function(item)
+				{
+					return item;
+				})
+				.sort(function(a, b)
+				{
+					if (a.maxDeep == b.maxDeep)
+						return a.name > b.name ? 1 : -1;
+					else
+						return a.maxDeep > b.maxDeep ? 1 : -1;
+				})
+				.forEach(function(item)
+				{
+					ArrayPush.apply(result, item.render());
+				});
+
+			return result;
+		}
+	});
+
+	var tableContentMap = new Key();
+	tableInfo.forEach(function(item)
+	{
+		var nameArr = item.name.split('.');
+		item.nameArr = nameArr;
+		var tmp = tableContentMap;
+		var nameLen = nameArr.length;
+		maxCollsLength = Math.max(maxCollsLength, nameLen);
+
+		nameArr.forEach(function(subname)
+		{
+			var tmp2 = tmp.children[subname];
+			if (!tmp2) tmp2 = tmp.children[subname] = new Key(subname, tmp);
+			tmp = tmp2;
+			tmp.child_count++;
+			tmp.maxDeep = Math.max(tmp.maxDeep, nameLen);
+		});
+		tmp.child_count--;
+		tmp.info = item;
+	});
+
+	return {
+		maxCollsLength: maxCollsLength,
+		content: tableContentMap.render()
+	};
+}
+
+
 exports.table_1toN = function(mapData, oldTableName, newTableName)
 {
 	// var maxOldKeyLen = 0;
