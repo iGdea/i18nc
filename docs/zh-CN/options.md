@@ -44,7 +44,7 @@
 	<tr><td>style</td><td colspan="2">codeStyle</td><td>String</td><td>fullHandler</td><td>优先使用的代码风格（fullHandler/proxyGlobalHandler）</td><td></td></tr>
 	<tr><td rowspan="11"></td><td colspan="2">comment4nowords</td><td>Boolean</td><td>true</td><td>翻译结果JSON，输出所有提取到的关键字；没有翻译结果的关键字，以注释的形式插入</td><td></td></tr>
 	<tr><td colspan="2">minFuncCode</td><td>Boolean</td><td>false</td><td>对插入的I18N进行代码压缩</td><td></td></tr>
-	<tr><td colspan="2">minFuncJSON</td><td>Boolean</td><td>false</td><td>对插入到代码中的翻译结果JSON进行代码压缩</td><td>设置true，会导致</td></tr>
+	<tr><td colspan="2">minFuncJSON</td><td>Boolean</td><td>false</td><td>对插入到代码中的翻译结果JSON进行代码压缩</td><td>设置true，会导致 I18NHandler.style.comment4nowords 失效</td></tr>
 	<tr><td colspan="2">fullHandler</td><td>Object</td><td></td><td>插入完整的I18N函数体，代码不依赖外部任何库或者函数</td><td></td></tr>
 	<tr><td rowspan="2"></td><td>autoConvert</td><td>Boolean</td><td>true</td><td>将源码中类fullHandler写法的I18N函数，转换为标准的fullHandler</td><td></td></tr>
 	<tr><td>keepThisStyle</td><td>Boolean</td><td>true</td><td>已经转的函数，是否维持此状态</td><td>权重高于autoConvert</td></tr>

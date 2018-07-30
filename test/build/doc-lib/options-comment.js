@@ -51,7 +51,10 @@ module.exports = function(content)
 
 						case 'default':
 						case 'remark':
-							output[tag.tag] = tag.name;
+							var str = tag.name;
+							if (tag.type) str += ' '+tag.type;
+							if (tag.description) str += ' '+tag.description;
+							output[tag.tag] = str;
 							break;
 
 					}
