@@ -27,7 +27,7 @@ describe('#main', function()
 			var otherCode = requireAfterWrite('i18n_handler_example_i18nc_nocode_output.js', info.code);
 
 			expect(autoTestUtils.JsonOfI18ncRet(info)).to.eql(outputJSON);
-			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
+			expect(autoTestUtils.code2arr(''+info)).to.eql(autoTestUtils.code2arr(otherCode));
 		});
 
 		it('#withcode', function()
