@@ -13,11 +13,26 @@ var fileContent = tpl.replace(/\$(\w+)/g, function(all, key)
 	switch(key)
 	{
 		case 'ALL_DATA':
-			return _.map(funcs, function(item)
+			var content =
+				[
+					'CodeInfoResult',
+					'FileKeyTranslateWords',
+					'CodeTranslateWords',
+					'TranslateWords',
+					'DirtyWords'
+				]
+				.map(function(name)
+				{
+					var item = funcs[name];
+					delete funcs[name];
+					return item.render();
+				});
+			_.each(funcs, function(item)
 			{
-				return item.render();
-			})
-			.join('\n\n');
+				content.push(item.render());
+				return item;
+			});
+			return content.join('\n\n');
 
 		default:
 			return all;

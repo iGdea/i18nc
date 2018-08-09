@@ -45,6 +45,7 @@ _.extend(AstFunc.prototype,
 		}
 
 		return {
+			name: this.name,
 			funcname: this.funcname(),
 			comment: comment,
 			subfuncs: this.subfuncs.map(function(item)
@@ -57,7 +58,12 @@ _.extend(AstFunc.prototype,
 	{
 		var obj = this.toJSON();
 		var content = [];
-		content.push('## '+obj.funcname);
+		content.push('## '+obj.name);
+		content.push(obj.funcname);
+		if (obj.comment)
+		{
+			content.push(' > '+obj.comment.description);
+		}
 
 		var tableData = [];
 		obj.subfuncs.forEach(function(item)

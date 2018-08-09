@@ -1,50 +1,9 @@
 返回结果
 =======
 
-## DirtyWords(list)
+## CodeInfoResult
 
-### 成员方法
-
-| 方法名             | 返回值      | 说明             |
-|:------------------|:-----------|:----------------|
-| toArray()         | Array      | 转换成数组        |
-| toJSON()          | Object     | 输出JSON格式的结果 |
-| clone()           | DirtyWords | 拷贝             |
-| merge(dirtyWords) |            | 合并数据          |
-
-## CodeTranslateWords(list)
-
-### 成员方法
-
-| 方法名                     | 返回值              | 说明                   |
-|:--------------------------|:-------------------|:----------------------|
-| toJSON()                  | Object             | 输出JSON格式的结果       |
-| clone()                   | CodeTranslateWords | 拷贝                   |
-| merge(codeTranslateWords) |                    | 合并数据                |
-| allwords()                | String             | 输出所有需要翻译的词条    |
-| list4newWordAsts()        | Ast                | 输出所有需要翻译的新的词条 |
-| list4newWords()           | String             | 输出所有需要翻译的新的词条 |
-
-## FileKeyTranslateWords(list)
-
-### 成员方法
-
-| 方法名                        | 返回值                 | 说明             |
-|:-----------------------------|:----------------------|:----------------|
-| toJSON()                     | Object                | 输出JSON格式的结果 |
-| clone()                      | FileKeyTranslateWords | 拷贝             |
-| merge(fileKeyTranslateWords) |                       | 合并数据          |
-| lans()                       | Array                 | 输出解析到的语种   |
-
-## TranslateWords(codeTranslateWords, funcTranslateWords, usedTranslateWords)
-
-### 成员方法
-
-| 方法名    | 返回值  | 说明             |
-|:---------|:-------|:----------------|
-| toJSON() | Object | 输出JSON格式的结果 |
-
-## CodeInfoResult(data)
+CodeInfoResult(data)
 
 ### 成员方法
 
@@ -61,3 +20,54 @@
 | allCurrentFileKeys()    | Array                 | 输出所有正在使用的FileKey             |
 | allOriginalFileKeys()   | Array                 | 输出所有解析的FileKey                 |
 | allDirtyWords()         | DirtyWords            | 输出所有无法处理的数据                 |
+
+## FileKeyTranslateWords
+
+FileKeyTranslateWords(list)
+
+### 成员方法
+
+| 方法名                        | 返回值                 | 说明             |
+|:-----------------------------|:----------------------|:----------------|
+| toJSON()                     | Object                | 输出JSON格式的结果 |
+| clone()                      | FileKeyTranslateWords | 拷贝             |
+| merge(fileKeyTranslateWords) |                       | 合并数据          |
+| lans()                       | Array                 | 输出解析到的语种   |
+
+## CodeTranslateWords
+
+CodeTranslateWords(list)
+
+### 成员方法
+
+| 方法名                     | 返回值              | 说明                   |
+|:--------------------------|:-------------------|:----------------------|
+| toJSON()                  | Object             | 输出JSON格式的结果       |
+| clone()                   | CodeTranslateWords | 拷贝                   |
+| merge(codeTranslateWords) |                    | 合并数据                |
+| allwords()                | String             | 输出所有需要翻译的词条    |
+| list4newWordAsts()        | Ast                | 输出所有需要翻译的新的词条 |
+| list4newWords()           | String             | 输出所有需要翻译的新的词条 |
+
+## TranslateWords
+
+TranslateWords(codeTranslateWords, funcTranslateWords, usedTranslateWords)
+
+### 成员方法
+
+| 方法名    | 返回值  | 说明             |
+|:---------|:-------|:----------------|
+| toJSON() | Object | 输出JSON格式的结果 |
+
+## DirtyWords
+
+DirtyWords(list)
+
+### 成员方法
+
+| 方法名             | 返回值      | 说明             |
+|:------------------|:-----------|:----------------|
+| toArray()         | Array      | 转换成数组        |
+| toJSON()          | Object     | 输出JSON格式的结果 |
+| clone()           | DirtyWords | 拷贝             |
+| merge(dirtyWords) |            | 合并数据          |
