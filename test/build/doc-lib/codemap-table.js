@@ -346,8 +346,9 @@ function strlen(str)
 	var len = str.length;
 	if (match)
 	{
-		len += match.length;
-		debug('ch str:%o', match);
+		var morelen = match.length - match.length/3|0;
+		len += morelen;
+		debug('ch morelen:%s str:%o', morelen, match);
 	}
 	return len;
 }
