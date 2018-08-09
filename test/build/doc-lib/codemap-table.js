@@ -1,13 +1,14 @@
 'use strict';
 
 var _ = require('lodash');
+var debug = require('debug')('i18nc-core:codemap-table');
 var valsUtils = require('../../../lib/utils/options_vals');
 var ArrayPush = Array.prototype.push;
 
 
 exports.table_names = table_names;
 /**
- * @param  {Array}    tableInfo 必须带有name
+ * @param  {Array}    tableInfo 必须带有name, 结构体为{name, info}
  * @param  {Function} render    渲染除了name之后其他的table
  * @return {Object}
  */
@@ -157,7 +158,9 @@ function table_names(tableInfo, render)
 	};
 }
 
-
+/**
+ * @param  {Object} mapData  {oldKey: [newKey]}
+ */
 exports.table_1toN = function(mapData, oldTableName, newTableName)
 {
 	// var maxOldKeyLen = 0;
@@ -253,7 +256,7 @@ exports.table_1toN = function(mapData, oldTableName, newTableName)
 		'</table>'
 	].join('\n');
 
-}
+};
 
 
 function newItemsRender(arr)
@@ -264,4 +267,87 @@ function newItemsRender(arr)
 			return '<code>'+newKeyInfo.key+'</code> = <code>'+newKeyInfo.value+'</code>';
 		})
 		.join('<br/>');
+}
+
+
+/**
+ * @param  {Array} arrs    [[td1, td2, ...]]
+ * @param  {Array} headers [{name, align}]
+ */
+exports.table_md = function(arrs, headers)
+{
+	var maxlens = [];
+	var arrs2 = arrs.slice();
+	arrs2.unshift(headers.map(function(item){return item.name}));
+	arrs2.forEach(function(arr)
+	{
+		arr.forEach(function(str, index)
+		{
+			var len = strlen(str);
+			var maxlen = maxlens[index];
+			if (!maxlen || maxlen < len) maxlens[index] = len;
+		});
+	});
+
+	var maxstr = maxlens.map(function(len)
+	{
+		return new Array(len+1).join(' ');
+	});
+
+	var tableContentArr = [];
+	var headerArr = [];
+	arrs2.forEach(function(arr, index)
+	{
+		var trstr = arr.map(function(str, index)
+			{
+				var align = headers[index].align;
+				var needstr = maxstr[index].substr(strlen(str));
+				var tdstr = align == 'right' ? needstr+str : str+needstr;
+				return ' '+tdstr+' ';
+			})
+			.join('|');
+
+		var arr = index === 0 ? headerArr : tableContentArr;
+		arr.push('|'+trstr+'|');
+	});
+
+	var headerStr = maxlens.map(function(len, index)
+	{
+		var tdstr = new Array(len+3).join('-');
+		switch(headers[index].align)
+		{
+			case 'right':
+				tdstr = tdstr.substr(1)+':';
+				break;
+			case 'middle':
+				tdstr = ':'+tdstr.substr(2)+':';
+				break;
+			case 'left':
+			default:
+				tdstr = ':'+tdstr.substr(1);
+		}
+
+		return tdstr;
+	})
+	.join('|');
+
+	headerArr.push('|'+headerStr+'|');
+
+	return {
+		tableContentArr: tableContentArr,
+		content: headerArr.join('\n')+'\n'+tableContentArr.join('\n')
+	};
+};
+
+
+function strlen(str)
+{
+	var match = str.match(/[^\u0000-\u007F]/g);
+	var len = str.length;
+	if (match)
+	{
+		len += match.length;
+		debug('ch str:%o', match);
+	}
+	return len;
 }

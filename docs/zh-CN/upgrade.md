@@ -29,7 +29,7 @@
 
 ## 新旧改名对照表
 
-|                                               老版本 | 新版本                                                   |
+|                                              老版本 | 新版本                                                  |
 |----------------------------------------------------:|:--------------------------------------------------------|
 | I18NHandler.style.proxyGlobalHandler.ignoreFuncCode | I18NHandler.style.proxyGlobalHandler.ignoreFuncCodeName |
 |                         I18NHandler.upgrade.version | I18NHandler.upgrade.checkVersion                        |
