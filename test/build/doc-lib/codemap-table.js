@@ -342,6 +342,7 @@ exports.table_md = function(arrs, headers)
 
 function strlen(str)
 {
+	/* eslint-disable no-control-regex */
 	var match = str.match(/[^\u0000-\u007F]/g);
 	var len = str.length;
 	if (match)
