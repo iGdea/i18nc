@@ -1632,7 +1632,7 @@ function _wordJson2ast(words)
 	{
 		if (!result.length)
 		{
-			result.push(astTpl.Property('<e.g.> translate word', astUtils.constVal2ast(null)));
+			result.push(astTpl.Property('', astUtils.constVal2ast(null)));
 		}
 		var lastItem = result[result.length-1];
 		lastItem.leadingComments = (lastItem.leadingComments || []).concat(emptyTranslateComments);
@@ -2613,6 +2613,8 @@ function mainHandler(code, options)
 }
 
 },{"./ast_collector":2,"./ast_utils":6,"./emitter":8,"./options":17}],17:[function(require,module,exports){
+/* eslint-disable no-control-regex */
+
 'use strict';
 
 var getLanguageCodeHandler = require('./upgrade/tpl/getlanguagecode_handler');
@@ -2622,7 +2624,7 @@ var utils = require('./utils/options_utils');
 exports.defaults =
 {
 	/**
-	 * 分词的正则
+	 * 提取分词的正则
 	 *
 	 * 前后两个匹配，是为了尽可能匹配多的字符
  	 * 排除所有的ascii字符，https://zh.wikipedia.org/wiki/ASCII
@@ -2652,7 +2654,7 @@ exports.defaults =
 	I18NHandlerAlias: [],
 
 	/**
-	 * 这些函数里面的调用，或则声明不进行扫描
+	 * 这些函数里面的调用或则声明，不进行扫描
 	 *
 	 * @remark 函数名带有.，表示对成员方法的调用
 	 * @type {Object|Array}
@@ -2670,14 +2672,14 @@ exports.defaults =
 	},
 
 	/**
-	 * 导入的翻译数据
+	 * 外部导入的翻译数据
 	 *
 	 * @type {Object}
 	 */
 	dbTranslateWords: null,
 
 	/**
-	 * 注入到代码中的I18N函数的一些配置
+	 * 注入到代码中的I18N函数的定制化配置
 	 *
 	 * @type {Object}
 	 */
@@ -2686,31 +2688,31 @@ exports.defaults =
 		data:
 		{
 			/**
-			 * 翻译代码默认标识key
+			 * 函数默认标识，可标识出特定的I18N函数体
 			 * 一般用文件的相对路径
 			 *
-			 * @remark 可以针对filekey，打包定制翻译结果
+			 * @remark 可以针对filekey，可以提供定制翻译结果
 			 * @type {String}
 			 */
 			defaultFileKey: '*',
 			/**
-			 * 当没有找到任何语言包 & 启动了 I18NHandler.style.comment4nowords, 使用这个语言，作为代码中的语言包
+			 * 当没有找到任何语言包 & 启动了comment4nowords, 使用这个语言，作为代码中的语言包
 			 * 由于没有任何实际数据，对代码结果无影响
 			 *
 			 * @type {String}
 			 */
 			defaultLanguage: 'en-US',
 			/**
-			 * 只打包这个列表内语言包到代码中
+			 * 只打包这个列表的语言包到代码中
 			 *
-			 * @remark 数组为空则不受限制
+			 * @remark 数组为空则不受限制，传入多少种语言，就打包多少种
 			 * @type {Array}
 			 */
 			onlyTheseLanguages: [],
 			/**
 			 * 翻译的时候，不参考代码中I18N里面的数据
 			 *
-			 * @remark 启动后，如果dbTranslateWords没有数据，直接删除翻译
+			 * @remark 启动后，如果dbTranslateWords没有数据，直接删除在I18N已有的翻译
 			 * @type {Boolean}
 			 */
 			ignoreFuncWords: false,
@@ -2718,20 +2720,21 @@ exports.defaults =
 		upgrade:
 		{
 			/**
-			 * 能否更新已插入代码中I18N函数体的总开关
+			 * [总开关]能否更新已插入代码中I18N函数体
 			 *
 			 * @remark 已经初始化的I18N函数，不会主动更新
 			 * @type {Boolean}
 			 */
 			enable: true,
 			/**
-			 * 对I18N函数优先进行局部更新（只更新翻译数据）
+			 * 优先进行I18N函数的局部更新（只更新翻译数据）
 			 *
+			 * @remark 是否能进行局部更新，受到众多因素影响，这只是一个开关
 			 * @type {Boolean}
 			 */
 			partial: true,
 			/**
-			 * 函数版本号不同的时候，是否更新函数体
+			 * 函数版本号不同的时候，是否更新整个函数体
 			 *
 			 * @type {Boolean}
 			 */
@@ -2761,14 +2764,15 @@ exports.defaults =
 			 */
 			minFuncCode: false,
 			/**
-			 * 压缩插入到代码中的翻译结果JSON
+			 * 对插入到代码中的翻译结果JSON进行代码压缩
 			 *
 			 * @remark 设置true，会导致 I18NHandler.style.comment4nowords 失效
 			 * @type {Boolean}
 			 */
 			minFuncJSON: false,
 			/**
-			 * 在源代码中，输出所有提取的关键字中，没有翻译结果的关键字，以注释的形式插入
+			 * 翻译结果JSON，输出所有提取到的关键字；没有翻译结果的关键字，以注释的形式插入
+			 *
 			 * @type {Boolean}
 			 */
 			comment4nowords: true,
@@ -2807,6 +2811,11 @@ exports.defaults =
 				 */
 				ignoreFuncCodeName: false,
 			},
+			/**
+			 * 插入完整的I18N函数体，代码不依赖外部任何库或者函数
+			 *
+			 * @type {Object}
+			 */
 			fullHandler:
 			{
 				/**
@@ -2827,19 +2836,19 @@ exports.defaults =
 		insert:
 		{
 			/**
-			 * 是否插入新的I18N函数
+			 * [总开关]是否插入新的I18N函数
 			 *
 			 * @type {Boolean}
 			 */
 			enable: true,
 			/**
-			 * 插入I18N函数前，检查所在位置，必须闭包
+			 * 插入I18N函数前，检查插入位置，作用域不能是全局，必须闭包
 			 *
 			 * @type {Boolean}
 			 */
 			checkClosure: true,
 			/**
-			 * 新的I18N函数优先插入到define函数
+			 * 优先将新的I18N函数插入到define函数体中
 			 *
 			 * @type {Boolean}
 			 */
@@ -2848,7 +2857,7 @@ exports.defaults =
 		tpl:
 		{
 			/**
-			 * js代码中，获取当前语言包的代码
+			 * I18N函数体中，获取当前语言包的JS业务代码
 			 *
 			 * string，即全局的函数调用
  			 * function，必须是可被序列化成字符串，能独立运行
@@ -2892,7 +2901,7 @@ exports.defaults =
 	},
 
 	/**
-	 * 设置可修改的源码类型
+	 * 设置操作的源码可修改的内容
 	 *
 	 * 如果去掉TranslateWord，
 	 * 配合最后输出的I18NArgsTranslateWords和codeTranslateWords，
@@ -2906,19 +2915,19 @@ exports.defaults =
 		// I18NHandler 已经改名为 I18NHandler.upgrade.enable
 		// I18NHandler: true,
 		/**
-		 * 将分词的结果，用I18N函数包裹起来
+		 * 将提取的需要翻译的关键字，使用I18N函数包裹起来
 		 *
 		 * @type {Boolean}
 		 */
 		TranslateWord: true,
 		/**
-		 * TranslateWord中的RegExp类型
+		 * 同TranslateWord，RegExp类型的开关
 		 *
 		 * @type {Boolean}
 		 */
 		TranslateWord_RegExp: false,
 		/**
-		 * 将I18NHandlerAlias统一成I18NHandlerName
+		 * 将I18NHandlerAlias替换成I18NHandlerName
 		 *
 		 * @type {Boolean}
 		 */
@@ -2926,28 +2935,29 @@ exports.defaults =
 	},
 
 	/**
-	 * 启用的插件
+	 * 当前安装和启用的插件
 	 *
 	 * @remark 空数据则关闭所有，空对象则使用默认
 	 * @type {Object|Array}
 	 */
 	pluginEnabled: {},
 	/**
-	 * 插件配置
+	 * 插件的配置
 	 *
 	 * @type {Object}
 	 */
 	pluginSettings: {},
 
 	/**
-	 * 是否向前兼容逻辑
+	 * 是否开启向前版本兼容逻辑
 	 *
+	 * @remark 向前兼容需要消耗一定的计算资源和时间，建议按照提示修改成最新的配置和接口
 	 * @type {Boolean}
 	 */
 	depdEnable: true,
 
 	/**
-	 * 可监听的事件
+	 * 面向定制化的监听事件
 	 *
 	 * @type {Object}
 	 */
@@ -3070,6 +3080,11 @@ _.extend(DirtyWords.prototype,
 			originalAst	: ast,
 		});
 	},
+	/**
+	 * 转换成数组
+	 *
+	 * @return {Array} [源码片段]
+	 */
 	toArray: function()
 	{
 		return this.list.map(function(item)
@@ -3077,10 +3092,33 @@ _.extend(DirtyWords.prototype,
 			return item.code;
 		});
 	},
+	/**
+	 * 输出JSON格式的结果
+	 *
+	 * @return {Object}
+	 */
+	toJSON: function()
+	{
+		return this.toArray();
+	},
+	/**
+	 * 拷贝
+	 *
+	 * @return {DirtyWords}
+	 */
 	clone: function()
 	{
-		return this.list.slice();
+		return new DirtyWords(this.list.slice());
 	},
+	/**
+	 * 合并数据
+	 *
+	 * @param  {DirtyWords} dirtyWords
+	 */
+	merge: function(dirtyWords)
+	{
+		ArrayPush.apply(this.list, dirtyWords.list);
+	}
 });
 
 
@@ -3091,6 +3129,11 @@ function CodeTranslateWords(list)
 
 _.extend(CodeTranslateWords.prototype,
 {
+	/**
+	 * 输出JSON格式的结果
+	 *
+	 * @return {Object}
+	 */
 	toJSON: function()
 	{
 		var DEFAULTS = [];
@@ -3125,10 +3168,29 @@ _.extend(CodeTranslateWords.prototype,
 			SUBTYPES: SUBTYPES,
 		};
 	},
+	/**
+	 * 拷贝
+	 *
+	 * @return {CodeTranslateWords}
+	 */
 	clone: function()
 	{
-		return this.list.slice();
+		return new CodeTranslateWords(this.list.slice());
 	},
+	/**
+	 * 合并数据
+	 *
+	 * @param  {CodeTranslateWords} codeTranslateWords
+	 */
+	merge: function(codeTranslateWords)
+	{
+		ArrayPush.apply(this.list, codeTranslateWords.list);
+	},
+	/**
+	 * 输出所有需要翻译的词条
+	 *
+	 * @return {String}
+	 */
 	allwords: function()
 	{
 		var result = [];
@@ -3154,6 +3216,11 @@ _.extend(CodeTranslateWords.prototype,
 
 		return result;
 	},
+	/**
+	 * 输出所有需要翻译的新的词条
+	 *
+	 * @return {Ast}
+	 */
 	list4newWordAsts: function()
 	{
 		return this.list.filter(function(item)
@@ -3161,6 +3228,11 @@ _.extend(CodeTranslateWords.prototype,
 				return item.type == 'new';
 			});
 	},
+	/**
+	 * 输出所有需要翻译的新的词条
+	 *
+	 * @return {String}
+	 */
 	list4newWords: function()
 	{
 		var arrs = this.list4newWordAsts().map(function(item)
@@ -3211,6 +3283,11 @@ _.extend(FileKeyTranslateWords.prototype,
 	{
 		this.list.push({fileKey: fileKey, data: json || {}});
 	},
+	/**
+	 * 输出JSON格式的结果
+	 *
+	 * @return {Object}
+	 */
 	toJSON: function()
 	{
 		var arrs = this.list.map(function(item)
@@ -3221,21 +3298,29 @@ _.extend(FileKeyTranslateWords.prototype,
 		arrs.unshift(true, {});
 		return extend.apply(null, arrs);
 	},
+	/**
+	 * 拷贝
+	 *
+	 * @return {FileKeyTranslateWords}
+	 */
 	clone: function()
 	{
-		return this.list.slice();
+		return new FileKeyTranslateWords(this.list.slice());
 	},
-	// fileKeyJSON: function()
-	// {
-	// 	var fileKeys = {};
-	// 	_.each(this.list, function(item)
-	// 	{
-	// 		var arr = fileKeys[item.fileKey] || (fileKeys[item.fileKey] = []);
-	// 		arr.push(item.data);
-	// 	});
-	//
-	// 	return fileKeys;
-	// },
+	/**
+	 * 合并数据
+	 *
+	 * @param  {FileKeyTranslateWords} fileKeyTranslateWords
+	 */
+	merge: function(fileKeyTranslateWords)
+	{
+		ArrayPush.apply(this.list, fileKeyTranslateWords.list);
+	},
+	/**
+	 * 输出解析到的语种
+	 *
+	 * @return {Array}
+	 */
 	lans: function()
 	{
 		var lanArrs = this.list.map(function(item)
@@ -3264,6 +3349,11 @@ function TranslateWords(codeTranslateWords, funcTranslateWords, usedTranslateWor
 
 _.extend(TranslateWords.prototype,
 {
+	/**
+	 * 输出JSON格式的结果
+	 *
+	 * @return {Object}
+	 */
 	toJSON: function()
 	{
 		return {
@@ -3305,6 +3395,20 @@ function CodeInfoResult(data)
 
 _.extend(CodeInfoResult.prototype,
 {
+	/**
+	 * 输出处理后的源码
+	 *
+	 * @return {String}
+	 */
+	toString: function()
+	{
+		return this.code;
+	},
+	/**
+	 * 输出JSON格式的结果
+	 *
+	 * @return {Object}
+	 */
 	toJSON: function()
 	{
 		var json =
@@ -3321,6 +3425,11 @@ _.extend(CodeInfoResult.prototype,
 
 		return json;
 	},
+	/**
+	 * 输出汇集所有子域结果后的最终结果
+	 *
+	 * @return {CodeInfoResult}
+	 */
 	squeeze: function()
 	{
 		var lans = this.allFuncLans();
@@ -3343,6 +3452,11 @@ _.extend(CodeInfoResult.prototype,
 				this.allUsedTranslateWords()),
 		});
 	},
+	/**
+	 * 输出所有I18N函数解析结果中使用的翻译语种
+	 *
+	 * @return {Array}
+	 */
 	allFuncLans: function()
 	{
 		var self = this;
@@ -3355,6 +3469,11 @@ _.extend(CodeInfoResult.prototype,
 
 		return _.uniq(result);
 	},
+	/**
+	 * 输出所有当前使用的翻译语种
+	 *
+	 * @return {Array}
+	 */
 	allUsedLans: function()
 	{
 		var self = this;
@@ -3367,6 +3486,11 @@ _.extend(CodeInfoResult.prototype,
 
 		return _.uniq(result);
 	},
+	/**
+	 * 输出所有源码中获取到的需要翻译的词组
+	 *
+	 * @return {CodeTranslateWords}
+	 */
 	allCodeTranslateWords: function()
 	{
 		var self = this;
@@ -3374,11 +3498,16 @@ _.extend(CodeInfoResult.prototype,
 
 		self.subScopeDatas.forEach(function(item)
 		{
-			ArrayPush.apply(result, item.allCodeTranslateWords().list);
+			result.merge(item.allCodeTranslateWords());
 		});
 
-		return new CodeTranslateWords(result);
+		return result;
 	},
+	/**
+	 * 输出所有I18N函数中解析到的翻译数据
+	 *
+	 * @return {FileKeyTranslateWords}
+	 */
 	allFuncTranslateWords: function()
 	{
 		var self = this;
@@ -3386,11 +3515,16 @@ _.extend(CodeInfoResult.prototype,
 
 		self.subScopeDatas.forEach(function(item)
 		{
-			ArrayPush.apply(result, item.allFuncTranslateWords().list);
+			result.merge(item.allFuncTranslateWords());
 		});
 
-		return new FuncTranslateWords(result);
+		return result;
 	},
+	/**
+	 * 输出所有正在使用的翻译数据
+	 *
+	 * @return {FileKeyTranslateWords}
+	 */
 	allUsedTranslateWords: function()
 	{
 		var self = this;
@@ -3398,11 +3532,16 @@ _.extend(CodeInfoResult.prototype,
 
 		self.subScopeDatas.forEach(function(item)
 		{
-			ArrayPush.apply(result, item.allUsedTranslateWords().list);
+			result.merge(item.allUsedTranslateWords());
 		});
 
-		return new UsedTranslateWords(result);
+		return result;
 	},
+	/**
+	 * 输出所有正在使用的FileKey
+	 *
+	 * @return {Array}
+	 */
 	allCurrentFileKeys: function()
 	{
 		var self = this;
@@ -3416,6 +3555,11 @@ _.extend(CodeInfoResult.prototype,
 
 		return result;
 	},
+	/**
+	 * 输出所有解析的FileKey
+	 *
+	 * @return {Array}
+	 */
 	allOriginalFileKeys: function()
 	{
 		var self = this;
@@ -3428,6 +3572,11 @@ _.extend(CodeInfoResult.prototype,
 
 		return result;
 	},
+	/**
+	 * 输出所有无法处理的数据
+	 *
+	 * @return {DirtyWords}
+	 */
 	allDirtyWords: function()
 	{
 		var self = this;
@@ -3435,10 +3584,10 @@ _.extend(CodeInfoResult.prototype,
 
 		self.subScopeDatas.forEach(function(item)
 		{
-			ArrayPush.apply(result, item.allDirtyWords().list);
+			result.merge(item.allDirtyWords());
 		});
 
-		return new DirtyWords(result);
+		return result;
 	},
 });
 
@@ -47271,7 +47420,7 @@ exports.SourceNode = require('./lib/source-node').SourceNode;
 },{"./lib/source-map-consumer":99,"./lib/source-map-generator":100,"./lib/source-node":101}],104:[function(require,module,exports){
 module.exports={
   "name": "i18nc-core",
-  "version": "10.6.1",
+  "version": "10.6.2",
   "description": "I18N Tool for JS files",
   "main": "index.js",
   "scripts": {
@@ -47301,12 +47450,12 @@ module.exports={
     "benchmark": "^2.1.4",
     "comment-parser": "^0.5.0",
     "cross-env": "^5.2.0",
-    "eslint": "^5.1.0",
+    "eslint": "^5.2.0",
     "eslint-config-brcjs": "^0.2.0",
     "expect.js": "^0.3.1",
     "glob": "^7.1.2",
     "istanbul": "^0.4.5",
-    "karma": "^2.0.4",
+    "karma": "^2.0.5",
     "karma-config-brcjs": "^1.0.1",
     "mkdirp": "^0.5.1",
     "mocha": "^5.2.0"

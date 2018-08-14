@@ -87,11 +87,11 @@ module.exports = function code()
 							'subtype': {
 								// 'I18N(中文)':
 								// '中文I18N subtype':
-								'<e.g.> translate word': null
+								'': null
 							},
 							'subtype2': {
 								// 'I18N(中文)':
-								'<e.g.> translate word': null
+								'': null
 							}
 						}
 					}

@@ -82,17 +82,17 @@ module.exports = function code()
 							// '中文val':
 							// '中文val in object':
 							// '简体':
-							'<e.g.> translate word': null
+							'': null
 						},
 						'SUBTYPES': {
 							'subtype': {
 								// 'I18N(中文)':
 								// '中文I18N subtype':
-								'<e.g.> translate word': null
+								'': null
 							},
 							'subtype2': {
 								// 'I18N(中文)':
-								'<e.g.> translate word': null
+								'': null
 							}
 						}
 					}

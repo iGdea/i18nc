@@ -35,7 +35,7 @@ module.exports = function code()
 					'en-US': {
 						'DEFAULTS': {
 							// '1234':
-							'<e.g.> translate word': null
+							'': null
 						}
 					}
 				};

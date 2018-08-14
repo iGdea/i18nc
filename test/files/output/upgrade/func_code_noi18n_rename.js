@@ -35,7 +35,7 @@ module.exports = function code()
 					'en-US': {
 						'DEFAULTS': {
 							// '中':
-							'<e.g.> translate word': null
+							'': null
 						}
 					}
 				};

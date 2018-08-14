@@ -35,7 +35,7 @@ module.exports = function code()
 					'en-US': {
 						'DEFAULTS': {
 							// 'out define 中文':
-							'<e.g.> translate word': null
+							'': null
 						}
 					}
 				};
@@ -127,7 +127,7 @@ module.exports = function code()
 						'en-US': {
 							'DEFAULTS': {
 								// '中文':
-								'<e.g.> translate word': null
+								'': null
 							}
 						}
 					};
@@ -220,7 +220,7 @@ module.exports = function code()
 						'en-US': {
 							'DEFAULTS': {
 								// 'define2 中文':
-								'<e.g.> translate word': null
+								'': null
 							}
 						}
 					};
@@ -314,7 +314,7 @@ module.exports = function code()
 						'en-US': {
 							'DEFAULTS': {
 								// 'define3 中文':
-								'<e.g.> translate word': null
+								'': null
 							}
 						}
 					};
@@ -411,7 +411,7 @@ module.exports = function code()
 							'DEFAULTS': {
 								// 'define4 中文':
 								// 'define5 中文':
-								'<e.g.> translate word': null
+								'': null
 							}
 						}
 					};
@@ -509,7 +509,7 @@ module.exports = function code()
 						'en-US': {
 							'DEFAULTS': {
 								// 'define6 中文':
-								'<e.g.> translate word': null
+								'': null
 							}
 						}
 					};

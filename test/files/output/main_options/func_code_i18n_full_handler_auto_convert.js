@@ -33,7 +33,7 @@ module.exports = function code()
 					'en-US': {
 						'DEFAULTS': {
 							// '中文':
-							'<e.g.> translate word': null
+							'': null
 						}
 					}
 				};

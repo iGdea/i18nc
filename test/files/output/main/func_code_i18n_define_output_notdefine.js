@@ -40,7 +40,7 @@ module.exports = function code()
 							// 'define5 中文':
 							// 'out define 中文':
 							// '中文':
-							'<e.g.> translate word': null
+							'': null
 						}
 					}
 				};
@@ -161,7 +161,7 @@ module.exports = function code()
 						'en-US': {
 							'DEFAULTS': {
 								// 'define6 中文':
-								'<e.g.> translate word': null
+								'': null
 							}
 						}
 					};

@@ -55,7 +55,7 @@ describe('#word_json_ast', function()
 						// 'word_1':
 						// 'word_2':
 						// 'word_3':
-						'<e.g.> translate word': null
+						'': null
 					}
 					console.log(d);
 				}

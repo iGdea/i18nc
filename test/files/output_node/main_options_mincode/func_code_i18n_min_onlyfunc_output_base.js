@@ -8,7 +8,7 @@ module.exports = function code()
 			'en-US': {
 				'DEFAULTS': {
 					// '简体':
-					'<e.g.> translate word': null
+					'': null
 				}
 			}
 		};
