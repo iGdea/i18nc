@@ -1170,6 +1170,7 @@ var AST_FLAGS = exports.AST_FLAGS =
 	TEMPLATE_LITERAL		: 1 << 7,
 	JSX_ELEMENT				: 1 << 8,
 	TAGGED_TEMPLATE_LITERAL	: 1 << 9,
+	PLACEHOLDER_WORD		: 1 << 10,
 };
 
 exports.UNSUPPORT_AST_TYPS	=
@@ -1269,6 +1270,7 @@ var escodegen		= require('escodegen');
 var astTpl			= require('../ast_tpl');
 var astUtils		= require('../ast_utils');
 var optionsUtils	= require('../options');
+var AST_FLAGS		= astUtils.AST_FLAGS;
 var exportsTest		= exports._test = {};
 
 exports.genTranslateJSONCode = genTranslateJSONCode;
@@ -1279,7 +1281,9 @@ function genTranslateJSONCode(translateData)
 	var ast = _translateJSON2ast(translateData);
 	if (ast)
 	{
-		return escodegen.generate(ast, optionsUtils.escodegenOptions);
+		var code = escodegen.generate(ast, optionsUtils.escodegenOptions);
+		code = code.replace(/,?\s*(['"])\1 *: *null/g, '');
+		return code;
 	}
 	else
 	{
@@ -1632,8 +1636,11 @@ function _wordJson2ast(words)
 	{
 		if (!result.length)
 		{
-			result.push(astTpl.Property('', astUtils.constVal2ast(null)));
+			var protoKey = astTpl.Property('', astUtils.constVal2ast(null));
+			astUtils.setAstFlag(protoKey, AST_FLAGS.PLACEHOLDER_WORDER);
+			result.push(protoKey);
 		}
+
 		var lastItem = result[result.length-1];
 		lastItem.leadingComments = (lastItem.leadingComments || []).concat(emptyTranslateComments);
 	}

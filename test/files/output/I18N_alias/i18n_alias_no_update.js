@@ -47,17 +47,14 @@ module.exports = function code()
 							// '中文val':
 							// '中文val in object':
 							// '简体':
-							'': null
 						},
 						'SUBTYPES': {
 							'subtype': {
 								// 'I18N(中文)':
 								// '中文I18N subtype':
-								'': null
 							},
 							'subtype2': {
 								// 'I18N(中文)':
-								'': null
 							}
 						}
 					}
@@ -193,17 +190,14 @@ module.exports = function code()
 							// '中文val':
 							// '中文val in object':
 							// '简体':
-							'': null
 						},
 						'SUBTYPES': {
 							'subtype': {
 								// 'I18N(中文)':
 								// '中文I18N subtype':
-								'': null
 							},
 							'subtype2': {
 								// 'I18N(中文)':
-								'': null
 							}
 						}
 					}

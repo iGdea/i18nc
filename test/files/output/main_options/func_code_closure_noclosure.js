@@ -36,7 +36,6 @@ function I18N(msg, tpldata, subtype)
 				'en-US': {
 					'DEFAULTS': {
 						// '中文':
-						'': null
 					}
 				}
 			};

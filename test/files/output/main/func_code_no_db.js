@@ -36,7 +36,6 @@ function I18N(msg, tpldata, subtype)
 				'en-US': {
 					'DEFAULTS': {
 						// '不可能存在的中文翻译词组':
-						'': null
 					}
 				}
 			};

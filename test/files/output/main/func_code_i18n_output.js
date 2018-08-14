@@ -40,7 +40,6 @@ module.exports = function code()
 							// '中文3':
 							// '中文4':
 							// '中文5':
-							'': null
 						}
 					}
 				};

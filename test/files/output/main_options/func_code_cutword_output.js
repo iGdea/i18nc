@@ -35,7 +35,6 @@ module.exports = function code()
 					'en-US': {
 						'DEFAULTS': {
 							// '1234':
-							'': null
 						}
 					}
 				};

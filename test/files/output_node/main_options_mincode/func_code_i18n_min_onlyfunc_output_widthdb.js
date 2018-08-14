@@ -8,7 +8,6 @@ module.exports = function code()
 			'en-US': {
 				'DEFAULTS': {
 					// '简体':
-					'': null
 				}
 			}
 		};

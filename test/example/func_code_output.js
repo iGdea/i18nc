@@ -90,7 +90,6 @@ module.exports = function code()
 							},
 							'subtype2': {
 								// 'I18N(中文)':
-								'': null
 							}
 						}
 					}

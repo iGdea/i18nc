@@ -35,7 +35,6 @@ module.exports = function code()
 					'en-US': {
 						'DEFAULTS': {
 							// '中':
-							'': null
 						}
 					}
 				};

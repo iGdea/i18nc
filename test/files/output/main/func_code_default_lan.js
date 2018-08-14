@@ -11,7 +11,6 @@ module.exports = function code()
 						'en-US': {
 							'DEFAULTS': {
 								// '不可能存在的中文翻译词组':
-								'': null
 							}
 						}
 					};

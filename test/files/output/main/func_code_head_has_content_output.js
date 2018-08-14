@@ -37,7 +37,6 @@ define(function(){
 					'en-US': {
 						'DEFAULTS': {
 							// '中文':
-							'': null
 						}
 					}
 				};

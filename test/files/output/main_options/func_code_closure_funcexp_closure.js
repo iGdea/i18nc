@@ -36,7 +36,6 @@ module.exports = function textWrapCode(){
 					'en-US': {
 						'DEFAULTS': {
 							// '中文':
-							'': null
 						}
 					}
 				};
