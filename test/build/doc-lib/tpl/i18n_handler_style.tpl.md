@@ -8,6 +8,8 @@ I18N函数风格
 $FULL_HANDLER_CODE
 ```
 
+$FULL_HANDLER_PARGMS
+
 
 ## 简易模式
 
