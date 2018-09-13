@@ -6,3 +6,17 @@
 .page-header, .site-footer{
 	display: none;
 }
+
+.main-content {
+	font-size: 1rem !important;
+
+	table {
+		display: table;;
+	}
+}
+
+@media screen and (max-width: 42em) {
+	.main-content table {
+		display: block;
+	}
+}
