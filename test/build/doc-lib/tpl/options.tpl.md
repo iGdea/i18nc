@@ -1,7 +1,9 @@
 配置说明
 ========
 
-> 文档宽度较大，注意左右滚动阅读
+<blockquote class="table_big_tips">
+	表格宽度过大，已经自动隐藏<code>描述</code> <code>备注</code> 两列，<a href="./only-options">点击此处</a>查看完整表格
+</blockquote>
 
 $OPTIONS_TABLE_DATA
 

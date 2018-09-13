@@ -22,4 +22,5 @@ var fileContent = tpl.replace(/\$(\w+)/g, function(all, key)
 			return all;
 	}
 });
+
 fs.writeFileSync(__dirname+'/../../docs/zh-CN/options.md', fileContent);

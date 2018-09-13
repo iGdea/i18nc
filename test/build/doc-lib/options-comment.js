@@ -90,8 +90,8 @@ module.exports = function(content)
 			return [
 				'<td>'+(info.type || '')+'</td>',
 				'<td>'+defaultVal+'</td>',
-				'<td>'+(info.description || '')+'</td>',
-				'<td>'+(info.remark || '')+'</td>'
+				'<td class="table_options_desc">'+(info.description || '')+'</td>',
+				'<td class="table_options_remark">'+(info.remark || '')+'</td>'
 			]
 			.join('');
 		});
@@ -102,8 +102,8 @@ module.exports = function(content)
 		'\t\t<th colspan="'+tableContent.maxCollsLength+'">变量</th>',
 		'\t\t<th>类型</th>',
 		'\t\t<th>默认值</th>',
-		'\t\t<th>描述</th>',
-		'\t\t<th>备注</th>',
+		'\t\t<th class="table_options_desc">描述</th>',
+		'\t\t<th class="table_options_remark">备注</th>',
 		'\t</tr>',
 		'\t'+tableContent.content.join('\n\t'),
 		'</table>'
