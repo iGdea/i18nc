@@ -3,9 +3,12 @@
 
 @import "{{ site.theme }}";
 
-.page-header, .site-footer{
+.site-footer{
 	display: none;
 }
+// .page-header {
+// 	display: none;
+// }
 
 .main-content {
 	font-size: 1rem !important;
