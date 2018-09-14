@@ -29,7 +29,7 @@ $OPTIONS_RENAME_TABLE_DATA
 
 function GetLanguageCodeHandler(cache)
 {
-	var g = cache.g || (cache.g = $GetLanguageCode);
-	return g.$LanguageVars.name$;
+  var g = cache.g || (cache.g = $GetLanguageCode);
+  return g.$LanguageVars.name$;
 }
 ```
