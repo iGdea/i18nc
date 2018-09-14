@@ -1,7 +1,11 @@
 配置说明
 ========
 
-> 文档宽度较大，注意左右滚动阅读
+> 表格宽度过大，已经自动隐藏`描述` `备注` 两列，[点击此处](./only-options)查看完整表格
+
+<style>
+.table_options_desc, .table_options_remark {display: none;}
+</style>
 
 $OPTIONS_TABLE_DATA
 

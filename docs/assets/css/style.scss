@@ -3,28 +3,23 @@
 
 @import "{{ site.theme }}";
 
-.page-header, .site-footer{
+.site-footer{
 	display: none;
 }
+// .page-header {
+// 	display: none;
+// }
 
 .main-content {
-	max-width: none !important;
-	padding: 2rem !important;
 	font-size: 1rem !important;
 
-	table th {
-		font-size: 1rem;
+	table {
+		display: table;;
 	}
-	table td {
-		font-size: 0.9rem;
-	}
-	table.table_big {
-		word-break: unset;
-	}
-	.table_big {
-		td {
-			font-size: 0.8rem;
-			padding: 0.5rem 0.4rem;
-		}
+}
+
+@media screen and (max-width: 42em) {
+	.main-content table {
+		display: block;
 	}
 }

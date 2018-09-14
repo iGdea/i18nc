@@ -4305,41 +4305,26 @@ function getTranslateWordsFromLineStrings(lineStrings)
 
 },{"../emitter":8,"debug":25}],25:[function(require,module,exports){
 (function (process){
+"use strict";
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+/* eslint-env browser */
+
 /**
  * This is the web browser implementation of `debug()`.
- *
- * Expose `debug()` as the module.
  */
-
-exports = module.exports = require('./debug');
 exports.log = log;
 exports.formatArgs = formatArgs;
 exports.save = save;
 exports.load = load;
 exports.useColors = useColors;
-exports.storage = 'undefined' != typeof chrome
-               && 'undefined' != typeof chrome.storage
-                  ? chrome.storage.local
-                  : localstorage();
-
+exports.storage = localstorage();
 /**
  * Colors.
  */
 
-exports.colors = [
-  '#0000CC', '#0000FF', '#0033CC', '#0033FF', '#0066CC', '#0066FF', '#0099CC',
-  '#0099FF', '#00CC00', '#00CC33', '#00CC66', '#00CC99', '#00CCCC', '#00CCFF',
-  '#3300CC', '#3300FF', '#3333CC', '#3333FF', '#3366CC', '#3366FF', '#3399CC',
-  '#3399FF', '#33CC00', '#33CC33', '#33CC66', '#33CC99', '#33CCCC', '#33CCFF',
-  '#6600CC', '#6600FF', '#6633CC', '#6633FF', '#66CC00', '#66CC33', '#9900CC',
-  '#9900FF', '#9933CC', '#9933FF', '#99CC00', '#99CC33', '#CC0000', '#CC0033',
-  '#CC0066', '#CC0099', '#CC00CC', '#CC00FF', '#CC3300', '#CC3333', '#CC3366',
-  '#CC3399', '#CC33CC', '#CC33FF', '#CC6600', '#CC6633', '#CC9900', '#CC9933',
-  '#CCCC00', '#CCCC33', '#FF0000', '#FF0033', '#FF0066', '#FF0099', '#FF00CC',
-  '#FF00FF', '#FF3300', '#FF3333', '#FF3366', '#FF3399', '#FF33CC', '#FF33FF',
-  '#FF6600', '#FF6633', '#FF9900', '#FF9933', '#FFCC00', '#FFCC33'
-];
-
+exports.colors = ['#0000CC', '#0000FF', '#0033CC', '#0033FF', '#0066CC', '#0066FF', '#0099CC', '#0099FF', '#00CC00', '#00CC33', '#00CC66', '#00CC99', '#00CCCC', '#00CCFF', '#3300CC', '#3300FF', '#3333CC', '#3333FF', '#3366CC', '#3366FF', '#3399CC', '#3399FF', '#33CC00', '#33CC33', '#33CC66', '#33CC99', '#33CCCC', '#33CCFF', '#6600CC', '#6600FF', '#6633CC', '#6633FF', '#66CC00', '#66CC33', '#9900CC', '#9900FF', '#9933CC', '#9933FF', '#99CC00', '#99CC33', '#CC0000', '#CC0033', '#CC0066', '#CC0099', '#CC00CC', '#CC00FF', '#CC3300', '#CC3333', '#CC3366', '#CC3399', '#CC33CC', '#CC33FF', '#CC6600', '#CC6633', '#CC9900', '#CC9933', '#CCCC00', '#CCCC33', '#FF0000', '#FF0033', '#FF0066', '#FF0099', '#FF00CC', '#FF00FF', '#FF3300', '#FF3333', '#FF3366', '#FF3399', '#FF33CC', '#FF33FF', '#FF6600', '#FF6633', '#FF9900', '#FF9933', '#FFCC00', '#FFCC33'];
 /**
  * Currently only WebKit-based Web Inspectors, Firefox >= v31,
  * and the Firebug extension (any Firefox version) are known
@@ -4347,84 +4332,65 @@ exports.colors = [
  *
  * TODO: add a `localStorage` variable to explicitly enable/disable colors
  */
+// eslint-disable-next-line complexity
 
 function useColors() {
   // NB: In an Electron preload script, document will be defined but not fully
   // initialized. Since we know we're in Chrome, we'll just detect this case
   // explicitly
-  if (typeof window !== 'undefined' && window.process && window.process.type === 'renderer') {
+  if (typeof window !== 'undefined' && window.process && (window.process.type === 'renderer' || window.process.__nwjs)) {
     return true;
-  }
+  } // Internet Explorer and Edge do not support colors.
 
-  // Internet Explorer and Edge do not support colors.
+
   if (typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/(edge|trident)\/(\d+)/)) {
     return false;
-  }
-
-  // is webkit? http://stackoverflow.com/a/16459606/376773
+  } // Is webkit? http://stackoverflow.com/a/16459606/376773
   // document is undefined in react-native: https://github.com/facebook/react-native/pull/1632
-  return (typeof document !== 'undefined' && document.documentElement && document.documentElement.style && document.documentElement.style.WebkitAppearance) ||
-    // is firebug? http://stackoverflow.com/a/398120/376773
-    (typeof window !== 'undefined' && window.console && (window.console.firebug || (window.console.exception && window.console.table))) ||
-    // is firefox >= v31?
-    // https://developer.mozilla.org/en-US/docs/Tools/Web_Console#Styling_messages
-    (typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/) && parseInt(RegExp.$1, 10) >= 31) ||
-    // double check webkit in userAgent just in case we are in a worker
-    (typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/applewebkit\/(\d+)/));
+
+
+  return typeof document !== 'undefined' && document.documentElement && document.documentElement.style && document.documentElement.style.WebkitAppearance || // Is firebug? http://stackoverflow.com/a/398120/376773
+  typeof window !== 'undefined' && window.console && (window.console.firebug || window.console.exception && window.console.table) || // Is firefox >= v31?
+  // https://developer.mozilla.org/en-US/docs/Tools/Web_Console#Styling_messages
+  typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/) && parseInt(RegExp.$1, 10) >= 31 || // Double check webkit in userAgent just in case we are in a worker
+  typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/applewebkit\/(\d+)/);
 }
-
-/**
- * Map %j to `JSON.stringify()`, since no Web Inspectors do that by default.
- */
-
-exports.formatters.j = function(v) {
-  try {
-    return JSON.stringify(v);
-  } catch (err) {
-    return '[UnexpectedJSONParseError]: ' + err.message;
-  }
-};
-
-
 /**
  * Colorize log arguments if enabled.
  *
  * @api public
  */
 
+
 function formatArgs(args) {
-  var useColors = this.useColors;
+  args[0] = (this.useColors ? '%c' : '') + this.namespace + (this.useColors ? ' %c' : ' ') + args[0] + (this.useColors ? '%c ' : ' ') + '+' + module.exports.humanize(this.diff);
 
-  args[0] = (useColors ? '%c' : '')
-    + this.namespace
-    + (useColors ? ' %c' : ' ')
-    + args[0]
-    + (useColors ? '%c ' : ' ')
-    + '+' + exports.humanize(this.diff);
-
-  if (!useColors) return;
+  if (!this.useColors) {
+    return;
+  }
 
   var c = 'color: ' + this.color;
-  args.splice(1, 0, c, 'color: inherit')
-
-  // the final "%c" is somewhat tricky, because there could be other
+  args.splice(1, 0, c, 'color: inherit'); // The final "%c" is somewhat tricky, because there could be other
   // arguments passed either before or after the %c, so we need to
   // figure out the correct index to insert the CSS into
+
   var index = 0;
   var lastC = 0;
-  args[0].replace(/%[a-zA-Z%]/g, function(match) {
-    if ('%%' === match) return;
+  args[0].replace(/%[a-zA-Z%]/g, function (match) {
+    if (match === '%%') {
+      return;
+    }
+
     index++;
-    if ('%c' === match) {
-      // we only are interested in the *last* %c
+
+    if (match === '%c') {
+      // We only are interested in the *last* %c
       // (the user may have provided their own)
       lastC = index;
     }
   });
-
   args.splice(lastC, 0, c);
 }
-
 /**
  * Invokes `console.log()` when available.
  * No-op when `console.log` is not a "function".
@@ -4432,14 +4398,14 @@ function formatArgs(args) {
  * @api public
  */
 
-function log() {
-  // this hackery is required for IE8/9, where
-  // the `console.log` function doesn't have 'apply'
-  return 'object' === typeof console
-    && console.log
-    && Function.prototype.apply.call(console.log, console, arguments);
-}
 
+function log() {
+  var _console;
+
+  // This hackery is required for IE8/9, where
+  // the `console.log` function doesn't have 'apply'
+  return (typeof console === "undefined" ? "undefined" : _typeof(console)) === 'object' && console.log && (_console = console).log.apply(_console, arguments);
+}
 /**
  * Save `namespaces`.
  *
@@ -4447,16 +4413,18 @@ function log() {
  * @api private
  */
 
+
 function save(namespaces) {
   try {
-    if (null == namespaces) {
-      exports.storage.removeItem('debug');
+    if (namespaces) {
+      exports.storage.setItem('debug', namespaces);
     } else {
-      exports.storage.debug = namespaces;
+      exports.storage.removeItem('debug');
     }
-  } catch(e) {}
+  } catch (error) {// Swallow
+    // XXX (@Qix-) should we be logging these?
+  }
 }
-
 /**
  * Load `namespaces`.
  *
@@ -4464,26 +4432,23 @@ function save(namespaces) {
  * @api private
  */
 
+
 function load() {
   var r;
-  try {
-    r = exports.storage.debug;
-  } catch(e) {}
 
+  try {
+    r = exports.storage.getItem('debug');
+  } catch (error) {} // Swallow
+  // XXX (@Qix-) should we be logging these?
   // If debug isn't set in LS, and we're in Electron, try to load $DEBUG
+
+
   if (!r && typeof process !== 'undefined' && 'env' in process) {
     r = process.env.DEBUG;
   }
 
   return r;
 }
-
-/**
- * Enable namespaces listed in `localStorage.debug` initially.
- */
-
-exports.enable(load());
-
 /**
  * Localstorage attempts to return the localstorage.
  *
@@ -4495,239 +4460,283 @@ exports.enable(load());
  * @api private
  */
 
+
 function localstorage() {
   try {
-    return window.localStorage;
-  } catch (e) {}
+    // TVMLKit (Apple TV JS Runtime) does not have a window object, just localStorage in the global context
+    // The Browser also has localStorage in the global context.
+    return localStorage;
+  } catch (error) {// Swallow
+    // XXX (@Qix-) should we be logging these?
+  }
 }
 
+module.exports = require('./common')(exports);
+var formatters = module.exports.formatters;
+/**
+ * Map %j to `JSON.stringify()`, since no Web Inspectors do that by default.
+ */
+
+formatters.j = function (v) {
+  try {
+    return JSON.stringify(v);
+  } catch (error) {
+    return '[UnexpectedJSONParseError]: ' + error.message;
+  }
+};
+
+
 }).call(this,require('_process'))
-},{"./debug":26,"_process":92}],26:[function(require,module,exports){
+},{"./common":26,"_process":92}],26:[function(require,module,exports){
+"use strict";
 
 /**
  * This is the common logic for both the Node.js and web browser
  * implementations of `debug()`.
- *
- * Expose `debug()` as the module.
  */
+function setup(env) {
+  createDebug.debug = createDebug;
+  createDebug.default = createDebug;
+  createDebug.coerce = coerce;
+  createDebug.disable = disable;
+  createDebug.enable = enable;
+  createDebug.enabled = enabled;
+  createDebug.humanize = require('ms');
+  Object.keys(env).forEach(function (key) {
+    createDebug[key] = env[key];
+  });
+  /**
+  * Active `debug` instances.
+  */
 
-exports = module.exports = createDebug.debug = createDebug['default'] = createDebug;
-exports.coerce = coerce;
-exports.disable = disable;
-exports.enable = enable;
-exports.enabled = enabled;
-exports.humanize = require('ms');
+  createDebug.instances = [];
+  /**
+  * The currently active debug mode names, and names to skip.
+  */
 
-/**
- * Active `debug` instances.
- */
-exports.instances = [];
+  createDebug.names = [];
+  createDebug.skips = [];
+  /**
+  * Map of special "%n" handling functions, for the debug "format" argument.
+  *
+  * Valid key names are a single, lower or upper-case letter, i.e. "n" and "N".
+  */
 
-/**
- * The currently active debug mode names, and names to skip.
- */
+  createDebug.formatters = {};
+  /**
+  * Selects a color for a debug namespace
+  * @param {String} namespace The namespace string for the for the debug instance to be colored
+  * @return {Number|String} An ANSI color code for the given namespace
+  * @api private
+  */
 
-exports.names = [];
-exports.skips = [];
+  function selectColor(namespace) {
+    var hash = 0;
 
-/**
- * Map of special "%n" handling functions, for the debug "format" argument.
- *
- * Valid key names are a single, lower or upper-case letter, i.e. "n" and "N".
- */
+    for (var i = 0; i < namespace.length; i++) {
+      hash = (hash << 5) - hash + namespace.charCodeAt(i);
+      hash |= 0; // Convert to 32bit integer
+    }
 
-exports.formatters = {};
-
-/**
- * Select a color.
- * @param {String} namespace
- * @return {Number}
- * @api private
- */
-
-function selectColor(namespace) {
-  var hash = 0, i;
-
-  for (i in namespace) {
-    hash  = ((hash << 5) - hash) + namespace.charCodeAt(i);
-    hash |= 0; // Convert to 32bit integer
+    return createDebug.colors[Math.abs(hash) % createDebug.colors.length];
   }
 
-  return exports.colors[Math.abs(hash) % exports.colors.length];
-}
+  createDebug.selectColor = selectColor;
+  /**
+  * Create a debugger with the given `namespace`.
+  *
+  * @param {String} namespace
+  * @return {Function}
+  * @api public
+  */
 
-/**
- * Create a debugger with the given `namespace`.
- *
- * @param {String} namespace
- * @return {Function}
- * @api public
- */
+  function createDebug(namespace) {
+    var prevTime;
 
-function createDebug(namespace) {
-
-  var prevTime;
-
-  function debug() {
-    // disabled?
-    if (!debug.enabled) return;
-
-    var self = debug;
-
-    // set `diff` timestamp
-    var curr = +new Date();
-    var ms = curr - (prevTime || curr);
-    self.diff = ms;
-    self.prev = prevTime;
-    self.curr = curr;
-    prevTime = curr;
-
-    // turn the `arguments` into a proper Array
-    var args = new Array(arguments.length);
-    for (var i = 0; i < args.length; i++) {
-      args[i] = arguments[i];
-    }
-
-    args[0] = exports.coerce(args[0]);
-
-    if ('string' !== typeof args[0]) {
-      // anything else let's inspect with %O
-      args.unshift('%O');
-    }
-
-    // apply any `formatters` transformations
-    var index = 0;
-    args[0] = args[0].replace(/%([a-zA-Z%])/g, function(match, format) {
-      // if we encounter an escaped % then don't increase the array index
-      if (match === '%%') return match;
-      index++;
-      var formatter = exports.formatters[format];
-      if ('function' === typeof formatter) {
-        var val = args[index];
-        match = formatter.call(self, val);
-
-        // now we need to remove `args[index]` since it's inlined in the `format`
-        args.splice(index, 1);
-        index--;
+    function debug() {
+      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
       }
-      return match;
-    });
 
-    // apply env-specific formatting (colors, etc.)
-    exports.formatArgs.call(self, args);
+      // Disabled?
+      if (!debug.enabled) {
+        return;
+      }
 
-    var logFn = debug.log || exports.log || console.log.bind(console);
-    logFn.apply(self, args);
-  }
+      var self = debug; // Set `diff` timestamp
 
-  debug.namespace = namespace;
-  debug.enabled = exports.enabled(namespace);
-  debug.useColors = exports.useColors();
-  debug.color = selectColor(namespace);
-  debug.destroy = destroy;
+      var curr = Number(new Date());
+      var ms = curr - (prevTime || curr);
+      self.diff = ms;
+      self.prev = prevTime;
+      self.curr = curr;
+      prevTime = curr;
+      args[0] = createDebug.coerce(args[0]);
 
-  // env-specific initialization logic for debug instances
-  if ('function' === typeof exports.init) {
-    exports.init(debug);
-  }
+      if (typeof args[0] !== 'string') {
+        // Anything else let's inspect with %O
+        args.unshift('%O');
+      } // Apply any `formatters` transformations
 
-  exports.instances.push(debug);
 
-  return debug;
-}
+      var index = 0;
+      args[0] = args[0].replace(/%([a-zA-Z%])/g, function (match, format) {
+        // If we encounter an escaped % then don't increase the array index
+        if (match === '%%') {
+          return match;
+        }
 
-function destroy () {
-  var index = exports.instances.indexOf(this);
-  if (index !== -1) {
-    exports.instances.splice(index, 1);
-    return true;
-  } else {
-    return false;
-  }
-}
+        index++;
+        var formatter = createDebug.formatters[format];
 
-/**
- * Enables a debug mode by namespaces. This can include modes
- * separated by a colon and wildcards.
- *
- * @param {String} namespaces
- * @api public
- */
+        if (typeof formatter === 'function') {
+          var val = args[index];
+          match = formatter.call(self, val); // Now we need to remove `args[index]` since it's inlined in the `format`
 
-function enable(namespaces) {
-  exports.save(namespaces);
+          args.splice(index, 1);
+          index--;
+        }
 
-  exports.names = [];
-  exports.skips = [];
+        return match;
+      }); // Apply env-specific formatting (colors, etc.)
 
-  var i;
-  var split = (typeof namespaces === 'string' ? namespaces : '').split(/[\s,]+/);
-  var len = split.length;
-
-  for (i = 0; i < len; i++) {
-    if (!split[i]) continue; // ignore empty strings
-    namespaces = split[i].replace(/\*/g, '.*?');
-    if (namespaces[0] === '-') {
-      exports.skips.push(new RegExp('^' + namespaces.substr(1) + '$'));
-    } else {
-      exports.names.push(new RegExp('^' + namespaces + '$'));
+      createDebug.formatArgs.call(self, args);
+      var logFn = self.log || createDebug.log;
+      logFn.apply(self, args);
     }
-  }
 
-  for (i = 0; i < exports.instances.length; i++) {
-    var instance = exports.instances[i];
-    instance.enabled = exports.enabled(instance.namespace);
-  }
-}
+    debug.namespace = namespace;
+    debug.enabled = createDebug.enabled(namespace);
+    debug.useColors = createDebug.useColors();
+    debug.color = selectColor(namespace);
+    debug.destroy = destroy;
+    debug.extend = extend; // Debug.formatArgs = formatArgs;
+    // debug.rawLog = rawLog;
+    // env-specific initialization logic for debug instances
 
-/**
- * Disable debug output.
- *
- * @api public
- */
-
-function disable() {
-  exports.enable('');
-}
-
-/**
- * Returns true if the given mode name is enabled, false otherwise.
- *
- * @param {String} name
- * @return {Boolean}
- * @api public
- */
-
-function enabled(name) {
-  if (name[name.length - 1] === '*') {
-    return true;
-  }
-  var i, len;
-  for (i = 0, len = exports.skips.length; i < len; i++) {
-    if (exports.skips[i].test(name)) {
-      return false;
+    if (typeof createDebug.init === 'function') {
+      createDebug.init(debug);
     }
+
+    createDebug.instances.push(debug);
+    return debug;
   }
-  for (i = 0, len = exports.names.length; i < len; i++) {
-    if (exports.names[i].test(name)) {
+
+  function destroy() {
+    var index = createDebug.instances.indexOf(this);
+
+    if (index !== -1) {
+      createDebug.instances.splice(index, 1);
       return true;
     }
+
+    return false;
   }
-  return false;
+
+  function extend(namespace, delimiter) {
+    return createDebug(this.namespace + (typeof delimiter === 'undefined' ? ':' : delimiter) + namespace);
+  }
+  /**
+  * Enables a debug mode by namespaces. This can include modes
+  * separated by a colon and wildcards.
+  *
+  * @param {String} namespaces
+  * @api public
+  */
+
+
+  function enable(namespaces) {
+    createDebug.save(namespaces);
+    createDebug.names = [];
+    createDebug.skips = [];
+    var i;
+    var split = (typeof namespaces === 'string' ? namespaces : '').split(/[\s,]+/);
+    var len = split.length;
+
+    for (i = 0; i < len; i++) {
+      if (!split[i]) {
+        // ignore empty strings
+        continue;
+      }
+
+      namespaces = split[i].replace(/\*/g, '.*?');
+
+      if (namespaces[0] === '-') {
+        createDebug.skips.push(new RegExp('^' + namespaces.substr(1) + '$'));
+      } else {
+        createDebug.names.push(new RegExp('^' + namespaces + '$'));
+      }
+    }
+
+    for (i = 0; i < createDebug.instances.length; i++) {
+      var instance = createDebug.instances[i];
+      instance.enabled = createDebug.enabled(instance.namespace);
+    }
+  }
+  /**
+  * Disable debug output.
+  *
+  * @api public
+  */
+
+
+  function disable() {
+    createDebug.enable('');
+  }
+  /**
+  * Returns true if the given mode name is enabled, false otherwise.
+  *
+  * @param {String} name
+  * @return {Boolean}
+  * @api public
+  */
+
+
+  function enabled(name) {
+    if (name[name.length - 1] === '*') {
+      return true;
+    }
+
+    var i;
+    var len;
+
+    for (i = 0, len = createDebug.skips.length; i < len; i++) {
+      if (createDebug.skips[i].test(name)) {
+        return false;
+      }
+    }
+
+    for (i = 0, len = createDebug.names.length; i < len; i++) {
+      if (createDebug.names[i].test(name)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+  /**
+  * Coerce `val`.
+  *
+  * @param {Mixed} val
+  * @return {Mixed}
+  * @api private
+  */
+
+
+  function coerce(val) {
+    if (val instanceof Error) {
+      return val.stack || val.message;
+    }
+
+    return val;
+  }
+
+  createDebug.enable(createDebug.load());
+  return createDebug;
 }
 
-/**
- * Coerce `val`.
- *
- * @param {Mixed} val
- * @return {Mixed}
- * @api private
- */
+module.exports = setup;
 
-function coerce(val) {
-  if (val instanceof Error) return val.stack || val.message;
-  return val;
-}
 
 },{"ms":91}],27:[function(require,module,exports){
 /*!
@@ -7417,44 +7426,21 @@ function wrapproperty (obj, prop, message) {
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"./package.json":29,"estraverse":82,"esutils":87,"source-map":103}],29:[function(require,module,exports){
 module.exports={
-  "_args": [
-    [
-      {
-        "raw": "escodegen@^1.11.0",
-        "scope": null,
-        "escapedName": "escodegen",
-        "name": "escodegen",
-        "rawSpec": "^1.11.0",
-        "spec": ">=1.11.0 <2.0.0",
-        "type": "range"
-      },
-      "/Users/feya/dev/node_modules/i18nc-core"
-    ]
-  ],
-  "_from": "escodegen@>=1.11.0 <2.0.0",
+  "_from": "escodegen@^1.11.0",
   "_id": "escodegen@1.11.0",
-  "_inCache": true,
-  "_installable": true,
+  "_inBundle": false,
+  "_integrity": "sha512-IeMV45ReixHS53K/OmfKAIztN/igDHzTJUhZM3k1jMhIZWjk45SMwAtBsEXiJp3vSPmTcu6CXn7mDvFHRN66fw==",
   "_location": "/escodegen",
-  "_nodeVersion": "10.0.0",
-  "_npmOperationalInternal": {
-    "host": "s3://npm-registry-packages",
-    "tmp": "tmp/escodegen_1.11.0_1531587077447_0.5928377937540485"
-  },
-  "_npmUser": {
-    "name": "michaelficarra",
-    "email": "npm@michael.ficarra.me"
-  },
-  "_npmVersion": "6.0.1",
   "_phantomChildren": {},
   "_requested": {
+    "type": "range",
+    "registry": true,
     "raw": "escodegen@^1.11.0",
-    "scope": null,
-    "escapedName": "escodegen",
     "name": "escodegen",
+    "escapedName": "escodegen",
     "rawSpec": "^1.11.0",
-    "spec": ">=1.11.0 <2.0.0",
-    "type": "range"
+    "saveSpec": null,
+    "fetchSpec": "^1.11.0"
   },
   "_requiredBy": [
     "/",
@@ -7462,9 +7448,8 @@ module.exports={
   ],
   "_resolved": "https://registry.npmjs.org/escodegen/-/escodegen-1.11.0.tgz",
   "_shasum": "b27a9389481d5bfd5bec76f7bb1eb3f8f4556589",
-  "_shrinkwrap": null,
   "_spec": "escodegen@^1.11.0",
-  "_where": "/Users/feya/dev/node_modules/i18nc-core",
+  "_where": "/Users/bacra/dev/node_modules/i18nc-core",
   "bin": {
     "esgenerate": "./bin/esgenerate.js",
     "escodegen": "./bin/escodegen.js"
@@ -7472,6 +7457,7 @@ module.exports={
   "bugs": {
     "url": "https://github.com/estools/escodegen/issues"
   },
+  "bundleDependencies": false,
   "dependencies": {
     "esprima": "^3.1.3",
     "estraverse": "^4.2.0",
@@ -7479,6 +7465,7 @@ module.exports={
     "optionator": "^0.8.1",
     "source-map": "~0.6.1"
   },
+  "deprecated": false,
   "description": "ECMAScript code generator",
   "devDependencies": {
     "acorn": "^4.0.4",
@@ -7491,15 +7478,6 @@ module.exports={
     "gulp-mocha": "^3.0.1",
     "semver": "^5.1.0"
   },
-  "directories": {},
-  "dist": {
-    "integrity": "sha512-IeMV45ReixHS53K/OmfKAIztN/igDHzTJUhZM3k1jMhIZWjk45SMwAtBsEXiJp3vSPmTcu6CXn7mDvFHRN66fw==",
-    "shasum": "b27a9389481d5bfd5bec76f7bb1eb3f8f4556589",
-    "tarball": "https://registry.npmjs.org/escodegen/-/escodegen-1.11.0.tgz",
-    "fileCount": 6,
-    "unpackedSize": 106127,
-    "npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJbSioFCRA9TVsSAnZWagAAK3YP/2FxhiCn16ZHrOPcHm/B\ncHz2/nkx3LigCezwo1/sHjwMelxas2Lq1AyJzwKCYYrPT8AtqqOu8uAPtCAo\nDrA8ZDTgva/yQe4onMA1IdWvyGiESxprZ6eZ/B5fgSS5/tyV8eOAc1172iQe\nyGdKAuaN0OUkPGeTxMCLQoHZHJv87I6S47D1GM1/xYNnQ69vb1Vves1bcpp4\nuFhtT9QtDEqus44ELJliiV7Efhkh4yVQGqG5xBo5dxlFL9l3LY/5Y+eNPo3O\nbcKSkHX4sxCF+SQ4B32aRKrTCzlfm6WSvMxNv6eJCidwTh7TKi6gTCBA/YK2\n6l5288G+L7oaewQIfjNfL8iRPT2MMGCw320Vv1Eu+S7uCJNUtq0Ufj/FdrKI\nN0AdkFoTZXcihaPoiO177iu3rm5SJR5HM+hTpcOtlrc2vcvNxIAdDU/Pc3Mw\nfOhF/WSKM8DhtcWeZqXCJ9xImNpRP9ld9YRV7+SZ5XK65YAtoROGOer6n3cW\nXwVfkV0V6l48SDjnAXI4PfALY5lZWR23OHZP/zwVXmOwSB42snMYuLWy1Z7V\nEcPB/MAt7QIN482wKTZ+wLeJ4XTzryWHG8qUV6ZUwwj/XpawjfomIbmXA6+m\nLm6Ifjv+F7ygAu21VbCxS/MruHVrYCk7JGwgTVyfgyZRZWVvmRFTWVey8rLi\ncRa2\r\n=XpG1\r\n-----END PGP SIGNATURE-----\r\n"
-  },
   "engines": {
     "node": ">=4.0"
   },
@@ -7510,25 +7488,20 @@ module.exports={
     "escodegen.js",
     "package.json"
   ],
-  "gitHead": "20a0d3748a25653eb463d9155bbaa3239883717a",
   "homepage": "http://github.com/estools/escodegen",
   "license": "BSD-2-Clause",
   "main": "escodegen.js",
   "maintainers": [
     {
-      "name": "constellation",
-      "email": "utatane.tea@gmail.com"
-    },
-    {
-      "name": "michaelficarra",
-      "email": "npm@michael.ficarra.me"
+      "name": "Yusuke Suzuki",
+      "email": "utatane.tea@gmail.com",
+      "url": "http://github.com/Constellation"
     }
   ],
   "name": "escodegen",
   "optionalDependencies": {
     "source-map": "~0.6.1"
   },
-  "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/estools/escodegen.git"
@@ -9511,52 +9484,34 @@ module.exports={
 
 },{"./package.json":32}],32:[function(require,module,exports){
 module.exports={
-  "_args": [
-    [
-      {
-        "raw": "estraverse@^2.0.0",
-        "scope": null,
-        "escapedName": "estraverse",
-        "name": "estraverse",
-        "rawSpec": "^2.0.0",
-        "spec": ">=2.0.0 <3.0.0",
-        "type": "range"
-      },
-      "/Users/feya/dev/node_modules/i18nc-core/node_modules/escope"
-    ]
-  ],
-  "_from": "estraverse@>=2.0.0 <3.0.0",
+  "_from": "estraverse@^2.0.0",
   "_id": "estraverse@2.0.0",
-  "_inCache": true,
-  "_installable": true,
+  "_inBundle": false,
+  "_integrity": "sha1-WuRpYyQ2ACBmdMyySgnhZnT83KE=",
   "_location": "/escope/estraverse",
-  "_npmUser": {
-    "name": "constellation",
-    "email": "utatane.tea@gmail.com"
-  },
-  "_npmVersion": "2.0.0-alpha-5",
   "_phantomChildren": {},
   "_requested": {
+    "type": "range",
+    "registry": true,
     "raw": "estraverse@^2.0.0",
-    "scope": null,
-    "escapedName": "estraverse",
     "name": "estraverse",
+    "escapedName": "estraverse",
     "rawSpec": "^2.0.0",
-    "spec": ">=2.0.0 <3.0.0",
-    "type": "range"
+    "saveSpec": null,
+    "fetchSpec": "^2.0.0"
   },
   "_requiredBy": [
     "/escope"
   ],
   "_resolved": "https://registry.npmjs.org/estraverse/-/estraverse-2.0.0.tgz",
   "_shasum": "5ae46963243600206674ccb24a09e16674fcdca1",
-  "_shrinkwrap": null,
   "_spec": "estraverse@^2.0.0",
-  "_where": "/Users/feya/dev/node_modules/i18nc-core/node_modules/escope",
+  "_where": "/Users/bacra/dev/node_modules/i18nc-core/node_modules/escope",
   "bugs": {
     "url": "https://github.com/estools/estraverse/issues"
   },
-  "dependencies": {},
+  "bundleDependencies": false,
+  "deprecated": false,
   "description": "ECMAScript JS AST traversal functions",
   "devDependencies": {
     "chai": "^2.1.1",
@@ -9570,15 +9525,9 @@ module.exports={
     "jshint": "^2.5.6",
     "mocha": "^2.1.0"
   },
-  "directories": {},
-  "dist": {
-    "shasum": "5ae46963243600206674ccb24a09e16674fcdca1",
-    "tarball": "https://registry.npmjs.org/estraverse/-/estraverse-2.0.0.tgz"
-  },
   "engines": {
     "node": ">=0.10.0"
   },
-  "gitHead": "d8bc726f126817cc03c7a4e751528edb19db0ffb",
   "homepage": "https://github.com/estools/estraverse",
   "licenses": [
     {
@@ -9589,13 +9538,12 @@ module.exports={
   "main": "estraverse.js",
   "maintainers": [
     {
-      "name": "constellation",
-      "email": "utatane.tea@gmail.com"
+      "name": "Yusuke Suzuki",
+      "email": "utatane.tea@gmail.com",
+      "url": "http://github.com/Constellation"
     }
   ],
   "name": "estraverse",
-  "optionalDependencies": {},
-  "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/estools/estraverse.git"
@@ -16459,30 +16407,11 @@ module.exports={
 
 },{"./code":71,"./keyword":72}],74:[function(require,module,exports){
 module.exports={
-  "_args": [
-    [
-      {
-        "raw": "esmangle@^1.0.1",
-        "scope": null,
-        "escapedName": "esmangle",
-        "name": "esmangle",
-        "rawSpec": "^1.0.1",
-        "spec": ">=1.0.1 <2.0.0",
-        "type": "range"
-      },
-      "/Users/feya/dev/node_modules/i18nc-core"
-    ]
-  ],
-  "_from": "esmangle@>=1.0.1 <2.0.0",
+  "_from": "esmangle@^1.0.1",
   "_id": "esmangle@1.0.1",
-  "_inCache": true,
-  "_installable": true,
+  "_inBundle": false,
+  "_integrity": "sha1-2bs3uPjq+/Tm1O1reqKVarvTxMI=",
   "_location": "/esmangle",
-  "_npmUser": {
-    "name": "constellation",
-    "email": "utatane.tea@gmail.com"
-  },
-  "_npmVersion": "1.3.11",
   "_phantomChildren": {
     "amdefine": "1.0.1",
     "deep-is": "0.1.3",
@@ -16490,28 +16419,29 @@ module.exports={
     "type-check": "0.3.2"
   },
   "_requested": {
+    "type": "range",
+    "registry": true,
     "raw": "esmangle@^1.0.1",
-    "scope": null,
-    "escapedName": "esmangle",
     "name": "esmangle",
+    "escapedName": "esmangle",
     "rawSpec": "^1.0.1",
-    "spec": ">=1.0.1 <2.0.0",
-    "type": "range"
+    "saveSpec": null,
+    "fetchSpec": "^1.0.1"
   },
   "_requiredBy": [
     "/"
   ],
   "_resolved": "https://registry.npmjs.org/esmangle/-/esmangle-1.0.1.tgz",
   "_shasum": "d9bb37b8f8eafbf4e6d4ed6b7aa2956abbd3c4c2",
-  "_shrinkwrap": null,
   "_spec": "esmangle@^1.0.1",
-  "_where": "/Users/feya/dev/node_modules/i18nc-core",
+  "_where": "/Users/bacra/dev/node_modules/i18nc-core",
   "bin": {
     "esmangle": "./bin/esmangle.js"
   },
   "bugs": {
     "url": "https://github.com/Constellation/esmangle/issues"
   },
+  "bundleDependencies": false,
   "dependencies": {
     "escodegen": "~1.3.2",
     "escope": "~1.0.1",
@@ -16522,6 +16452,7 @@ module.exports={
     "optionator": "~0.3.0",
     "source-map": "~0.1.33"
   },
+  "deprecated": false,
   "description": "ECMAScript code mangler / minifier",
   "devDependencies": {
     "async": "~0.2.9",
@@ -16541,10 +16472,6 @@ module.exports={
   "directories": {
     "lib": "./lib"
   },
-  "dist": {
-    "shasum": "d9bb37b8f8eafbf4e6d4ed6b7aa2956abbd3c4c2",
-    "tarball": "https://registry.npmjs.org/esmangle/-/esmangle-1.0.1.tgz"
-  },
   "engines": {
     "node": ">=0.6.0"
   },
@@ -16558,13 +16485,12 @@ module.exports={
   "main": "lib/esmangle.js",
   "maintainers": [
     {
-      "name": "constellation",
-      "email": "utatane.tea@gmail.com"
+      "name": "Yusuke Suzuki",
+      "email": "utatane.tea@gmail.com",
+      "url": "http://github.com/Constellation"
     }
   ],
   "name": "esmangle",
-  "optionalDependencies": {},
-  "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/Constellation/esmangle.git"
@@ -24541,53 +24467,34 @@ arguments[4][37][0].apply(exports,arguments)
 
 },{"./package.json":80}],80:[function(require,module,exports){
 module.exports={
-  "_args": [
-    [
-      {
-        "raw": "estraverse@~4.1.1",
-        "scope": null,
-        "escapedName": "estraverse",
-        "name": "estraverse",
-        "rawSpec": "~4.1.1",
-        "spec": ">=4.1.1 <4.2.0",
-        "type": "range"
-      },
-      "/Users/feya/dev/node_modules/i18nc-core/node_modules/esshorten"
-    ]
-  ],
-  "_from": "estraverse@>=4.1.1 <4.2.0",
+  "_from": "estraverse@~4.1.1",
   "_id": "estraverse@4.1.1",
-  "_inCache": true,
-  "_installable": true,
+  "_inBundle": false,
+  "_integrity": "sha1-9srKcokzqFDvkGYdDheYK6RxEaI=",
   "_location": "/esshorten/estraverse",
-  "_nodeVersion": "4.1.1",
-  "_npmUser": {
-    "name": "constellation",
-    "email": "utatane.tea@gmail.com"
-  },
-  "_npmVersion": "2.14.4",
   "_phantomChildren": {},
   "_requested": {
+    "type": "range",
+    "registry": true,
     "raw": "estraverse@~4.1.1",
-    "scope": null,
-    "escapedName": "estraverse",
     "name": "estraverse",
+    "escapedName": "estraverse",
     "rawSpec": "~4.1.1",
-    "spec": ">=4.1.1 <4.2.0",
-    "type": "range"
+    "saveSpec": null,
+    "fetchSpec": "~4.1.1"
   },
   "_requiredBy": [
     "/esshorten"
   ],
   "_resolved": "https://registry.npmjs.org/estraverse/-/estraverse-4.1.1.tgz",
   "_shasum": "f6caca728933a850ef90661d0e17982ba47111a2",
-  "_shrinkwrap": null,
   "_spec": "estraverse@~4.1.1",
-  "_where": "/Users/feya/dev/node_modules/i18nc-core/node_modules/esshorten",
+  "_where": "/Users/bacra/dev/node_modules/i18nc-core/node_modules/esshorten",
   "bugs": {
     "url": "https://github.com/estools/estraverse/issues"
   },
-  "dependencies": {},
+  "bundleDependencies": false,
+  "deprecated": false,
   "description": "ECMAScript JS AST traversal functions",
   "devDependencies": {
     "chai": "^2.1.1",
@@ -24601,35 +24508,20 @@ module.exports={
     "jshint": "^2.5.6",
     "mocha": "^2.1.0"
   },
-  "directories": {},
-  "dist": {
-    "shasum": "f6caca728933a850ef90661d0e17982ba47111a2",
-    "tarball": "https://registry.npmjs.org/estraverse/-/estraverse-4.1.1.tgz"
-  },
   "engines": {
     "node": ">=0.10.0"
   },
-  "gitHead": "bbcccbfe98296585e4311c8755e1d00dcd581e3c",
   "homepage": "https://github.com/estools/estraverse",
   "license": "BSD-2-Clause",
   "main": "estraverse.js",
   "maintainers": [
     {
-      "name": "constellation",
-      "email": "utatane.tea@gmail.com"
-    },
-    {
-      "name": "michaelficarra",
-      "email": "npm@michael.ficarra.me"
-    },
-    {
-      "name": "nzakas",
-      "email": "nicholas@nczconsulting.com"
+      "name": "Yusuke Suzuki",
+      "email": "utatane.tea@gmail.com",
+      "url": "http://github.com/Constellation"
     }
   ],
   "name": "estraverse",
-  "optionalDependencies": {},
-  "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/estools/estraverse.git"
@@ -24644,57 +24536,39 @@ module.exports={
 
 },{}],81:[function(require,module,exports){
 module.exports={
-  "_args": [
-    [
-      {
-        "raw": "esshorten@~1.1.0",
-        "scope": null,
-        "escapedName": "esshorten",
-        "name": "esshorten",
-        "rawSpec": "~1.1.0",
-        "spec": ">=1.1.0 <1.2.0",
-        "type": "range"
-      },
-      "/Users/feya/dev/node_modules/i18nc-core/node_modules/esmangle"
-    ]
-  ],
-  "_from": "esshorten@>=1.1.0 <1.2.0",
+  "_from": "esshorten@~1.1.0",
   "_id": "esshorten@1.1.1",
-  "_inCache": true,
-  "_installable": true,
+  "_inBundle": false,
+  "_integrity": "sha1-F0+Wt8wmfkaHLYFOfbfCkL3/Yak=",
   "_location": "/esshorten",
-  "_nodeVersion": "4.1.1",
-  "_npmUser": {
-    "name": "constellation",
-    "email": "utatane.tea@gmail.com"
-  },
-  "_npmVersion": "2.14.4",
   "_phantomChildren": {},
   "_requested": {
+    "type": "range",
+    "registry": true,
     "raw": "esshorten@~1.1.0",
-    "scope": null,
-    "escapedName": "esshorten",
     "name": "esshorten",
+    "escapedName": "esshorten",
     "rawSpec": "~1.1.0",
-    "spec": ">=1.1.0 <1.2.0",
-    "type": "range"
+    "saveSpec": null,
+    "fetchSpec": "~1.1.0"
   },
   "_requiredBy": [
     "/esmangle"
   ],
   "_resolved": "https://registry.npmjs.org/esshorten/-/esshorten-1.1.1.tgz",
   "_shasum": "174f96b7cc267e46872d814e7db7c290bdff61a9",
-  "_shrinkwrap": null,
   "_spec": "esshorten@~1.1.0",
-  "_where": "/Users/feya/dev/node_modules/i18nc-core/node_modules/esmangle",
+  "_where": "/Users/bacra/dev/node_modules/i18nc-core/node_modules/esmangle",
   "bugs": {
     "url": "https://github.com/estools/esshorten/issues"
   },
+  "bundleDependencies": false,
   "dependencies": {
     "escope": "~1.0.1",
     "estraverse": "~4.1.1",
     "esutils": "~2.0.2"
   },
+  "deprecated": false,
   "description": "Shorten (mangle) names in JavaScript code",
   "devDependencies": {
     "chai": "*",
@@ -24708,14 +24582,9 @@ module.exports={
   "directories": {
     "lib": "./lib"
   },
-  "dist": {
-    "shasum": "174f96b7cc267e46872d814e7db7c290bdff61a9",
-    "tarball": "https://registry.npmjs.org/esshorten/-/esshorten-1.1.1.tgz"
-  },
   "engines": {
     "node": ">=0.6.0"
   },
-  "gitHead": "213bac0e0a321d4ab837d3ee7c93433c5cd67763",
   "homepage": "https://github.com/estools/esshorten#readme",
   "licenses": [
     {
@@ -24726,17 +24595,12 @@ module.exports={
   "main": "lib/esshorten.js",
   "maintainers": [
     {
-      "name": "constellation",
-      "email": "utatane.tea@gmail.com"
-    },
-    {
-      "name": "michaelficarra",
-      "email": "npm@michael.ficarra.me"
+      "name": "Yusuke Suzuki",
+      "email": "utatane.tea@gmail.com",
+      "url": "http://github.com/Constellation"
     }
   ],
   "name": "esshorten",
-  "optionalDependencies": {},
-  "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/estools/esshorten.git"
@@ -25602,45 +25466,21 @@ module.exports={
 
 },{"./package.json":83}],83:[function(require,module,exports){
 module.exports={
-  "_args": [
-    [
-      {
-        "raw": "estraverse@^4.2.0",
-        "scope": null,
-        "escapedName": "estraverse",
-        "name": "estraverse",
-        "rawSpec": "^4.2.0",
-        "spec": ">=4.2.0 <5.0.0",
-        "type": "range"
-      },
-      "/Users/feya/dev/node_modules/i18nc-core"
-    ]
-  ],
-  "_cnpm_publish_time": 1457646739346,
-  "_from": "estraverse@>=4.2.0 <5.0.0",
+  "_from": "estraverse@^4.2.0",
   "_id": "estraverse@4.2.0",
-  "_inCache": true,
-  "_installable": true,
+  "_inBundle": false,
+  "_integrity": "sha1-De4/7TH81GlhjOc0IJn8GvoL2xM=",
   "_location": "/estraverse",
-  "_nodeVersion": "0.12.9",
-  "_npmOperationalInternal": {
-    "host": "packages-12-west.internal.npmjs.com",
-    "tmp": "tmp/estraverse-4.2.0.tgz_1457646738925_0.7118953282479197"
-  },
-  "_npmUser": {
-    "name": "nzakas",
-    "email": "nicholas@nczconsulting.com"
-  },
-  "_npmVersion": "2.14.9",
   "_phantomChildren": {},
   "_requested": {
+    "type": "range",
+    "registry": true,
     "raw": "estraverse@^4.2.0",
-    "scope": null,
-    "escapedName": "estraverse",
     "name": "estraverse",
+    "escapedName": "estraverse",
     "rawSpec": "^4.2.0",
-    "spec": ">=4.2.0 <5.0.0",
-    "type": "range"
+    "saveSpec": null,
+    "fetchSpec": "^4.2.0"
   },
   "_requiredBy": [
     "/",
@@ -25649,15 +25489,15 @@ module.exports={
     "/esquery",
     "/esrecurse"
   ],
-  "_resolved": "https://registry.npm.taobao.org/estraverse/download/estraverse-4.2.0.tgz",
+  "_resolved": "https://registry.npmjs.org/estraverse/-/estraverse-4.2.0.tgz",
   "_shasum": "0dee3fed31fcd469618ce7342099fc1afa0bdb13",
-  "_shrinkwrap": null,
   "_spec": "estraverse@^4.2.0",
-  "_where": "/Users/feya/dev/node_modules/i18nc-core",
+  "_where": "/Users/bacra/dev/node_modules/i18nc-core",
   "bugs": {
     "url": "https://github.com/estools/estraverse/issues"
   },
-  "dependencies": {},
+  "bundleDependencies": false,
+  "deprecated": false,
   "description": "ECMAScript JS AST traversal functions",
   "devDependencies": {
     "babel-preset-es2015": "^6.3.13",
@@ -25672,35 +25512,20 @@ module.exports={
     "jshint": "^2.5.6",
     "mocha": "^2.1.0"
   },
-  "directories": {},
-  "dist": {
-    "shasum": "0dee3fed31fcd469618ce7342099fc1afa0bdb13",
-    "tarball": "https://registry.npmjs.org/estraverse/-/estraverse-4.2.0.tgz"
-  },
   "engines": {
     "node": ">=0.10.0"
   },
-  "gitHead": "6f6a4e99653908e859c7c10d04d9518bf4844ede",
   "homepage": "https://github.com/estools/estraverse",
   "license": "BSD-2-Clause",
   "main": "estraverse.js",
   "maintainers": [
     {
-      "name": "constellation",
-      "email": "utatane.tea@gmail.com"
-    },
-    {
-      "name": "michaelficarra",
-      "email": "npm@michael.ficarra.me"
-    },
-    {
-      "name": "nzakas",
-      "email": "nicholas@nczconsulting.com"
+      "name": "Yusuke Suzuki",
+      "email": "utatane.tea@gmail.com",
+      "url": "http://github.com/Constellation"
     }
   ],
   "name": "estraverse",
-  "optionalDependencies": {},
-  "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/estools/estraverse.git"
@@ -26858,7 +26683,7 @@ module.exports = function extend() {
   var undefined;
 
   /** Used as the semantic version number. */
-  var VERSION = '4.17.10';
+  var VERSION = '4.17.11';
 
   /** Used as the size to enable large array optimizations. */
   var LARGE_ARRAY_SIZE = 200;
@@ -27122,7 +26947,7 @@ module.exports = function extend() {
   var reHasUnicode = RegExp('[' + rsZWJ + rsAstralRange  + rsComboRange + rsVarRange + ']');
 
   /** Used to detect strings that need a more robust regexp to match words. */
-  var reHasUnicodeWord = /[a-z][A-Z]|[A-Z]{2,}[a-z]|[0-9][a-zA-Z]|[a-zA-Z][0-9]|[^a-zA-Z0-9 ]/;
+  var reHasUnicodeWord = /[a-z][A-Z]|[A-Z]{2}[a-z]|[0-9][a-zA-Z]|[a-zA-Z][0-9]|[^a-zA-Z0-9 ]/;
 
   /** Used to assign default `context` object properties. */
   var contextProps = [
@@ -28068,20 +27893,6 @@ module.exports = function extend() {
       }
     }
     return result;
-  }
-
-  /**
-   * Gets the value at `key`, unless `key` is "__proto__".
-   *
-   * @private
-   * @param {Object} object The object to query.
-   * @param {string} key The key of the property to get.
-   * @returns {*} Returns the property value.
-   */
-  function safeGet(object, key) {
-    return key == '__proto__'
-      ? undefined
-      : object[key];
   }
 
   /**
@@ -30541,7 +30352,7 @@ module.exports = function extend() {
           if (isArguments(objValue)) {
             newValue = toPlainObject(objValue);
           }
-          else if (!isObject(objValue) || (srcIndex && isFunction(objValue))) {
+          else if (!isObject(objValue) || isFunction(objValue)) {
             newValue = initCloneObject(srcValue);
           }
         }
@@ -33462,6 +33273,22 @@ module.exports = function extend() {
         array[length] = isIndex(index, arrLength) ? oldArray[index] : undefined;
       }
       return array;
+    }
+
+    /**
+     * Gets the value at `key`, unless `key` is "__proto__".
+     *
+     * @private
+     * @param {Object} object The object to query.
+     * @param {string} key The key of the property to get.
+     * @returns {*} Returns the property value.
+     */
+    function safeGet(object, key) {
+      if (key == '__proto__') {
+        return;
+      }
+
+      return object[key];
     }
 
     /**
@@ -43960,6 +43787,7 @@ var s = 1000;
 var m = s * 60;
 var h = m * 60;
 var d = h * 24;
+var w = d * 7;
 var y = d * 365.25;
 
 /**
@@ -44003,7 +43831,7 @@ function parse(str) {
   if (str.length > 100) {
     return;
   }
-  var match = /^((?:\d+)?\.?\d+) *(milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|years?|yrs?|y)?$/i.exec(
+  var match = /^((?:\d+)?\-?\d?\.?\d+) *(milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|weeks?|w|years?|yrs?|y)?$/i.exec(
     str
   );
   if (!match) {
@@ -44018,6 +43846,10 @@ function parse(str) {
     case 'yr':
     case 'y':
       return n * y;
+    case 'weeks':
+    case 'week':
+    case 'w':
+      return n * w;
     case 'days':
     case 'day':
     case 'd':
@@ -44060,16 +43892,17 @@ function parse(str) {
  */
 
 function fmtShort(ms) {
-  if (ms >= d) {
+  var msAbs = Math.abs(ms);
+  if (msAbs >= d) {
     return Math.round(ms / d) + 'd';
   }
-  if (ms >= h) {
+  if (msAbs >= h) {
     return Math.round(ms / h) + 'h';
   }
-  if (ms >= m) {
+  if (msAbs >= m) {
     return Math.round(ms / m) + 'm';
   }
-  if (ms >= s) {
+  if (msAbs >= s) {
     return Math.round(ms / s) + 's';
   }
   return ms + 'ms';
@@ -44084,25 +43917,29 @@ function fmtShort(ms) {
  */
 
 function fmtLong(ms) {
-  return plural(ms, d, 'day') ||
-    plural(ms, h, 'hour') ||
-    plural(ms, m, 'minute') ||
-    plural(ms, s, 'second') ||
-    ms + ' ms';
+  var msAbs = Math.abs(ms);
+  if (msAbs >= d) {
+    return plural(ms, msAbs, d, 'day');
+  }
+  if (msAbs >= h) {
+    return plural(ms, msAbs, h, 'hour');
+  }
+  if (msAbs >= m) {
+    return plural(ms, msAbs, m, 'minute');
+  }
+  if (msAbs >= s) {
+    return plural(ms, msAbs, s, 'second');
+  }
+  return ms + ' ms';
 }
 
 /**
  * Pluralization helper.
  */
 
-function plural(ms, n, name) {
-  if (ms < n) {
-    return;
-  }
-  if (ms < n * 1.5) {
-    return Math.floor(ms / n) + ' ' + name;
-  }
-  return Math.ceil(ms / n) + ' ' + name + 's';
+function plural(ms, msAbs, n, name) {
+  var isPlural = msAbs >= n * 1.5;
+  return Math.round(ms / n) + ' ' + name + (isPlural ? 's' : '');
 }
 
 },{}],92:[function(require,module,exports){
