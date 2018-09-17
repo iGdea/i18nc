@@ -1,6 +1,10 @@
 开发文档
 ======
 
+## 翻译函数
+
+[I18N风格](./zh-CN/i18n_handler_style)
+
 
 ## API
 

@@ -77,7 +77,7 @@
 ```javascript
 function I18N(msg)
 {
-	return ''+topI18NHandler(msg, arguments);
+  return ''+topI18NHandler(msg, arguments);
 }
 ```
 
@@ -97,7 +97,7 @@ function I18N(msg)
 ```javascript
 function I18N(msg)
 {
-	return ''+msg;
+  return ''+msg;
 }
 ```
 
