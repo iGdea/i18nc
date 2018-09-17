@@ -17,13 +17,13 @@
 		var self = I18N;
 	
 		self.K = '*';
-		self.V = 'bs';
+		self.V = 'cs';
 	
 		var replace_index = 0;
 		return msg.replace(/%s|%\{.+?\}/g, function(all)
 		{
 			var newVal = tpldata[replace_index++];
-			return newVal === undefined || newVal === null ? all : newVal;
+			return newVal === undefined ? all : newVal === null ? '' : newVal;
 		});
 	}
 

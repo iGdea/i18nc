@@ -1181,7 +1181,7 @@ exports.UNSUPPORT_AST_TYPS	=
 	TaggedTemplateExpression	: AST_FLAGS.TAGGED_TEMPLATE_LITERAL,
 };
 
-exports.I18NFunctionVersion = 'b';
+exports.I18NFunctionVersion = 'c';
 exports.I18NFunctionSubVersion =
 {
 	FULL	: 'f',
@@ -2086,7 +2086,7 @@ module.exports = function $handlerName(msg, tpldata, subtype)
 	return msg.replace(/%s|%\{.+?\}/g, function(all)
 	{
 		var newVal = tpldata[replace_index++];
-		return newVal === undefined || newVal === null ? all : newVal;
+		return newVal === undefined ? all : newVal === null ? '' : newVal;
 	});
 }
 
@@ -2133,7 +2133,7 @@ module.exports = function $handlerName(msg, tpldata)
 	return msg.replace(/%s|%\{.+?\}/g, function(all)
 	{
 		var newVal = tpldata[replace_index++];
-		return newVal === undefined || newVal === null ? all : newVal;
+		return newVal === undefined ? all : newVal === null ? '' : newVal;
 	});
 }
 

@@ -31,7 +31,7 @@ module.exports = function textWrapCode(){
 			if (self.L != LAN)
 			{
 				self.K = '*';
-				self.V = 'bf';
+				self.V = 'cf';
 				self.D = {
 					'en-US': {
 						'DEFAULTS': {
@@ -81,7 +81,7 @@ module.exports = function textWrapCode(){
 		return msg.replace(/%s|%\{.+?\}/g, function(all)
 		{
 			var newVal = tpldata[replace_index++];
-			return newVal === undefined || newVal === null ? all : newVal;
+			return newVal === undefined ? all : newVal === null ? '' : newVal;
 		});
 	}
 	/* eslint-enable */

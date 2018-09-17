@@ -17,7 +17,7 @@ function I18N(msg, tpldata, subtype)
 		if (self.L != LAN)
 		{
 			self.K = 'i18n_handler_example';
-			self.V = 'bf';
+			self.V = 'cf';
 			self.D = {'en-US':{'DEFAULTS':{'%s美好%s生活':'%sgood%s life','%{中文}词典':'%{Chinese} dictionary','空白':[],'简体':'simplified'}},'zh-TW':{'DEFAULTS':{'简体':'簡體'}}};
 
 			var __TRANSLATE_JSON__ = self.D;
@@ -61,7 +61,7 @@ function I18N(msg, tpldata, subtype)
 	return msg.replace(/%s|%\{.+?\}/g, function(all)
 	{
 		var newVal = tpldata[replace_index++];
-		return newVal === undefined || newVal === null ? all : newVal;
+		return newVal === undefined ? all : newVal === null ? '' : newVal;
 	});
 }
 var codeJSON={
