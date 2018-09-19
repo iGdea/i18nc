@@ -361,6 +361,4 @@ describe('#main', function()
 			});
 		});
 	});
-
-
 });

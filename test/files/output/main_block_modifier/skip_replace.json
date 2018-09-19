@@ -1,0 +1,31 @@
+{
+	"codeTranslateWords": {
+		"DEFAULTS": [],
+		"SUBTYPES": {}
+	},
+	"currentFileKey": "*",
+	"funcTranslateWords": {},
+	"newWord4codeTranslateWords": [],
+	"originalFileKeys": [],
+	"subScopeDatas": [
+		{
+			"codeTranslateWords": {
+				"DEFAULTS": [
+					"中文",
+					"这个中文还在"
+				],
+				"SUBTYPES": {}
+			},
+			"currentFileKey": "*",
+			"funcTranslateWords": {},
+			"newWord4codeTranslateWords": [
+				"中文",
+				"这个中文还在"
+			],
+			"originalFileKeys": [],
+			"subScopeDatas": [],
+			"usedTranslateWords": {}
+		}
+	],
+	"usedTranslateWords": {}
+}

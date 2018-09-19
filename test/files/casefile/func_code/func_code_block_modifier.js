@@ -9,12 +9,12 @@ exports.skip_scan = function code()
 };
 
 
-exports.skip_repalce = function code()
+exports.skip_replace = function code()
 {
 	var v1 = '中文';
 
 	{
-		"[i18nc] skip_repalce"
+		"[i18nc] skip_replace"
 		var v2 = "这个中文还在";
 	}
 };
@@ -29,12 +29,12 @@ exports.skip_scan_I18N = function code()
 	}
 };
 
-exports.skip_repalce_I18N = function code()
+exports.skip_replace_I18N = function code()
 {
 	var v1 = '中文';
 
 	{
-		"[i18nc] skip_repalce@I18N"
+		"[i18nc] skip_replace@I18N"
 		var v2 = "这个中文还在";
 	}
 };

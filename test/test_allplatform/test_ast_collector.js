@@ -20,9 +20,9 @@ describe('#ASTCollector', function()
 				expect(getScopeCodeTranslateWord(scope)).to.eql(['中文']);
 			});
 
-			it('#skip_repalce', function()
+			it('#skip_replace', function()
 			{
-				var code = blockModifierFuncs.skip_repalce;
+				var code = blockModifierFuncs.skip_replace;
 
 				var scope = getFinalCollect(code);
 				expect(!!astUtils.checkAstFlag(scope.translateWordAsts[0], astUtils.AST_FLAGS.SKIP_REPLACE)).to.be(false);
@@ -37,9 +37,9 @@ describe('#ASTCollector', function()
 				expect(getScopeCodeTranslateWord(scope)).to.eql(['中文']);
 			});
 
-			it('#skip_repalce@I18N', function()
+			it('#skip_replace@I18N', function()
 			{
-				var code = blockModifierFuncs.skip_repalce_I18N;
+				var code = blockModifierFuncs.skip_replace_I18N;
 
 				var scope = getFinalCollect(code);
 				expect(!!astUtils.checkAstFlag(scope.translateWordAsts[0], astUtils.AST_FLAGS.SKIP_REPLACE)).to.be(false);
