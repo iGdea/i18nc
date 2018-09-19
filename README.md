@@ -1,13 +1,13 @@
 I18NC-CORE
 ==================
 
-
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][npm-url]
 [![Build Status][travis-image]][travis-url]
 [![Coveralls][coveralls-image]][coveralls-url]
 [![NPM License][license-image]][npm-url]
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FBacra%2Fnode-i18nc-core.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FBacra%2Fnode-i18nc-core?ref=badge_shield)
+[![License Status][license-status-image]][license-status-url]
+
 
 # Install
 
@@ -85,7 +85,5 @@ function I18N(h,f,i){
 [coveralls-image]: https://img.shields.io/coveralls/Bacra/node-i18nc-core.svg
 [coveralls-url]: https://coveralls.io/github/Bacra/node-i18nc-core
 [license-image]: http://img.shields.io/npm/l/i18nc-core.svg
-
-
-## License
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FBacra%2Fnode-i18nc-core.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FBacra%2Fnode-i18nc-core?ref=badge_large)
+[license-status-url]: https://app.fossa.io/projects/git%2Bgithub.com%2FBacra%2Fnode-i18nc-core?ref=badge_shield
+[license-status-image]: https://app.fossa.io/api/projects/git%2Bgithub.com%2FBacra%2Fnode-i18nc-core.svg?type=shield
