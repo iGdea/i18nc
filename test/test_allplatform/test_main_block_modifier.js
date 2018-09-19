@@ -2,7 +2,6 @@
 
 var expect				= require('expect.js');
 var i18nc				= require('../../');
-var astUtils			= require('../../lib/ast_utils');
 var autoTestUtils		= require('../auto_test_utils');
 var blockModifierFuncs	= require('../files/casefile/func_code/func_code_block_modifier');
 var requireAfterWrite	= autoTestUtils.requireAfterWrite('main_block_modifier');
