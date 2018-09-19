@@ -27,6 +27,11 @@ exports.skip_scan_I18N = function code()
 		"[i18nc] skip_scan@I18N"
 		var v2 = "跳过这个中文";
 	}
+
+	{
+		"[i18nc] skip_scan@I18N2"
+		var v2 = "这个中文还在2";
+	}
 };
 
 exports.skip_replace_I18N = function code()
@@ -36,6 +41,11 @@ exports.skip_replace_I18N = function code()
 	{
 		"[i18nc] skip_replace@I18N"
 		var v2 = "这个中文还在";
+	}
+
+	{
+		"[i18nc] skip_replace@I18N2"
+		var v2 = "这个中文还在2";
 	}
 };
 

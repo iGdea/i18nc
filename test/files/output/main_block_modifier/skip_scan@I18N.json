@@ -11,14 +11,16 @@
 		{
 			"codeTranslateWords": {
 				"DEFAULTS": [
-					"中文"
+					"中文",
+					"这个中文还在2"
 				],
 				"SUBTYPES": {}
 			},
 			"currentFileKey": "*",
 			"funcTranslateWords": {},
 			"newWord4codeTranslateWords": [
-				"中文"
+				"中文",
+				"这个中文还在2"
 			],
 			"originalFileKeys": [],
 			"subScopeDatas": [],

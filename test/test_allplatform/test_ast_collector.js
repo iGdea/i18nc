@@ -34,7 +34,7 @@ describe('#ASTCollector', function()
 			{
 				var code = blockModifierFuncs.skip_scan_I18N;
 				var scope = getFinalCollect(code);
-				expect(getScopeCodeTranslateWord(scope)).to.eql(['中文']);
+				expect(getScopeCodeTranslateWord(scope)).to.eql(['中文', '这个中文还在2']);
 			});
 
 			it('#skip_replace@I18N', function()
@@ -44,7 +44,7 @@ describe('#ASTCollector', function()
 				var scope = getFinalCollect(code);
 				expect(!!astUtils.checkAstFlag(scope.translateWordAsts[0], astUtils.AST_FLAGS.SKIP_REPLACE)).to.be(false);
 				expect(!!astUtils.checkAstFlag(scope.translateWordAsts[1], astUtils.AST_FLAGS.SKIP_REPLACE)).to.be(true);
-				expect(getScopeCodeTranslateWord(scope)).to.eql(['中文', '这个中文还在'].sort());
+				expect(getScopeCodeTranslateWord(scope)).to.eql(['中文', '这个中文还在', '这个中文还在2'].sort());
 			});
 		});
 

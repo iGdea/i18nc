@@ -36,6 +36,7 @@ module.exports = function code()
 						'DEFAULTS': {
 							// '中文':
 							// '这个中文还在':
+							// '这个中文还在2':
 						}
 					}
 				};
@@ -93,5 +94,10 @@ module.exports = function code()
 	{
 		"[i18nc] skip_replace@I18N"
 		var v2 = "这个中文还在";
+	}
+
+	{
+		"[i18nc] skip_replace@I18N2"
+		var v2 = I18N('这个中文还在2');
 	}
 }
