@@ -4,11 +4,11 @@ var expect				= require('expect.js');
 var escodegen			= require('escodegen');
 var optionsUtils		= require('../../lib/options');
 var wordAst2json		= require('../../lib/upgrade/i18n_func/parse_translate_json_v1')._wordAst2json;
-var i18nGenerator		= require('../../lib/i18n_func/generator');
+var i18nGenerator		= require('../../lib/upgrade/i18n_func/generator_v1');
 var i18nGeneratorTest	= i18nGenerator._test;
 
 
-describe('#word_json_ast', function()
+describe('#word_json_ast_v1', function()
 {
 	it('#base', function()
 	{
@@ -35,7 +35,7 @@ describe('#word_json_ast', function()
 			.to.eql(['word_1', 'word_2', 'word_3', 'word_empty1', 'word_empty2']);
 	});
 
-	describe('#wordJson2as', function()
+	describe('#wordJson2ast', function()
 	{
 		describe('#comments', function()
 		{
