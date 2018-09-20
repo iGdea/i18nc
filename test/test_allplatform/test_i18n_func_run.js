@@ -124,7 +124,7 @@ describe('#i18n_func_run', function()
 
 			it('#match subtype', function()
 			{
-				expect(I18N('简体', 'subtype')).to.be('simplified subtype');
+				expect(I18N('简体', 'subtype')).to.be('簡體');
 			});
 		});
 

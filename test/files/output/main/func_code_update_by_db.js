@@ -5,7 +5,7 @@ module.exports = function code()
 				{
 					var self = I18N;
 					self.__FILE_KEY__ = "default_file_key";
-					self.__FUNCTION_VERSION__ = "c";
+					self.__FUNCTION_VERSION__ = "d";
 					self.__TRANSLATE_JSON__ =
 					{ 'zh-TW': { 'DEFAULTS': { '简体': '簡體' } } };
 				}

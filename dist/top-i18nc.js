@@ -11,11 +11,13 @@
 {
 	function topI18N(msg, args, translateJSON, fileKey, data, handler)
 	{
-		var self = handler;
-		// 使用的时候，需要替换此变量，或者全局申明此方法
-		var LAN = $I18N_getLanguageCode(data);
-		var tpldata = args[1];
-		var subtype = args[2];
+		var self = handler,
+			tpldata = args[1],
+			subtype = args[2],
+			replace_index = 0,
+			lanArr, lanKeys, i, lanItem, translateMsg, subtypeJSON,
+			LAN = $I18N_getLanguageCode(data);
+	
 		if (!tpldata || !tpldata.join)
 		{
 			subtype = tpldata;
@@ -24,12 +26,11 @@
 	
 		if (LAN && LAN.split)
 		{
-			var lanArr, i, len, lanItem;
 			if (self.L != LAN)
 			{
-				var lanKeys = LAN.split(',');
+				lanKeys = LAN.split(',');
 				lanArr = self.M = [];
-				for(i = 0, len = lanKeys.length; i < len; i++)
+				for(i = lanKeys.length; i--;)
 				{
 					lanItem = translateJSON[lanKeys[i]];
 					if (lanItem) lanArr.push(lanItem);
@@ -39,37 +40,33 @@
 			}
 	
 			lanArr = self.M;
-			var resultDefault, resultSubject, allsubtypes, alldefaults, subtypeJSON;
-			for(i = 0, len = lanArr.length; i < len; i++)
+			for(i = lanArr.length; !translateMsg && i--;)
 			{
 				lanItem = lanArr[i];
 				if (subtype)
 				{
-					allsubtypes = lanItem.SUBTYPES;
-					subtypeJSON = allsubtypes && allsubtypes[subtype];
-					resultSubject = subtypeJSON && subtypeJSON[msg];
-					if (resultSubject) break;
+					subtypeJSON = lanItem.SUBTYPES;
+					subtypeJSON = subtypeJSON && subtypeJSON[subtype];
+					translateMsg = subtypeJSON && subtypeJSON[msg];
 				}
-				// default 不能使用break，有可能后面的lan有resultSubject
-				if (!resultDefault)
+				if (!translateMsg)
 				{
-					alldefaults = lanItem.DEFAULTS;
-					resultDefault = alldefaults && alldefaults[msg];
+					subtypeJSON = lanItem.DEFAULTS;
+					translateMsg = subtypeJSON && subtypeJSON[msg];
 				}
 			}
 	
-			if (resultSubject) msg = resultSubject;
-			else if (resultDefault) msg = resultDefault;
+			if (translateMsg) msg = translateMsg;
 		}
 	
 		msg += '';
+		// 判断是否需要替换：不需要替换，直接返回
 		if (!tpldata.length || msg.indexOf('%') == -1) return msg;
 	
-		var replace_index = 0;
 		return msg.replace(/%s|%\{.+?\}/g, function(all)
 		{
 			var newVal = tpldata[replace_index++];
-			return newVal === undefined || newVal === null ? all : newVal;
+			return newVal === undefined ? all : newVal === null ? '' : newVal;
 		});
 	}
 
