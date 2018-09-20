@@ -17,7 +17,7 @@
 		var self = I18N;
 	
 		self.K = '*';
-		self.V = 'ds';
+		self.V = 'Ds';
 	
 		var replace_index = 0;
 		return msg.replace(/%s|%\{.+?\}/g, function(all)

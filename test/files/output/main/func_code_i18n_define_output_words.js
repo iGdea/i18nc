@@ -33,7 +33,7 @@ module.exports = function code()
 			if (self.L != LAN)
 			{
 				self.K = '*';
-				self.V = 'df';
+				self.V = 'Df';
 				self.D = {
 					'en-US': {
 						'DEFAULTS': {
@@ -124,7 +124,7 @@ module.exports = function code()
 				if (self.L != LAN)
 				{
 					self.K = '*';
-					self.V = 'df';
+					self.V = 'Df';
 					self.D = {
 						'en-US': {
 							'DEFAULTS': {
@@ -216,7 +216,7 @@ module.exports = function code()
 				if (self.L != LAN)
 				{
 					self.K = '*';
-					self.V = 'df';
+					self.V = 'Df';
 					self.D = { 'zh': { 'DEFAULTS': { 'define2 中文': 'define2 中文' } } };
 
 					translateJSON = self.D;
@@ -303,7 +303,7 @@ module.exports = function code()
 				if (self.L != LAN)
 				{
 					self.K = '*';
-					self.V = 'df';
+					self.V = 'Df';
 					self.D = {
 						'en-US': {
 							'DEFAULTS': {
@@ -398,7 +398,7 @@ module.exports = function code()
 				if (self.L != LAN)
 				{
 					self.K = '*';
-					self.V = 'df';
+					self.V = 'Df';
 					self.D = {
 						'en-US': {
 							'DEFAULTS': {
@@ -496,7 +496,7 @@ module.exports = function code()
 				if (self.L != LAN)
 				{
 					self.K = '*';
-					self.V = 'df';
+					self.V = 'Df';
 					self.D = {
 						'en-US': {
 							'DEFAULTS': {

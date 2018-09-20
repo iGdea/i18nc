@@ -4,7 +4,7 @@ module.exports = function code()
 
 	/* eslint-disable */
 	function I18N(c,e,k){
-		var a=I18N,m,l=0,i,j,h,g,f,b,n=a.$||(a.$={}),d=(function(a){if(!a.global){a.global=typeof window=='object'&&window||typeof global=='object'&&global||{}}return a.global.__i18n_lan__})(n);if(!e||!e.join){k=e;e=[]}if(d&&d.split){if(a.L!=d){a.K='*';a.V='df';a.D={
+		var a=I18N,m,l=0,i,j,h,g,f,b,n=a.$||(a.$={}),d=(function(a){if(!a.global){a.global=typeof window=='object'&&window||typeof global=='object'&&global||{}}return a.global.__i18n_lan__})(n);if(!e||!e.join){k=e;e=[]}if(d&&d.split){if(a.L!=d){a.K='*';a.V='Df';a.D={
 			'en-US': {
 				'DEFAULTS': {
 					// '简体':
