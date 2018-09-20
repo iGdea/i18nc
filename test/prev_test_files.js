@@ -7,31 +7,18 @@ var i18nTpl	= require('../lib/i18n_func/render');
 
 exports.TRANSLATE_JSON =
 {
-	"en-US":
+	$: ['en-US', 'zh-TW'],
+	'*':
 	{
-		"DEFAULTS":
-		{
-			'简体': 'simplified',
-			'空白': [],
-			'无': '',
-			'%s美好%s生活': '%sgood%s life',
-			'%{中文}词典': '%{Chinese} dictionary'
-		},
-		"SUBTYPES":
-		{
-			'subtype':
-			{
-				'简体': 'simplified subtype',
-			}
-		}
+		'简体': ['simplified', '簡體'],
+		'空白': [[]],
+		'无': ['', '無'],
+		'%s美好%s生活': ['%sgood%s life'],
+		'%{中文}词典': ['%{Chinese} dictionary']
 	},
-	"zh-TW":
+	'subtype':
 	{
-		"DEFAULTS":
-		{
-			'简体': '簡體',
-			'无': '無',
-		}
+		'简体': ['simplified subtype'],
 	}
 };
 
