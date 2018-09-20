@@ -53,9 +53,8 @@
 	<tr><td colspan="3">loadTranslateJSON</td><td>Function</td><td>null</td><td class="table_options_desc">从源码I18N函数体中提取到翻译数据时触发，可修改数据</td><td class="table_options_remark"></td></tr>
 	<tr><td colspan="3">newTranslateJSON</td><td>Function</td><td>null</td><td class="table_options_desc">生成新的I18N函数时触发，可对翻译数据进行再加工</td><td class="table_options_remark"></td></tr>
 	<tr><td colspan="4">I18NHandler</td><td>Object</td><td></td><td class="table_options_desc">注入到代码中的I18N函数的定制化配置</td><td class="table_options_remark"></td></tr>
-	<tr><td rowspan="29"></td><td>data</td><td colspan="2">defaultFileKey</td><td>String</td><td>*</td><td class="table_options_desc">函数默认标识，可标识出特定的I18N函数体</td><td class="table_options_remark">可以针对filekey，可以提供定制翻译结果</td></tr>
-	<tr><td rowspan="3"></td><td colspan="2">defaultLanguage</td><td>String</td><td>en-US</td><td class="table_options_desc">当没有找到任何语言包 & 启动了comment4nowords, 使用这个语言，作为代码中的语言包</td><td class="table_options_remark"></td></tr>
-	<tr><td colspan="2">ignoreFuncWords</td><td>Boolean</td><td>false</td><td class="table_options_desc">翻译的时候，不参考代码中I18N里面的数据</td><td class="table_options_remark">启动后，如果dbTranslateWords没有数据，直接删除在I18N已有的翻译</td></tr>
+	<tr><td rowspan="28"></td><td>data</td><td colspan="2">defaultFileKey</td><td>String</td><td>*</td><td class="table_options_desc">函数默认标识，可标识出特定的I18N函数体</td><td class="table_options_remark">可以针对filekey，可以提供定制翻译结果</td></tr>
+	<tr><td rowspan="2"></td><td colspan="2">ignoreFuncWords</td><td>Boolean</td><td>false</td><td class="table_options_desc">翻译的时候，不参考代码中I18N里面的数据</td><td class="table_options_remark">启动后，如果dbTranslateWords没有数据，直接删除在I18N已有的翻译</td></tr>
 	<tr><td colspan="2">onlyTheseLanguages</td><td>Array</td><td></td><td class="table_options_desc">只打包这个列表的语言包到代码中</td><td class="table_options_remark">数组为空则不受限制，传入多少种语言，就打包多少种</td></tr>
 	<tr><td>insert</td><td colspan="2">checkClosure</td><td>Boolean</td><td>true</td><td class="table_options_desc">插入I18N函数前，检查插入位置，作用域不能是全局，必须闭包</td><td class="table_options_remark"></td></tr>
 	<tr><td rowspan="2"></td><td colspan="2">enable</td><td>Boolean</td><td>true</td><td class="table_options_desc">[总开关]是否插入新的I18N函数</td><td class="table_options_remark"></td></tr>

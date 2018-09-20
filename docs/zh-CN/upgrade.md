@@ -52,7 +52,6 @@
 |                                          cutWordReg | cutwordReg                                              |
 |                                             cutword | events.cutword                                          |
 |                                      defaultFileKey | I18NHandler.data.defaultFileKey                         |
-|                            defaultTranslateLanguage | I18NHandler.data.defaultLanguage                        |
 |                                         handlerName | I18NHandlerName                                         |
 |                     isCheckClosureForNewI18NHandler | I18NHandler.insert.checkClosure                         |
 |                           isClosureWhenInsertedHead | I18NHandler.insert.checkClosure                         |
