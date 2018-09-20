@@ -4,7 +4,6 @@
 
 var expect				= require('expect.js');
 var i18nc				= require('../../');
-var DEF					= require('../../lib/def');
 var dbTranslateWords	= require('../example/translate_words_db');
 var autoTestUtils		= require('../auto_test_utils');
 var requireAfterWrite	= autoTestUtils.requireAfterWrite('main');
@@ -237,14 +236,14 @@ describe('#main', function()
 				{
 					var self = I18N;
 					self.__FILE_KEY__ = "default_file_key";
-					self.__FUNCTION_VERSION__ = "$FUNCTION_VERSION$";
+					self.__FUNCTION_VERSION__ = "9";
 					self.__TRANSLATE_JSON__ =
 					{
 						en: {DEFAULTS:{'1':'2'}}
 					};
 				}
 			};
-			code = code.toString().replace(/\$FUNCTION_VERSION\$/, DEF.I18NFunctionVersion);
+			code = code.toString();
 			var info = i18nc(code);
 			var otherCode = requireAfterWrite('func_code_default_lan.js', info.code);
 
@@ -260,14 +259,14 @@ describe('#main', function()
 				{
 					var self = I18N;
 					self.__FILE_KEY__ = "default_file_key";
-					self.__FUNCTION_VERSION__ = "$FUNCTION_VERSION$";
+					self.__FUNCTION_VERSION__ = "9";
 					self.__TRANSLATE_JSON__ =
 					{
 						'en': {DEFAULTS:{'1':'2'}}
 					};
 				}
 			};
-			code = code.toString().replace(/\$FUNCTION_VERSION\$/, DEF.I18NFunctionVersion);
+			code = code.toString();
 			var info = i18nc(code,
 				{
 					dbTranslateWords:
