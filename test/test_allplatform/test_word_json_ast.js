@@ -3,10 +3,9 @@
 var expect				= require('expect.js');
 var escodegen			= require('escodegen');
 var optionsUtils		= require('../../lib/options');
-var i18nParser			= require('../../lib/i18n_func/parser');
+var wordAst2json		= require('../../lib/upgrade/i18n_func/parse_translate_json_v1')._wordAst2json;
 var i18nGenerator		= require('../../lib/i18n_func/generator');
 var i18nGeneratorTest	= i18nGenerator._test;
-var i18nParserTest		= i18nParser._test;
 
 
 describe('#word_json_ast', function()
@@ -29,7 +28,7 @@ describe('#word_json_ast', function()
 		expect(Object.keys(astJson))
 			.to.eql(['word_1', 'word_2', 'word_3', 'word_empty1', 'word_empty2']);
 
-		var resultJson = i18nParserTest._wordAst2json(resultAst);
+		var resultJson = wordAst2json(resultAst);
 		expect(resultJson)
 			.to.eql({word_1: '文字_1', word_2: '文字_2', word_3: '文字_3', word_empty1: '', word_empty2: ''});
 		expect(Object.keys(resultJson))
