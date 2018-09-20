@@ -33,7 +33,7 @@ module.exports = function code()
 			if (self.L != LAN)
 			{
 				self.K = '*';
-				self.V = 'df';
+				self.V = 'Df';
 				self.D = require("./require_data.json");
 	
 				translateJSON = self.D;

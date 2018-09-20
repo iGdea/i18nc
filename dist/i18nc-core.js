@@ -1181,7 +1181,7 @@ exports.UNSUPPORT_AST_TYPS	=
 	TaggedTemplateExpression	: AST_FLAGS.TAGGED_TEMPLATE_LITERAL,
 };
 
-exports.I18NFunctionVersion = 'd';
+exports.I18NFunctionVersion = 'D';
 exports.I18NFunctionSubVersion =
 {
 	FULL	: 'f',

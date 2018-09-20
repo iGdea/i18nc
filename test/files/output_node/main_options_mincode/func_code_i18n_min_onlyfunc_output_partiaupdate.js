@@ -20,7 +20,7 @@ function I18N(msg, tpldata, subtype)
 		if (self.L != LAN)
 		{
 			self.K = 'i18n_handler_example';
-			self.V = 'df';
+			self.V = 'Df';
 			self.D = {
 				'en-US': {
 					'DEFAULTS': {

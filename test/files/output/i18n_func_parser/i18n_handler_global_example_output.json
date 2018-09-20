@@ -11,10 +11,10 @@
 	"__FILE_KEY__": "i18n_handler_example_global",
 	"__FUNCTION_VERSION__ast": {
 		"type": "Literal",
-		"value": "dg",
-		"raw": "'dg'"
+		"value": "Dg",
+		"raw": "'Dg'"
 	},
-	"__FUNCTION_VERSION__": "dg",
+	"__FUNCTION_VERSION__": "Dg",
 	"__TRANSLATE_JSON__ast": {
 		"type": "ObjectExpression",
 		"properties": [

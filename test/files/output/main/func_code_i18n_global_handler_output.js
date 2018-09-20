@@ -10,7 +10,7 @@ module.exports = function code()
 		{
 			data = self.$ = {};
 			self.K = '*';
-			self.V = 'dg';
+			self.V = 'Dg';
 			self.D = {
 				'en-US': {
 					'DEFAULTS': {

@@ -20,7 +20,7 @@ function I18N(msg, tpldata, subtype)
 		if (self.L != LAN)
 		{
 			self.K = 'i18n_handler_example';
-			self.V = 'df';
+			self.V = 'Df';
 			self.D = {'en-US':{'DEFAULTS':{'%s美好%s生活':'%sgood%s life','%{中文}词典':'%{Chinese} dictionary','空白':[],'简体':'simplified'}},'zh-TW':{'DEFAULTS':{'简体':'簡體'}}};
 
 			translateJSON = self.D;
