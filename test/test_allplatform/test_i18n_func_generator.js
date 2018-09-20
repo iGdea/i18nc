@@ -10,19 +10,9 @@ var requireAfterWrite	= autoTestUtils.requireAfterWrite('i18nc_func_generator');
 
 describe('#i18n_func_generator', function()
 {
-	it('#mergeTranslateData', function()
-	{
-		var args = require('../files/merge_translate_data');
-		var result = i18nGeneratorTest._mergeTranslateData(args);
-
-		var outputJSON = requireAfterWrite('merge_translate_data_json.json', result);
-
-		expect(result).to.eql(outputJSON);
-	});
-
 	it('#to_TRANSLATE_DATA_fromat', function()
 	{
-		var args = require('../files/output/i18nc_func_generator/merge_translate_data_json.json');
+		var args = require('../files/output/merge_translate_data/merge_translate_data.json');
 		var result = i18nGeneratorTest._to_TRANSLATE_DATA_fromat(args);
 
 		var outputJSON = requireAfterWrite('merge_translate_data_output.json', result);
@@ -44,7 +34,7 @@ describe('#i18n_func_generator', function()
 
 	it('#genTranslateJSONCode', function()
 	{
-		var data = require('../files/output/i18nc_func_generator/merge_translate_data_json.json');
+		var data = require('../files/output/merge_translate_data/merge_translate_data.json');
 		var result = i18nGeneratorTest._to_TRANSLATE_DATA_fromat(data);
 
 		var outputJSON = requireAfterWrite('merge_translate_data_output.json', result);
