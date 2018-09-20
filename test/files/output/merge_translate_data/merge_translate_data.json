@@ -1,4 +1,8 @@
 {
+	"LANS": [
+		"en-US",
+		"zh-TW"
+	],
 	"DEFAULTS": {
 		"简体": {
 			"en-US": "simplified",
