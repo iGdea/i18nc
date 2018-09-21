@@ -2,7 +2,8 @@
 
 var expect			= require('expect.js');
 var escodegen		= require('escodegen');
-var astTpl			= require('../../lib/ast_tpl');
+var i18ncAst		= require('i18nc-ast');
+var astTpl			= i18ncAst.tpl;
 var optionsUtils	= require('../../lib/options');
 var LiteralHandler	= require('../../lib/ast_literal_handler').LiteralHandler;
 
@@ -17,7 +18,7 @@ describe('#cutword', function()
 		{
 			var ast = literalHandler.handle(astTpl.Literal(val))[0]
 					.__i18n_replace_info__.newAst;
-			return escodegen.generate(ast, optionsUtils.escodegenMinOptions);
+			return escodegen.generate(ast, i18ncAst.config.escodegenMinOptions);;
 		}
 
 		expect(txt2code('中文')).to.be("I18N('中文')");

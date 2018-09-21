@@ -3,9 +3,11 @@
 var expect				= require('expect.js');
 var ASTCollector		= require('../../lib/ast_collector').ASTCollector;
 var optionsUtils		= require('../../lib/options');
-var astUtils			= require('../../lib/ast_utils');
+var i18ncAst			= require('i18nc-ast');
+var astUtil				= i18ncAst.util;
 var i18nc				= require('../../');
 var blockModifierFuncs	= require('../files/casefile/func_code/func_code_block_modifier');
+var AST_FLAGS			= i18ncAst.AST_FLAGS;
 
 describe('#ASTCollector', function()
 {
@@ -25,8 +27,8 @@ describe('#ASTCollector', function()
 				var code = blockModifierFuncs.skip_replace;
 
 				var scope = getFinalCollect(code);
-				expect(!!astUtils.checkAstFlag(scope.translateWordAsts[0], astUtils.AST_FLAGS.SKIP_REPLACE)).to.be(false);
-				expect(!!astUtils.checkAstFlag(scope.translateWordAsts[1], astUtils.AST_FLAGS.SKIP_REPLACE)).to.be(true);
+				expect(!!astUtil.checkAstFlag(scope.translateWordAsts[0], AST_FLAGS.SKIP_REPLACE)).to.be(false);
+				expect(!!astUtil.checkAstFlag(scope.translateWordAsts[1], AST_FLAGS.SKIP_REPLACE)).to.be(true);
 				expect(getScopeCodeTranslateWord(scope)).to.eql(['中文', '这个中文还在'].sort());
 			});
 
@@ -42,8 +44,8 @@ describe('#ASTCollector', function()
 				var code = blockModifierFuncs.skip_replace_I18N;
 
 				var scope = getFinalCollect(code);
-				expect(!!astUtils.checkAstFlag(scope.translateWordAsts[0], astUtils.AST_FLAGS.SKIP_REPLACE)).to.be(false);
-				expect(!!astUtils.checkAstFlag(scope.translateWordAsts[1], astUtils.AST_FLAGS.SKIP_REPLACE)).to.be(true);
+				expect(!!astUtil.checkAstFlag(scope.translateWordAsts[0], AST_FLAGS.SKIP_REPLACE)).to.be(false);
+				expect(!!astUtil.checkAstFlag(scope.translateWordAsts[1], AST_FLAGS.SKIP_REPLACE)).to.be(true);
 				expect(getScopeCodeTranslateWord(scope)).to.eql(['中文', '这个中文还在', '这个中文还在2'].sort());
 			});
 		});
@@ -132,7 +134,7 @@ describe('#ASTCollector', function()
 
 function getCollect(code, options)
 {
-	var ast = astUtils.parse(code.toString());
+	var ast = astUtil.parse(code.toString());
 	return new ASTCollector(optionsUtils.extend(options)).collect(ast);
 }
 
@@ -145,7 +147,7 @@ function getScopeCodeTranslateWord(scope)
 {
 	var words = scope.translateWordAsts.map(function(ast)
 		{
-			if (!astUtils.checkAstFlag(ast, astUtils.AST_FLAGS.DIS_REPLACE))
+			if (!astUtil.checkAstFlag(ast, AST_FLAGS.DIS_REPLACE))
 			{
 				return ast.__i18n_replace_info__.translateWords;
 			}

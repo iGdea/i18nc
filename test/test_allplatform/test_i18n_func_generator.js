@@ -1,9 +1,8 @@
 'use strict';
 
 var expect				= require('expect.js');
-var escodegen			= require('escodegen');
+var astUtil				= require('i18nc-ast').util;
 var autoTestUtils		= require('../auto_test_utils');
-var optionsUtils		= require('../../lib/options');
 var i18nGenerator		= require('../../lib/i18n_func/generator');
 var i18nGeneratorTest	= i18nGenerator._test;
 var requireAfterWrite	= autoTestUtils.requireAfterWrite('i18n_func_generator');
@@ -47,7 +46,7 @@ describe('#i18n_func_generator', function()
 	{
 		var data = require('../files/output/i18n_func_generator/merge_translate_data_output.json');
 		var resultAst = i18nGeneratorTest._translateJSON2ast(data);
-		var resultCode = 'var json = '+escodegen.generate(resultAst, optionsUtils.escodegenOptions);
+		var resultCode = 'var json = '+astUtil.tocode(resultAst);
 
 		var otherCode = requireAfterWrite('merge_translate_data_output.js', resultCode);
 

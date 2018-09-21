@@ -2,7 +2,7 @@
 
 var expect				= require('expect.js');
 var escodegen			= require('escodegen');
-var optionsUtils		= require('../../lib/options');
+var astUtil				= require('i18nc-ast').util;
 var wordAst2json		= require('../../lib/upgrade/i18n_func/parse_translate_json_v1')._wordAst2json;
 var i18nGenerator		= require('../../lib/upgrade/i18n_func/generator_v1');
 var i18nGeneratorTest	= i18nGenerator._test;
@@ -59,7 +59,7 @@ describe('#word_json_ast_v1', function()
 					console.log(d);
 				}
 				var resultAst = i18nGeneratorTest._wordJson2ast(astData);
-				var resultCode = escodegen.generate(resultAst, optionsUtils.escodegenOptions);
+				var resultCode = astUtil.tocode(resultAst);
 				expect(code2arr(resultCode)).to.eql(func2codeArr(code).slice(1, -1));
 			});
 
@@ -82,7 +82,7 @@ describe('#word_json_ast_v1', function()
 					console.log(d);
 				}
 				var resultAst = i18nGeneratorTest._wordJson2ast(astData);
-				var resultCode = escodegen.generate(resultAst, optionsUtils.escodegenOptions);
+				var resultCode = astUtil.tocode(resultAst);
 				expect(code2arr(resultCode)).to.eql(func2codeArr(code).slice(1, -1));
 			});
 
@@ -105,7 +105,7 @@ describe('#word_json_ast_v1', function()
 					console.log(d);
 				}
 				var resultAst = i18nGeneratorTest._wordJson2ast(astData);
-				var resultCode = escodegen.generate(resultAst, optionsUtils.escodegenOptions);
+				var resultCode = astUtil.tocode(resultAst);
 				expect(code2arr(resultCode)).to.eql(func2codeArr(code).slice(1, -1));
 			});
 
@@ -128,7 +128,7 @@ describe('#word_json_ast_v1', function()
 					console.log(d);
 				}
 				var resultAst = i18nGeneratorTest._wordJson2ast(astData);
-				var resultCode = escodegen.generate(resultAst, optionsUtils.escodegenOptions);
+				var resultCode = astUtil.tocode(resultAst);
 				expect(code2arr(resultCode)).to.eql(func2codeArr(code).slice(1, -1));
 			});
 		});

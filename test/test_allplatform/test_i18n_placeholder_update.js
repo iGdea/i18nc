@@ -1,7 +1,7 @@
 'use strict';
 
 var expect			= require('expect.js');
-var esprima			= require('esprima');
+var astUtil			= require('i18nc-ast').util;
 var prevTestFiles	= require('../prev_test_files');
 var DEF				= require('../../lib/def');
 var optionsUtils	= require('../../lib/options');
@@ -15,7 +15,7 @@ describe('#i18n_placeholder_update', function()
 	{
 		function checkEmptyJSONCode(code, renderType, options)
 		{
-			var ast = esprima.parse(code, optionsUtils.esprimaOptions);
+			var ast = astUtil.parse(code);
 			var codeTranslateWords = {};
 			var I18NPlaceholderNew = new I18NPlaceholder(
 					codeTranslateWords, code, optionsUtils.extend(options), ast.body[0]
@@ -25,7 +25,7 @@ describe('#i18n_placeholder_update', function()
 
 		function checkWidthJSONCode(code, renderType, options)
 		{
-			var ast = esprima.parse(code, optionsUtils.esprimaOptions);
+			var ast = astUtil.parse(code);
 			var codeTranslateWords = {
 				DEFAULTS: ['中文']
 			};
@@ -136,7 +136,7 @@ describe('#i18n_placeholder_update', function()
 
 		it('#partial', function()
 		{
-			var ast = esprima.parse(code, optionsUtils.esprimaOptions);
+			var ast = astUtil.parse(code);
 			var I18NPlaceholderNew = new I18NPlaceholder(
 					codeTranslateWords, code, optionsUtils.extend(), ast.body[0]
 				);
@@ -159,7 +159,7 @@ describe('#i18n_placeholder_update', function()
 
 		it('#original', function()
 		{
-			var ast = esprima.parse(code, optionsUtils.esprimaOptions);
+			var ast = astUtil.parse(code);
 			var I18NPlaceholderNew = new I18NPlaceholder(
 					codeTranslateWords, code, optionsUtils.extend(), ast.body[0]
 				);
@@ -170,7 +170,7 @@ describe('#i18n_placeholder_update', function()
 
 		it('#empty', function()
 		{
-			var ast = esprima.parse(code, optionsUtils.esprimaOptions);
+			var ast = astUtil.parse(code);
 			var I18NPlaceholderNew = new I18NPlaceholder(
 					codeTranslateWords, code, optionsUtils.extend(), ast.body[0]
 				);
@@ -181,7 +181,7 @@ describe('#i18n_placeholder_update', function()
 
 		it('#simple', function()
 		{
-			var ast = esprima.parse(code, optionsUtils.esprimaOptions);
+			var ast = astUtil.parse(code);
 			var I18NPlaceholderNew = new I18NPlaceholder(
 					codeTranslateWords, code, optionsUtils.extend(), ast.body[0]
 				);
@@ -197,7 +197,7 @@ describe('#i18n_placeholder_update', function()
 
 		it('#complete', function()
 		{
-			var ast = esprima.parse(code, optionsUtils.esprimaOptions);
+			var ast = astUtil.parse(code);
 			var I18NPlaceholderNew = new I18NPlaceholder(
 					{}, code, optionsUtils.extend({I18NHandlerTPL_GetLanguageCode: 'GetLanguageCode'}), ast.body[0]
 				);
