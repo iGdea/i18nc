@@ -91,7 +91,7 @@ module.exports = function code()
 				};
 				translateJSON = self.D;
 	
-				var dblans = translateJSON.$,
+				var dblans = translateJSON.$ || [],
 					dblansMap = {},
 					lanKeys = LAN.split(',');
 				lanIndexArr = self.M = [];

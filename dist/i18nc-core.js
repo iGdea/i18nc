@@ -1383,7 +1383,7 @@ function _translateJSON2ast(mainData)
 	if (mainData['*']) keys.unshift('*');
 
 	var lans = mainData.$;
-	if (lans)
+	if (lans && lans.length)
 	{
 		var tmp = astTpl.ArrayExpression(lans.map(function(val)
 		{
@@ -2020,6 +2020,7 @@ function paseI18nHandlerInfo(ast, options, result)
 		{
 			result		: undefined,
 			options		: options,
+			funcVersion	: funcVersion,
 			original	: jsonAst,
 		};
 		emitter.trigger('loadTranslateJSON', emitData);
@@ -2156,7 +2157,7 @@ module.exports = function $handlerName(msg, tpldata, subtype)
 			// if (!self.D) self.D = $TRANSLATE_JSON_CODE;
 			translateJSON = self.D;
 
-			var dblans = translateJSON.$,
+			var dblans = translateJSON.$ || [],
 				dblansMap = {},
 				lanKeys = LAN.split(',');
 			lanIndexArr = self.M = [];

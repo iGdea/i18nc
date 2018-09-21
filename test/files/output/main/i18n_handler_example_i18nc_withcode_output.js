@@ -35,7 +35,7 @@ function I18N(msg, tpldata, subtype)
 			};
 			translateJSON = self.D;
 
-			var dblans = translateJSON.$,
+			var dblans = translateJSON.$ || [],
 				dblansMap = {},
 				lanKeys = LAN.split(',');
 			lanIndexArr = self.M = [];

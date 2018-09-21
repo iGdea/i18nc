@@ -30,14 +30,13 @@ module.exports = function code()
 				self.K = '*';
 				self.V = 'Gf';
 				self.D = {
-					'$': [],
 					'*': {
 						// 'out define 中文':
 					}
 				};
 				translateJSON = self.D;
 
-				var dblans = translateJSON.$,
+				var dblans = translateJSON.$ || [],
 					dblansMap = {},
 					lanKeys = LAN.split(',');
 				lanIndexArr = self.M = [];
@@ -113,14 +112,13 @@ module.exports = function code()
 					self.K = '*';
 					self.V = 'Gf';
 					self.D = {
-						'$': [],
 						'*': {
 							// '中文':
 						}
 					};
 					translateJSON = self.D;
 
-					var dblans = translateJSON.$,
+					var dblans = translateJSON.$ || [],
 						dblansMap = {},
 						lanKeys = LAN.split(',');
 					lanIndexArr = self.M = [];
@@ -197,14 +195,13 @@ module.exports = function code()
 					self.K = '*';
 					self.V = 'Gf';
 					self.D = {
-						'$': [],
 						'*': {
 							// 'define2 中文':
 						}
 					};
 					translateJSON = self.D;
 
-					var dblans = translateJSON.$,
+					var dblans = translateJSON.$ || [],
 						dblansMap = {},
 						lanKeys = LAN.split(',');
 					lanIndexArr = self.M = [];
@@ -282,14 +279,13 @@ module.exports = function code()
 					self.K = '*';
 					self.V = 'Gf';
 					self.D = {
-						'$': [],
 						'*': {
 							// 'define3 中文':
 						}
 					};
 					translateJSON = self.D;
 
-					var dblans = translateJSON.$,
+					var dblans = translateJSON.$ || [],
 						dblansMap = {},
 						lanKeys = LAN.split(',');
 					lanIndexArr = self.M = [];
@@ -369,7 +365,6 @@ module.exports = function code()
 					self.K = '*';
 					self.V = 'Gf';
 					self.D = {
-						'$': [],
 						'*': {
 							// 'define4 中文':
 							// 'define5 中文':
@@ -377,7 +372,7 @@ module.exports = function code()
 					};
 					translateJSON = self.D;
 
-					var dblans = translateJSON.$,
+					var dblans = translateJSON.$ || [],
 						dblansMap = {},
 						lanKeys = LAN.split(',');
 					lanIndexArr = self.M = [];
@@ -459,14 +454,13 @@ module.exports = function code()
 					self.K = '*';
 					self.V = 'Gf';
 					self.D = {
-						'$': [],
 						'*': {
 							// 'define6 中文':
 						}
 					};
 					translateJSON = self.D;
 		
-					var dblans = translateJSON.$,
+					var dblans = translateJSON.$ || [],
 						dblansMap = {},
 						lanKeys = LAN.split(',');
 					lanIndexArr = self.M = [];

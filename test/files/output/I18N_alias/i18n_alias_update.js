@@ -65,7 +65,6 @@ module.exports = function code()
 				self.K = '*';
 				self.V = 'Gf';
 				self.D = {
-					'$': [],
 					'*': {
 						// 'argv中文':
 						// 'print信息，':
@@ -91,7 +90,7 @@ module.exports = function code()
 				};
 				translateJSON = self.D;
 	
-				var dblans = translateJSON.$,
+				var dblans = translateJSON.$ || [],
 					dblansMap = {},
 					lanKeys = LAN.split(',');
 				lanIndexArr = self.M = [];

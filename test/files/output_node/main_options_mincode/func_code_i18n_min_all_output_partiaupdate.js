@@ -21,7 +21,7 @@ function I18N(msg, tpldata, subtype)
 			self.D = {'$':['en-US','zh-TW'],'*':{'%s美好%s生活':['%sgood%s life'],'%{中文}词典':['%{Chinese} dictionary'],'简体':['simplified','簡體']}};
 			translateJSON = self.D;
 
-			var dblans = translateJSON.$,
+			var dblans = translateJSON.$ || [],
 				dblansMap = {},
 				lanKeys = LAN.split(',');
 			lanIndexArr = self.M = [];

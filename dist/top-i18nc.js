@@ -44,7 +44,7 @@
 		{
 			if (self.L != LAN)
 			{
-				var dblans = translateJSON.$,
+				var dblans = translateJSON.$ || [],
 					dblansMap = {},
 					lanKeys = LAN.split(',');
 				lanIndexArr = self.M = [];

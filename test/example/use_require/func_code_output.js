@@ -32,7 +32,7 @@ module.exports = function code()
 				self.D = require("./require_data.json");
 				translateJSON = self.D;
 	
-				var dblans = translateJSON.$,
+				var dblans = translateJSON.$ || [],
 					dblansMap = {},
 					lanKeys = LAN.split(',');
 				lanIndexArr = self.M = [];

@@ -33,7 +33,7 @@ function topI18N_v2(msg, args, translateJSON, fileKey, data, handler)
 	{
 		if (self.L != LAN)
 		{
-			var dblans = translateJSON.$,
+			var dblans = translateJSON.$ || [],
 				dblansMap = {},
 				lanKeys = LAN.split(',');
 			lanIndexArr = self.M = [];

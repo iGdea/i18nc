@@ -29,10 +29,10 @@ module.exports = function code()
 			if (self.L != LAN) {
 				self.K = '*';
 				self.V = 'Gf';
-				self.D = { '$': [] };
+				self.D = {};
 				translateJSON = self.D;
 
-				var dblans = translateJSON.$,
+				var dblans = translateJSON.$ || [],
 					dblansMap = {},
 					lanKeys = LAN.split(',');
 				lanIndexArr = self.M = [];

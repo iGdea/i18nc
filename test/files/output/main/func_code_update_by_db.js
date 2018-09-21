@@ -30,7 +30,7 @@ module.exports = function code()
 							self.D = { 'zh-TW': { 'DEFAULTS': { '简体': '簡體' } } };
 							translateJSON = self.D;
 				
-							var dblans = translateJSON.$,
+							var dblans = translateJSON.$ || [],
 								dblansMap = {},
 								lanKeys = LAN.split(',');
 							lanIndexArr = self.M = [];

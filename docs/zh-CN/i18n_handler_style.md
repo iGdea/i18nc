@@ -11,7 +11,7 @@ function I18N(msg, tpldata, subtype)
 		data = self.$ || (self.$ = {}),
 		translateJSON,
 		replace_index = 0,
-		lanIndexReverseArr, i, lanIndex, msgResult, translateValues,
+		lanIndexArr, i, lanIndex, msgResult, translateValues,
 		LAN = (function(){return global.__i18n_lan__})(data);
 
 	if (!tpldata || !tpldata.join) {
@@ -55,19 +55,19 @@ function I18N(msg, tpldata, subtype)
 			};
 			translateJSON = self.D;
 
-			var dblans = translateJSON.$,
+			var dblans = translateJSON.$ || [],
 				dblansMap = {},
 				lanKeys = LAN.split(',');
-			lanIndexReverseArr = self.M = [];
+			lanIndexArr = self.M = [];
 			for(i = dblans.length; i--;) dblansMap[dblans[i]] = i;
 			for(i = lanKeys.length; i--;) {
 				lanIndex = dblansMap[lanKeys[i]];
-				if (lanIndex || lanIndex === 0) lanIndexReverseArr.push(lanIndex);
+				if (lanIndex || lanIndex === 0) lanIndexArr.push(lanIndex);
 			}
 			self.L = LAN;
 		}
 
-		lanIndexReverseArr = self.M;
+		lanIndexArr = self.M;
 		translateJSON = self.D;
 		var _getVaule = function(subtype) {
 			translateValues = translateJSON[subtype] && translateJSON[subtype][msg];
@@ -76,8 +76,8 @@ function I18N(msg, tpldata, subtype)
 				if (typeof msgResult == 'number') msgResult = translateValues[msgResult];
 			}
 		};
-		for(i = lanIndexReverseArr.length; !msgResult && i--;) {
-			lanIndex = lanIndexReverseArr[i];
+		for(i = lanIndexArr.length; !msgResult && i--;) {
+			lanIndex = lanIndexArr[i];
 			if (subtype) _getVaule(subtype);
 			if (!msgResult) _getVaule('*');
 		}

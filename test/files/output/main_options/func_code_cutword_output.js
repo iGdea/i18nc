@@ -30,14 +30,13 @@ module.exports = function code()
 				self.K = '*';
 				self.V = 'Gf';
 				self.D = {
-					'$': [],
 					'*': {
 						// '1234':
 					}
 				};
 				translateJSON = self.D;
 
-				var dblans = translateJSON.$,
+				var dblans = translateJSON.$ || [],
 					dblansMap = {},
 					lanKeys = LAN.split(',');
 				lanIndexArr = self.M = [];

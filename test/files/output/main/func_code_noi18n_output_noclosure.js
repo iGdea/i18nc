@@ -31,7 +31,6 @@ function I18N(msg, tpldata, subtype)
 			self.K = '*';
 			self.V = 'Gf';
 			self.D = {
-				'$': [],
 				'*': {
 					// '中文':
 					// '中文2':
@@ -39,7 +38,7 @@ function I18N(msg, tpldata, subtype)
 			};
 			translateJSON = self.D;
 
-			var dblans = translateJSON.$,
+			var dblans = translateJSON.$ || [],
 				dblansMap = {},
 				lanKeys = LAN.split(',');
 			lanIndexArr = self.M = [];

@@ -13,7 +13,6 @@ module.exports = function code()
 			self.K = '*';
 			self.V = 'Gg';
 			self.D = {
-				'$': [],
 				'*': {
 					// '中文':
 					// '中文2':

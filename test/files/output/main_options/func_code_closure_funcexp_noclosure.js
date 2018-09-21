@@ -31,14 +31,13 @@ function I18N(msg, tpldata, subtype)
 			self.K = '*';
 			self.V = 'Gf';
 			self.D = {
-				'$': [],
 				'*': {
 					// '中文':
 				}
 			};
 			translateJSON = self.D;
 
-			var dblans = translateJSON.$,
+			var dblans = translateJSON.$ || [],
 				dblansMap = {},
 				lanKeys = LAN.split(',');
 			lanIndexArr = self.M = [];

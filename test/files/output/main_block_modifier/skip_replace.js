@@ -30,7 +30,6 @@ module.exports = function code()
 				self.K = '*';
 				self.V = 'Gf';
 				self.D = {
-					'$': [],
 					'*': {
 						// '中文':
 						// '这个中文还在':
@@ -38,7 +37,7 @@ module.exports = function code()
 				};
 				translateJSON = self.D;
 
-				var dblans = translateJSON.$,
+				var dblans = translateJSON.$ || [],
 					dblansMap = {},
 					lanKeys = LAN.split(',');
 				lanIndexArr = self.M = [];
