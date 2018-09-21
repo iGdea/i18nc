@@ -24,8 +24,12 @@
 			],
 			"originalFileKeys": [],
 			"subScopeDatas": [],
-			"usedTranslateWords": {}
+			"usedTranslateWords": {
+				"$": []
+			}
 		}
 	],
-	"usedTranslateWords": {}
+	"usedTranslateWords": {
+		"$": []
+	}
 }

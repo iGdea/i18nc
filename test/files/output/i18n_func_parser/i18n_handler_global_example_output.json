@@ -11,10 +11,10 @@
 	"__FILE_KEY__": "i18n_handler_example_global",
 	"__FUNCTION_VERSION__ast": {
 		"type": "Literal",
-		"value": "Dg",
-		"raw": "'Dg'"
+		"value": "Gg",
+		"raw": "'Gg'"
 	},
-	"__FUNCTION_VERSION__": "Dg",
+	"__FUNCTION_VERSION__": "Gg",
 	"__TRANSLATE_JSON__ast": {
 		"type": "ObjectExpression",
 		"properties": [
@@ -22,8 +22,35 @@
 				"type": "Property",
 				"key": {
 					"type": "Literal",
-					"value": "en-US",
-					"raw": "\"en-US\""
+					"value": "$",
+					"raw": "\"$\""
+				},
+				"computed": false,
+				"value": {
+					"type": "ArrayExpression",
+					"elements": [
+						{
+							"type": "Literal",
+							"value": "en-US",
+							"raw": "\"en-US\""
+						},
+						{
+							"type": "Literal",
+							"value": "zh-TW",
+							"raw": "\"zh-TW\""
+						}
+					]
+				},
+				"kind": "init",
+				"method": false,
+				"shorthand": false
+			},
+			{
+				"type": "Property",
+				"key": {
+					"type": "Literal",
+					"value": "*",
+					"raw": "\"*\""
 				},
 				"computed": false,
 				"value": {
@@ -33,96 +60,22 @@
 							"type": "Property",
 							"key": {
 								"type": "Literal",
-								"value": "DEFAULTS",
-								"raw": "\"DEFAULTS\""
+								"value": "简体",
+								"raw": "\"简体\""
 							},
 							"computed": false,
 							"value": {
-								"type": "ObjectExpression",
-								"properties": [
+								"type": "ArrayExpression",
+								"elements": [
 									{
-										"type": "Property",
-										"key": {
-											"type": "Literal",
-											"value": "简体",
-											"raw": "\"简体\""
-										},
-										"computed": false,
-										"value": {
-											"type": "Literal",
-											"value": "simplified",
-											"raw": "\"simplified\""
-										},
-										"kind": "init",
-										"method": false,
-										"shorthand": false
+										"type": "Literal",
+										"value": "simplified",
+										"raw": "\"simplified\""
 									},
 									{
-										"type": "Property",
-										"key": {
-											"type": "Literal",
-											"value": "空白",
-											"raw": "\"空白\""
-										},
-										"computed": false,
-										"value": {
-											"type": "ArrayExpression",
-											"elements": []
-										},
-										"kind": "init",
-										"method": false,
-										"shorthand": false
-									},
-									{
-										"type": "Property",
-										"key": {
-											"type": "Literal",
-											"value": "无",
-											"raw": "\"无\""
-										},
-										"computed": false,
-										"value": {
-											"type": "Literal",
-											"value": "",
-											"raw": "\"\""
-										},
-										"kind": "init",
-										"method": false,
-										"shorthand": false
-									},
-									{
-										"type": "Property",
-										"key": {
-											"type": "Literal",
-											"value": "%s美好%s生活",
-											"raw": "\"%s美好%s生活\""
-										},
-										"computed": false,
-										"value": {
-											"type": "Literal",
-											"value": "%sgood%s life",
-											"raw": "\"%sgood%s life\""
-										},
-										"kind": "init",
-										"method": false,
-										"shorthand": false
-									},
-									{
-										"type": "Property",
-										"key": {
-											"type": "Literal",
-											"value": "%{中文}词典",
-											"raw": "\"%{中文}词典\""
-										},
-										"computed": false,
-										"value": {
-											"type": "Literal",
-											"value": "%{Chinese} dictionary",
-											"raw": "\"%{Chinese} dictionary\""
-										},
-										"kind": "init",
-										"method": false,
-										"shorthand": false
+										"type": "Literal",
+										"value": "簡體",
+										"raw": "\"簡體\""
 									}
 								]
 							},
@@ -134,46 +87,87 @@
 							"type": "Property",
 							"key": {
 								"type": "Literal",
-								"value": "SUBTYPES",
-								"raw": "\"SUBTYPES\""
+								"value": "空白",
+								"raw": "\"空白\""
 							},
 							"computed": false,
 							"value": {
-								"type": "ObjectExpression",
-								"properties": [
+								"type": "ArrayExpression",
+								"elements": [
 									{
-										"type": "Property",
-										"key": {
-											"type": "Literal",
-											"value": "subtype",
-											"raw": "\"subtype\""
-										},
-										"computed": false,
-										"value": {
-											"type": "ObjectExpression",
-											"properties": [
-												{
-													"type": "Property",
-													"key": {
-														"type": "Literal",
-														"value": "简体",
-														"raw": "\"简体\""
-													},
-													"computed": false,
-													"value": {
-														"type": "Literal",
-														"value": "simplified subtype",
-														"raw": "\"simplified subtype\""
-													},
-													"kind": "init",
-													"method": false,
-													"shorthand": false
-												}
-											]
-										},
-										"kind": "init",
-										"method": false,
-										"shorthand": false
+										"type": "ArrayExpression",
+										"elements": []
+									}
+								]
+							},
+							"kind": "init",
+							"method": false,
+							"shorthand": false
+						},
+						{
+							"type": "Property",
+							"key": {
+								"type": "Literal",
+								"value": "无",
+								"raw": "\"无\""
+							},
+							"computed": false,
+							"value": {
+								"type": "ArrayExpression",
+								"elements": [
+									{
+										"type": "Literal",
+										"value": "",
+										"raw": "\"\""
+									},
+									{
+										"type": "Literal",
+										"value": "無",
+										"raw": "\"無\""
+									}
+								]
+							},
+							"kind": "init",
+							"method": false,
+							"shorthand": false
+						},
+						{
+							"type": "Property",
+							"key": {
+								"type": "Literal",
+								"value": "%s美好%s生活",
+								"raw": "\"%s美好%s生活\""
+							},
+							"computed": false,
+							"value": {
+								"type": "ArrayExpression",
+								"elements": [
+									{
+										"type": "Literal",
+										"value": "%sgood%s life",
+										"raw": "\"%sgood%s life\""
+									}
+								]
+							},
+							"kind": "init",
+							"method": false,
+							"shorthand": false
+						},
+						{
+							"type": "Property",
+							"key": {
+								"type": "Literal",
+								"value": "%{中文}词典",
+								"raw": "\"%{中文}词典\""
+							},
+							"computed": false,
+							"value": {
+								"type": "ArrayExpression",
+								"elements": [
+									{
+										"type": "Literal",
+										"value": "%{Chinese} dictionary",
+										"raw": "\"%{Chinese} dictionary\""
 									}
 								]
 							},
@@ -191,8 +185,8 @@
 				"type": "Property",
 				"key": {
 					"type": "Literal",
-					"value": "zh-TW",
-					"raw": "\"zh-TW\""
+					"value": "subtype",
+					"raw": "\"subtype\""
 				},
 				"computed": false,
 				"value": {
@@ -202,46 +196,17 @@
 							"type": "Property",
 							"key": {
 								"type": "Literal",
-								"value": "DEFAULTS",
-								"raw": "\"DEFAULTS\""
+								"value": "简体",
+								"raw": "\"简体\""
 							},
 							"computed": false,
 							"value": {
-								"type": "ObjectExpression",
-								"properties": [
+								"type": "ArrayExpression",
+								"elements": [
 									{
-										"type": "Property",
-										"key": {
-											"type": "Literal",
-											"value": "简体",
-											"raw": "\"简体\""
-										},
-										"computed": false,
-										"value": {
-											"type": "Literal",
-											"value": "簡體",
-											"raw": "\"簡體\""
-										},
-										"kind": "init",
-										"method": false,
-										"shorthand": false
-									},
-									{
-										"type": "Property",
-										"key": {
-											"type": "Literal",
-											"value": "无",
-											"raw": "\"无\""
-										},
-										"computed": false,
-										"value": {
-											"type": "Literal",
-											"value": "無",
-											"raw": "\"無\""
-										},
-										"kind": "init",
-										"method": false,
-										"shorthand": false
+										"type": "Literal",
+										"value": "simplified subtype",
+										"raw": "\"simplified subtype\""
 									}
 								]
 							},
@@ -261,7 +226,7 @@
 		"en-US": {
 			"DEFAULTS": {
 				"简体": "simplified",
-				"空白": "",
+				"无": "",
 				"%s美好%s生活": "%sgood%s life",
 				"%{中文}词典": "%{Chinese} dictionary"
 			},
@@ -275,6 +240,9 @@
 			"DEFAULTS": {
 				"简体": "簡體",
 				"无": "無"
+			},
+			"SUBTYPES": {
+				"subtype": {}
 			}
 		}
 	}

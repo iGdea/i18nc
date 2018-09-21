@@ -14,7 +14,7 @@
 		"en-US": {
 			"DEFAULTS": {
 				"简体": "simplified",
-				"空白": "",
+				"无": "",
 				"%s美好%s生活": "%sgood%s life",
 				"%{中文}词典": "%{Chinese} dictionary"
 			},
@@ -28,6 +28,9 @@
 			"DEFAULTS": {
 				"简体": "簡體",
 				"无": "無"
+			},
+			"SUBTYPES": {
+				"subtype": {}
 			}
 		}
 	},
@@ -43,18 +46,21 @@
 	],
 	"subScopeDatas": [],
 	"usedTranslateWords": {
-		"en-US": {
-			"DEFAULTS": {
-				"简体": "simplified",
-				"空白": "",
-				"%s美好%s生活": "%sgood%s life",
-				"%{中文}词典": "%{Chinese} dictionary"
-			}
-		},
-		"zh-TW": {
-			"DEFAULTS": {
-				"简体": "簡體"
-			}
+		"$": [
+			"en-US",
+			"zh-TW"
+		],
+		"*": {
+			"简体": [
+				"simplified",
+				"簡體"
+			],
+			"%s美好%s生活": [
+				"%sgood%s life"
+			],
+			"%{中文}词典": [
+				"%{Chinese} dictionary"
+			]
 		}
 	}
 }

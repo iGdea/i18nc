@@ -59,18 +59,23 @@
 			],
 			"subScopeDatas": [],
 			"usedTranslateWords": {
-				"zh-TW": {
-					"DEFAULTS": {
-						"中文key": "中文键"
-					},
-					"SUBTYPES": {
-						"subtype": {
-							"I18N(中文)": "中文国际化"
-						}
-					}
+				"$": [
+					"zh-TW"
+				],
+				"*": {
+					"中文key": [
+						"中文键"
+					]
+				},
+				"subtype": {
+					"I18N(中文)": [
+						"中文国际化"
+					]
 				}
 			}
 		}
 	],
-	"usedTranslateWords": {}
+	"usedTranslateWords": {
+		"$": []
+	}
 }

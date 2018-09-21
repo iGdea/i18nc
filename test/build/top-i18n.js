@@ -1,7 +1,7 @@
 'use strict';
 
 var fs = require('fs');
-var code = require('../../src/top_i18n').toString();
+var code = require('fs').readFileSync(require.resolve('../../src/top_i18n')).toString();
 var wrapCode = require('./wrap-code.tpl.js').toString();
 
 var content =

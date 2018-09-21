@@ -3,15 +3,14 @@ module.exports = function code()
 
 
 	/* eslint-disable */
-	function I18N(c,e,k){
-		var a=I18N,m,l=0,i,j,h,g,f,b,n=a.$||(a.$={}),d=(function(a){if(!a.global){a.global=typeof window=='object'&&window||typeof global=='object'&&global||{}}return a.global.__i18n_lan__})(n);if(!e||!e.join){k=e;e=[]}if(d&&d.split){if(a.L!=d){a.K='*';a.V='Df';a.D={
-			'en-US': {
-				'DEFAULTS': {
-					// '简体':
-				}
+	function I18N(e,d,k){
+		var a=I18N,q=a.$||(a.$={}),h,p=0,i,b,f,c,j,g=(function(a){if(!a.global){a.global=typeof window=='object'&&window||typeof global=='object'&&global||{}}return a.global.__i18n_lan__})(q);if(!d||!d.join){k=d;d=[]}if(g&&g.split){if(a.L!=g){a.K='*';a.V='Gf';a.D={
+			'$': [],
+			'*': {
+				// '简体':
 			}
 		};
-		m=a.D;j=d.split(',');i=a.M=[];for(h=j.length;h--;){g=m[j[h]];if(g)i.push(g)}a.L=d}i=a.M;for(h=i.length;!f&&h--;){g=i[h];if(k){b=g.SUBTYPES;b=b&&b[k];f=b&&b[c]}if(!f){b=g.DEFAULTS;f=b&&b[c]}}if(f)c=f}c+='';if(!e.length||c.indexOf('%')==-1)return c;return c.replace(/%s|%\{.+?\}/g,function(b){var a=e[l++];return a===undefined?b:a===null?'':a})
+		h=a.D;var o=h.$,l={},n=g.split(',');i=a.M=[];for(b=o.length;b--;)l[o[b]]=b;for(b=n.length;b--;){f=l[n[b]];if(f||f===0)i.push(f)}a.L=g}i=a.M;h=a.D;var m=function(a){j=h[a]&&h[a][e];if(j){c=j[f];if(typeof c=='number')c=j[c]}};for(b=i.length;!c&&b--;){f=i[b];if(k)m(k);if(!c)m('*')}if(c)e=c}e+='';if(!d.length||e.indexOf('%')==-1)return e;return e.replace(/%s|%\{.+?\}/g,function(b){var a=d[p++];return a===undefined?b:a===null?'':a})
 	}
 	/* eslint-enable */
 

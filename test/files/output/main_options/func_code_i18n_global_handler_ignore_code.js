@@ -6,16 +6,14 @@ module.exports = function code()
 		var self = I18N;
 		var data = self.$;
 	
-		if (!data)
-		{
+		if (!data) {
 			data = self.$ = {};
 			self.K = '*';
-			self.V = 'Dg';
+			self.V = 'Gg';
 			self.D = {
-				'en-US': {
-					'DEFAULTS': {
-						// '中文':
-					}
+				'$': [],
+				'*': {
+					// '中文':
 				}
 			};
 		}

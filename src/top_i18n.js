@@ -20,7 +20,7 @@ function topI18N_v2(msg, args, translateJSON, fileKey, data, handler)
 		tpldata = args[1],
 		subtype = args[2],
 		replace_index = 0,
-		lanIndexReverseArr, i, lanIndex, msgResult, translateValues,
+		lanIndexArr, i, lanIndex, msgResult, translateValues,
 		LAN = $I18N_getLanguageCode(data);
 
 	if (!tpldata || !tpldata.join)
@@ -36,7 +36,7 @@ function topI18N_v2(msg, args, translateJSON, fileKey, data, handler)
 			var dblans = translateJSON.$,
 				dblansMap = {},
 				lanKeys = LAN.split(',');
-			lanIndexReverseArr = self.M = [];
+			lanIndexArr = self.M = [];
 			for(i = dblans.length; i--;)
 			{
 				dblansMap[dblans[i]] = i;
@@ -44,13 +44,13 @@ function topI18N_v2(msg, args, translateJSON, fileKey, data, handler)
 			for(i = lanKeys.length; i--;)
 			{
 				lanIndex = dblansMap[lanKeys[i]];
-				if (lanIndex || lanIndex === 0) lanIndexReverseArr.push(lanIndex);
+				if (lanIndex || lanIndex === 0) lanIndexArr.push(lanIndex);
 			}
 			// 放到最后，防止前面代码出错，导致if逻辑被保存
 			self.L = LAN;
 		}
 
-		lanIndexReverseArr = self.M;
+		lanIndexArr = self.M;
 		var _getVaule = function(subtype)
 		{
 			translateValues = translateJSON[subtype] && translateJSON[subtype][msg];
@@ -60,9 +60,9 @@ function topI18N_v2(msg, args, translateJSON, fileKey, data, handler)
 				if (typeof msgResult == 'number') msgResult = translateValues[msgResult];
 			}
 		};
-		for(i = lanIndexReverseArr.length; !msgResult && i--;)
+		for(i = lanIndexArr.length; !msgResult && i--;)
 		{
-			lanIndex = lanIndexReverseArr[i];
+			lanIndex = lanIndexArr[i];
 			if (subtype) _getVaule(subtype);
 			if (!msgResult) _getVaule('*');
 		}

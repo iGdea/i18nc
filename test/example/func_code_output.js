@@ -41,14 +41,12 @@ module.exports = function code()
 	function I18N(msg, tpldata, subtype)
 	{
 		var self = I18N,
+			data = self.$ || (self.$ = {}),
 			translateJSON,
 			replace_index = 0,
-			lanArr, lanKeys, i, lanItem, translateMsg, subtypeJSON,
-			data = self.$ || (self.$ = {}),
-			LAN = (function(cache)
-			{
-				if (!cache.global)
-				{
+			lanIndexArr, i, lanIndex, msgResult, translateValues,
+			LAN = (function(cache) {
+				if (!cache.global) {
 					cache.global = (typeof window == 'object' && window)
 						|| (typeof global == 'object' && global)
 						|| {};
@@ -57,84 +55,76 @@ module.exports = function code()
 				return cache.global.__i18n_lan__;
 			})(data);
 	
-		if (!tpldata || !tpldata.join)
-		{
+		if (!tpldata || !tpldata.join) {
 			subtype = tpldata;
 			tpldata = [];
 		}
 	
-		if (LAN && LAN.split)
-		{
-			if (self.L != LAN)
-			{
+		if (LAN && LAN.split) {
+			if (self.L != LAN) {
 				self.K = '*';
-				self.V = 'Df';
+				self.V = 'Gf';
 				self.D = {
-					'zh-TW': {
-						'DEFAULTS': {
-							// 'argv中文':
-							// 'print信息，':
-							// '中午true':
-							// '中文0':
-							// '中文1':
-							// '中文I18N':
-							// '中文case':
-							// '中文false':
-							// '中文if':
-							// '中文val':
-							// '中文val in object':
-							// '简体':
-							'中文key': '中文键'
-						},
-						'SUBTYPES': {
-							'subtype': {
-								// '中文I18N subtype':
-								'I18N(中文)': '中文国际化'
-							},
-							'subtype2': {
-								// 'I18N(中文)':
-							}
-						}
+					'$': ['zh-TW'],
+					'*': {
+						// 'argv中文':
+						// 'print信息，':
+						// '中午true':
+						// '中文0':
+						// '中文1':
+						// '中文I18N':
+						// '中文case':
+						// '中文false':
+						// '中文if':
+						// '中文val':
+						// '中文val in object':
+						// '简体':
+						'中文key': ['中文键']
+					},
+					'subtype': {
+						// '中文I18N subtype':
+						'I18N(中文)': ['中文国际化']
+					},
+					'subtype2': {
+						// 'I18N(中文)':
 					}
 				};
-	
 				translateJSON = self.D;
-				lanKeys = LAN.split(',');
 	
-				lanArr = self.M = [];
-				for(i = lanKeys.length; i--;)
-				{
-					lanItem = translateJSON[lanKeys[i]];
-					if (lanItem) lanArr.push(lanItem);
+				var dblans = translateJSON.$,
+					dblansMap = {},
+					lanKeys = LAN.split(',');
+				lanIndexArr = self.M = [];
+				for(i = dblans.length; i--;) dblansMap[dblans[i]] = i;
+				for(i = lanKeys.length; i--;) {
+					lanIndex = dblansMap[lanKeys[i]];
+					if (lanIndex || lanIndex === 0) lanIndexArr.push(lanIndex);
 				}
 				self.L = LAN;
 			}
 	
-			lanArr = self.M;
-			for(i = lanArr.length; !translateMsg && i--;)
-			{
-				lanItem = lanArr[i];
-				if (subtype)
-				{
-					subtypeJSON = lanItem.SUBTYPES;
-					subtypeJSON = subtypeJSON && subtypeJSON[subtype];
-					translateMsg = subtypeJSON && subtypeJSON[msg];
+			lanIndexArr = self.M;
+			translateJSON = self.D;
+			var _getVaule = function(subtype) {
+				translateValues = translateJSON[subtype] && translateJSON[subtype][msg];
+				if (translateValues) {
+					msgResult = translateValues[lanIndex];
+					if (typeof msgResult == 'number') msgResult = translateValues[msgResult];
 				}
-				if (!translateMsg)
-				{
-					subtypeJSON = lanItem.DEFAULTS;
-					translateMsg = subtypeJSON && subtypeJSON[msg];
-				}
+			};
+			for(i = lanIndexArr.length; !msgResult && i--;) {
+				lanIndex = lanIndexArr[i];
+				if (subtype) _getVaule(subtype);
+				if (!msgResult) _getVaule('*');
 			}
 	
-			if (translateMsg) msg = translateMsg;
+			if (msgResult) msg = msgResult;
 		}
 	
 		msg += '';
 		if (!tpldata.length || msg.indexOf('%') == -1) return msg;
 	
-		return msg.replace(/%s|%\{.+?\}/g, function(all)
-		{
+		return msg.replace(/%s|%\{.+?\}/g, function(all) {
 			var newVal = tpldata[replace_index++];
 			return newVal === undefined ? all : newVal === null ? '' : newVal;
 		});

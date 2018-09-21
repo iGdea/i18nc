@@ -23,7 +23,7 @@ exports.registerPlugin = function(name, handler)
 	debug('register plugin:%s', name);
 };
 
-},{"./lib/emitter":8,"./lib/main":16,"./lib/options":17,"./package.json":104,"debug":25}],2:[function(require,module,exports){
+},{"./lib/emitter":8,"./lib/main":18,"./lib/options":19,"./package.json":109,"debug":30}],2:[function(require,module,exports){
 'use strict';
 
 var _					= require('lodash');
@@ -345,7 +345,7 @@ _.extend(ASTCollector.prototype,
 	}
 });
 
-},{"./ast_literal_handler":3,"./ast_scope":4,"./ast_utils":6,"./def":7,"./emitter":8,"debug":25,"estraverse":82,"lodash":90}],3:[function(require,module,exports){
+},{"./ast_literal_handler":3,"./ast_scope":4,"./ast_utils":6,"./def":7,"./emitter":8,"debug":30,"estraverse":87,"lodash":95}],3:[function(require,module,exports){
 'use strict';
 
 var _				= require('lodash');
@@ -506,7 +506,7 @@ _.extend(LiteralHandler.prototype,
 	},
 });
 
-},{"./ast_tpl":5,"./ast_utils":6,"./emitter":8,"./utils/words_utils":24,"debug":25,"lodash":90}],4:[function(require,module,exports){
+},{"./ast_tpl":5,"./ast_utils":6,"./emitter":8,"./utils/words_utils":29,"debug":30,"lodash":95}],4:[function(require,module,exports){
 'use strict';
 
 var _					= require('lodash');
@@ -915,7 +915,7 @@ _.extend(ASTScope.prototype,
 	}
 });
 
-},{"./ast_tpl":5,"./ast_utils":6,"./def":7,"./i18n_placeholder":15,"./options":17,"./result_object":18,"debug":25,"escodegen":28,"lodash":90}],5:[function(require,module,exports){
+},{"./ast_tpl":5,"./ast_utils":6,"./def":7,"./i18n_placeholder":17,"./options":19,"./result_object":20,"debug":30,"escodegen":33,"lodash":95}],5:[function(require,module,exports){
 'use strict';
 
 var SELF_CREATED_FLAG = require('./def').AST_FLAGS.SELF_CREATED;
@@ -1020,6 +1020,7 @@ var escodegen		= require('escodegen');
 var astTpl			= require('./ast_tpl');
 var DEF				= require('./def');
 var optionsUtils	= require('./options');
+var debug			= require('debug')('i18nc-core:ast_utils');
 var ArrayPush		= Array.prototype.push;
 
 exports.AST_FLAGS = DEF.AST_FLAGS;
@@ -1061,36 +1062,59 @@ exports.codeIndent = function codeIndent(ast, code)
 exports.ast2constVal = function ast2constVal(ast)
 {
 	if (ast.type == 'Literal') return ast.value;
-	// Identifier 是 object的key不是字符串的时候的表示
-	// @see #i18n_function_parser #wordAst2json #is js, not json
+	if (ast.type == 'Identifier')
+	{
+		switch(ast.name)
+		{
+			case 'undefined':
+				return undefined;
+			case 'NaN':
+				return NaN;
+			case 'Infinity':
+				return Infinity;
+			default:
+				debug('unknow Infinity: %o', ast);
+				throw new Error('UNKNOW INFINITY');
+		}
+	}
+};
+
+
+exports.ast2constKey = function(ast)
+{
+	if (ast.type == 'Literal') return ast.value;
 	if (ast.type == 'Identifier') return ast.name;
 };
 
 exports.constVal2ast = function constVal2ast(val)
 {
-	if (!val)
+	if (val === undefined)
 	{
-		if (val === undefined)
-		{
-			return {
-				"type": "Identifier",
-				"name": "undefined"
-			};
-		}
-		else if (isNaN(val))
-		{
-			return {
-				"type": "Identifier",
-				"name": "NaN"
-			};
-		}
-		else
-		{
-			return {
-				"type": "Literal",
-				"value": val
-			};
-		}
+		return {
+			"type": "Identifier",
+			"name": "undefined"
+		};
+	}
+	else if (val === null)
+	{
+		return {
+			"type": "Literal",
+			"value": null,
+		};
+	}
+	else if (val === Infinity)
+	{
+		return {
+			"type": "Identifier",
+			"name": "Infinity"
+		};
+	}
+	else if (!val && isNaN(val))
+	{
+		return {
+			"type": "Identifier",
+			"name": "NaN"
+		};
 	}
 	else
 	{
@@ -1142,14 +1166,14 @@ exports.astMemberExpression2arr = function astMemberExpression2arr(ast)
 	if (ast.object.type == 'MemberExpression')
 		ArrayPush.apply(result, exports.astMemberExpression2arr(ast.object));
 	else
-		result.push(exports.ast2constVal(ast.object));
+		result.push(exports.ast2constKey(ast.object));
 
-	result.push(exports.ast2constVal(ast.property));
+	result.push(exports.ast2constKey(ast.property));
 
 	return result;
 }
 
-},{"./ast_tpl":5,"./def":7,"./options":17,"escodegen":28,"esprima":75}],7:[function(require,module,exports){
+},{"./ast_tpl":5,"./def":7,"./options":19,"debug":30,"escodegen":33,"esprima":80}],7:[function(require,module,exports){
 'use strict';
 
 exports.BLOCK_MODIFIER =
@@ -1181,7 +1205,8 @@ exports.UNSUPPORT_AST_TYPS	=
 	TaggedTemplateExpression	: AST_FLAGS.TAGGED_TEMPLATE_LITERAL,
 };
 
-exports.I18NFunctionVersion = 'D';
+
+exports.I18NFunctionVersion = 'G';
 exports.I18NFunctionSubVersion =
 {
 	FULL	: 'f',
@@ -1261,18 +1286,67 @@ exports.proxy = function(obj)
 	};
 }
 
-},{"debug":25,"events":88}],9:[function(require,module,exports){
+},{"debug":30,"events":93}],9:[function(require,module,exports){
 'use strict';
 
-var _				= require('lodash');
-var debug			= require('debug')('i18nc-core:i18n_func_generator');
-var escodegen		= require('escodegen');
-var astTpl			= require('../ast_tpl');
-var astUtils		= require('../ast_utils');
-var optionsUtils	= require('../options');
-var AST_FLAGS		= astUtils.AST_FLAGS;
-var exportsTest		= exports._test = {};
+var _					= require('lodash');
+var debug				= require('debug')('i18nc-core:i18n_func_generator');
+var escodegen			= require('escodegen');
+var astTpl				= require('../ast_tpl');
+var astUtils			= require('../ast_utils');
+var optionsUtils		= require('../options');
+var AST_FLAGS			= astUtils.AST_FLAGS;
+var exportsTest			= exports._test = {};
+var mergeTranslateData	= require('./lib/merge_translate_data');
 
+/**
+ * 获取使用的翻译数据
+ *
+ * input: test/files/merge_translate_data.js
+ * output: test/files/output/i18n_func_generator/merge_translate_data_output.json
+ */
+exports.getTranslateJSON = getTranslateJSON;
+function getTranslateJSON(data)
+{
+	var result = mergeTranslateData(data);
+	result = _to_TRANSLATE_DATA_fromat(result);
+
+	return result;
+}
+
+/**
+ * 没有翻译的，生成注释
+ */
+exports.fillNoUsedCodeTranslateWords = fillNoUsedCodeTranslateWords;
+function fillNoUsedCodeTranslateWords(translateDataJSON, codeTranslateWords)
+{
+	var DEFAULTS_WORDS = _.uniq(codeTranslateWords.DEFAULTS);
+	if (DEFAULTS_WORDS.length)
+	{
+		var result = translateDataJSON['*'] || (translateDataJSON['*'] = {});
+		_.each(DEFAULTS_WORDS, function(word)
+		{
+			if (!result[word]) result[word] = null;
+		});
+	}
+
+	_.each(codeTranslateWords.SUBTYPES, function(subtype_words, subtype)
+	{
+		var SUBTYPE_WORDS = _.uniq(subtype_words);
+		if (!SUBTYPE_WORDS.length) return;
+
+		var result = translateDataJSON[subtype] || (translateDataJSON[subtype] = {});
+		_.each(SUBTYPE_WORDS, function(word)
+		{
+			if (!result[word]) result[word] = null;
+		});
+	});
+}
+
+
+/**
+ * 结果转code
+ */
 exports.genTranslateJSONCode = genTranslateJSONCode;
 function genTranslateJSONCode(translateData)
 {
@@ -1291,75 +1365,36 @@ function genTranslateJSONCode(translateData)
 	}
 }
 
-/**
- * 获取使用的翻译数据
- *
- * input: test/files/merge_translate_data.js
- * output: test/files/merge_translate_data_output.json
- */
-exports.getTranslateJSON = getTranslateJSON;
-function getTranslateJSON(data)
-{
-	var result = _mergeTranslateData(data);
-	result = _to_TRANSLATE_DATA_fromat(result);
-
-	return result;
-}
-
-
 
 /**
  * 将TRANSLATE_DATA数据，转成ast表示
  *
  * input: _to_TRANSLATE_DATA_fromat  运行结果
- * output: test/files/merge_translate_data.json
+ * output: test/files/output/i18n_func_generator/merge_translate_data_output.json
  *
  * 对数据进行重新编排
- * 暴露接口仅测试使用
  */
 exportsTest._translateJSON2ast = _translateJSON2ast;
 function _translateJSON2ast(mainData)
 {
 	var resultPropertiesAst = [];
+	var keys = Object.keys(mainData);
+	keys = _.without(keys, '$', '*').sort();
+	if (mainData['*']) keys.unshift('*');
 
-	_.each(Object.keys(mainData).sort(), function(lan)
+	var lans = mainData.$;
+	if (lans)
 	{
-		var translateData = mainData[lan];
-		var lanPropertiesAst = [];
-
-		// 处理DEFAULTS
-		var tmp = _wordJson2ast(translateData.DEFAULTS);
-		if (tmp)
+		var tmp = astTpl.ArrayExpression(lans.map(function(val)
 		{
-			lanPropertiesAst.push(astTpl.Property('DEFAULTS', tmp));
-		}
+			return astUtils.constVal2ast(val);
+		}));
+		resultPropertiesAst.push(astTpl.Property('$', tmp));
+	}
 
-
-		// 处理 SUBTYPES
-		if (translateData.SUBTYPES)
-		{
-			var tmpSubtypesPropertiesAst = _.map(Object.keys(translateData.SUBTYPES).sort(), function(subtype)
-				{
-					var tmp = _wordJson2ast(translateData.SUBTYPES[subtype]);
-					if (!tmp) return;
-
-					return astTpl.Property(subtype, tmp);
-				})
-				.filter(function(val)
-				{
-					return val;
-				});
-
-			if (tmpSubtypesPropertiesAst.length)
-			{
-				lanPropertiesAst.push(astTpl.Property('SUBTYPES', astTpl.ObjectExpression(tmpSubtypesPropertiesAst)));
-			}
-		}
-
-		if (lanPropertiesAst.length)
-		{
-			resultPropertiesAst.push(astTpl.Property(lan, astTpl.ObjectExpression(lanPropertiesAst)));
-		}
+	_.each(keys, function(key)
+	{
+		resultPropertiesAst.push(astTpl.Property(key, _wordJson2ast(mainData[key])));
 	});
 
 
@@ -1369,82 +1404,60 @@ function _translateJSON2ast(mainData)
 	}
 }
 
-exports.fillNoUsedCodeTranslateWords = fillNoUsedCodeTranslateWords;
-function fillNoUsedCodeTranslateWords(translateDataJSON, codeTranslateWords, defaultLanguage)
-{
-	var lans = Object.keys(translateDataJSON);
-	if (!lans.length) lans = [defaultLanguage];
-
-	var DEFAULTS_WORDS = _.uniq(codeTranslateWords.DEFAULTS);
-	if (DEFAULTS_WORDS.length)
-	{
-		lans.forEach(function(lan)
-		{
-			var lanItem = translateDataJSON[lan] || (translateDataJSON[lan] = {});
-			var result = lanItem.DEFAULTS || (lanItem.DEFAULTS = {});
-			_.each(DEFAULTS_WORDS, function(word)
-			{
-				if (!result[word]) result[word] = null;
-			});
-		});
-	}
-
-	_.each(codeTranslateWords.SUBTYPES, function(subtype_words, subtype)
-	{
-		var SUBTYPE_WORDS = _.uniq(subtype_words);
-		if (!SUBTYPE_WORDS.length) return;
-
-		lans.forEach(function(lan)
-		{
-			var lanItem = translateDataJSON[lan] || (translateDataJSON[lan] = {});
-			lanItem = lanItem.SUBTYPES || (lanItem.SUBTYPES = {});
-			var result = lanItem[subtype] || (lanItem[subtype] = {});
-
-			_.each(SUBTYPE_WORDS, function(word)
-			{
-				if (!result[word]) result[word] = null;
-			});
-		});
-	});
-}
-
 
 /**
  * 对mergeTranslateData的结果数据进行重新编排
  * 生成TRANSLATE_DATA的数据格式
+ * 同时，将重复的数据，使用index进行替换
  *
- * input: _mergeTranslateData  运行结果
- * output: test/files/merge_translate_data_output.json
- *
- * 暴露接口仅测试使用
+ * input: mergeTranslateData  运行结果
+ * output: test/files/output/i18n_func_generator/merge_translate_data_output.json
  */
 exportsTest._to_TRANSLATE_DATA_fromat = _to_TRANSLATE_DATA_fromat;
 function _to_TRANSLATE_DATA_fromat(data)
 {
-	var result = {};
+	var result = {$: data.LANS};
+	var lansMap = _getLansMap(data.LANS.sort());
+
+	function _addkey(subtype, word, lanData)
+	{
+		var wordMap = {};
+		_.each(Object.keys(lanData).sort(), function(lan)
+		{
+			var translateData = lanData[lan];
+			var lanObj = result[subtype] || (result[subtype] = {});
+			var wordObj = lanObj[word] || (lanObj[word] = []);
+			var lanIndex = lansMap[lan];
+
+			if (translateData in wordMap)
+			{
+				wordObj[lanIndex] = wordMap[translateData];
+			}
+			else
+			{
+				wordObj[lanIndex] = translateData;
+				wordMap[translateData] = lanIndex;
+			}
+		});
+	}
+
 	_.each(data.DEFAULTS, function(lanData, word)
 	{
-		_.each(lanData, function(translateData, lan)
-		{
-			var lanObj = result[lan] || (result[lan] = {});
-			var wordObj = lanObj.DEFAULTS || (lanObj.DEFAULTS = {});
-
-			wordObj[word] = translateData;
-		});
+		_addkey('*', word, lanData);
 	});
 
 	_.each(data.SUBTYPES, function(item, subtype)
 	{
 		_.each(item, function(lanData, word)
 		{
-			_.each(lanData, function(translateData, lan)
-			{
-				var lanObj = result[lan] || (result[lan] = {});
-				var subtypeObj = lanObj.SUBTYPES || (lanObj.SUBTYPES = {});
-				var wordObj = subtypeObj[subtype] || (subtypeObj[subtype] = {});
+			if (subtype == '*')
+				throw new Error('`*` IS SYSTEM RESERVED FIELD');
+			else if (subtype == '$')
+				throw new Error('`$` IS SYSTEM RESERVED FIELD');
+			else if ((''+subtype)[0] == '$')
+				throw new Error('`$...` ARE SYSTEM RESERVED FIELD');
 
-				wordObj[word] = translateData;
-			});
+			_addkey(subtype, word, lanData);
 		});
 	});
 
@@ -1453,27 +1466,114 @@ function _to_TRANSLATE_DATA_fromat(data)
 
 
 
+
+
+/**
+ * 将array表示的或关系转成ast表示
+ */
+exportsTest._wordJson2ast = _wordJson2ast;
+function _wordJson2ast(wordMap)
+{
+	if (!wordMap) return;
+	var result = [];
+
+	// 翻译为空的时候，把这些wordMap转化成注释
+	var emptyTranslateComments = [];
+
+	// 先对object进行排序，保证尽可能少触发svn变更
+	Object.keys(wordMap).sort()
+		.forEach(function(word)
+		{
+			var translateWords = wordMap[word];
+			debug('wordJson2ast word:%s, translateWords:%o', word, translateWords);
+
+			if (translateWords === null)
+			{
+				// 使用escodegen.generate替换JSON.stringify
+				// JSON.stringify 会导致一些特殊字符不会encode，例如\u2029
+				var keyStr = escodegen.generate(astTpl.Literal(word), optionsUtils.escodegenOptions);
+				emptyTranslateComments.push(astTpl.LineComment(' '+keyStr+':'));
+				return;
+			}
+
+			var valAst = translateWords.map(function(val)
+			{
+				if (val === undefined)
+					return null;
+				else if (val == '')
+					return astTpl.ArrayExpression([]);
+				else
+					return astUtils.constVal2ast(val);
+			});
+
+			var retAst = astTpl.Property(word, astTpl.ArrayExpression(valAst));
+			result.push(retAst);
+
+			if (emptyTranslateComments.length)
+			{
+				retAst.leadingComments = emptyTranslateComments;
+				emptyTranslateComments = [];
+			}
+		});
+
+	if (emptyTranslateComments.length)
+	{
+		if (!result.length)
+		{
+			var protoKey = astTpl.Property('', astUtils.constVal2ast(null));
+			astUtils.setAstFlag(protoKey, AST_FLAGS.PLACEHOLDER_WORDER);
+			result.push(protoKey);
+		}
+
+		var lastItem = result[result.length-1];
+		lastItem.leadingComments = (lastItem.leadingComments || []).concat(emptyTranslateComments);
+	}
+
+	return astTpl.ObjectExpression(result);
+}
+
+
+function _getLansMap(lans)
+{
+	var result = {};
+	_.each(lans, function(lan, index)
+	{
+		result[lan] = index;
+	});
+
+	return result;
+}
+
+},{"../ast_tpl":5,"../ast_utils":6,"../options":19,"./lib/merge_translate_data":10,"debug":30,"escodegen":33,"lodash":95}],10:[function(require,module,exports){
+'use strict';
+
+var _		= require('lodash');
+var debug	= require('debug')('i18nc-core:i18n_func_merge_translate_data');
+
+
+module.exports = mergeTranslateData;
+
 /**
  * 合并各个来源的数据
  * 根据参数来确定打包到code的数据
  *
  * input: test/files/merge_translate_data.js
- * output: test/files/merge_translate_data_json.json
- *
- * 暴露接口仅测试使用
+ * output: test/files/output/merge_translate_data/merge_translate_data.json
  */
-exportsTest._mergeTranslateData = _mergeTranslateData;
-function _mergeTranslateData(mainData)
+function mergeTranslateData(mainData)
 {
 	// 先用一个不规范的数据保存，最后要把语言作为一级key处理
-	var result = {DEFAULTS: {}, SUBTYPES: {}};
+	var result = {LANS: [], DEFAULTS: {}, SUBTYPES: {}};
 	var codeTranslateWords = mainData.codeTranslateWords || {};
 	var FILE_KEY = mainData.FILE_KEY;
+	var lans = [];
 
 
 	_.each(_.uniq(codeTranslateWords.DEFAULTS), function(word)
 	{
-		result.DEFAULTS[word] = _getOneTypeListData('DEFAULTS', word, mainData, FILE_KEY);
+		var info = _getOneTypeListData('DEFAULTS', word, mainData, FILE_KEY);
+		lans = _.union(lans, info.lans);
+		result.DEFAULTS[word] = info.result;
 	});
 
 	_.each(codeTranslateWords.SUBTYPES, function(words, subtype)
@@ -1481,9 +1581,13 @@ function _mergeTranslateData(mainData)
 		var subresult = result.SUBTYPES[subtype] = {};
 		_.each(_.uniq(words), function(word)
 		{
-			subresult[word] = _getOneTypeListData('SUBTYPES', word, mainData, FILE_KEY, subtype);
+			var info = _getOneTypeListData('SUBTYPES', word, mainData, FILE_KEY, subtype);
+			lans = _.union(lans, info.lans);
+			subresult[word] = info.result;
 		});
 	});
+
+	result.LANS = lans;
 
 	return result;
 }
@@ -1580,83 +1684,166 @@ function _getOneTypeListData(maintype, word, mainData, FILE_KEY, subtype)
 		}
 	});
 
-	return result;
+	return {
+		lans: lans,
+		result: result,
+	};
 }
 
+},{"debug":30,"lodash":95}],11:[function(require,module,exports){
+'use strict';
 
+var _			= require('lodash');
+var debug		= require('debug')('i18nc-core:i18n_func_parse_json');
+var astUtils	= require('../../ast_utils');
+
+exports = module.exports = translateAst2JSON;
+
+
+/**
+ * 将__TRANSLATE_JSON__值的ast，解成json对象
+ */
+function translateAst2JSON(ast)
+{
+	var lans = [];
+	var translateJSON = {};
+	var translateLansMaxLen = 0;
+
+	ast.properties.forEach(function(translate_json_ast)
+	{
+		var key = astUtils.ast2constKey(translate_json_ast.key);
+		var value = translate_json_ast.value;
+		switch(key)
+		{
+			// 语言
+			case '$':
+				if (value.type != 'ArrayExpression')
+				{
+					throw new Error('LANGS KEY `$` ONLY MUST BE AN ARRAY');
+				}
+				lans = value.elements.map(astUtils.ast2constVal);
+				break;
+
+			// 翻译数据
+			case '*':
+			default:
+				if (value.type != 'ObjectExpression')
+				{
+					if (key == '*')
+						throw new Error('DEFAULT TRANSLATE JSON `*` MUST BE AN OBJECT');
+					else
+						throw new Error('SUBTYPE TRANSLATE JSON MUST BE AN OBJECT');
+				}
+				var lan_data = translateJSON[key] = {};
+				value.properties.forEach(function(ast)
+				{
+					var word = astUtils.ast2constKey(ast.key);
+					var val = ast.value;
+					if (val.type != 'ArrayExpression')
+					{
+						debug('translate target err, word:%s ast:%o', word, val);
+						throw new Error('TRANSLATE TARGET MUST BE AN ARRAY');
+					}
+
+					var targets = lan_data[word] = val.elements.map(function(ast)
+					{
+						// 如果是null，说明是这种写法 [,,,,1]
+						if (val == null) return undefined;
+						return astUtils.ast2constVal(ast);
+					});
+
+					translateLansMaxLen = Math.max(translateLansMaxLen, targets.length);
+				});
+		}
+
+	});
+
+	if (translateLansMaxLen > lans.length)
+	{
+		debug('lans max len:%s, lans:%o', translateLansMaxLen, lans);
+		throw new Error('LANGS OVERFLOW');
+	}
+
+
+	return _toLansJSON(lans, translateJSON);
+}
 
 
 
 /**
- * 将array表示的或关系转成ast表示
- *
- * 暴露接口仅测试使用
+ * 将新的数据结构转化成普通的以语言为分类的结构体
  */
-exportsTest._wordJson2ast = _wordJson2ast;
-function _wordJson2ast(words)
+function _toLansJSON(lans, translateJSON)
 {
-	if (!words) return;
-	var result = [];
-
-	// 翻译为空的时候，把这些words转化成注释
-	var emptyTranslateComments = [];
-
-	// 先对object进行排序，保证尽可能少触发svn变更
-	Object.keys(words).sort()
-		.forEach(function(val)
+	var result = {};
+	// 转数据结构，提速
+	var translateJSON2 = Object.keys(translateJSON)
+		.map(function(subtype)
 		{
-			var translateWord = words[val];
-			debug('wordJson2ast val:%s, translateWord:%o', val, translateWord);
-
-			if (translateWord === null)
-			{
-				// 使用escodegen.generate替换JSON.stringify
-				// JSON.stringify 会导致一些特殊字符不会encode，例如\u2029
-				var keyStr = escodegen.generate(astTpl.Literal(val), optionsUtils.escodegenOptions);
-				emptyTranslateComments.push(astTpl.LineComment(' '+keyStr+':'));
-				return;
-			}
-
-			var valAst = translateWord == ''
-				? astTpl.ArrayExpression([])
-				: astUtils.constVal2ast(translateWord);
-
-			var retAst = astTpl.Property(val, valAst);
-			result.push(retAst);
-
-
-			if (emptyTranslateComments.length)
-			{
-				retAst.leadingComments = emptyTranslateComments;
-				emptyTranslateComments = [];
-			}
+			return {
+				subtype: subtype,
+				items: _.map(translateJSON[subtype], function(values, word)
+					{
+						return {word: word, values: values};
+					})
+			};
 		});
 
-	if (emptyTranslateComments.length)
+	lans.forEach(function(lan, lanIndex)
 	{
-		if (!result.length)
+		var lan_data = result[lan] = {};
+
+		translateJSON2.forEach(function(subtypeItem)
 		{
-			var protoKey = astTpl.Property('', astUtils.constVal2ast(null));
-			astUtils.setAstFlag(protoKey, AST_FLAGS.PLACEHOLDER_WORDER);
-			result.push(protoKey);
-		}
+			if (subtypeItem.subtype == '*')
+			{
+				lan_data.DEFAULTS = _getSubtypeJSON(subtypeItem, lanIndex);
+			}
+			else
+			{
+				var SUBTYPES_data = lan_data.SUBTYPES || (lan_data.SUBTYPES = {});
+				SUBTYPES_data[subtypeItem.subtype] = _getSubtypeJSON(subtypeItem, lanIndex);
+			}
+		});
+	});
 
-		var lastItem = result[result.length-1];
-		lastItem.leadingComments = (lastItem.leadingComments || []).concat(emptyTranslateComments);
-	}
-
-	return astTpl.ObjectExpression(result);
+	return result;
 }
 
-},{"../ast_tpl":5,"../ast_utils":6,"../options":17,"debug":25,"escodegen":28,"lodash":90}],10:[function(require,module,exports){
+
+/**
+ * 从多个语言翻译结果合并的数组中，找到对应语言的翻译数据
+ * 是对一个语言包的一个subtype完整处理，不是单个词
+ */
+function _getSubtypeJSON(subtypeItem, lanIndex)
+{
+	var result = {};
+	_.each(subtypeItem.items, function(item)
+	{
+		var target = item.values[lanIndex];
+		if (target === undefined) return;
+
+		// 如果是数字，则进行一次转化
+		// 和i18n_func 中的逻辑保持一致，只转一次
+		if (typeof target == 'number') target = item.values[target];
+
+		if (target !== undefined) result[item.word] = target;
+	});
+
+	return result;
+}
+
+},{"../../ast_utils":6,"debug":30,"lodash":95}],12:[function(require,module,exports){
 'use strict';
 
 var _			= require('lodash');
 var debug		= require('debug')('i18nc-core:i18n_func_parser');
-var astUtils	= require('../ast_utils');
 var emitter		= require('../emitter');
 var escodegen	= require('escodegen');
-var exportsTest	= exports._test = {};
+var utils		= require('../utils/utils');
+
+var parseTranslateJSON		= require('./lib/parse_translate_json');
+var parseTranslateJSONv1	= require('../upgrade/i18n_func/parse_translate_json_v1');
 
 /**
  * 分析i18n函数，提取相关信息：
@@ -1674,8 +1861,10 @@ function paseI18nHandlerInfo(ast, options, result)
 {
 	if (!ast) return;
 
+	var isFirstDeep = false;
 	if (!result)
 	{
+		isFirstDeep = true;
 		// 第一次遍历，可以获取到函数名
 		result =
 		{
@@ -1763,22 +1952,6 @@ function paseI18nHandlerInfo(ast, options, result)
 				result[name+'ast'] = initVal;
 
 				if (result[name]) throw new Error(name+' IS DEFINED TWICE');
-
-				initVal.toI18NJSON = _translateAst2JSON;
-				// 接入外部插件
-				var emitData =
-				{
-					result		: undefined,
-					options		: options,
-					original	: initVal,
-				};
-				emitter.trigger('loadTranslateJSON', emitData);
-
-				result[name] = emitData.result === undefined
-					? initVal.toI18NJSON() : emitData.result;
-				// 删除toJSON，避免后续结果序列化有问题
-				delete initVal.toI18NJSON;
-
 				break;
 		}
 	}
@@ -1827,114 +2000,54 @@ function paseI18nHandlerInfo(ast, options, result)
 		}
 	}
 
-	return result;
-}
 
-
-/**
- * 将__TRANSLATE_JSON__值的ast，解成json对象
- */
-function _translateAst2JSON()
-{
-	var ast = this;
-	var result = {};
-
-	ast.properties.forEach(function(translate_json_ast)
+	// 由于json数据需要根据version判断使用不同的parser
+	// 所以移动到第一个迭代使用
+	if (isFirstDeep && result.__TRANSLATE_JSON__ast)
 	{
-		var lan = astUtils.ast2constVal(translate_json_ast.key);
-		var lan_data = result[lan] = {}
-
-		if (translate_json_ast.value.type != 'ObjectExpression')
+		var jsonAst = result.__TRANSLATE_JSON__ast;
+		var funcVersion = result.__FUNCTION_VERSION__;
+		jsonAst.toI18NJSON = function()
 		{
-			debug('translate json lan <%s> value is not object: %s', lan, translate_json_ast.value.type);
-			return;
-		}
+			// 从 G 版本，开始使用新的数据结构
+			var json = !funcVersion || !utils.ltI18NFuncVersion(funcVersion, 'G')
+				? parseTranslateJSON(this) : parseTranslateJSONv1(this);
 
-		translate_json_ast.value.properties.forEach(function(lan_ast)
+			return new I18NJSON(json);
+		};
+		// 接入外部插件
+		var emitData =
 		{
-			var key = astUtils.ast2constVal(lan_ast.key);
+			result		: undefined,
+			options		: options,
+			original	: jsonAst,
+		};
+		emitter.trigger('loadTranslateJSON', emitData);
 
-			// 正式解析翻译数据
-			switch(key)
-			{
-				case 'DEFAULTS':
-					debug('TranslateData JSON Key <%s> begin, lan:%', key, lan);
-					lan_data.DEFAULTS = _wordAst2json(lan_ast.value);
-					debug('TranslateData JSON Key <%s> end, lan:%', key, lan);
-					break;
-
-				case 'SUBTYPES':
-					var SUBTYPES_data = lan_data.SUBTYPES = {};
-
-					lan_ast.value.properties.forEach(function(subtype_ast)
-					{
-						var subkey = astUtils.ast2constVal(subtype_ast.key);
-						debug('TranslateData JSON Key <%s> begin, lan:%, subkey:%s', key, lan, subkey);
-						SUBTYPES_data[subkey] = _wordAst2json(subtype_ast.value);
-						debug('TranslateData JSON Key <%s> begin, lan:%, subkey:%s', key, lan, subkey);
-					});
-					break;
-
-				default:
-					debug('undefined TranslateData JSON Key: %s', key);
-
-			}
-		});
-
-	});
-
+		result.__TRANSLATE_JSON__ = emitData.result === undefined
+			? jsonAst.toI18NJSON().toJSON() : emitData.result;
+		// 删除toJSON，避免后续结果序列化有问题
+		delete jsonAst.toI18NJSON;
+	}
 
 	return result;
 }
 
 
-
-/**
- * 将ast转换成json数据
- *
- * 暴露接口仅测试使用
- */
-exportsTest._wordAst2json = _wordAst2json;
-function _wordAst2json(ast)
+function I18NJSON(data)
 {
-	var result = {};
-	ast.properties.forEach(function(proto_ast)
-	{
-		var name = astUtils.ast2constVal(proto_ast.key);
-		var val_ast = proto_ast.value;
-
-		if (result[name])
-		{
-			debug('subkey defined twice, %s', name);
-		}
-
-		switch(val_ast.type)
-		{
-			case 'Literal':
-				var val = astUtils.ast2constVal(val_ast);
-				if (val)
-					result[name] = val;
-				else
-					debug('result is empty <%s>:%s', name, val);
-				break;
-
-			case 'ArrayExpression':
-				if (val_ast.elements.length)
-				{
-					throw new Error('TRANSLATE DATA ONLY SUPPORT EMPTY ARRAY');
-				}
-				result[name] = '';
-				break;
-
-			default:
-				throw new Error('Error ast type for translate JSON');
-		}
-	});
-
-	return result;
+	this.data = data;
 }
 
-},{"../ast_utils":6,"../emitter":8,"debug":25,"escodegen":28,"lodash":90}],11:[function(require,module,exports){
+_.extend(I18NJSON.prototype,
+{
+	toJSON: function()
+	{
+		return this.data;
+	}
+});
+
+},{"../emitter":8,"../upgrade/i18n_func/parse_translate_json_v1":23,"../utils/utils":28,"./lib/parse_translate_json":11,"debug":30,"escodegen":33,"lodash":95}],13:[function(require,module,exports){
 'use strict';
 
 var esprima		= require('esprima');
@@ -2012,7 +2125,7 @@ exports.render = tpl2render(require('./tpl/full.js').toString());
 exports.renderSimple = tpl2render(require('./tpl/simple.js').toString());
 exports.renderGlobal = tpl2render(require('./tpl/global.js').toString());
 
-},{"./tpl/full.js":12,"./tpl/global.js":13,"./tpl/simple.js":14,"debug":25,"escodegen":28,"esmangle":35,"esprima":75}],12:[function(require,module,exports){
+},{"./tpl/full.js":14,"./tpl/global.js":15,"./tpl/simple.js":16,"debug":30,"escodegen":33,"esmangle":40,"esprima":80}],14:[function(require,module,exports){
 /* global $getLanguageCode $TRANSLATE_JSON_CODE */
 
 'use strict';
@@ -2020,22 +2133,19 @@ exports.renderGlobal = tpl2render(require('./tpl/global.js').toString());
 module.exports = function $handlerName(msg, tpldata, subtype)
 {
 	var self = $handlerName,
+		data = self.$ || (self.$ = {}),
 		translateJSON,
 		replace_index = 0,
-		lanArr, lanKeys, i, lanItem, translateMsg, subtypeJSON,
-		data = self.$ || (self.$ = {}),
+		lanIndexArr, i, lanIndex, msgResult, translateValues,
 		LAN = $getLanguageCode(data);
 
-	if (!tpldata || !tpldata.join)
-	{
+	if (!tpldata || !tpldata.join) {
 		subtype = tpldata;
 		tpldata = [];
 	}
 
-	if (LAN && LAN.split)
-	{
-		if (self.L != LAN)
-		{
+	if (LAN && LAN.split) {
+		if (self.L != LAN) {
 			// K: __FILE_KEY__
 			// V: __FUNCTION_VERSION__
 			// D: __TRANSLATE_JSON__
@@ -2044,52 +2154,50 @@ module.exports = function $handlerName(msg, tpldata, subtype)
 			self.D = $TRANSLATE_JSON_CODE;
 			// 很少遇到LAN切换，没必要为了低概率增加一个if
 			// if (!self.D) self.D = $TRANSLATE_JSON_CODE;
-
 			translateJSON = self.D;
-			lanKeys = LAN.split(',');
 
-			lanArr = self.M = [];
-			for(i = lanKeys.length; i--;)
-			{
-				lanItem = translateJSON[lanKeys[i]];
-				if (lanItem) lanArr.push(lanItem);
+			var dblans = translateJSON.$,
+				dblansMap = {},
+				lanKeys = LAN.split(',');
+			lanIndexArr = self.M = [];
+			for(i = dblans.length; i--;) dblansMap[dblans[i]] = i;
+			for(i = lanKeys.length; i--;) {
+				lanIndex = dblansMap[lanKeys[i]];
+				if (lanIndex || lanIndex === 0) lanIndexArr.push(lanIndex);
 			}
 			// 放到最后，防止前面代码出错，导致if逻辑被保存
 			self.L = LAN;
 		}
 
-		lanArr = self.M;
-		for(i = lanArr.length; !translateMsg && i--;)
-		{
-			lanItem = lanArr[i];
-			if (subtype)
-			{
-				subtypeJSON = lanItem.SUBTYPES;
-				subtypeJSON = subtypeJSON && subtypeJSON[subtype];
-				translateMsg = subtypeJSON && subtypeJSON[msg];
+		lanIndexArr = self.M;
+		translateJSON = self.D;
+		var _getVaule = function(subtype) {
+			translateValues = translateJSON[subtype] && translateJSON[subtype][msg];
+			if (translateValues) {
+				msgResult = translateValues[lanIndex];
+				if (typeof msgResult == 'number') msgResult = translateValues[msgResult];
 			}
-			if (!translateMsg)
-			{
-				subtypeJSON = lanItem.DEFAULTS;
-				translateMsg = subtypeJSON && subtypeJSON[msg];
-			}
+		};
+		for(i = lanIndexArr.length; !msgResult && i--;) {
+			lanIndex = lanIndexArr[i];
+			if (subtype) _getVaule(subtype);
+			if (!msgResult) _getVaule('*');
 		}
 
-		if (translateMsg) msg = translateMsg;
+		if (msgResult) msg = msgResult;
 	}
 
 	msg += '';
 	// 判断是否需要替换：不需要替换，直接返回
 	if (!tpldata.length || msg.indexOf('%') == -1) return msg;
 
-	return msg.replace(/%s|%\{.+?\}/g, function(all)
-	{
+	return msg.replace(/%s|%\{.+?\}/g, function(all) {
 		var newVal = tpldata[replace_index++];
 		return newVal === undefined ? all : newVal === null ? '' : newVal;
 	});
 }
 
-},{}],13:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 /* global $globalHandlerName $TRANSLATE_JSON_CODE */
 
 'use strict';
@@ -2099,8 +2207,7 @@ module.exports = function $handlerName(msg)
 	var self = $handlerName;
 	var data = self.$;
 
-	if (!data)
-	{
+	if (!data) {
 		data = self.$ = {};
 		// K: __FILE_KEY__
 		// V: __FUNCTION_VERSION__
@@ -2113,7 +2220,7 @@ module.exports = function $handlerName(msg)
 	return ''+$globalHandlerName(msg, arguments, self.D, self.K, data, self);
 }
 
-},{}],14:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 'use strict';
 
 module.exports = function $handlerName(msg, tpldata)
@@ -2129,14 +2236,13 @@ module.exports = function $handlerName(msg, tpldata)
 	self.V = '$FUNCTION_VERSION';
 
 	var replace_index = 0;
-	return msg.replace(/%s|%\{.+?\}/g, function(all)
-	{
+	return msg.replace(/%s|%\{.+?\}/g, function(all) {
 		var newVal = tpldata[replace_index++];
 		return newVal === undefined ? all : newVal === null ? '' : newVal;
 	});
 }
 
-},{}],15:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 'use strict';
 
 var _				= require('lodash');
@@ -2147,6 +2253,8 @@ var astUtils		= require('./ast_utils');
 var i18nTpl			= require('./i18n_func/render');
 var i18nParser		= require('./i18n_func/parser');
 var i18nGenerator	= require('./i18n_func/generator');
+var i18nGeneratorV1	= require('./upgrade/i18n_func/generator_v1');
+var utils			= require('./utils/utils');
 var LanguageVarsReg	= /\$LanguageVars\.([\w$]+)\$/g;
 
 exports.I18NPlaceholder = I18NPlaceholder;
@@ -2316,7 +2424,16 @@ _.extend(I18NPlaceholder.prototype,
 	},
 	getTranslateJSON: function()
 	{
-		return i18nGenerator.getTranslateJSON(this._getTranslateJSONArgs());
+		return this._getI18NGenerator()
+			.getTranslateJSON(this._getTranslateJSONArgs());
+	},
+	_getI18NGenerator: function()
+	{
+		var funcInfo = this.parse();
+		var funcVersion = funcInfo.__FUNCTION_VERSION__;
+
+		return !funcVersion || !utils.ltI18NFuncVersion(funcVersion, 'G')
+			? i18nGenerator : i18nGeneratorV1;
 	},
 	_getRenderTranslateJSONCode: function()
 	{
@@ -2367,15 +2484,16 @@ _.extend(I18NPlaceholder.prototype,
 	{
 		var options = this.options;
 		var translateJSON = this.getTranslateJSON();
+		var myI18NGenerator = this._getI18NGenerator();
 		if (options.I18NHandler.style.comment4nowords)
 		{
-			i18nGenerator.fillNoUsedCodeTranslateWords(
+			myI18NGenerator.fillNoUsedCodeTranslateWords(
 				translateJSON,
 				this.codeTranslateWords,
 				options.I18NHandler.data.defaultLanguage
 			);
 		}
-		var translateJSONCode = i18nGenerator.genTranslateJSONCode(translateJSON);
+		var translateJSONCode = myI18NGenerator.genTranslateJSONCode(translateJSON);
 
 		var emitData =
 		{
@@ -2561,7 +2679,7 @@ _.extend(I18NPlaceholder.prototype,
 	}
 });
 
-},{"./ast_utils":6,"./def":7,"./emitter":8,"./i18n_func/generator":9,"./i18n_func/parser":10,"./i18n_func/render":11,"debug":25,"lodash":90}],16:[function(require,module,exports){
+},{"./ast_utils":6,"./def":7,"./emitter":8,"./i18n_func/generator":9,"./i18n_func/parser":12,"./i18n_func/render":13,"./upgrade/i18n_func/generator_v1":22,"./utils/utils":28,"debug":30,"lodash":95}],18:[function(require,module,exports){
 'use strict';
 
 var emitter			= require('./emitter');
@@ -2618,7 +2736,7 @@ function mainHandler(code, options)
 	return result;
 }
 
-},{"./ast_collector":2,"./ast_utils":6,"./emitter":8,"./options":17}],17:[function(require,module,exports){
+},{"./ast_collector":2,"./ast_utils":6,"./emitter":8,"./options":19}],19:[function(require,module,exports){
 /* eslint-disable no-control-regex */
 
 'use strict';
@@ -2701,13 +2819,6 @@ exports.defaults =
 			 * @type {String}
 			 */
 			defaultFileKey: '*',
-			/**
-			 * 当没有找到任何语言包 & 启动了comment4nowords, 使用这个语言，作为代码中的语言包
-			 * 由于没有任何实际数据，对代码结果无影响
-			 *
-			 * @type {String}
-			 */
-			defaultLanguage: 'en-US',
 			/**
 			 * 只打包这个列表的语言包到代码中
 			 *
@@ -3049,7 +3160,7 @@ exports.extend = function(obj)
 	return utils.extend(exports.defaults, obj);
 };
 
-},{"./upgrade/tpl/getlanguagecode_handler":21,"./utils/options_utils":22}],18:[function(require,module,exports){
+},{"./upgrade/tpl/getlanguagecode_handler":25,"./utils/options_utils":26}],20:[function(require,module,exports){
 'use strict';
 
 var _				= require('lodash');
@@ -3597,7 +3708,7 @@ _.extend(CodeInfoResult.prototype,
 	},
 });
 
-},{"./ast_utils":6,"./options":17,"debug":25,"escodegen":28,"extend":89,"lodash":90}],19:[function(require,module,exports){
+},{"./ast_utils":6,"./options":19,"debug":30,"escodegen":33,"extend":94,"lodash":95}],21:[function(require,module,exports){
 'use strict';
 
 var _ = require('lodash');
@@ -3605,7 +3716,7 @@ var deprecate = require('depd')('i18nc-core:options');
 var GetLanguageCodeDepd = require('./tpl/depd_getlanguagecode_handler').toString();
 var valUtils = require('../utils/options_vals.js');
 var OptionsVals = valUtils.OptionsVals;
-exports = module.exports = main;
+
 
 var OPTIONS_RENAME_MAP = exports.OPTIONS_RENAME_MAP =
 {
@@ -3613,7 +3724,7 @@ var OPTIONS_RENAME_MAP = exports.OPTIONS_RENAME_MAP =
 	handlerName: 'I18NHandlerName',
 
 	defaultFileKey: 'I18NHandler.data.defaultFileKey',
-	defaultTranslateLanguage: 'I18NHandler.data.defaultLanguage',
+	// defaultTranslateLanguage: 'I18NHandler.data.defaultLanguage',
 	pickFileLanguages: 'I18NHandler.data.onlyTheseLanguages',
 	isIgnoreI18NHandlerTranslateWords: 'I18NHandler.data.ignoreFuncWords',
 
@@ -3778,22 +3889,436 @@ function rename_1toN(optionsVals)
 	});
 }
 
+var OPTIONS_RM_KEYS =
+{
+	/**
+	 * 当没有找到任何语言包 & 启动了comment4nowords, 使用这个语言，作为代码中的语言包
+	 * 由于没有任何实际数据，对代码结果无影响
+	 *
+	 * @type {String}
+	 */
+	'I18NHandler.data.defaultLanguage': 'en-US',
+};
 
-function main(options)
+function rmkeys(optionsVals)
+{
+	_.each(OPTIONS_RM_KEYS, function(defaultVal, key)
+	{
+		switch(key)
+		{
+			case 'I18NHandler.data.defaultLanguage':
+				if (optionsVals.exists(key))
+				{
+					deprecate('`'+key+'` will be removed');
+				}
+				else if (optionsVals.exists('defaultTranslateLanguage'))
+				{
+					deprecate('`defaultTranslateLanguage` will be removed');
+					optionsVals.setVal(key, optionsVals.getVal('defaultTranslateLanguage'));
+				}
+				else
+				{
+					optionsVals.setVal(key, defaultVal);
+				}
+				break;
+
+			default:
+				if (optionsVals.exists(key))
+					deprecate('`'+key+'` will be removed');
+				else
+					optionsVals.setVal(key, defaultVal);
+		}
+	});
+}
+
+exports.before = function(options)
 {
 	var optionsVals = new OptionsVals(options);
 	rename_1toN(optionsVals);
 	rename_1to1(optionsVals);
 }
 
-},{"../utils/options_vals.js":23,"./tpl/depd_getlanguagecode_handler":20,"depd":27,"lodash":90}],20:[function(require,module,exports){
+exports.after = function(result)
+{
+	var resultVals = new OptionsVals(result);
+	rmkeys(resultVals);
+};
+
+},{"../utils/options_vals.js":27,"./tpl/depd_getlanguagecode_handler":24,"depd":32,"lodash":95}],22:[function(require,module,exports){
+'use strict';
+
+var _					= require('lodash');
+var debug				= require('debug')('i18nc-core:i18n_func_generator_v1');
+var escodegen			= require('escodegen');
+var astTpl				= require('../../ast_tpl');
+var astUtils			= require('../../ast_utils');
+var optionsUtils		= require('../../options');
+var AST_FLAGS			= astUtils.AST_FLAGS;
+var exportsTest			= exports._test = {};
+var mergeTranslateData	= require('../../i18n_func/lib/merge_translate_data');
+
+/**
+ * 获取使用的翻译数据
+ *
+ * input: test/files/merge_translate_data.js
+ * output: test/files/output/i18n_func_generator_v1/merge_translate_data_output.json
+ */
+exports.getTranslateJSON = getTranslateJSON;
+function getTranslateJSON(data)
+{
+	var result = mergeTranslateData(data);
+	result = _to_TRANSLATE_DATA_fromat(result);
+
+	return result;
+}
+
+/**
+ * 没有翻译的，生成注释
+ */
+exports.fillNoUsedCodeTranslateWords = fillNoUsedCodeTranslateWords;
+function fillNoUsedCodeTranslateWords(translateDataJSON, codeTranslateWords, defaultLanguage)
+{
+	var lans = Object.keys(translateDataJSON);
+	if (!lans.length) lans = [defaultLanguage];
+
+	var DEFAULTS_WORDS = _.uniq(codeTranslateWords.DEFAULTS);
+	if (DEFAULTS_WORDS.length)
+	{
+		lans.forEach(function(lan)
+		{
+			var lanItem = translateDataJSON[lan] || (translateDataJSON[lan] = {});
+			var result = lanItem.DEFAULTS || (lanItem.DEFAULTS = {});
+			_.each(DEFAULTS_WORDS, function(word)
+			{
+				if (!result[word]) result[word] = null;
+			});
+		});
+	}
+
+	_.each(codeTranslateWords.SUBTYPES, function(subtype_words, subtype)
+	{
+		var SUBTYPE_WORDS = _.uniq(subtype_words);
+		if (!SUBTYPE_WORDS.length) return;
+
+		lans.forEach(function(lan)
+		{
+			var lanItem = translateDataJSON[lan] || (translateDataJSON[lan] = {});
+			lanItem = lanItem.SUBTYPES || (lanItem.SUBTYPES = {});
+			var result = lanItem[subtype] || (lanItem[subtype] = {});
+
+			_.each(SUBTYPE_WORDS, function(word)
+			{
+				if (!result[word]) result[word] = null;
+			});
+		});
+	});
+}
+
+
+/**
+ * 结果转code
+ */
+exports.genTranslateJSONCode = genTranslateJSONCode;
+function genTranslateJSONCode(translateData)
+{
+	debug('translateData:%o', translateData);
+
+	var ast = _translateJSON2ast(translateData);
+	if (ast)
+	{
+		var code = escodegen.generate(ast, optionsUtils.escodegenOptions);
+		code = code.replace(/,?\s*(['"])\1 *: *null/g, '');
+		return code;
+	}
+	else
+	{
+		return '{}';
+	}
+}
+
+
+/**
+ * 将TRANSLATE_DATA数据，转成ast表示
+ *
+ * input: _to_TRANSLATE_DATA_fromat  运行结果
+ * output: test/files/output/i18n_func_generator_v1/merge_translate_data_output.json
+ *
+ * 对数据进行重新编排
+ */
+exportsTest._translateJSON2ast = _translateJSON2ast;
+function _translateJSON2ast(mainData)
+{
+	var resultPropertiesAst = [];
+
+	_.each(Object.keys(mainData).sort(), function(lan)
+	{
+		var translateData = mainData[lan];
+		var lanPropertiesAst = [];
+
+		// 处理DEFAULTS
+		var tmp = _wordJson2ast(translateData.DEFAULTS);
+		if (tmp)
+		{
+			lanPropertiesAst.push(astTpl.Property('DEFAULTS', tmp));
+		}
+
+
+		// 处理 SUBTYPES
+		if (translateData.SUBTYPES)
+		{
+			var tmpSubtypesPropertiesAst = _.map(Object.keys(translateData.SUBTYPES).sort(), function(subtype)
+				{
+					var tmp = _wordJson2ast(translateData.SUBTYPES[subtype]);
+					if (!tmp) return;
+
+					return astTpl.Property(subtype, tmp);
+				})
+				.filter(function(val)
+				{
+					return val;
+				});
+
+			if (tmpSubtypesPropertiesAst.length)
+			{
+				lanPropertiesAst.push(astTpl.Property('SUBTYPES', astTpl.ObjectExpression(tmpSubtypesPropertiesAst)));
+			}
+		}
+
+		if (lanPropertiesAst.length)
+		{
+			resultPropertiesAst.push(astTpl.Property(lan, astTpl.ObjectExpression(lanPropertiesAst)));
+		}
+	});
+
+
+	if (resultPropertiesAst.length)
+	{
+		return astTpl.ObjectExpression(resultPropertiesAst);
+	}
+}
+
+
+/**
+ * 对mergeTranslateData的结果数据进行重新编排
+ * 生成TRANSLATE_DATA的数据格式
+ *
+ * input: mergeTranslateData  运行结果
+ * output: test/files/output/i18n_func_generator_v1/merge_translate_data_output.json
+ */
+exportsTest._to_TRANSLATE_DATA_fromat = _to_TRANSLATE_DATA_fromat;
+function _to_TRANSLATE_DATA_fromat(data)
+{
+	var result = {};
+	_.each(data.DEFAULTS, function(lanData, word)
+	{
+		_.each(lanData, function(translateData, lan)
+		{
+			var lanObj = result[lan] || (result[lan] = {});
+			var wordObj = lanObj.DEFAULTS || (lanObj.DEFAULTS = {});
+
+			wordObj[word] = translateData;
+		});
+	});
+
+	_.each(data.SUBTYPES, function(item, subtype)
+	{
+		_.each(item, function(lanData, word)
+		{
+			_.each(lanData, function(translateData, lan)
+			{
+				var lanObj = result[lan] || (result[lan] = {});
+				var subtypeObj = lanObj.SUBTYPES || (lanObj.SUBTYPES = {});
+				var wordObj = subtypeObj[subtype] || (subtypeObj[subtype] = {});
+
+				wordObj[word] = translateData;
+			});
+		});
+	});
+
+	return result;
+}
+
+
+
+
+
+/**
+ * 将array表示的或关系转成ast表示
+ */
+exportsTest._wordJson2ast = _wordJson2ast;
+function _wordJson2ast(words)
+{
+	if (!words) return;
+	var result = [];
+
+	// 翻译为空的时候，把这些words转化成注释
+	var emptyTranslateComments = [];
+
+	// 先对object进行排序，保证尽可能少触发svn变更
+	Object.keys(words).sort()
+		.forEach(function(val)
+		{
+			var translateWord = words[val];
+			debug('wordJson2ast val:%s, translateWord:%o', val, translateWord);
+
+			if (translateWord === null)
+			{
+				// 使用escodegen.generate替换JSON.stringify
+				// JSON.stringify 会导致一些特殊字符不会encode，例如\u2029
+				var keyStr = escodegen.generate(astTpl.Literal(val), optionsUtils.escodegenOptions);
+				emptyTranslateComments.push(astTpl.LineComment(' '+keyStr+':'));
+				return;
+			}
+
+			var valAst = translateWord == ''
+				? astTpl.ArrayExpression([])
+				: astUtils.constVal2ast(translateWord);
+
+			var retAst = astTpl.Property(val, valAst);
+			result.push(retAst);
+
+
+			if (emptyTranslateComments.length)
+			{
+				retAst.leadingComments = emptyTranslateComments;
+				emptyTranslateComments = [];
+			}
+		});
+
+	if (emptyTranslateComments.length)
+	{
+		if (!result.length)
+		{
+			var protoKey = astTpl.Property('', astUtils.constVal2ast(null));
+			astUtils.setAstFlag(protoKey, AST_FLAGS.PLACEHOLDER_WORDER);
+			result.push(protoKey);
+		}
+
+		var lastItem = result[result.length-1];
+		lastItem.leadingComments = (lastItem.leadingComments || []).concat(emptyTranslateComments);
+	}
+
+	return astTpl.ObjectExpression(result);
+}
+
+},{"../../ast_tpl":5,"../../ast_utils":6,"../../i18n_func/lib/merge_translate_data":10,"../../options":19,"debug":30,"escodegen":33,"lodash":95}],23:[function(require,module,exports){
+'use strict';
+
+var debug		= require('debug')('i18nc-core:i18n_func_parse_json');
+var astUtils	= require('../../ast_utils');
+
+exports = module.exports = translateAst2JSON;
+
+
+/**
+ * 将__TRANSLATE_JSON__值的ast，解成json对象
+ */
+function translateAst2JSON(ast)
+{
+	var result = {};
+
+	ast.properties.forEach(function(translate_json_ast)
+	{
+		var lan = astUtils.ast2constKey(translate_json_ast.key);
+		var lan_data = result[lan] = {}
+
+		if (translate_json_ast.value.type != 'ObjectExpression')
+		{
+			debug('translate json lan <%s> value is not object: %s', lan, translate_json_ast.value.type);
+			return;
+		}
+
+		translate_json_ast.value.properties.forEach(function(lan_ast)
+		{
+			var key = astUtils.ast2constKey(lan_ast.key);
+
+			// 正式解析翻译数据
+			switch(key)
+			{
+				case 'DEFAULTS':
+					debug('TranslateData JSON Key <%s> begin, lan:%', key, lan);
+					lan_data.DEFAULTS = _wordAst2json(lan_ast.value);
+					debug('TranslateData JSON Key <%s> end, lan:%', key, lan);
+					break;
+
+				case 'SUBTYPES':
+					var SUBTYPES_data = lan_data.SUBTYPES = {};
+
+					lan_ast.value.properties.forEach(function(subtype_ast)
+					{
+						var subkey = astUtils.ast2constVal(subtype_ast.key);
+						debug('TranslateData JSON Key <%s> begin, lan:%, subkey:%s', key, lan, subkey);
+						SUBTYPES_data[subkey] = _wordAst2json(subtype_ast.value);
+						debug('TranslateData JSON Key <%s> begin, lan:%, subkey:%s', key, lan, subkey);
+					});
+					break;
+
+				default:
+					debug('undefined TranslateData JSON Key: %s', key);
+
+			}
+		});
+
+	});
+
+
+	return result;
+}
+
+
+
+/**
+ * 将ast转换成json数据
+ *
+ * 暴露接口仅测试使用
+ */
+exports._wordAst2json = _wordAst2json;
+function _wordAst2json(ast)
+{
+	var result = {};
+	ast.properties.forEach(function(proto_ast)
+	{
+		var name = astUtils.ast2constVal(proto_ast.key);
+		var val_ast = proto_ast.value;
+
+		if (result[name])
+		{
+			debug('subkey defined twice, %s', name);
+		}
+
+		switch(val_ast.type)
+		{
+			case 'Literal':
+				var val = astUtils.ast2constVal(val_ast);
+				if (val)
+					result[name] = val;
+				else
+					debug('result is empty <%s>:%s', name, val);
+				break;
+
+			case 'ArrayExpression':
+				if (val_ast.elements.length)
+				{
+					throw new Error('TRANSLATE DATA ONLY SUPPORT EMPTY ARRAY');
+				}
+				result[name] = '';
+				break;
+
+			default:
+				throw new Error('Error ast type for translate JSON');
+		}
+	});
+
+	return result;
+}
+
+},{"../../ast_utils":6,"debug":30}],24:[function(require,module,exports){
 /* global $GetLanguageCode */
 
 'use strict';
 
 
-module.exports = function GetLanguageCodeHandler(cache)
-{
+module.exports = function GetLanguageCodeHandler(cache) {
 	var g = cache.g || (cache.g = $GetLanguageCode);
 	return g.$LanguageVars.name$;
 }
@@ -3811,17 +4336,15 @@ module.exports = function GetLanguageCodeHandler(cache)
 // 	};
 // }
 
-},{}],21:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 (function (global){
 /* global window */
 
 'use strict';
 
 
-module.exports = function GetLanguageCodeHandler(cache)
-{
-	if (!cache.global)
-	{
+module.exports = function GetLanguageCodeHandler(cache) {
+	if (!cache.global) {
 		cache.global = (typeof window == 'object' && window)
 			|| (typeof global == 'object' && global)
 			|| {};
@@ -3844,7 +4367,7 @@ module.exports = function GetLanguageCodeHandler(cache)
 // }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],22:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 'use strict';
 
 var _ = require('lodash');
@@ -3877,11 +4400,10 @@ var LINK_VALUES = exports.LINK_VALUES =
 exports.extend = function(defaults, originalOptions)
 {
 	defaults = extend(true, {}, defaults);
-	if (!originalOptions) return defaults;
 	var options = extend(true, {}, originalOptions);
-
-	if (options.depdEnable !== false) depdOptions(options);
+	if (options.depdEnable !== false) depdOptions.before(options);
 	var result = _extendDefault(defaults, options);
+	depdOptions.after(result);
 
 	// for emitter
 	// 回调的时候，可能会带有额外的参数，保留这份
@@ -4071,7 +4593,12 @@ function _extendDefault(defaults, object)
 	return result;
 }
 
-},{"../upgrade/depd_options":19,"./options_vals.js":23,"debug":25,"extend":89,"lodash":90}],23:[function(require,module,exports){
+},{"../upgrade/depd_options":21,"./options_vals.js":27,"debug":30,"extend":94,"lodash":95}],27:[function(require,module,exports){
+/**
+ * 针对options，提供快速获取key和值的接口
+ * 例如 options.getVal('I18NHandler.style.codeStyle');
+ */
+
 'use strict';
 
 var _ = require('lodash');
@@ -4201,7 +4728,19 @@ function str2keyVal(key)
 	return ret;
 }
 
-},{"debug":25,"lodash":90}],24:[function(require,module,exports){
+},{"debug":30,"lodash":95}],28:[function(require,module,exports){
+'use strict';
+
+
+// 判断两个版本号，是否是小于关系
+// 由于一开始做的版本，先使用了小写字母，导致charCode转化有问题
+// 这里先转成大写进行判断，等到后面大写用完之后，再去掉toUpperCase
+exports.ltI18NFuncVersion = function(a, b)
+{
+	return a.toUpperCase().charCodeAt(0) < b.toUpperCase().charCodeAt(0);
+};
+
+},{}],29:[function(require,module,exports){
 'use strict';
 
 var debug			= require('debug')('i18nc-core:words_utils');
@@ -4302,7 +4841,7 @@ function getTranslateWordsFromLineStrings(lineStrings)
 	return translateWords;
 }
 
-},{"../emitter":8,"debug":25}],25:[function(require,module,exports){
+},{"../emitter":8,"debug":30}],30:[function(require,module,exports){
 (function (process){
 /* eslint-env browser */
 
@@ -4570,7 +5109,7 @@ formatters.j = function (v) {
 };
 
 }).call(this,require('_process'))
-},{"./common":26,"_process":92}],26:[function(require,module,exports){
+},{"./common":31,"_process":97}],31:[function(require,module,exports){
 
 /**
  * This is the common logic for both the Node.js and web browser
@@ -4817,7 +5356,7 @@ function setup(env) {
 
 module.exports = setup;
 
-},{"ms":91}],27:[function(require,module,exports){
+},{"ms":96}],32:[function(require,module,exports){
 /*!
  * depd
  * Copyright(c) 2015 Douglas Christopher Wilson
@@ -4896,7 +5435,7 @@ function wrapproperty (obj, prop, message) {
   }
 }
 
-},{}],28:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 (function (global){
 /*
   Copyright (C) 2012-2014 Yusuke Suzuki <utatane.tea@gmail.com>
@@ -7503,7 +8042,7 @@ function wrapproperty (obj, prop, message) {
 /* vim: set sw=4 ts=4 et tw=80 : */
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./package.json":29,"estraverse":82,"esutils":87,"source-map":103}],29:[function(require,module,exports){
+},{"./package.json":34,"estraverse":87,"esutils":92,"source-map":108}],34:[function(require,module,exports){
 module.exports={
   "_from": "escodegen@^1.11.0",
   "_id": "escodegen@1.11.0",
@@ -7596,7 +8135,7 @@ module.exports={
   "version": "1.11.0"
 }
 
-},{}],30:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
   Copyright (C) 2013 Alex Seville <hi@alexanderseville.com>
@@ -8720,7 +9259,7 @@ module.exports={
 }, this));
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"estraverse":31}],31:[function(require,module,exports){
+},{"estraverse":36}],36:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
   Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com>
@@ -9561,7 +10100,7 @@ module.exports={
 }(exports));
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./package.json":32}],32:[function(require,module,exports){
+},{"./package.json":37}],37:[function(require,module,exports){
 module.exports={
   "_from": "estraverse@^2.0.0",
   "_id": "estraverse@2.0.0",
@@ -9635,7 +10174,7 @@ module.exports={
   "version": "2.0.0"
 }
 
-},{}],33:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -9804,7 +10343,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./common":34}],34:[function(require,module,exports){
+},{"./common":39}],39:[function(require,module,exports){
 /*
   Copyright (C) 2012 Yusuke Suzuki <utatane.tea@gmail.com>
   Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com>
@@ -10274,7 +10813,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"escope":30,"estraverse":70,"esutils":73}],35:[function(require,module,exports){
+},{"escope":35,"estraverse":75,"esutils":78}],40:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -10464,7 +11003,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../package.json":74,"./annotate-directive":33,"./common":34,"./options":38,"./pass":39,"esshorten":76}],36:[function(require,module,exports){
+},{"../package.json":79,"./annotate-directive":38,"./common":39,"./options":43,"./pass":44,"esshorten":81}],41:[function(require,module,exports){
 /*
   Copyright (C) 2012 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -10830,7 +11369,7 @@ module.exports={
     exports.booleanCondition = booleanCondition;
 }());
 
-},{"./common":34}],37:[function(require,module,exports){
+},{"./common":39}],42:[function(require,module,exports){
 (function (global){
 /*
   Copyright (C) 2012 Yusuke Suzuki <utatane.tea@gmail.com>
@@ -10945,7 +11484,7 @@ module.exports={
 /* vim: set sw=4 ts=4 et tw=80 : */
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],38:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -11036,7 +11575,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./common":34}],39:[function(require,module,exports){
+},{"./common":39}],44:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -11148,7 +11687,7 @@ module.exports={
     ];
 }());
 
-},{"./common":34,"./pass/concatenate-variable-definition":40,"./pass/dead-code-elimination":41,"./pass/drop-variable-definition":42,"./pass/eliminate-duplicate-function-declarations":43,"./pass/hoist-variable-to-arguments":44,"./pass/reduce-branch-jump":45,"./pass/reduce-multiple-if-statements":46,"./pass/reduce-sequence-expression":47,"./pass/remove-context-sensitive-expressions":48,"./pass/remove-empty-statement":49,"./pass/remove-side-effect-free-expressions":50,"./pass/remove-unreachable-branch":51,"./pass/remove-unused-label":52,"./pass/remove-wasted-blocks":53,"./pass/reordering-function-declarations":54,"./pass/transform-branch-to-expression":55,"./pass/transform-dynamic-to-static-property-access":56,"./pass/transform-dynamic-to-static-property-definition":57,"./pass/transform-immediate-function-call":58,"./pass/transform-logical-association":59,"./pass/transform-to-compound-assignment":60,"./pass/transform-to-sequence-expression":61,"./pass/transform-typeof-undefined":62,"./pass/tree-based-constant-folding":63,"./post/omit-parens-in-void-context-iife":64,"./post/rewrite-boolean":65,"./post/rewrite-conditional-expression":66,"./post/transform-infinity":67,"./post/transform-static-to-dynamic-property-access":68,"./query":69}],40:[function(require,module,exports){
+},{"./common":39,"./pass/concatenate-variable-definition":45,"./pass/dead-code-elimination":46,"./pass/drop-variable-definition":47,"./pass/eliminate-duplicate-function-declarations":48,"./pass/hoist-variable-to-arguments":49,"./pass/reduce-branch-jump":50,"./pass/reduce-multiple-if-statements":51,"./pass/reduce-sequence-expression":52,"./pass/remove-context-sensitive-expressions":53,"./pass/remove-empty-statement":54,"./pass/remove-side-effect-free-expressions":55,"./pass/remove-unreachable-branch":56,"./pass/remove-unused-label":57,"./pass/remove-wasted-blocks":58,"./pass/reordering-function-declarations":59,"./pass/transform-branch-to-expression":60,"./pass/transform-dynamic-to-static-property-access":61,"./pass/transform-dynamic-to-static-property-definition":62,"./pass/transform-immediate-function-call":63,"./pass/transform-logical-association":64,"./pass/transform-to-compound-assignment":65,"./pass/transform-to-sequence-expression":66,"./pass/transform-typeof-undefined":67,"./pass/tree-based-constant-folding":68,"./post/omit-parens-in-void-context-iife":69,"./post/rewrite-boolean":70,"./post/rewrite-conditional-expression":71,"./post/transform-infinity":72,"./post/transform-static-to-dynamic-property-access":73,"./query":74}],45:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -11237,7 +11776,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":34}],41:[function(require,module,exports){
+},{"../common":39}],46:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -11799,7 +12338,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":34}],42:[function(require,module,exports){
+},{"../common":39}],47:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -12027,7 +12566,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":34,"../evaluator":36,"escope":30}],43:[function(require,module,exports){
+},{"../common":39,"../evaluator":41,"escope":35}],48:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -12190,7 +12729,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":34,"../map":37}],44:[function(require,module,exports){
+},{"../common":39,"../map":42}],49:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -12374,7 +12913,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":34,"escope":30}],45:[function(require,module,exports){
+},{"../common":39,"escope":35}],50:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -12545,7 +13084,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":34}],46:[function(require,module,exports){
+},{"../common":39}],51:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -12624,7 +13163,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":34}],47:[function(require,module,exports){
+},{"../common":39}],52:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -12818,7 +13357,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":34,"../evaluator":36,"escope":30}],48:[function(require,module,exports){
+},{"../common":39,"../evaluator":41,"escope":35}],53:[function(require,module,exports){
 /*
   Copyright (C) 2012 Mihai Bazon <mihai.bazon@gmail.com>
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
@@ -13179,7 +13718,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":34,"../evaluator":36,"escope":30}],49:[function(require,module,exports){
+},{"../common":39,"../evaluator":41,"escope":35}],54:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -13295,7 +13834,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":34}],50:[function(require,module,exports){
+},{"../common":39}],55:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -13454,7 +13993,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":34,"../evaluator":36,"escope":30}],51:[function(require,module,exports){
+},{"../common":39,"../evaluator":41,"escope":35}],56:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -13652,7 +14191,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":34,"../evaluator":36,"escope":30}],52:[function(require,module,exports){
+},{"../common":39,"../evaluator":41,"escope":35}],57:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -13782,7 +14321,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":34,"../map":37}],53:[function(require,module,exports){
+},{"../common":39,"../map":42}],58:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -13896,7 +14435,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":34}],54:[function(require,module,exports){
+},{"../common":39}],59:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -13985,7 +14524,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":34}],55:[function(require,module,exports){
+},{"../common":39}],60:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -14133,7 +14672,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":34}],56:[function(require,module,exports){
+},{"../common":39}],61:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -14209,7 +14748,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":34}],57:[function(require,module,exports){
+},{"../common":39}],62:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -14289,7 +14828,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":34}],58:[function(require,module,exports){
+},{"../common":39}],63:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -14397,7 +14936,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":34}],59:[function(require,module,exports){
+},{"../common":39}],64:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -14470,7 +15009,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":34}],60:[function(require,module,exports){
+},{"../common":39}],65:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -14607,7 +15146,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":34,"escope":30}],61:[function(require,module,exports){
+},{"../common":39,"escope":35}],66:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -14753,7 +15292,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":34}],62:[function(require,module,exports){
+},{"../common":39}],67:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -14854,7 +15393,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":34,"escope":30}],63:[function(require,module,exports){
+},{"../common":39,"escope":35}],68:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -15050,7 +15589,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":34,"../evaluator":36}],64:[function(require,module,exports){
+},{"../common":39,"../evaluator":41}],69:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -15154,7 +15693,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":34}],65:[function(require,module,exports){
+},{"../common":39}],70:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -15250,7 +15789,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":34}],66:[function(require,module,exports){
+},{"../common":39}],71:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -15324,7 +15863,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":34}],67:[function(require,module,exports){
+},{"../common":39}],72:[function(require,module,exports){
 /*
   Copyright (C) 2012 Michael Ficarra <esmangle.copyright@michael.ficarra.me>
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
@@ -15394,7 +15933,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":34}],68:[function(require,module,exports){
+},{"../common":39}],73:[function(require,module,exports){
 /*
   Copyright (C) 2012 Michael Ficarra <esmangle.copyright@michael.ficarra.me>
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
@@ -15490,7 +16029,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":34}],69:[function(require,module,exports){
+},{"../common":39}],74:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -15548,7 +16087,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./common":34}],70:[function(require,module,exports){
+},{"./common":39}],75:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
   Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com>
@@ -16239,7 +16778,7 @@ module.exports={
 }));
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{}],71:[function(require,module,exports){
+},{}],76:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -16331,7 +16870,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{}],72:[function(require,module,exports){
+},{}],77:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -16450,7 +16989,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./code":71}],73:[function(require,module,exports){
+},{"./code":76}],78:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -16484,7 +17023,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./code":71,"./keyword":72}],74:[function(require,module,exports){
+},{"./code":76,"./keyword":77}],79:[function(require,module,exports){
 module.exports={
   "_from": "esmangle@^1.0.1",
   "_id": "esmangle@1.0.1",
@@ -16584,7 +17123,7 @@ module.exports={
   "version": "1.0.1"
 }
 
-},{}],75:[function(require,module,exports){
+},{}],80:[function(require,module,exports){
 (function webpackUniversalModuleDefinition(root, factory) {
 /* istanbul ignore next */
 	if(typeof exports === 'object' && typeof module === 'object')
@@ -23294,7 +23833,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ ])
 });
 ;
-},{}],76:[function(require,module,exports){
+},{}],81:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -23586,9 +24125,9 @@ return /******/ (function(modules) { // webpackBootstrap
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../package.json":81,"./map":77,"./utility":78,"escope":30,"estraverse":79,"esutils":87}],77:[function(require,module,exports){
-arguments[4][37][0].apply(exports,arguments)
-},{"dup":37}],78:[function(require,module,exports){
+},{"../package.json":86,"./map":82,"./utility":83,"escope":35,"estraverse":84,"esutils":92}],82:[function(require,module,exports){
+arguments[4][42][0].apply(exports,arguments)
+},{"dup":42}],83:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -23699,7 +24238,7 @@ arguments[4][37][0].apply(exports,arguments)
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{}],79:[function(require,module,exports){
+},{}],84:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
   Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com>
@@ -24544,7 +25083,7 @@ arguments[4][37][0].apply(exports,arguments)
 }(exports));
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./package.json":80}],80:[function(require,module,exports){
+},{"./package.json":85}],85:[function(require,module,exports){
 module.exports={
   "_from": "estraverse@~4.1.1",
   "_id": "estraverse@4.1.1",
@@ -24613,7 +25152,7 @@ module.exports={
   "version": "4.1.1"
 }
 
-},{}],81:[function(require,module,exports){
+},{}],86:[function(require,module,exports){
 module.exports={
   "_from": "esshorten@~1.1.0",
   "_id": "esshorten@1.1.1",
@@ -24692,7 +25231,7 @@ module.exports={
   "version": "1.1.1"
 }
 
-},{}],82:[function(require,module,exports){
+},{}],87:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
   Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com>
@@ -25543,7 +26082,7 @@ module.exports={
 }(exports));
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./package.json":83}],83:[function(require,module,exports){
+},{"./package.json":88}],88:[function(require,module,exports){
 module.exports={
   "_from": "estraverse@^4.2.0",
   "_id": "estraverse@4.2.0",
@@ -25617,7 +26156,7 @@ module.exports={
   "version": "4.2.0"
 }
 
-},{}],84:[function(require,module,exports){
+},{}],89:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -25763,7 +26302,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{}],85:[function(require,module,exports){
+},{}],90:[function(require,module,exports){
 /*
   Copyright (C) 2013-2014 Yusuke Suzuki <utatane.tea@gmail.com>
   Copyright (C) 2014 Ivan Nikulin <ifaaan@gmail.com>
@@ -25900,7 +26439,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{}],86:[function(require,module,exports){
+},{}],91:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -26067,7 +26606,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./code":85}],87:[function(require,module,exports){
+},{"./code":90}],92:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -26102,7 +26641,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./ast":84,"./code":85,"./keyword":86}],88:[function(require,module,exports){
+},{"./ast":89,"./code":90,"./keyword":91}],93:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -26627,7 +27166,7 @@ function functionBindPolyfill(context) {
   };
 }
 
-},{}],89:[function(require,module,exports){
+},{}],94:[function(require,module,exports){
 'use strict';
 
 var hasOwn = Object.prototype.hasOwnProperty;
@@ -26746,7 +27285,7 @@ module.exports = function extend() {
 	return target;
 };
 
-},{}],90:[function(require,module,exports){
+},{}],95:[function(require,module,exports){
 (function (global){
 /**
  * @license
@@ -43857,7 +44396,7 @@ module.exports = function extend() {
 }.call(this));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],91:[function(require,module,exports){
+},{}],96:[function(require,module,exports){
 /**
  * Helpers.
  */
@@ -44021,7 +44560,7 @@ function plural(ms, msAbs, n, name) {
   return Math.round(ms / n) + ' ' + name + (isPlural ? 's' : '');
 }
 
-},{}],92:[function(require,module,exports){
+},{}],97:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -44207,7 +44746,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],93:[function(require,module,exports){
+},{}],98:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -44330,7 +44869,7 @@ ArraySet.prototype.toArray = function ArraySet_toArray() {
 
 exports.ArraySet = ArraySet;
 
-},{"./util":102}],94:[function(require,module,exports){
+},{"./util":107}],99:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -44472,7 +45011,7 @@ exports.decode = function base64VLQ_decode(aStr, aIndex, aOutParam) {
   aOutParam.rest = aIndex;
 };
 
-},{"./base64":95}],95:[function(require,module,exports){
+},{"./base64":100}],100:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -44541,7 +45080,7 @@ exports.decode = function (charCode) {
   return -1;
 };
 
-},{}],96:[function(require,module,exports){
+},{}],101:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -44654,7 +45193,7 @@ exports.search = function search(aNeedle, aHaystack, aCompare, aBias) {
   return index;
 };
 
-},{}],97:[function(require,module,exports){
+},{}],102:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2014 Mozilla Foundation and contributors
@@ -44735,7 +45274,7 @@ MappingList.prototype.toArray = function MappingList_toArray() {
 
 exports.MappingList = MappingList;
 
-},{"./util":102}],98:[function(require,module,exports){
+},{"./util":107}],103:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -44851,7 +45390,7 @@ exports.quickSort = function (ary, comparator) {
   doQuickSort(ary, comparator, 0, ary.length - 1);
 };
 
-},{}],99:[function(require,module,exports){
+},{}],104:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -45998,7 +46537,7 @@ IndexedSourceMapConsumer.prototype._parseMappings =
 
 exports.IndexedSourceMapConsumer = IndexedSourceMapConsumer;
 
-},{"./array-set":93,"./base64-vlq":94,"./binary-search":96,"./quick-sort":98,"./util":102}],100:[function(require,module,exports){
+},{"./array-set":98,"./base64-vlq":99,"./binary-search":101,"./quick-sort":103,"./util":107}],105:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -46425,7 +46964,7 @@ SourceMapGenerator.prototype.toString =
 
 exports.SourceMapGenerator = SourceMapGenerator;
 
-},{"./array-set":93,"./base64-vlq":94,"./mapping-list":97,"./util":102}],101:[function(require,module,exports){
+},{"./array-set":98,"./base64-vlq":99,"./mapping-list":102,"./util":107}],106:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -46840,7 +47379,7 @@ SourceNode.prototype.toStringWithSourceMap = function SourceNode_toStringWithSou
 
 exports.SourceNode = SourceNode;
 
-},{"./source-map-generator":100,"./util":102}],102:[function(require,module,exports){
+},{"./source-map-generator":105,"./util":107}],107:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -47330,7 +47869,7 @@ function computeSourceURL(sourceRoot, sourceURL, sourceMapURL) {
 }
 exports.computeSourceURL = computeSourceURL;
 
-},{}],103:[function(require,module,exports){
+},{}],108:[function(require,module,exports){
 /*
  * Copyright 2009-2011 Mozilla Foundation and contributors
  * Licensed under the New BSD license. See LICENSE.txt or:
@@ -47340,10 +47879,10 @@ exports.SourceMapGenerator = require('./lib/source-map-generator').SourceMapGene
 exports.SourceMapConsumer = require('./lib/source-map-consumer').SourceMapConsumer;
 exports.SourceNode = require('./lib/source-node').SourceNode;
 
-},{"./lib/source-map-consumer":99,"./lib/source-map-generator":100,"./lib/source-node":101}],104:[function(require,module,exports){
+},{"./lib/source-map-consumer":104,"./lib/source-map-generator":105,"./lib/source-node":106}],109:[function(require,module,exports){
 module.exports={
   "name": "i18nc-core",
-  "version": "10.7.1",
+  "version": "10.8.0",
   "description": "I18N Tool for JS files",
   "main": "index.js",
   "scripts": {

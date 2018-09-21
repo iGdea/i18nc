@@ -2,84 +2,87 @@ module.exports = I18N;
 function I18N(msg, tpldata, subtype)
 {
 	var self = I18N,
+		data = self.$ || (self.$ = {}),
 		translateJSON,
 		replace_index = 0,
-		lanArr, lanKeys, i, lanItem, translateMsg, subtypeJSON,
-		data = self.$ || (self.$ = {}),
+		lanIndexArr, i, lanIndex, msgResult, translateValues,
 		LAN = (function(){return global.__i18n_lan__})(data);
 
-	if (!tpldata || !tpldata.join)
-	{
+	if (!tpldata || !tpldata.join) {
 		subtype = tpldata;
 		tpldata = [];
 	}
 
-	if (LAN && LAN.split)
-	{
-		if (self.L != LAN)
-		{
+	if (LAN && LAN.split) {
+		if (self.L != LAN) {
 			self.K = 'i18n_handler_example';
-			self.V = 'Df';
+			self.V = 'Gf';
 			self.D = {
-				"en-US": {
-					"DEFAULTS": {
-						"简体": "simplified",
-						"空白": [],
-						"无": "",
-						"%s美好%s生活": "%sgood%s life",
-						"%{中文}词典": "%{Chinese} dictionary"
-					},
-					"SUBTYPES": {
-						"subtype": {
-							"简体": "simplified subtype"
-						}
-					}
+				"$": [
+					"en-US",
+					"zh-TW"
+				],
+				"*": {
+					"简体": [
+						"simplified",
+						"簡體"
+					],
+					"空白": [
+						[]
+					],
+					"无": [
+						"",
+						"無"
+					],
+					"%s美好%s生活": [
+						"%sgood%s life"
+					],
+					"%{中文}词典": [
+						"%{Chinese} dictionary"
+					]
 				},
-				"zh-TW": {
-					"DEFAULTS": {
-						"简体": "簡體",
-						"无": "無"
-					}
+				"subtype": {
+					"简体": [
+						"simplified subtype"
+					]
 				}
 			};
-
 			translateJSON = self.D;
-			lanKeys = LAN.split(',');
 
-			lanArr = self.M = [];
-			for(i = lanKeys.length; i--;)
-			{
-				lanItem = translateJSON[lanKeys[i]];
-				if (lanItem) lanArr.push(lanItem);
+			var dblans = translateJSON.$,
+				dblansMap = {},
+				lanKeys = LAN.split(',');
+			lanIndexArr = self.M = [];
+			for(i = dblans.length; i--;) dblansMap[dblans[i]] = i;
+			for(i = lanKeys.length; i--;) {
+				lanIndex = dblansMap[lanKeys[i]];
+				if (lanIndex || lanIndex === 0) lanIndexArr.push(lanIndex);
 			}
 			self.L = LAN;
 		}
 
-		lanArr = self.M;
-		for(i = lanArr.length; !translateMsg && i--;)
-		{
-			lanItem = lanArr[i];
-			if (subtype)
-			{
-				subtypeJSON = lanItem.SUBTYPES;
-				subtypeJSON = subtypeJSON && subtypeJSON[subtype];
-				translateMsg = subtypeJSON && subtypeJSON[msg];
+		lanIndexArr = self.M;
+		translateJSON = self.D;
+		var _getVaule = function(subtype) {
+			translateValues = translateJSON[subtype] && translateJSON[subtype][msg];
+			if (translateValues) {
+				msgResult = translateValues[lanIndex];
+				if (typeof msgResult == 'number') msgResult = translateValues[msgResult];
 			}
-			if (!translateMsg)
-			{
-				subtypeJSON = lanItem.DEFAULTS;
-				translateMsg = subtypeJSON && subtypeJSON[msg];
-			}
+		};
+		for(i = lanIndexArr.length; !msgResult && i--;) {
+			lanIndex = lanIndexArr[i];
+			if (subtype) _getVaule(subtype);
+			if (!msgResult) _getVaule('*');
 		}
 
-		if (translateMsg) msg = translateMsg;
+		if (msgResult) msg = msgResult;
 	}
 
 	msg += '';
 	if (!tpldata.length || msg.indexOf('%') == -1) return msg;
 
-	return msg.replace(/%s|%\{.+?\}/g, function(all)
-	{
+	return msg.replace(/%s|%\{.+?\}/g, function(all) {
 		var newVal = tpldata[replace_index++];
 		return newVal === undefined ? all : newVal === null ? '' : newVal;
 	});
