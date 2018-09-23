@@ -1,10 +1,10 @@
 'use strict';
 
-var _ = require('lodash');
-var fs = require('fs');
-var path =  require('path');
-var mkdirp = require('mkdirp');
-var debug = require('debug')('i18nc-core:auto_test_utils');
+var _		= require('lodash');
+var fs		= require('fs');
+var path	= require('path');
+var mkdirp	= require('mkdirp');
+var debug	= require('debug')('i18nc-core:auto_test_utils');
 
 exports.wrapCode4pkg = function(code)
 {

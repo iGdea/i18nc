@@ -25,7 +25,9 @@
     "estraverse": "^4.2.0",
     "extend": "^3.0.2",
     "lodash": "^4.17.11",
-    "i18nc-ast": "^1.0.0"
+    "i18nc-ast": "^1.0.0",
+    "i18nc-jsoncode1": "^1.0.0",
+    "i18nc-jsoncode2": "^1.0.0"
   },
   "devDependencies": {
     "benchmark": "^2.1.4",
