@@ -1,8 +1,8 @@
 'use strict';
 
-require('./i18nc-core');
-require('./i18nc-handler');
-require('./top-i18n');
+require('./i18nc_core');
+require('./i18nc_handler');
+require('./topi18n');
 
 require('./doc-options');
 require('./doc-only-options');

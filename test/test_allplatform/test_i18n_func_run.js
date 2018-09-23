@@ -305,7 +305,7 @@ describe('#i18n_func_run', function()
 
 		describe('#dist', function()
 		{
-			var I18N = require('../../dist/i18nc-handler').I18N;
+			var I18N = require('../../dist/i18nc_handler').I18N;
 			describe('#base', function()
 			{
 				it('#no msg', function()
@@ -365,7 +365,7 @@ describe('#i18n_func_run', function()
 	describe('#topI18N', function()
 	{
 		var translateJSON = require('../prev_test_files').TRANSLATE_JSON;
-		var topI18N = require('../../dist/top-i18nc').topI18N;
+		var topI18N = require('../../dist/topi18n').topI18N;
 		var I18N = require('../files/casefile/i18n_handler/i18n_handler_example');
 
 		function runTest(msg)

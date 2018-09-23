@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "prepublish": "npm ls",
-    "build": "node test/build/i18nc-core",
+    "build": "node test/build",
     "bench": "node benchmark/index",
     "lint": "eslint .",
     "test": "cross-env DEBUG=i18nc-core* mocha test/test_*/test_*",
