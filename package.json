@@ -27,7 +27,7 @@
     "lodash": "^4.17.11",
     "i18nc-ast": "^1.0.0",
     "i18nc-jsoncode1": "^1.0.0",
-    "i18nc-jsoncode2": "^1.0.0"
+    "i18nc-jsoncode2": "^1.0.1"
   },
   "devDependencies": {
     "benchmark": "^2.1.4",
