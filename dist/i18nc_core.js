@@ -15979,8 +15979,9 @@ exports.proxy = function(obj)
 },{"debug":52,"events":115}],35:[function(require,module,exports){
 'use strict';
 
-var jsoncode1 = require('i18nc-jsoncode1');
-var jsoncode2 = require('i18nc-jsoncode2');
+var debug	 	= require('debug')('i18nc-core:jsoncode');
+var jsoncode1	= require('i18nc-jsoncode1');
+var jsoncode2	= require('i18nc-jsoncode2');
 
 
 // 判断两个版本号，是否是小于关系
@@ -15993,17 +15994,33 @@ function ltI18NFuncVersion(a, b)
 
 exports.getParser = function(funcVersion)
 {
-	return !funcVersion || !ltI18NFuncVersion(funcVersion, 'G')
-		? jsoncode2.parser : jsoncode1.parser;
+	if (!funcVersion || !ltI18NFuncVersion(funcVersion, 'G'))
+	{
+		debug('use parser v2');
+		return jsoncode2.parser;
+	}
+	else
+	{
+		debug('use parser v1');
+		return jsoncode1.parser;
+	}
 };
 
 exports.getGenerator = function(funcVersion)
 {
-	return !funcVersion || !ltI18NFuncVersion(funcVersion, 'G')
-		? jsoncode2.generator : jsoncode1.generator;
+	if (!funcVersion || !ltI18NFuncVersion(funcVersion, 'G'))
+	{
+		debug('use generator v2');
+		return jsoncode2.generator;
+	}
+	else
+	{
+		debug('use generator v1');
+		return jsoncode1.generator;
+	}
 };
 
-},{"i18nc-jsoncode1":132,"i18nc-jsoncode2":164}],36:[function(require,module,exports){
+},{"debug":52,"i18nc-jsoncode1":132,"i18nc-jsoncode2":164}],36:[function(require,module,exports){
 'use strict';
 
 var _		= require('lodash');
@@ -16319,6 +16336,7 @@ function paseI18nHandlerInfo(ast, options, result)
 	// 所以移动到第一个迭代使用
 	if (isFirstDeep && result.__TRANSLATE_JSON__ast)
 	{
+		debug('parse __TRANSLATE_JSON__ast');
 		var jsonAst = result.__TRANSLATE_JSON__ast;
 		var funcVersion = result.__FUNCTION_VERSION__;
 		jsonAst.toI18NJSON = function()
@@ -16736,7 +16754,26 @@ _.extend(I18NPlaceholder.prototype,
 	},
 	getTranslateJSON: function()
 	{
-		var data = mergeTranslateData(this._getTranslateJSONArgs());
+		var funcInfo = this.parse();
+		var funcVersion = funcInfo.__FUNCTION_VERSION__;
+		return jsoncode.getParser(funcVersion)
+			.codeJSON2translateJSON(this._getTranslateJSON());
+	},
+	_getTranslateJSON: function()
+	{
+		var options = this.options;
+		var funcInfo = this.parse();
+		var ignoreFuncWords = options.I18NHandler.data.ignoreFuncWords;
+
+		var info =
+		{
+			FILE_KEY			: funcInfo.__FILE_KEY__,
+			onlyTheseLanguages	: options.I18NHandler.data.onlyTheseLanguages,
+			funcTranslateWords	: ignoreFuncWords ? null : funcInfo.__TRANSLATE_JSON__,
+			dbTranslateWords	: options.dbTranslateWords,
+			codeTranslateWords	: this.codeTranslateWords
+		};
+		var data = mergeTranslateData(info);
 		return this._getI18NGenerator().toTranslateJSON(data);
 	},
 	_getI18NGenerator: function()
@@ -16795,7 +16832,7 @@ _.extend(I18NPlaceholder.prototype,
 	_getNewRenderTranslateJSONCode: function()
 	{
 		var options = this.options;
-		var translateJSON = this.getTranslateJSON();
+		var translateJSON = this._getTranslateJSON();
 		var myI18NGenerator = this._getI18NGenerator();
 		if (options.I18NHandler.style.comment4nowords)
 		{
@@ -16818,20 +16855,6 @@ _.extend(I18NPlaceholder.prototype,
 		emitter.trigger('newTranslateJSON', emitData);
 
 		return ''+emitData.result;
-	},
-	_getTranslateJSONArgs: function()
-	{
-		var options = this.options;
-		var funcInfo = this.parse();
-		var ignoreFuncWords = options.I18NHandler.data.ignoreFuncWords;
-
-		return {
-			FILE_KEY			: funcInfo.__FILE_KEY__,
-			onlyTheseLanguages	: options.I18NHandler.data.onlyTheseLanguages,
-			funcTranslateWords	: ignoreFuncWords ? null : funcInfo.__TRANSLATE_JSON__,
-			dbTranslateWords	: options.dbTranslateWords,
-			codeTranslateWords	: this.codeTranslateWords
-		};
 	},
 	_updatePartialCode: function()
 	{
@@ -47375,8 +47398,8 @@ module.exports={
     "extend": "^3.0.2",
     "lodash": "^4.17.11",
     "i18nc-ast": "^1.0.0",
-    "i18nc-jsoncode1": "^1.0.0",
-    "i18nc-jsoncode2": "^1.0.0"
+    "i18nc-jsoncode1": "^1.1.0",
+    "i18nc-jsoncode2": "^1.1.1"
   },
   "devDependencies": {
     "benchmark": "^2.1.4",
@@ -47721,7 +47744,10 @@ function translateAst2JSON(ast)
 	return result;
 }
 
-
+exports.codeJSON2translateJSON = function(json)
+{
+	return json;
+};
 
 /**
  * 将ast转换成json数据
@@ -48239,11 +48265,16 @@ var astUtil	= require('i18nc-ast').util;
 
 exports.translateAst2JSON = translateAst2JSON;
 
+function translateAst2JSON(ast)
+{
+	return codeJSON2translateJSON(_ast2json(ast));
+}
+
 
 /**
  * 将__TRANSLATE_JSON__值的ast，解成json对象
  */
-function translateAst2JSON(ast)
+function _ast2json(ast)
 {
 	var lans = [];
 	var translateJSON = {};
@@ -48304,22 +48335,27 @@ function translateAst2JSON(ast)
 		throw new Error('LANGS OVERFLOW');
 	}
 
+	if (lans.length) translateJSON.$ = lans;
 
-	return _toLansJSON(lans, translateJSON);
+	return translateJSON;
 }
 
 
 
+exports.codeJSON2translateJSON = codeJSON2translateJSON;
 /**
  * 将新的数据结构转化成普通的以语言为分类的结构体
  */
-function _toLansJSON(lans, translateJSON)
+function codeJSON2translateJSON(translateJSON)
 {
 	var result = {};
+	var lans = translateJSON.$ || [];
 	// 转数据结构，提速
 	var translateJSON2 = Object.keys(translateJSON)
 		.map(function(subtype)
 		{
+			if (subtype == '$') return;
+
 			return {
 				subtype: subtype,
 				items: _.map(translateJSON[subtype], function(values, word)
@@ -48335,6 +48371,8 @@ function _toLansJSON(lans, translateJSON)
 
 		translateJSON2.forEach(function(subtypeItem)
 		{
+			if (!subtypeItem) return;
+
 			if (subtypeItem.subtype == '*')
 			{
 				lan_data.DEFAULTS = _getSubtypeJSON(subtypeItem, lanIndex);

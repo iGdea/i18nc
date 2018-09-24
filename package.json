@@ -1,6 +1,6 @@
 {
   "name": "i18nc-core",
-  "version": "10.8.0",
+  "version": "10.8.1",
   "description": "I18N Tool for JS files",
   "main": "index.js",
   "scripts": {
@@ -26,8 +26,8 @@
     "extend": "^3.0.2",
     "lodash": "^4.17.11",
     "i18nc-ast": "^1.0.0",
-    "i18nc-jsoncode1": "^1.0.0",
-    "i18nc-jsoncode2": "^1.0.1"
+    "i18nc-jsoncode1": "^1.1.0",
+    "i18nc-jsoncode2": "^1.1.1"
   },
   "devDependencies": {
     "benchmark": "^2.1.4",
