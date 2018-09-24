@@ -18,10 +18,10 @@ describe('#i18n_func_parser', function()
 
 	it('#old', function()
 	{
-		var code = require('../files/casefile/i18n_handler/i18n_handler_example_old').toString();
+		var code = require('../files/casefile/i18n_handler/i18n_handler_example_v1').toString();
 		var ast = esprima.parse(code);
 		var result = i18nParser.parse(ast.body[0]);
-		var outputJSON = requireAfterWrite('i18n_handler_example_old_output.json', result);
+		var outputJSON = requireAfterWrite('i18n_handler_example_v1_output.json', result);
 		expect(result).to.eql(outputJSON);
 	});
 
