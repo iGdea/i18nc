@@ -364,41 +364,93 @@ describe('#i18n_func_run', function()
 
 	describe('#topI18N', function()
 	{
-		var translateJSON = require('../prev_test_files').TRANSLATE_JSON;
-		var topI18N = require('../../dist/topi18n').topI18N;
-		var I18N = require('../files/casefile/i18n_handler/i18n_handler_example');
-
-		function runTest(msg)
+		describe('#v1', function()
 		{
-			var str1 = topI18N(msg, arguments, translateJSON, '1.g', {c:1}, function(){});
-			var str2 = I18N.apply(null, arguments);
-
-			expect(str1).to.be(str2);
-		}
-
-		beforeEach(function()
-		{
-			global.__i18n_lan__ = 'en-US';
-			global.$I18N_getLanguageCode = function(cache)
+			var topI18N = require('../../dist/topi18n_v1').topI18N;
+			var translateJSON =
 			{
-				expect(cache).to.be.eql({c:1});
-				return global.__i18n_lan__;
+				"en-US": {
+					"DEFAULTS": {
+						"简体": "simplified",
+						"%{中文}词典": "%{Chinese} dictionary"
+					},
+					"SUBTYPES": {
+						"subtype": {
+							"简体": "simplified subtype"
+						}
+					}
+				}
 			};
+
+			function run(msg)
+			{
+				return topI18N(msg, arguments, translateJSON, '1.g', {c:1}, function(){});
+			}
+
+			beforeEach(function()
+			{
+				global.__i18n_lan__ = 'en-US';
+				global.$I18N_getLanguageCode = function(cache)
+				{
+					expect(cache).to.be.eql({c:1});
+					return global.__i18n_lan__;
+				};
+			});
+
+			afterEach(function()
+			{
+				delete global.__i18n_lan__;
+				delete global.$I18N_getLanguageCode;
+			});
+
+			it('#base', function()
+			{
+				expect(run()).to.be('undefined');
+				expect(run(111)).to.be('111');
+				expect(run('中文')).to.be('中文');
+				expect(run('%{中文}词典', ['English'])).to.be('English dictionary');
+				expect(run('简体', 'subtype')).to.be('simplified subtype');
+			});
 		});
 
-		afterEach(function()
+		describe('#v2', function()
 		{
-			delete global.__i18n_lan__;
-			delete global.$I18N_getLanguageCode;
-		});
+			var translateJSON = require('../prev_test_files').TRANSLATE_JSON;
+			var topI18N = require('../../dist/topi18n').topI18N;
+			var I18N = require('../files/casefile/i18n_handler/i18n_handler_example');
 
-		it('#base', function()
-		{
-			runTest();
-			runTest(111);
-			runTest('中文');
-			runTest('%{中文}词典', ['English']);
-			runTest('简体', 'subtype');
+			function runTest(msg)
+			{
+				var str1 = topI18N(msg, arguments, translateJSON, '1.g', {c:1}, function(){});
+				var str2 = I18N.apply(null, arguments);
+
+				expect(str1).to.be(str2);
+			}
+
+			beforeEach(function()
+			{
+				global.__i18n_lan__ = 'en-US';
+				global.$I18N_getLanguageCode = function(cache)
+				{
+					expect(cache).to.be.eql({c:1});
+					return global.__i18n_lan__;
+				};
+			});
+
+			afterEach(function()
+			{
+				delete global.__i18n_lan__;
+				delete global.$I18N_getLanguageCode;
+			});
+
+			it('#base', function()
+			{
+				runTest();
+				runTest(111);
+				runTest('中文');
+				runTest('%{中文}词典', ['English']);
+				runTest('简体', 'subtype');
+			});
 		});
 	});
 
