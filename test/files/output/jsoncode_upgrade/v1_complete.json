@@ -1,0 +1,73 @@
+{
+	"codeTranslateWords": {
+		"DEFAULTS": [
+			"简体",
+			"空白",
+			"%s美好%s生活",
+			"%{中文}词典",
+			"无"
+		],
+		"SUBTYPES": {
+			"subtype": [
+				"简体"
+			]
+		}
+	},
+	"currentFileKey": "i18n_handler_example",
+	"funcTranslateWords": {
+		"en-US": {
+			"DEFAULTS": {
+				"简体": "simplified",
+				"空白": "",
+				"%s美好%s生活": "%sgood%s life",
+				"%{中文}词典": "%{Chinese} dictionary"
+			},
+			"SUBTYPES": {
+				"subtype": {
+					"简体": "simplified subtype"
+				}
+			}
+		},
+		"zh-TW": {
+			"DEFAULTS": {
+				"简体": "簡體",
+				"无": "無"
+			}
+		}
+	},
+	"newWord4codeTranslateWords": [],
+	"originalFileKeys": [
+		"i18n_handler_example"
+	],
+	"subScopeDatas": [],
+	"usedTranslateWords": {
+		"$": [
+			"en-US",
+			"zh-TW"
+		],
+		"*": {
+			"简体": [
+				"simplified",
+				"簡體"
+			],
+			"空白": [
+				""
+			],
+			"%s美好%s生活": [
+				"%sgood%s life"
+			],
+			"%{中文}词典": [
+				"%{Chinese} dictionary"
+			],
+			"无": [
+				null,
+				"無"
+			]
+		},
+		"subtype": {
+			"简体": [
+				"simplified subtype"
+			]
+		}
+	}
+}
