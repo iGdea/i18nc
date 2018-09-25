@@ -52,7 +52,7 @@ describe('#jsoncode upgrade', function()
 			// 导致的结果是，生成的json文件里面，是null表示
 			var myJSON = JSON.parse(JSON.stringify(autoTestUtils.JsonOfI18ncRet(info)));
 			var outputJSON = requireAfterWrite('v1_complete.json', myJSON);
-			var otherCode = requireAfterWrite('v1_complete.js', info.code);
+			var otherCode = requireAfterWrite('v1_complete.js', autoTestUtils.wrapCode4pkg(info.code));
 
 			expect(myJSON).to.eql(outputJSON);
 			expect(autoTestUtils.code2arr(''+info)).to.eql(autoTestUtils.code2arr(otherCode));
@@ -69,7 +69,7 @@ describe('#jsoncode upgrade', function()
 					}
 				});
 			var outputJSON = requireAfterWrite('v1_partial.json', autoTestUtils.JsonOfI18ncRet(info));
-			var otherCode = requireAfterWrite('v1_partial.js', info.code);
+			var otherCode = requireAfterWrite('v1_partial.js', autoTestUtils.wrapCode4pkg(info.code));
 
 			expect(autoTestUtils.JsonOfI18ncRet(info)).to.eql(outputJSON);
 			expect(autoTestUtils.code2arr(''+info)).to.eql(autoTestUtils.code2arr(otherCode));
