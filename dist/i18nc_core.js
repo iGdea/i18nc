@@ -1604,11 +1604,6 @@ _.extend(I18NPlaceholder.prototype,
 	},
 	getTranslateJSON: function()
 	{
-		return jsoncode.getParser(this._getTargetFuncVersion())
-			.codeJSON2translateJSON(this._getTranslateJSON());
-	},
-	_getTranslateJSON: function()
-	{
 		var options = this.options;
 		var funcInfo = this.parse();
 		var ignoreFuncWords = options.I18NHandler.data.ignoreFuncWords;
@@ -1622,22 +1617,7 @@ _.extend(I18NPlaceholder.prototype,
 			codeTranslateWords	: this.codeTranslateWords
 		};
 
-		var data = i18ncDB.mergeTranslateData(info);
-		return this._getI18NGenerator().toTranslateJSON(data);
-	},
-	_getTargetFuncVersion: function()
-	{
-		var funcInfo = this.parse();
-		var funcVersion = funcInfo.__FUNCTION_VERSION__;
-		var renderType = this.getRenderType();
-
-		return renderType == 'complete'
-			? DEF.I18NFunctionVersion + DEF.I18NFunctionSubVersion.FULL
-			: funcVersion;
-	},
-	_getI18NGenerator: function()
-	{
-		return jsoncode.getGenerator(this._getTargetFuncVersion());
+		return i18ncDB.mergeTranslateData(info);
 	},
 	_getRenderTranslateJSONCode: function()
 	{
@@ -1687,8 +1667,8 @@ _.extend(I18NPlaceholder.prototype,
 	_getNewRenderTranslateJSONCode: function()
 	{
 		var options = this.options;
-		var translateJSON = this._getTranslateJSON();
-		var myI18NGenerator = this._getI18NGenerator();
+		var myI18NGenerator = jsoncode.getGenerator(this.getRenderType() != 'complete' && this.parse().__FUNCTION_VERSION__);
+		var translateJSON = myI18NGenerator.toTranslateJSON(this.getTranslateJSON());
 		if (options.I18NHandler.style.comment4nowords)
 		{
 			myI18NGenerator.fillNoUsedCodeTranslateWords(
@@ -48002,7 +47982,7 @@ exports.SourceNode = require('./lib/source-node').SourceNode;
 },{"./lib/source-map-consumer":111,"./lib/source-map-generator":112,"./lib/source-node":113}],116:[function(require,module,exports){
 module.exports={
   "name": "i18nc-core",
-  "version": "10.10.0",
+  "version": "10.9.1",
   "description": "I18N Tool for JS files",
   "main": "index.js",
   "scripts": {

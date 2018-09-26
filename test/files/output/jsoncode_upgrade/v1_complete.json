@@ -58,9 +58,6 @@
 			"DEFAULTS": {
 				"简体": "簡體",
 				"无": "無"
-			},
-			"SUBTYPES": {
-				"subtype": {}
 			}
 		}
 	}
