@@ -23,7 +23,7 @@ exports.registerPlugin = function(name, handler)
 	debug('register plugin:%s', name);
 };
 
-},{"./lib/emitter":6,"./lib/main":15,"./lib/options":16,"./package.json":114,"debug":24}],2:[function(require,module,exports){
+},{"./lib/emitter":6,"./lib/main":13,"./lib/options":14,"./package.json":116,"debug":22}],2:[function(require,module,exports){
 'use strict';
 
 var _					= require('lodash');
@@ -346,7 +346,7 @@ _.extend(ASTCollector.prototype,
 	}
 });
 
-},{"./ast_literal_handler":3,"./ast_scope":4,"./def":5,"./emitter":6,"debug":24,"estraverse":81,"i18nc-ast":89,"lodash":100}],3:[function(require,module,exports){
+},{"./ast_literal_handler":3,"./ast_scope":4,"./def":5,"./emitter":6,"debug":22,"estraverse":79,"i18nc-ast":87,"lodash":102}],3:[function(require,module,exports){
 'use strict';
 
 var _			= require('lodash');
@@ -508,7 +508,7 @@ _.extend(LiteralHandler.prototype,
 	},
 });
 
-},{"./emitter":6,"./utils/words_utils":23,"debug":24,"i18nc-ast":89,"lodash":100}],4:[function(require,module,exports){
+},{"./emitter":6,"./utils/words_utils":21,"debug":22,"i18nc-ast":87,"lodash":102}],4:[function(require,module,exports){
 'use strict';
 
 var _					= require('lodash');
@@ -916,7 +916,7 @@ _.extend(ASTScope.prototype,
 	}
 });
 
-},{"./def":5,"./i18n_placeholder":14,"./result_object":17,"debug":24,"i18nc-ast":89,"lodash":100}],5:[function(require,module,exports){
+},{"./def":5,"./i18n_placeholder":12,"./result_object":15,"debug":22,"i18nc-ast":87,"lodash":102}],5:[function(require,module,exports){
 'use strict';
 
 var AST_FLAGS = require('i18nc-ast').AST_FLAGS;
@@ -944,7 +944,7 @@ exports.I18NFunctionSubVersion =
 	GLOBAL	: 'g',
 };
 
-},{"i18nc-ast":89}],6:[function(require,module,exports){
+},{"i18nc-ast":87}],6:[function(require,module,exports){
 'use strict';
 
 var debug			= require('debug')('i18nc-core:emitter');
@@ -1016,212 +1016,14 @@ exports.proxy = function(obj)
 	};
 }
 
-},{"debug":24,"events":87}],7:[function(require,module,exports){
-'use strict';
-
-var debug	 	= require('debug')('i18nc-core:jsoncode');
-var jsoncode1	= require('i18nc-jsoncode1');
-var jsoncode2	= require('i18nc-jsoncode2');
-
-
-// 判断两个版本号，是否是小于关系
-// 由于一开始做的版本，先使用了小写字母，导致charCode转化有问题
-// 这里先转成大写进行判断，等到后面大写用完之后，再去掉toUpperCase
-function ltI18NFuncVersion(a, b)
-{
-	return a.toUpperCase().charCodeAt(0) < b.toUpperCase().charCodeAt(0);
-}
-
-exports.getParser = function(funcVersion)
-{
-	if (!funcVersion || !ltI18NFuncVersion(funcVersion, 'G'))
-	{
-		debug('use parser v2');
-		return jsoncode2.parser;
-	}
-	else
-	{
-		debug('use parser v1');
-		return jsoncode1.parser;
-	}
-};
-
-exports.getGenerator = function(funcVersion)
-{
-	if (!funcVersion || !ltI18NFuncVersion(funcVersion, 'G'))
-	{
-		debug('use generator v2');
-		return jsoncode2.generator;
-	}
-	else
-	{
-		debug('use generator v1');
-		return jsoncode1.generator;
-	}
-};
-
-},{"debug":24,"i18nc-jsoncode1":94,"i18nc-jsoncode2":97}],8:[function(require,module,exports){
-'use strict';
-
-var _		= require('lodash');
-var debug	= require('debug')('i18nc-core:i18n_func_merge_translate_data');
-
-
-exports = module.exports = mergeTranslateData;
-
-function mergeTranslateData(mainData)
-{
-	var json = _mergeData(mainData);
-	return _toTranslateJSON(json);
-}
-
-
-exports._mergeData = _mergeData;
-/**
- * 合并各个来源的数据
- * 根据参数来确定打包到code的数据
- *
- * input: test/files/merge_translate_data.js
- * output: test/files/output/merge_translate_data/merge_data.json
- */
-function _mergeData(mainData)
-{
-	// 先用一个不规范的数据保存，最后要把语言作为一级key处理
-	var result = {DEFAULTS: {}, SUBTYPES: {}};
-	var codeTranslateWords = mainData.codeTranslateWords || {};
-	var FILE_KEY = mainData.FILE_KEY;
-	var dbTranslateWords = mainData.dbTranslateWords && mainData.dbTranslateWords.data || {};
-	var typeData =
-	{
-		func		: mainData.funcTranslateWords,
-		db_filekey	: dbTranslateWords[FILE_KEY],
-		'db_*'		: dbTranslateWords['*'],
-	};
-	var onlyTheseLanguages = mainData.onlyTheseLanguages
-			&& mainData.onlyTheseLanguages.length
-			&& mainData.onlyTheseLanguages;
-	debug('onlyTheseLanguages:%o', onlyTheseLanguages);
-
-	_.each(_.uniq(codeTranslateWords.DEFAULTS), function(word)
-	{
-		var info = _getOneTypeListData('DEFAULTS', word, typeData, onlyTheseLanguages);
-		result.DEFAULTS[word] = info.result;
-	});
-
-	_.each(codeTranslateWords.SUBTYPES, function(words, subtype)
-	{
-		var subresult = result.SUBTYPES[subtype] = {};
-		_.each(_.uniq(words), function(word)
-		{
-			var info = _getOneTypeListData('SUBTYPES', word, typeData, onlyTheseLanguages, subtype);
-			subresult[word] = info.result;
-		});
-	});
-
-	return result;
-}
-
-/**
- * 针对单个type(DEFAULTS/SUBTYPES)，单个单词的 所有语言
- * 返回其翻译结果的数组
- *
- * 处理任务
- *     db下所有文件和指定文件的两份数据融合
- *     和函数中分析出来的数据融合
- */
-function _getOneTypeListData(maintype, word, typeData, onlyTheseLanguages, subtype)
-{
-	var lans = {};
-	var results = {};
-	// 数组有先后顺序，不要随便调整
-	var types = ['db_filekey', 'db_*', 'func'];
-
-	types.forEach(function(type)
-	{
-		var result = results[type] = {};
-		_.each(typeData[type], function(lanInfo, lan)
-		{
-			if (!lanInfo) return;
-			if (onlyTheseLanguages && onlyTheseLanguages.indexOf(lan) == -1) return;
-
-			var subLanInfo = lanInfo[maintype];
-			if (subtype && subLanInfo) subLanInfo = subLanInfo[subtype];
-			var translateWord = subLanInfo && subLanInfo[word];
-
-			if (translateWord || translateWord === '')
-			{
-				lans[lan] = 1;
-				result[lan] = translateWord;
-			}
-		});
-	});
-
-
-	var lans = Object.keys(lans);
-	debug('word:%s, subtype:%s lans:%o, results:%o', word, subtype, lans, results);
-
-	// 对获取到的所有数据进行合并操作
-	var result = {};
-	lans.forEach(function(lan)
-	{
-		types.some(function(type)
-		{
-			var tmp = results[type][lan];
-			if (tmp || tmp === '')
-			{
-				result[lan] = tmp;
-				return true;
-			}
-		});
-	});
-
-	return {
-		lans: lans,
-		result: result,
-	};
-}
-
-
-function _toTranslateJSON(data)
-{
-	var result = {};
-	_.each(data.DEFAULTS, function(lanData, word)
-	{
-		_.each(lanData, function(translateData, lan)
-		{
-			var lanObj = result[lan] || (result[lan] = {});
-			var wordObj = lanObj.DEFAULTS || (lanObj.DEFAULTS = {});
-
-			wordObj[word] = translateData;
-		});
-	});
-
-	_.each(data.SUBTYPES, function(item, subtype)
-	{
-		_.each(item, function(lanData, word)
-		{
-			_.each(lanData, function(translateData, lan)
-			{
-				var lanObj = result[lan] || (result[lan] = {});
-				var subtypeObj = lanObj.SUBTYPES || (lanObj.SUBTYPES = {});
-				var wordObj = subtypeObj[subtype] || (subtypeObj[subtype] = {});
-
-				wordObj[word] = translateData;
-			});
-		});
-	});
-
-	return result;
-}
-
-},{"debug":24,"lodash":100}],9:[function(require,module,exports){
+},{"debug":22,"events":85}],7:[function(require,module,exports){
 'use strict';
 
 var _			= require('lodash');
 var debug		= require('debug')('i18nc-core:i18n_func_parser');
 var emitter		= require('../emitter');
 var escodegen	= require('escodegen');
-var jsoncode	= require('./jsoncode');
+var jsoncode	= require('i18nc-jsoncode');
 
 
 /**
@@ -1426,7 +1228,7 @@ _.extend(I18NJSON.prototype,
 	},
 });
 
-},{"../emitter":6,"./jsoncode":7,"debug":24,"escodegen":27,"lodash":100}],10:[function(require,module,exports){
+},{"../emitter":6,"debug":22,"escodegen":25,"i18nc-jsoncode":95,"lodash":102}],8:[function(require,module,exports){
 'use strict';
 
 var esprima		= require('esprima');
@@ -1504,7 +1306,7 @@ exports.render = tpl2render(require('./tpl/full.js').toString());
 exports.renderSimple = tpl2render(require('./tpl/simple.js').toString());
 exports.renderGlobal = tpl2render(require('./tpl/global.js').toString());
 
-},{"./tpl/full.js":11,"./tpl/global.js":12,"./tpl/simple.js":13,"debug":24,"escodegen":27,"esmangle":34,"esprima":74}],11:[function(require,module,exports){
+},{"./tpl/full.js":9,"./tpl/global.js":10,"./tpl/simple.js":11,"debug":22,"escodegen":25,"esmangle":32,"esprima":72}],9:[function(require,module,exports){
 /* global $getLanguageCode $TRANSLATE_JSON_CODE */
 
 'use strict';
@@ -1576,7 +1378,7 @@ module.exports = function $handlerName(msg, tpldata, subtype)
 	});
 }
 
-},{}],12:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 /* global $globalHandlerName $TRANSLATE_JSON_CODE */
 
 'use strict';
@@ -1599,7 +1401,7 @@ module.exports = function $handlerName(msg)
 	return ''+$globalHandlerName(msg, arguments, self.D, self.K, data, self);
 }
 
-},{}],13:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 'use strict';
 
 module.exports = function $handlerName(msg, tpldata)
@@ -1621,7 +1423,7 @@ module.exports = function $handlerName(msg, tpldata)
 	});
 }
 
-},{}],14:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 'use strict';
 
 var _					= require('lodash');
@@ -1629,10 +1431,10 @@ var debug				= require('debug')('i18nc-core:i18n_placeholder');
 var DEF					= require('./def');
 var emitter				= require('./emitter');
 var astUtil				= require('i18nc-ast').util;
+var i18ncDB				= require('i18nc-db');
+var jsoncode			= require('i18nc-jsoncode');
 var i18nTpl				= require('./i18n_func/render');
 var i18nParser			= require('./i18n_func/parser');
-var mergeTranslateData	= require('./i18n_func/merge_translate_data');
-var jsoncode			= require('./i18n_func/jsoncode');
 var LanguageVarsReg		= /\$LanguageVars\.([\w$]+)\$/g;
 
 exports.I18NPlaceholder = I18NPlaceholder;
@@ -1822,7 +1624,7 @@ _.extend(I18NPlaceholder.prototype,
 			codeTranslateWords	: this.codeTranslateWords
 		};
 
-		var data = mergeTranslateData(info);
+		var data = i18ncDB.mergeTranslateData(info);
 		return this._getI18NGenerator().toTranslateJSON(data);
 	},
 	_getI18NGenerator: function()
@@ -2063,7 +1865,7 @@ _.extend(I18NPlaceholder.prototype,
 	}
 });
 
-},{"./def":5,"./emitter":6,"./i18n_func/jsoncode":7,"./i18n_func/merge_translate_data":8,"./i18n_func/parser":9,"./i18n_func/render":10,"debug":24,"i18nc-ast":89,"lodash":100}],15:[function(require,module,exports){
+},{"./def":5,"./emitter":6,"./i18n_func/parser":7,"./i18n_func/render":8,"debug":22,"i18nc-ast":87,"i18nc-db":92,"i18nc-jsoncode":95,"lodash":102}],13:[function(require,module,exports){
 'use strict';
 
 var emitter			= require('./emitter');
@@ -2120,7 +1922,7 @@ function mainHandler(code, options)
 	return result;
 }
 
-},{"./ast_collector":2,"./emitter":6,"./options":16,"i18nc-ast":89}],16:[function(require,module,exports){
+},{"./ast_collector":2,"./emitter":6,"./options":14,"i18nc-ast":87}],14:[function(require,module,exports){
 /* eslint-disable no-control-regex */
 
 'use strict';
@@ -2504,7 +2306,7 @@ exports.extend = function(obj)
 	return utils.extend(exports.defaults, obj);
 };
 
-},{"./upgrade/tpl/getlanguagecode_handler":20,"./utils/options_utils":21}],17:[function(require,module,exports){
+},{"./upgrade/tpl/getlanguagecode_handler":18,"./utils/options_utils":19}],15:[function(require,module,exports){
 'use strict';
 
 var _				= require('lodash');
@@ -3092,14 +2894,15 @@ _.extend(CodeInfoResult.prototype,
 	},
 });
 
-},{"debug":24,"extend":88,"i18nc-ast":89,"lodash":100}],18:[function(require,module,exports){
+},{"debug":22,"extend":86,"i18nc-ast":87,"lodash":102}],16:[function(require,module,exports){
 'use strict';
 
-var _ = require('lodash');
-var deprecate = require('depd')('i18nc-core:options');
-var GetLanguageCodeDepd = require('./tpl/depd_getlanguagecode_handler').toString();
-var valUtils = require('../utils/options_vals.js');
-var OptionsVals = valUtils.OptionsVals;
+var _					= require('lodash');
+var deprecate			= require('depd')('i18nc-core:options');
+var i18ncDB				= require('i18nc-db');
+var valUtils			= require('../utils/options_vals.js');
+var OptionsVals			= valUtils.OptionsVals;
+var GetLanguageCodeDepd	= require('./tpl/depd_getlanguagecode_handler').toString();
 
 
 var OPTIONS_RENAME_MAP = exports.OPTIONS_RENAME_MAP =
@@ -3315,38 +3118,19 @@ function rmkeys(optionsVals)
 	});
 }
 
-function dbTranslateWords(optionsVals)
-{
-	if (!optionsVals.exists('dbTranslateWords')) return;
-
-	var dbTranslateWords = optionsVals.getVal('dbTranslateWords');
-	if (!dbTranslateWords.version || dbTranslateWords.version == 1)
-	{
-		deprecate('dbTranslateWords format version 2 is support');
-		var newDB = {};
-		_.each(dbTranslateWords, function(item, lan)
-		{
-			_.each(item, function(data, fileKey)
-			{
-				var obj = newDB[fileKey] || (newDB[fileKey] = {});
-				obj[lan] = data;
-			});
-		});
-
-		optionsVals.setVal('dbTranslateWords',
-		{
-			version: 2,
-			data: newDB,
-		});
-	}
-}
 
 exports.before = function(options)
 {
 	var optionsVals = new OptionsVals(options);
 	rename_1toN(optionsVals);
 	rename_1to1(optionsVals);
-	dbTranslateWords(optionsVals);
+
+	var dbTranslateWords = i18ncDB.update(options.dbTranslateWords);
+	if (dbTranslateWords)
+	{
+		deprecate('dbTranslateWords v2 is support')
+		options.dbTranslateWords = dbTranslateWords;
+	}
 }
 
 exports.after = function(result)
@@ -3355,7 +3139,7 @@ exports.after = function(result)
 	rmkeys(resultVals);
 };
 
-},{"../utils/options_vals.js":22,"./tpl/depd_getlanguagecode_handler":19,"depd":26,"lodash":100}],19:[function(require,module,exports){
+},{"../utils/options_vals.js":20,"./tpl/depd_getlanguagecode_handler":17,"depd":24,"i18nc-db":92,"lodash":102}],17:[function(require,module,exports){
 /* global $GetLanguageCode */
 
 'use strict';
@@ -3379,7 +3163,7 @@ module.exports = function GetLanguageCodeHandler(cache) {
 // 	};
 // }
 
-},{}],20:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 (function (global){
 /* global window */
 
@@ -3410,13 +3194,12 @@ module.exports = function GetLanguageCodeHandler(cache) {
 // }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],21:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 'use strict';
 
 var _				= require('lodash');
 var extend			= require('extend');
 var debug			= require('debug')('i18nc-core:options');
-var jsoncode2		= require('i18nc-jsoncode2');
 var depdOptions		= require('../upgrade/depd_options');
 var valUtils		= require('./options_vals.js');
 var OptionsVals		= valUtils.OptionsVals;
@@ -3462,7 +3245,6 @@ exports.extend = function(defaults, originalOptions)
 	}
 
 	_fixOptionsVal(result);
-	_dbTranslateWordUpgrade(result);
 
 	return result;
 }
@@ -3488,27 +3270,6 @@ function _fixOptionsVal(options)
 	});
 }
 
-function _dbTranslateWordUpgrade(options)
-{
-	var dbTranslateWords = options.dbTranslateWords;
-	if (!dbTranslateWords || dbTranslateWords.version == 2) return;
-
-	switch(dbTranslateWords.version)
-	{
-		case 3:
-			var result = {};
-			_.each(dbTranslateWords.data, function(val, key)
-			{
-				result[key] = jsoncode2.parser.codeJSON2translateJSON(val);
-			});
-			options.dbTranslateWords =
-			{
-				version: 2,
-				data: result
-			};
-			break;
-	}
-}
 
 
 exports.freeze = function(obj)
@@ -3660,7 +3421,7 @@ function _extendDefault(defaults, object)
 	return result;
 }
 
-},{"../upgrade/depd_options":18,"./options_vals.js":22,"debug":24,"extend":88,"i18nc-jsoncode2":97,"lodash":100}],22:[function(require,module,exports){
+},{"../upgrade/depd_options":16,"./options_vals.js":20,"debug":22,"extend":86,"lodash":102}],20:[function(require,module,exports){
 /**
  * 针对options，提供快速获取key和值的接口
  * 例如 options.getVal('I18NHandler.style.codeStyle');
@@ -3795,7 +3556,7 @@ function str2keyVal(key)
 	return ret;
 }
 
-},{"debug":24,"lodash":100}],23:[function(require,module,exports){
+},{"debug":22,"lodash":102}],21:[function(require,module,exports){
 'use strict';
 
 var debug			= require('debug')('i18nc-core:words_utils');
@@ -3896,7 +3657,7 @@ function getTranslateWordsFromLineStrings(lineStrings)
 	return translateWords;
 }
 
-},{"../emitter":6,"debug":24}],24:[function(require,module,exports){
+},{"../emitter":6,"debug":22}],22:[function(require,module,exports){
 (function (process){
 /* eslint-env browser */
 
@@ -4164,7 +3925,7 @@ formatters.j = function (v) {
 };
 
 }).call(this,require('_process'))
-},{"./common":25,"_process":102}],25:[function(require,module,exports){
+},{"./common":23,"_process":104}],23:[function(require,module,exports){
 
 /**
  * This is the common logic for both the Node.js and web browser
@@ -4411,7 +4172,7 @@ function setup(env) {
 
 module.exports = setup;
 
-},{"ms":101}],26:[function(require,module,exports){
+},{"ms":103}],24:[function(require,module,exports){
 /*!
  * depd
  * Copyright(c) 2015 Douglas Christopher Wilson
@@ -4490,7 +4251,7 @@ function wrapproperty (obj, prop, message) {
   }
 }
 
-},{}],27:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 (function (global){
 /*
   Copyright (C) 2012-2014 Yusuke Suzuki <utatane.tea@gmail.com>
@@ -7097,7 +6858,7 @@ function wrapproperty (obj, prop, message) {
 /* vim: set sw=4 ts=4 et tw=80 : */
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./package.json":28,"estraverse":81,"esutils":86,"source-map":113}],28:[function(require,module,exports){
+},{"./package.json":26,"estraverse":79,"esutils":84,"source-map":115}],26:[function(require,module,exports){
 module.exports={
   "_from": "escodegen@^1.11.0",
   "_id": "escodegen@1.11.0",
@@ -7190,7 +6951,7 @@ module.exports={
   "version": "1.11.0"
 }
 
-},{}],29:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
   Copyright (C) 2013 Alex Seville <hi@alexanderseville.com>
@@ -8314,7 +8075,7 @@ module.exports={
 }, this));
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"estraverse":30}],30:[function(require,module,exports){
+},{"estraverse":28}],28:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
   Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com>
@@ -9155,7 +8916,7 @@ module.exports={
 }(exports));
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./package.json":31}],31:[function(require,module,exports){
+},{"./package.json":29}],29:[function(require,module,exports){
 module.exports={
   "_from": "estraverse@^2.0.0",
   "_id": "estraverse@2.0.0",
@@ -9229,7 +8990,7 @@ module.exports={
   "version": "2.0.0"
 }
 
-},{}],32:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -9398,7 +9159,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./common":33}],33:[function(require,module,exports){
+},{"./common":31}],31:[function(require,module,exports){
 /*
   Copyright (C) 2012 Yusuke Suzuki <utatane.tea@gmail.com>
   Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com>
@@ -9868,7 +9629,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"escope":29,"estraverse":69,"esutils":72}],34:[function(require,module,exports){
+},{"escope":27,"estraverse":67,"esutils":70}],32:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -10058,7 +9819,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../package.json":73,"./annotate-directive":32,"./common":33,"./options":37,"./pass":38,"esshorten":75}],35:[function(require,module,exports){
+},{"../package.json":71,"./annotate-directive":30,"./common":31,"./options":35,"./pass":36,"esshorten":73}],33:[function(require,module,exports){
 /*
   Copyright (C) 2012 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -10424,7 +10185,7 @@ module.exports={
     exports.booleanCondition = booleanCondition;
 }());
 
-},{"./common":33}],36:[function(require,module,exports){
+},{"./common":31}],34:[function(require,module,exports){
 (function (global){
 /*
   Copyright (C) 2012 Yusuke Suzuki <utatane.tea@gmail.com>
@@ -10539,7 +10300,7 @@ module.exports={
 /* vim: set sw=4 ts=4 et tw=80 : */
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],37:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -10630,7 +10391,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./common":33}],38:[function(require,module,exports){
+},{"./common":31}],36:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -10742,7 +10503,7 @@ module.exports={
     ];
 }());
 
-},{"./common":33,"./pass/concatenate-variable-definition":39,"./pass/dead-code-elimination":40,"./pass/drop-variable-definition":41,"./pass/eliminate-duplicate-function-declarations":42,"./pass/hoist-variable-to-arguments":43,"./pass/reduce-branch-jump":44,"./pass/reduce-multiple-if-statements":45,"./pass/reduce-sequence-expression":46,"./pass/remove-context-sensitive-expressions":47,"./pass/remove-empty-statement":48,"./pass/remove-side-effect-free-expressions":49,"./pass/remove-unreachable-branch":50,"./pass/remove-unused-label":51,"./pass/remove-wasted-blocks":52,"./pass/reordering-function-declarations":53,"./pass/transform-branch-to-expression":54,"./pass/transform-dynamic-to-static-property-access":55,"./pass/transform-dynamic-to-static-property-definition":56,"./pass/transform-immediate-function-call":57,"./pass/transform-logical-association":58,"./pass/transform-to-compound-assignment":59,"./pass/transform-to-sequence-expression":60,"./pass/transform-typeof-undefined":61,"./pass/tree-based-constant-folding":62,"./post/omit-parens-in-void-context-iife":63,"./post/rewrite-boolean":64,"./post/rewrite-conditional-expression":65,"./post/transform-infinity":66,"./post/transform-static-to-dynamic-property-access":67,"./query":68}],39:[function(require,module,exports){
+},{"./common":31,"./pass/concatenate-variable-definition":37,"./pass/dead-code-elimination":38,"./pass/drop-variable-definition":39,"./pass/eliminate-duplicate-function-declarations":40,"./pass/hoist-variable-to-arguments":41,"./pass/reduce-branch-jump":42,"./pass/reduce-multiple-if-statements":43,"./pass/reduce-sequence-expression":44,"./pass/remove-context-sensitive-expressions":45,"./pass/remove-empty-statement":46,"./pass/remove-side-effect-free-expressions":47,"./pass/remove-unreachable-branch":48,"./pass/remove-unused-label":49,"./pass/remove-wasted-blocks":50,"./pass/reordering-function-declarations":51,"./pass/transform-branch-to-expression":52,"./pass/transform-dynamic-to-static-property-access":53,"./pass/transform-dynamic-to-static-property-definition":54,"./pass/transform-immediate-function-call":55,"./pass/transform-logical-association":56,"./pass/transform-to-compound-assignment":57,"./pass/transform-to-sequence-expression":58,"./pass/transform-typeof-undefined":59,"./pass/tree-based-constant-folding":60,"./post/omit-parens-in-void-context-iife":61,"./post/rewrite-boolean":62,"./post/rewrite-conditional-expression":63,"./post/transform-infinity":64,"./post/transform-static-to-dynamic-property-access":65,"./query":66}],37:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -10831,7 +10592,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33}],40:[function(require,module,exports){
+},{"../common":31}],38:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -11393,7 +11154,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33}],41:[function(require,module,exports){
+},{"../common":31}],39:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -11621,7 +11382,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33,"../evaluator":35,"escope":29}],42:[function(require,module,exports){
+},{"../common":31,"../evaluator":33,"escope":27}],40:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -11784,7 +11545,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33,"../map":36}],43:[function(require,module,exports){
+},{"../common":31,"../map":34}],41:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -11968,7 +11729,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33,"escope":29}],44:[function(require,module,exports){
+},{"../common":31,"escope":27}],42:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -12139,7 +11900,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33}],45:[function(require,module,exports){
+},{"../common":31}],43:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -12218,7 +11979,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33}],46:[function(require,module,exports){
+},{"../common":31}],44:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -12412,7 +12173,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33,"../evaluator":35,"escope":29}],47:[function(require,module,exports){
+},{"../common":31,"../evaluator":33,"escope":27}],45:[function(require,module,exports){
 /*
   Copyright (C) 2012 Mihai Bazon <mihai.bazon@gmail.com>
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
@@ -12773,7 +12534,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33,"../evaluator":35,"escope":29}],48:[function(require,module,exports){
+},{"../common":31,"../evaluator":33,"escope":27}],46:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -12889,7 +12650,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33}],49:[function(require,module,exports){
+},{"../common":31}],47:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -13048,7 +12809,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33,"../evaluator":35,"escope":29}],50:[function(require,module,exports){
+},{"../common":31,"../evaluator":33,"escope":27}],48:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -13246,7 +13007,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33,"../evaluator":35,"escope":29}],51:[function(require,module,exports){
+},{"../common":31,"../evaluator":33,"escope":27}],49:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -13376,7 +13137,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33,"../map":36}],52:[function(require,module,exports){
+},{"../common":31,"../map":34}],50:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -13490,7 +13251,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33}],53:[function(require,module,exports){
+},{"../common":31}],51:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -13579,7 +13340,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33}],54:[function(require,module,exports){
+},{"../common":31}],52:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -13727,7 +13488,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33}],55:[function(require,module,exports){
+},{"../common":31}],53:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -13803,7 +13564,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33}],56:[function(require,module,exports){
+},{"../common":31}],54:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -13883,7 +13644,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33}],57:[function(require,module,exports){
+},{"../common":31}],55:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -13991,7 +13752,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33}],58:[function(require,module,exports){
+},{"../common":31}],56:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -14064,7 +13825,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33}],59:[function(require,module,exports){
+},{"../common":31}],57:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -14201,7 +13962,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33,"escope":29}],60:[function(require,module,exports){
+},{"../common":31,"escope":27}],58:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -14347,7 +14108,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33}],61:[function(require,module,exports){
+},{"../common":31}],59:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -14448,7 +14209,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33,"escope":29}],62:[function(require,module,exports){
+},{"../common":31,"escope":27}],60:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -14644,7 +14405,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33,"../evaluator":35}],63:[function(require,module,exports){
+},{"../common":31,"../evaluator":33}],61:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -14748,7 +14509,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33}],64:[function(require,module,exports){
+},{"../common":31}],62:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -14844,7 +14605,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33}],65:[function(require,module,exports){
+},{"../common":31}],63:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -14918,7 +14679,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33}],66:[function(require,module,exports){
+},{"../common":31}],64:[function(require,module,exports){
 /*
   Copyright (C) 2012 Michael Ficarra <esmangle.copyright@michael.ficarra.me>
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
@@ -14988,7 +14749,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33}],67:[function(require,module,exports){
+},{"../common":31}],65:[function(require,module,exports){
 /*
   Copyright (C) 2012 Michael Ficarra <esmangle.copyright@michael.ficarra.me>
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
@@ -15084,7 +14845,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":33}],68:[function(require,module,exports){
+},{"../common":31}],66:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -15142,7 +14903,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./common":33}],69:[function(require,module,exports){
+},{"./common":31}],67:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
   Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com>
@@ -15833,7 +15594,7 @@ module.exports={
 }));
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{}],70:[function(require,module,exports){
+},{}],68:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -15925,7 +15686,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{}],71:[function(require,module,exports){
+},{}],69:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -16044,7 +15805,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./code":70}],72:[function(require,module,exports){
+},{"./code":68}],70:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -16078,7 +15839,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./code":70,"./keyword":71}],73:[function(require,module,exports){
+},{"./code":68,"./keyword":69}],71:[function(require,module,exports){
 module.exports={
   "_from": "esmangle@^1.0.1",
   "_id": "esmangle@1.0.1",
@@ -16178,7 +15939,7 @@ module.exports={
   "version": "1.0.1"
 }
 
-},{}],74:[function(require,module,exports){
+},{}],72:[function(require,module,exports){
 (function webpackUniversalModuleDefinition(root, factory) {
 /* istanbul ignore next */
 	if(typeof exports === 'object' && typeof module === 'object')
@@ -22888,7 +22649,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ ])
 });
 ;
-},{}],75:[function(require,module,exports){
+},{}],73:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -23180,9 +22941,9 @@ return /******/ (function(modules) { // webpackBootstrap
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../package.json":80,"./map":76,"./utility":77,"escope":29,"estraverse":78,"esutils":86}],76:[function(require,module,exports){
-arguments[4][36][0].apply(exports,arguments)
-},{"dup":36}],77:[function(require,module,exports){
+},{"../package.json":78,"./map":74,"./utility":75,"escope":27,"estraverse":76,"esutils":84}],74:[function(require,module,exports){
+arguments[4][34][0].apply(exports,arguments)
+},{"dup":34}],75:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -23293,7 +23054,7 @@ arguments[4][36][0].apply(exports,arguments)
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{}],78:[function(require,module,exports){
+},{}],76:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
   Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com>
@@ -24138,7 +23899,7 @@ arguments[4][36][0].apply(exports,arguments)
 }(exports));
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./package.json":79}],79:[function(require,module,exports){
+},{"./package.json":77}],77:[function(require,module,exports){
 module.exports={
   "_from": "estraverse@~4.1.1",
   "_id": "estraverse@4.1.1",
@@ -24207,7 +23968,7 @@ module.exports={
   "version": "4.1.1"
 }
 
-},{}],80:[function(require,module,exports){
+},{}],78:[function(require,module,exports){
 module.exports={
   "_from": "esshorten@~1.1.0",
   "_id": "esshorten@1.1.1",
@@ -24286,7 +24047,7 @@ module.exports={
   "version": "1.1.1"
 }
 
-},{}],81:[function(require,module,exports){
+},{}],79:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
   Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com>
@@ -25137,7 +24898,7 @@ module.exports={
 }(exports));
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./package.json":82}],82:[function(require,module,exports){
+},{"./package.json":80}],80:[function(require,module,exports){
 module.exports={
   "_from": "estraverse@^4.2.0",
   "_id": "estraverse@4.2.0",
@@ -25211,7 +24972,7 @@ module.exports={
   "version": "4.2.0"
 }
 
-},{}],83:[function(require,module,exports){
+},{}],81:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -25357,7 +25118,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{}],84:[function(require,module,exports){
+},{}],82:[function(require,module,exports){
 /*
   Copyright (C) 2013-2014 Yusuke Suzuki <utatane.tea@gmail.com>
   Copyright (C) 2014 Ivan Nikulin <ifaaan@gmail.com>
@@ -25494,7 +25255,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{}],85:[function(require,module,exports){
+},{}],83:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -25661,7 +25422,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./code":84}],86:[function(require,module,exports){
+},{"./code":82}],84:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -25696,7 +25457,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./ast":83,"./code":84,"./keyword":85}],87:[function(require,module,exports){
+},{"./ast":81,"./code":82,"./keyword":83}],85:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -26221,7 +25982,7 @@ function functionBindPolyfill(context) {
   };
 }
 
-},{}],88:[function(require,module,exports){
+},{}],86:[function(require,module,exports){
 'use strict';
 
 var hasOwn = Object.prototype.hasOwnProperty;
@@ -26340,7 +26101,7 @@ module.exports = function extend() {
 	return target;
 };
 
-},{}],89:[function(require,module,exports){
+},{}],87:[function(require,module,exports){
 'use strict';
 
 exports.config = require('./lib/config');
@@ -26348,7 +26109,7 @@ exports.tpl = require('./lib/ast_tpl');
 exports.util = require('./lib/ast_util');
 exports.AST_FLAGS = require('./lib/ast_flags').AST_FLAGS;
 
-},{"./lib/ast_flags":90,"./lib/ast_tpl":91,"./lib/ast_util":92,"./lib/config":93}],90:[function(require,module,exports){
+},{"./lib/ast_flags":88,"./lib/ast_tpl":89,"./lib/ast_util":90,"./lib/config":91}],88:[function(require,module,exports){
 'use strict';
 
 exports.AST_FLAGS =
@@ -26366,7 +26127,7 @@ exports.AST_FLAGS =
 	PLACEHOLDER_WORD		: 1 << 10,
 };
 
-},{}],91:[function(require,module,exports){
+},{}],89:[function(require,module,exports){
 'use strict';
 
 var SELF_CREATED_FLAG = require('./ast_flags').AST_FLAGS.SELF_CREATED;
@@ -26463,7 +26224,7 @@ exports.NewExpression = function NewExpression(name, argumentsAst)
 	};
 }
 
-},{"./ast_flags":90}],92:[function(require,module,exports){
+},{"./ast_flags":88}],90:[function(require,module,exports){
 'use strict';
 
 var esprima		= require('esprima');
@@ -26627,7 +26388,7 @@ exports.astMemberExpression2arr = function astMemberExpression2arr(ast)
 	return result;
 }
 
-},{"./ast_tpl":91,"./config":93,"debug":24,"escodegen":27,"esprima":74}],93:[function(require,module,exports){
+},{"./ast_tpl":89,"./config":91,"debug":22,"escodegen":25,"esprima":72}],91:[function(require,module,exports){
 'use strict';
 
 exports.escodegenOptions =
@@ -26670,13 +26431,273 @@ exports.esprimaOptions =
 	loc: true
 };
 
-},{}],94:[function(require,module,exports){
+},{}],92:[function(require,module,exports){
+'use strict';
+
+exports.mergeTranslateData = require('./lib/merge_translate_data');
+exports.update = require('./lib/update');
+
+},{"./lib/merge_translate_data":93,"./lib/update":94}],93:[function(require,module,exports){
+'use strict';
+
+var _		= require('lodash');
+var debug	= require('debug')('i18nc-db:merge_translate_data');
+
+
+exports = module.exports = mergeTranslateData;
+
+function mergeTranslateData(mainData)
+{
+	var json = _mergeData(mainData);
+	return _toTranslateJSON(json);
+}
+
+
+exports._mergeData = _mergeData;
+/**
+ * 合并各个来源的数据
+ * 根据参数来确定打包到code的数据
+ *
+ * input: test/files/merge_translate_data.js
+ * output: test/files/output/merge_translate_data/merge_data.json
+ */
+function _mergeData(mainData)
+{
+	// 先用一个不规范的数据保存，最后要把语言作为一级key处理
+	var result = {DEFAULTS: {}, SUBTYPES: {}};
+	var codeTranslateWords = mainData.codeTranslateWords || {};
+	var FILE_KEY = mainData.FILE_KEY;
+	var dbTranslateWords = mainData.dbTranslateWords && mainData.dbTranslateWords.data || {};
+	var typeData =
+	{
+		func		: mainData.funcTranslateWords,
+		db_filekey	: dbTranslateWords[FILE_KEY],
+		'db_*'		: dbTranslateWords['*'],
+	};
+	var onlyTheseLanguages = mainData.onlyTheseLanguages
+			&& mainData.onlyTheseLanguages.length
+			&& mainData.onlyTheseLanguages;
+	debug('onlyTheseLanguages:%o', onlyTheseLanguages);
+
+	_.each(_.uniq(codeTranslateWords.DEFAULTS), function(word)
+	{
+		var info = _getOneTypeListData('DEFAULTS', word, typeData, onlyTheseLanguages);
+		result.DEFAULTS[word] = info.result;
+	});
+
+	_.each(codeTranslateWords.SUBTYPES, function(words, subtype)
+	{
+		var subresult = result.SUBTYPES[subtype] = {};
+		_.each(_.uniq(words), function(word)
+		{
+			var info = _getOneTypeListData('SUBTYPES', word, typeData, onlyTheseLanguages, subtype);
+			subresult[word] = info.result;
+		});
+	});
+
+	return result;
+}
+
+/**
+ * 针对单个type(DEFAULTS/SUBTYPES)，单个单词的 所有语言
+ * 返回其翻译结果的数组
+ *
+ * 处理任务
+ *     db下所有文件和指定文件的两份数据融合
+ *     和函数中分析出来的数据融合
+ */
+function _getOneTypeListData(maintype, word, typeData, onlyTheseLanguages, subtype)
+{
+	var lans = {};
+	var results = {};
+	// 数组有先后顺序，不要随便调整
+	var types = ['db_filekey', 'db_*', 'func'];
+
+	types.forEach(function(type)
+	{
+		var result = results[type] = {};
+		_.each(typeData[type], function(lanInfo, lan)
+		{
+			if (!lanInfo) return;
+			if (onlyTheseLanguages && onlyTheseLanguages.indexOf(lan) == -1) return;
+
+			var subLanInfo = lanInfo[maintype];
+			if (subtype && subLanInfo) subLanInfo = subLanInfo[subtype];
+			var translateWord = subLanInfo && subLanInfo[word];
+
+			if (translateWord || translateWord === '')
+			{
+				lans[lan] = 1;
+				result[lan] = translateWord;
+			}
+		});
+	});
+
+
+	var lans = Object.keys(lans);
+	debug('word:%s, subtype:%s lans:%o, results:%o', word, subtype, lans, results);
+
+	// 对获取到的所有数据进行合并操作
+	var result = {};
+	lans.forEach(function(lan)
+	{
+		types.some(function(type)
+		{
+			var tmp = results[type][lan];
+			if (tmp || tmp === '')
+			{
+				result[lan] = tmp;
+				return true;
+			}
+		});
+	});
+
+	return {
+		lans: lans,
+		result: result,
+	};
+}
+
+
+function _toTranslateJSON(data)
+{
+	var result = {};
+	_.each(data.DEFAULTS, function(lanData, word)
+	{
+		_.each(lanData, function(translateData, lan)
+		{
+			var lanObj = result[lan] || (result[lan] = {});
+			var wordObj = lanObj.DEFAULTS || (lanObj.DEFAULTS = {});
+
+			wordObj[word] = translateData;
+		});
+	});
+
+	_.each(data.SUBTYPES, function(item, subtype)
+	{
+		_.each(item, function(lanData, word)
+		{
+			_.each(lanData, function(translateData, lan)
+			{
+				var lanObj = result[lan] || (result[lan] = {});
+				var subtypeObj = lanObj.SUBTYPES || (lanObj.SUBTYPES = {});
+				var wordObj = subtypeObj[subtype] || (subtypeObj[subtype] = {});
+
+				wordObj[word] = translateData;
+			});
+		});
+	});
+
+	return result;
+}
+
+},{"debug":22,"lodash":102}],94:[function(require,module,exports){
+'use strict';
+
+var _			= require('lodash');
+var debug		= require('debug')('i18nc-db:update');
+var jsoncode	= require('i18nc-jsoncode');
+var parserV2	= jsoncode.jsoncode.v2.parser;
+
+
+module.exports = update;
+function update(dbTranslateWords)
+{
+	if (!dbTranslateWords || dbTranslateWords.version == 2) return false;
+	if (!dbTranslateWords.version) dbTranslateWords.version = 1;
+
+	debug('update version:%s', dbTranslateWords.version);
+
+	var result = {};
+	switch(dbTranslateWords.version)
+	{
+		case 1:
+			_.each(dbTranslateWords, function(item, lan)
+			{
+				if (lan == 'version') return;
+				_.each(item, function(data, fileKey)
+				{
+					var obj = result[fileKey] || (result[fileKey] = {});
+					obj[lan] = data;
+				});
+			});
+			break;
+
+		case 3:
+			_.each(dbTranslateWords.data, function(val, key)
+			{
+				result[key] = parserV2.codeJSON2translateJSON(val);
+			});
+			break;
+
+		default:
+			throw new Error('undefined dbTranslateWords Version');
+	}
+
+	return {
+		version: 2,
+		data: result
+	};
+}
+
+},{"debug":22,"i18nc-jsoncode":95,"lodash":102}],95:[function(require,module,exports){
+'use strict';
+
+var debug	 	= require('debug')('i18nc-jsoncode');
+var jsoncode1	= require('i18nc-jsoncode1');
+var jsoncode2	= require('i18nc-jsoncode2');
+
+
+exports.jsoncode =
+{
+	v1: jsoncode1,
+	v2: jsoncode2
+};
+
+exports.getParser = function(funcVersion)
+{
+	if (!funcVersion || !ltI18NFuncVersion(funcVersion, 'G'))
+	{
+		debug('use parser v2');
+		return jsoncode2.parser;
+	}
+	else
+	{
+		debug('use parser v1');
+		return jsoncode1.parser;
+	}
+};
+
+exports.getGenerator = function(funcVersion)
+{
+	if (!funcVersion || !ltI18NFuncVersion(funcVersion, 'G'))
+	{
+		debug('use generator v2');
+		return jsoncode2.generator;
+	}
+	else
+	{
+		debug('use generator v1');
+		return jsoncode1.generator;
+	}
+};
+
+
+// 判断两个版本号，是否是小于关系
+// 由于一开始做的版本，先使用了小写字母，导致charCode转化有问题
+// 这里先转成大写进行判断，等到后面大写用完之后，再去掉toUpperCase
+function ltI18NFuncVersion(a, b)
+{
+	return a.toUpperCase().charCodeAt(0) < b.toUpperCase().charCodeAt(0);
+}
+
+},{"debug":22,"i18nc-jsoncode1":96,"i18nc-jsoncode2":99}],96:[function(require,module,exports){
 'use strict';
 
 exports.parser = require('./lib/parser');
 exports.generator = require('./lib/generator');
 
-},{"./lib/generator":95,"./lib/parser":96}],95:[function(require,module,exports){
+},{"./lib/generator":97,"./lib/parser":98}],97:[function(require,module,exports){
 'use strict';
 
 var _			= require('lodash');
@@ -26881,7 +26902,7 @@ function _wordJson2ast(words)
 	return astTpl.ObjectExpression(result);
 }
 
-},{"debug":24,"i18nc-ast":89,"lodash":100}],96:[function(require,module,exports){
+},{"debug":22,"i18nc-ast":87,"lodash":102}],98:[function(require,module,exports){
 'use strict';
 
 var debug	= require('debug')('i18nc-jsoncode:parser');
@@ -26995,9 +27016,9 @@ function _wordAst2json(ast)
 	return result;
 }
 
-},{"debug":24,"i18nc-ast":89}],97:[function(require,module,exports){
-arguments[4][94][0].apply(exports,arguments)
-},{"./lib/generator":98,"./lib/parser":99,"dup":94}],98:[function(require,module,exports){
+},{"debug":22,"i18nc-ast":87}],99:[function(require,module,exports){
+arguments[4][96][0].apply(exports,arguments)
+},{"./lib/generator":100,"./lib/parser":101,"dup":96}],100:[function(require,module,exports){
 'use strict';
 
 var _					= require('lodash');
@@ -27224,7 +27245,7 @@ function _wordJson2ast(wordMap)
 	return astTpl.ObjectExpression(result);
 }
 
-},{"debug":24,"i18nc-ast":89,"lodash":100}],99:[function(require,module,exports){
+},{"debug":22,"i18nc-ast":87,"lodash":102}],101:[function(require,module,exports){
 'use strict';
 
 var _		= require('lodash');
@@ -27380,7 +27401,7 @@ function _getSubtypeJSON(subtypeItem, lanIndex)
 	return result;
 }
 
-},{"debug":24,"i18nc-ast":89,"lodash":100}],100:[function(require,module,exports){
+},{"debug":22,"i18nc-ast":87,"lodash":102}],102:[function(require,module,exports){
 (function (global){
 /**
  * @license
@@ -44491,7 +44512,7 @@ function _getSubtypeJSON(subtypeItem, lanIndex)
 }.call(this));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],101:[function(require,module,exports){
+},{}],103:[function(require,module,exports){
 /**
  * Helpers.
  */
@@ -44655,7 +44676,7 @@ function plural(ms, msAbs, n, name) {
   return Math.round(ms / n) + ' ' + name + (isPlural ? 's' : '');
 }
 
-},{}],102:[function(require,module,exports){
+},{}],104:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -44841,7 +44862,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],103:[function(require,module,exports){
+},{}],105:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -44964,7 +44985,7 @@ ArraySet.prototype.toArray = function ArraySet_toArray() {
 
 exports.ArraySet = ArraySet;
 
-},{"./util":112}],104:[function(require,module,exports){
+},{"./util":114}],106:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -45106,7 +45127,7 @@ exports.decode = function base64VLQ_decode(aStr, aIndex, aOutParam) {
   aOutParam.rest = aIndex;
 };
 
-},{"./base64":105}],105:[function(require,module,exports){
+},{"./base64":107}],107:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -45175,7 +45196,7 @@ exports.decode = function (charCode) {
   return -1;
 };
 
-},{}],106:[function(require,module,exports){
+},{}],108:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -45288,7 +45309,7 @@ exports.search = function search(aNeedle, aHaystack, aCompare, aBias) {
   return index;
 };
 
-},{}],107:[function(require,module,exports){
+},{}],109:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2014 Mozilla Foundation and contributors
@@ -45369,7 +45390,7 @@ MappingList.prototype.toArray = function MappingList_toArray() {
 
 exports.MappingList = MappingList;
 
-},{"./util":112}],108:[function(require,module,exports){
+},{"./util":114}],110:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -45485,7 +45506,7 @@ exports.quickSort = function (ary, comparator) {
   doQuickSort(ary, comparator, 0, ary.length - 1);
 };
 
-},{}],109:[function(require,module,exports){
+},{}],111:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -46632,7 +46653,7 @@ IndexedSourceMapConsumer.prototype._parseMappings =
 
 exports.IndexedSourceMapConsumer = IndexedSourceMapConsumer;
 
-},{"./array-set":103,"./base64-vlq":104,"./binary-search":106,"./quick-sort":108,"./util":112}],110:[function(require,module,exports){
+},{"./array-set":105,"./base64-vlq":106,"./binary-search":108,"./quick-sort":110,"./util":114}],112:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -47059,7 +47080,7 @@ SourceMapGenerator.prototype.toString =
 
 exports.SourceMapGenerator = SourceMapGenerator;
 
-},{"./array-set":103,"./base64-vlq":104,"./mapping-list":107,"./util":112}],111:[function(require,module,exports){
+},{"./array-set":105,"./base64-vlq":106,"./mapping-list":109,"./util":114}],113:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -47474,7 +47495,7 @@ SourceNode.prototype.toStringWithSourceMap = function SourceNode_toStringWithSou
 
 exports.SourceNode = SourceNode;
 
-},{"./source-map-generator":110,"./util":112}],112:[function(require,module,exports){
+},{"./source-map-generator":112,"./util":114}],114:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -47964,7 +47985,7 @@ function computeSourceURL(sourceRoot, sourceURL, sourceMapURL) {
 }
 exports.computeSourceURL = computeSourceURL;
 
-},{}],113:[function(require,module,exports){
+},{}],115:[function(require,module,exports){
 /*
  * Copyright 2009-2011 Mozilla Foundation and contributors
  * Licensed under the New BSD license. See LICENSE.txt or:
@@ -47974,7 +47995,7 @@ exports.SourceMapGenerator = require('./lib/source-map-generator').SourceMapGene
 exports.SourceMapConsumer = require('./lib/source-map-consumer').SourceMapConsumer;
 exports.SourceNode = require('./lib/source-node').SourceNode;
 
-},{"./lib/source-map-consumer":109,"./lib/source-map-generator":110,"./lib/source-node":111}],114:[function(require,module,exports){
+},{"./lib/source-map-consumer":111,"./lib/source-map-generator":112,"./lib/source-node":113}],116:[function(require,module,exports){
 module.exports={
   "name": "i18nc-core",
   "version": "10.9.0",
@@ -48003,8 +48024,8 @@ module.exports={
     "extend": "^3.0.2",
     "lodash": "^4.17.11",
     "i18nc-ast": "^1.0.0",
-    "i18nc-jsoncode1": "^2.0.0",
-    "i18nc-jsoncode2": "^2.0.0"
+    "i18nc-db": "^1.0.0",
+    "i18nc-jsoncode": "^1.0.0"
   },
   "devDependencies": {
     "benchmark": "^2.1.4",
