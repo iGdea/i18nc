@@ -1604,9 +1604,7 @@ _.extend(I18NPlaceholder.prototype,
 	},
 	getTranslateJSON: function()
 	{
-		var funcInfo = this.parse();
-		var funcVersion = funcInfo.__FUNCTION_VERSION__;
-		return jsoncode.getParser(funcVersion)
+		return jsoncode.getParser(this._getTargetFuncVersion())
 			.codeJSON2translateJSON(this._getTranslateJSON());
 	},
 	_getTranslateJSON: function()
@@ -1627,13 +1625,19 @@ _.extend(I18NPlaceholder.prototype,
 		var data = i18ncDB.mergeTranslateData(info);
 		return this._getI18NGenerator().toTranslateJSON(data);
 	},
-	_getI18NGenerator: function()
+	_getTargetFuncVersion: function()
 	{
 		var funcInfo = this.parse();
 		var funcVersion = funcInfo.__FUNCTION_VERSION__;
 		var renderType = this.getRenderType();
 
-		return jsoncode.getGenerator(renderType != 'complete' && funcVersion);
+		return renderType == 'complete'
+			? DEF.I18NFunctionVersion + DEF.I18NFunctionSubVersion.FULL
+			: funcVersion;
+	},
+	_getI18NGenerator: function()
+	{
+		return jsoncode.getGenerator(this._getTargetFuncVersion());
 	},
 	_getRenderTranslateJSONCode: function()
 	{
@@ -1784,7 +1788,7 @@ _.extend(I18NPlaceholder.prototype,
 			handlerName			: this.handlerName || funcInfo.handlerName || options.I18NHandlerName,
 			getLanguageCode		: getLanguageCode,
 			FILE_KEY			: funcInfo.__FILE_KEY__,
-			FUNCTION_VERSION	: DEF.I18NFunctionVersion+DEF.I18NFunctionSubVersion.FULL,
+			FUNCTION_VERSION	: DEF.I18NFunctionVersion + DEF.I18NFunctionSubVersion.FULL,
 			TRANSLATE_JSON_CODE	: TRANSLATE_JSON_CODE,
 		};
 
@@ -47998,7 +48002,7 @@ exports.SourceNode = require('./lib/source-node').SourceNode;
 },{"./lib/source-map-consumer":111,"./lib/source-map-generator":112,"./lib/source-node":113}],116:[function(require,module,exports){
 module.exports={
   "name": "i18nc-core",
-  "version": "10.9.0",
+  "version": "10.10.0",
   "description": "I18N Tool for JS files",
   "main": "index.js",
   "scripts": {
