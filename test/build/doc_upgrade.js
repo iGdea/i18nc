@@ -2,8 +2,8 @@
 
 var _ = require('lodash');
 var fs = require('fs');
-var tpl = fs.readFileSync(__dirname+'/doc-lib/tpl/upgrade.tpl.md').toString();
-var codeMapTable = require('./doc-lib/codemap-table');
+var tpl = fs.readFileSync(__dirname+'/doc_lib/tpl/upgrade.tpl.md').toString();
+var codeMapTable = require('./doc_lib/codemap_table');
 var depdOptions = require('../../lib/upgrade/depd_options');
 
 var content = tpl.replace(/\$(\w+)/g, function(all, key)

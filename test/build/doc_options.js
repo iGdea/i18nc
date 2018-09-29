@@ -1,11 +1,11 @@
 'use strict';
 
 var fs = require('fs');
-var optionsComment = require('./doc-lib/options-comment');
-var codeMapTable = require('./doc-lib/codemap-table');
+var optionsComment = require('./doc_lib/options_comment');
+var codeMapTable = require('./doc_lib/codemap_table');
 var optionsUtils = require('../../lib/utils/options_utils');
 
-var tpl = fs.readFileSync(__dirname+'/doc-lib/tpl/options.tpl.md').toString();
+var tpl = fs.readFileSync(__dirname+'/doc_lib/tpl/options.tpl.md').toString();
 var content = fs.readFileSync(__dirname+'/../../lib/options.js').toString();
 
 var fileContent = tpl.replace(/\$(\w+)/g, function(all, key)

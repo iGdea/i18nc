@@ -1,9 +1,9 @@
 'use strict';
 
 var fs = require('fs');
-var optionsComment = require('./doc-lib/options-comment');
+var optionsComment = require('./doc_lib/options_comment');
 
-var tpl = fs.readFileSync(__dirname+'/doc-lib/tpl/only-options.tpl.md').toString();
+var tpl = fs.readFileSync(__dirname+'/doc_lib/tpl/only_options.tpl.md').toString();
 var content = fs.readFileSync(__dirname+'/../../lib/options.js').toString();
 
 var fileContent = tpl.replace(/\$(\w+)/g, function(all, key)

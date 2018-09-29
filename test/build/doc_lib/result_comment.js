@@ -1,10 +1,10 @@
 'use strict';
 
 var _ = require('lodash');
-var debug = require('debug')('i18nc-core:doc-lib/result-comment');
+var debug = require('debug')('i18nc-core:doc_lib/result_comment');
 var esprima = require('esprima');
 var parseComment = require('comment-parser');
-var codeMapTable = require('./codemap-table');
+var codeMapTable = require('./codemap_table');
 var ArrayPush = Array.prototype.push;
 
 function AstFunc(name, ast, comments)

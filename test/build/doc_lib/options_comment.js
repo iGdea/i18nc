@@ -1,10 +1,10 @@
 'use strict';
 
-var debug = require('debug')('i18nc-core:doc-lib/options-comment');
+var debug = require('debug')('i18nc-core:doc_lib/options_comment');
 var esprima = require('esprima');
 var parseComment = require('comment-parser');
 var ArrayPush = Array.prototype.push;
-var codeMapTable = require('./codemap-table');
+var codeMapTable = require('./codemap_table');
 
 module.exports = function(content)
 {

@@ -2,9 +2,9 @@
 
 var _ = require('lodash');
 var fs = require('fs');
-var resultComment = require('./doc-lib/result-comment');
+var resultComment = require('./doc_lib/result_comment');
 
-var tpl = fs.readFileSync(__dirname+'/doc-lib/tpl/result.tpl.md').toString();
+var tpl = fs.readFileSync(__dirname+'/doc_lib/tpl/result.tpl.md').toString();
 var content = fs.readFileSync(__dirname+'/../../lib/result_object.js').toString();
 var funcs = resultComment(content);
 
