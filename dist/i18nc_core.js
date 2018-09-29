@@ -614,11 +614,14 @@ _.extend(ASTScope.prototype,
 	/**
 	 * 获取自身除I18N函数之外的translateInfo
 	 */
-	codeTranslateWordInfoOfSelf: function()
+	codeTranslateWordInfoOfSelf: function(options)
 	{
 		var scope				= this;
 		var dirtyWords			= new DirtyWords();
 		var codeTranslateWords	= new CodeTranslateWords();
+
+		var IGNORE_translateWord	= !options.codeModifyItems.TranslateWord;
+		var IGNORE_regexp			= !options.codeModifyItems.TranslateWord_RegExp;
 
 		scope.translateWordAsts.forEach(function(ast)
 		{
@@ -634,6 +637,11 @@ _.extend(ASTScope.prototype,
 				});
 
 				if (!ret) dirtyWords.add(ast, "This ast can't use I18N");
+			}
+			else if (IGNORE_translateWord ||
+				(IGNORE_regexp && ast.value instanceof RegExp))
+			{
+				dirtyWords.add(ast, 'Text Replacer Not Enabled');
 			}
 			else
 			{
@@ -695,14 +703,12 @@ _.extend(ASTScope.prototype,
 		var codeStartPos	= 0;
 		var dealAst			= [];
 		var newCode			= [];
-		var selfTWords		= scope.codeTranslateWordInfoOfSelf();
+		var selfTWords		= scope.codeTranslateWordInfoOfSelf(options);
 
 		var codeTranslateWordsJSON = selfTWords.codeTranslateWords.toJSON();
 		var selfFuncTranslateWords = new FuncTranslateWords();
 		var originalFileKeys = [];
 
-		var IGNORE_translateWord		= !options.codeModifyItems.TranslateWord;
-		var IGNORE_regexp				= !options.codeModifyItems.TranslateWord_RegExp;
 		var IGNORE_I18NHandler_alias	= !options.codeModifyItems.I18NHandlerAlias;
 
 		// 预处理 I18N函数 begin
@@ -751,11 +757,12 @@ _.extend(ASTScope.prototype,
 			dealAst.push({type: 'scope', value: item.ast, scope: item});
 		});
 
-		scope.translateWordAsts.forEach(function(ast)
+		selfTWords.codeTranslateWords.list.forEach(function(item)
 		{
-			if (!astUtil.checkAstFlag(ast, AST_FLAGS.SKIP_REPLACE | AST_FLAGS.DIS_REPLACE))
+			if (item.type == 'new'
+				&& !astUtil.checkAstFlag(item.originalAst, AST_FLAGS.SKIP_REPLACE | AST_FLAGS.DIS_REPLACE))
 			{
-				dealAst.push({type: 'translateWord', value: ast});
+				dealAst.push({type: 'translateWord', value: item.originalAst});
 			}
 		});
 
@@ -838,16 +845,8 @@ _.extend(ASTScope.prototype,
 						break;
 
 					case 'translateWord':
-						if (IGNORE_translateWord ||
-							(IGNORE_regexp && ast.value instanceof RegExp))
-						{
-							newCode.push(tmpCode.slice(codeStartPos, codeEndPos));
-						}
-						else
-						{
-							var myCode = astUtil.tocode(ast.__i18n_replace_info__.newAst);
-							newCode.push(myCode);
-						}
+						var myCode = astUtil.tocode(ast.__i18n_replace_info__.newAst);
+						newCode.push(myCode);
 						break;
 
 
