@@ -6861,7 +6861,7 @@ module.exports={
   },
   "_requiredBy": [
     "/",
-    "/degenerator"
+    "/i18nc-ast"
   ],
   "_resolved": "https://registry.npmjs.org/escodegen/-/escodegen-1.11.0.tgz",
   "_shasum": "b27a9389481d5bfd5bec76f7bb1eb3f8f4556589",
@@ -27004,12 +27004,12 @@ arguments[4][96][0].apply(exports,arguments)
 },{"./lib/generator":100,"./lib/parser":101,"dup":96}],100:[function(require,module,exports){
 'use strict';
 
-var _					= require('lodash');
-var debug				= require('debug')('i18nc-jsoncode:generator');
-var i18ncAst			= require('i18nc-ast');
-var astTpl				= i18ncAst.tpl;
-var astUtil				= i18ncAst.util;
-var AST_FLAGS			= i18ncAst.AST_FLAGS;
+var _			= require('lodash');
+var debug		= require('debug')('i18nc-jsoncode:generator');
+var i18ncAst	= require('i18nc-ast');
+var astTpl		= i18ncAst.tpl;
+var astUtil		= i18ncAst.util;
+var AST_FLAGS	= i18ncAst.AST_FLAGS;
 
 
 exports.toTranslateJSON = toTranslateJSON;
@@ -27024,7 +27024,7 @@ exports.toTranslateJSON = toTranslateJSON;
 function toTranslateJSON(data)
 {
 	var result = {};
-	var LANGS = Object.keys(data).sort();
+	var LANGS = _getlanArr(data);
 	if (LANGS.length) result.$ = LANGS;
 
 	function _addkey(subtype, srcWord, targetWord, langIndex)
@@ -27033,12 +27033,12 @@ function toTranslateJSON(data)
 		var arr = obj[srcWord];
 		if (arr)
 		{
-			 var targetIndex = arr.indexOf(targetWord);
-			 if (targetIndex != -1) targetWord = targetIndex;
+			var targetIndex = arr.indexOf(targetWord);
+			if (targetIndex != -1) targetWord = targetIndex;
 		}
 		else
 		{
-			 arr = obj[srcWord] = [];
+			arr = obj[srcWord] = [];
 		}
 
 		arr[langIndex] = targetWord;
@@ -27226,6 +27226,47 @@ function _wordJson2ast(wordMap)
 	}
 
 	return astTpl.ObjectExpression(result);
+}
+
+/**
+ * 从翻译数据中获取语言列表
+ *
+ * 语言数组需要进行排序
+ * 排序按照翻译的词条多少进行（可能会导致跨文件阅读时，一定程度上的不适应）
+ *
+ * @param       {Object} translateData 翻译数据
+ * @return      {Array}                获取到的语言列表
+ */
+function _getlanArr(translateData)
+{
+	return _.map(translateData, function(obj, lang)
+		{
+			var subtypeWordsLen = _(obj.SUBTYPES)
+				.map(function(obj)
+				{
+					return Object.keys(obj).length;
+				})
+				.reduce(function(a, b)
+				{
+					return a + b;
+				});
+
+			debug('subtypeWordsLen:%s', subtypeWordsLen);
+
+			return {
+				lang: lang,
+				words_len: _.keys(obj.DEFAULTS).length + (subtypeWordsLen || 0)
+			};
+		})
+		.sort(function(a, b)
+		{
+			if (a.words_len == b.words_len) return a.lang > b.lang ? -1 : 1;
+			return a.words_len > b.words_len ? -1 : 1;
+		})
+		.map(function(item)
+		{
+			return item.lang;
+		});
 }
 
 },{"debug":22,"i18nc-ast":87,"lodash":102}],101:[function(require,module,exports){
@@ -47981,7 +48022,7 @@ exports.SourceNode = require('./lib/source-node').SourceNode;
 },{"./lib/source-map-consumer":111,"./lib/source-map-generator":112,"./lib/source-node":113}],116:[function(require,module,exports){
 module.exports={
   "name": "i18nc-core",
-  "version": "10.9.1",
+  "version": "10.9.2",
   "description": "I18N Tool for JS files",
   "main": "index.js",
   "scripts": {
@@ -48014,14 +48055,14 @@ module.exports={
     "benchmark": "^2.1.4",
     "comment-parser": "^0.5.0",
     "cross-env": "^5.2.0",
-    "eslint": "^5.6.0",
+    "eslint": "^5.6.1",
     "eslint-config-brcjs": "^0.2.0",
     "expect.js": "^0.3.1",
     "glob": "^7.1.3",
+    "i18nc-test-req": "^1.1.0",
     "istanbul": "^0.4.5",
     "karma": "^3.0.0",
     "karma-config-brcjs": "^1.1.0",
-    "mkdirp": "^0.5.1",
     "mocha": "^5.2.0"
   },
   "repository": {

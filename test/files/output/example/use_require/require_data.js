@@ -1,4 +1,6 @@
-module.exports = function code(){
+module.exports = function textWrapCode(){
+
+function code(){
 // just fot test
 return {
 	'$': ['en-US'],
@@ -7,4 +9,6 @@ return {
 		'中文db *': ['indb *']
 	}
 };
+}
+
 }
