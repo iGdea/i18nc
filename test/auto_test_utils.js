@@ -7,6 +7,7 @@ testReq.ROOT_PATH = __dirname + '/files/output';
 exports.wrapCode4pkg = testReq.wrapCode4pkg;
 exports.requireAfterWriteReal = testReq.requireAfterWriteReal;
 exports.code2arr = testReq.code2arr;
+exports.isBuild = testReq.isBuild;
 exports.requireAfterWrite = testReq;
 
 exports.JsonOfI18ncRet = function JsonOfI18ncRet(info)

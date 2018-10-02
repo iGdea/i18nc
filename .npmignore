@@ -10,10 +10,13 @@ package-lock.json
 .eslintignore
 .editorconfig
 .npmignore
+.coveralls.yml
 .tags*
 .DS_Store
 
 test
+dist/test
+src/test
 coverage
 benchmark
 docs

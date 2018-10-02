@@ -969,8 +969,13 @@ var EventEmitter	= require('events').EventEmitter;
  */
 
 var globalEmitter = new EventEmitter;
-var tmpEmitter = new EventEmitter;
+var tmpEmitter = null;
 var EventEmit = globalEmitter.emit;
+
+exports.clear = function()
+{
+	tmpEmitter = null;
+};
 
 exports.new = function()
 {
@@ -980,7 +985,7 @@ exports.new = function()
 exports.trigger = function()
 {
 	EventEmit.apply(globalEmitter, arguments);
-	EventEmit.apply(tmpEmitter, arguments);
+	if (tmpEmitter) EventEmit.apply(tmpEmitter, arguments);
 };
 
 exports.proxy = function(obj)
@@ -1870,7 +1875,18 @@ module.exports = function(code, options)
 	if (typeof options.events.cutword == 'function')
 		tmpEmitter.addListener('cutword', options.events.cutword);
 
-	var result = mainHandler(code, options);
+	var result;
+
+	try {
+		result = mainHandler(code, options);
+	}
+	catch(err)
+	{
+		emitter.clear();
+		throw err;
+	}
+
+	emitter.clear();
 	return result;
 }
 
@@ -48049,7 +48065,7 @@ module.exports={
     "lodash": "^4.17.11",
     "i18nc-ast": "^1.0.0",
     "i18nc-db": "^1.0.0",
-    "i18nc-jsoncode": "^1.0.0"
+    "i18nc-jsoncode": "^1.0.1"
   },
   "devDependencies": {
     "benchmark": "^2.1.4",
@@ -48059,7 +48075,7 @@ module.exports={
     "eslint-config-brcjs": "^0.2.0",
     "expect.js": "^0.3.1",
     "glob": "^7.1.3",
-    "i18nc-test-req": "^1.1.0",
+    "i18nc-test-req": "^1.2.0",
     "istanbul": "^0.4.5",
     "karma": "^3.0.0",
     "karma-config-brcjs": "^1.1.0",

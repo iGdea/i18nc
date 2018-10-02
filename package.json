@@ -27,7 +27,7 @@
     "lodash": "^4.17.11",
     "i18nc-ast": "^1.0.0",
     "i18nc-db": "^1.0.0",
-    "i18nc-jsoncode": "^1.0.0"
+    "i18nc-jsoncode": "^1.0.1"
   },
   "devDependencies": {
     "benchmark": "^2.1.4",
@@ -37,7 +37,7 @@
     "eslint-config-brcjs": "^0.2.0",
     "expect.js": "^0.3.1",
     "glob": "^7.1.3",
-    "i18nc-test-req": "^1.1.0",
+    "i18nc-test-req": "^1.2.0",
     "istanbul": "^0.4.5",
     "karma": "^3.0.0",
     "karma-config-brcjs": "^1.1.0",

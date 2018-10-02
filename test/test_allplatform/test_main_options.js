@@ -2,7 +2,7 @@
 
 var expect				= require('expect.js');
 var i18nc				= require('../../');
-var dbTranslateWords	= require('../example/translate_words_db');
+var dbTranslateWords	= require('../files/casefile/translate_words_db');
 var autoTestUtils		= require('../auto_test_utils');
 var requireAfterWrite	= autoTestUtils.requireAfterWrite('main_options');
 var collectFuncs		= require('../files/casefile/func_code/func_code_collect');
@@ -89,7 +89,7 @@ describe('#main_options', function()
 		{
 			it('#enable', function()
 			{
-				var exampleCode = require('../example/func_code.js').toString();
+				var exampleCode = require('../files/casefile/func_code/func_code_example.js').toString();
 				var info = i18nc(exampleCode,
 				{
 					I18NHandler:
@@ -142,7 +142,7 @@ describe('#main_options', function()
 
 	describe('#codeModifiedArea', function()
 	{
-		var exampleCode = require('../example/func_code.js').toString();
+		var exampleCode = require('../files/casefile/func_code/func_code_example.js').toString();
 
 		it('#only translateWord', function()
 		{
@@ -291,7 +291,7 @@ describe('#main_options', function()
 
 	it('#isIgnoreI18NHandlerTranslateWords', function()
 	{
-		var code = require('../example/func_code_output').toString();
+		var code = require('../files/casefile/func_code/func_code_example').toString();
 		var info = i18nc(code,
 			{
 				isIgnoreI18NHandlerTranslateWords: true,
