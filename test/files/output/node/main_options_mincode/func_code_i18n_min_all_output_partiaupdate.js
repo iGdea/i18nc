@@ -17,7 +17,7 @@ function I18N(msg, tpldata, subtype)
 	if (LAN && LAN.split) {
 		if (self.L != LAN) {
 			self.K = 'i18n_handler_example';
-			self.V = 'Gf';
+			self.V = 'Hf';
 			self.D = {'$':['en-US','zh-TW'],'*':{'%s美好%s生活':['%sgood%s life'],'%{中文}词典':['%{Chinese} dictionary'],'简体':['simplified','簡體']}};
 			translateJSON = self.D;
 
@@ -54,9 +54,9 @@ function I18N(msg, tpldata, subtype)
 	msg += '';
 	if (!tpldata.length || msg.indexOf('%') == -1) return msg;
 
-	return msg.replace(/%s|%\{.+?\}/g, function(all) {
+	return msg.replace(/%s|%\{.+?\}/g, function() {
 		var newVal = tpldata[replace_index++];
-		return newVal === undefined ? all : newVal === null ? '' : newVal;
+		return newVal === undefined ? '' : newVal;
 	});
 }
 var codeJSON={

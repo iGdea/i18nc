@@ -28,7 +28,7 @@ module.exports = function code()
 		if (LAN && LAN.split) {
 			if (self.L != LAN) {
 				self.K = '*';
-				self.V = 'Gf';
+				self.V = 'Hf';
 				self.D = {
 					'*': {
 						// 'out define 中文':
@@ -69,9 +69,9 @@ module.exports = function code()
 		msg += '';
 		if (!tpldata.length || msg.indexOf('%') == -1) return msg;
 
-		return msg.replace(/%s|%\{.+?\}/g, function(all) {
+		return msg.replace(/%s|%\{.+?\}/g, function() {
 			var newVal = tpldata[replace_index++];
-			return newVal === undefined ? all : newVal === null ? '' : newVal;
+			return newVal === undefined ? '' : newVal;
 		});
 	}
 	/* eslint-enable */
@@ -110,7 +110,7 @@ module.exports = function code()
 			if (LAN && LAN.split) {
 				if (self.L != LAN) {
 					self.K = '*';
-					self.V = 'Gf';
+					self.V = 'Hf';
 					self.D = {
 						'*': {
 							// '中文':
@@ -151,9 +151,9 @@ module.exports = function code()
 			msg += '';
 			if (!tpldata.length || msg.indexOf('%') == -1) return msg;
 
-			return msg.replace(/%s|%\{.+?\}/g, function(all) {
+			return msg.replace(/%s|%\{.+?\}/g, function() {
 				var newVal = tpldata[replace_index++];
-				return newVal === undefined ? all : newVal === null ? '' : newVal;
+				return newVal === undefined ? '' : newVal;
 			});
 		}
 		/* eslint-enable */
@@ -193,7 +193,7 @@ module.exports = function code()
 			if (LAN && LAN.split) {
 				if (self.L != LAN) {
 					self.K = '*';
-					self.V = 'Gf';
+					self.V = 'Hf';
 					self.D = {
 						'*': {
 							// 'define2 中文':
@@ -234,9 +234,9 @@ module.exports = function code()
 			msg += '';
 			if (!tpldata.length || msg.indexOf('%') == -1) return msg;
 
-			return msg.replace(/%s|%\{.+?\}/g, function(all) {
+			return msg.replace(/%s|%\{.+?\}/g, function() {
 				var newVal = tpldata[replace_index++];
-				return newVal === undefined ? all : newVal === null ? '' : newVal;
+				return newVal === undefined ? '' : newVal;
 			});
 		}
 		/* eslint-enable */
@@ -277,7 +277,7 @@ module.exports = function code()
 			if (LAN && LAN.split) {
 				if (self.L != LAN) {
 					self.K = '*';
-					self.V = 'Gf';
+					self.V = 'Hf';
 					self.D = {
 						'*': {
 							// 'define3 中文':
@@ -318,9 +318,9 @@ module.exports = function code()
 			msg += '';
 			if (!tpldata.length || msg.indexOf('%') == -1) return msg;
 
-			return msg.replace(/%s|%\{.+?\}/g, function(all) {
+			return msg.replace(/%s|%\{.+?\}/g, function() {
 				var newVal = tpldata[replace_index++];
-				return newVal === undefined ? all : newVal === null ? '' : newVal;
+				return newVal === undefined ? '' : newVal;
 			});
 		}
 		/* eslint-enable */
@@ -363,7 +363,7 @@ module.exports = function code()
 			if (LAN && LAN.split) {
 				if (self.L != LAN) {
 					self.K = '*';
-					self.V = 'Gf';
+					self.V = 'Hf';
 					self.D = {
 						'*': {
 							// 'define4 中文':
@@ -405,9 +405,9 @@ module.exports = function code()
 			msg += '';
 			if (!tpldata.length || msg.indexOf('%') == -1) return msg;
 
-			return msg.replace(/%s|%\{.+?\}/g, function(all) {
+			return msg.replace(/%s|%\{.+?\}/g, function() {
 				var newVal = tpldata[replace_index++];
-				return newVal === undefined ? all : newVal === null ? '' : newVal;
+				return newVal === undefined ? '' : newVal;
 			});
 		}
 		/* eslint-enable */
@@ -452,7 +452,7 @@ module.exports = function code()
 			if (LAN && LAN.split) {
 				if (self.L != LAN) {
 					self.K = '*';
-					self.V = 'Gf';
+					self.V = 'Hf';
 					self.D = {
 						'*': {
 							// 'define6 中文':
@@ -493,9 +493,9 @@ module.exports = function code()
 			msg += '';
 			if (!tpldata.length || msg.indexOf('%') == -1) return msg;
 		
-			return msg.replace(/%s|%\{.+?\}/g, function(all) {
+			return msg.replace(/%s|%\{.+?\}/g, function() {
 				var newVal = tpldata[replace_index++];
-				return newVal === undefined ? all : newVal === null ? '' : newVal;
+				return newVal === undefined ? '' : newVal;
 			});
 		}
 

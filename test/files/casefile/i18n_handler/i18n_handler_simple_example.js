@@ -7,11 +7,11 @@ function I18N(msg, tpldata)
 	var self = I18N;
 
 	self.K = 'i18n_handler_example_simple';
-	self.V = 'Gs';
+	self.V = 'Hs';
 
 	var replace_index = 0;
-	return msg.replace(/%s|%\{.+?\}/g, function(all) {
+	return msg.replace(/%s|%\{.+?\}/g, function() {
 		var newVal = tpldata[replace_index++];
-		return newVal === undefined ? all : newVal === null ? '' : newVal;
+		return newVal === undefined ? '' : newVal;
 	});
 }

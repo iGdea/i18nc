@@ -30,7 +30,7 @@ define(function(){
 		if (LAN && LAN.split) {
 			if (self.L != LAN) {
 				self.K = '*';
-				self.V = 'Gf';
+				self.V = 'Hf';
 				self.D = {
 					'*': {
 						// '中文':
@@ -71,9 +71,9 @@ define(function(){
 		msg += '';
 		if (!tpldata.length || msg.indexOf('%') == -1) return msg;
 
-		return msg.replace(/%s|%\{.+?\}/g, function(all) {
+		return msg.replace(/%s|%\{.+?\}/g, function() {
 			var newVal = tpldata[replace_index++];
-			return newVal === undefined ? all : newVal === null ? '' : newVal;
+			return newVal === undefined ? '' : newVal;
 		});
 	}
 	/* eslint-enable */

@@ -147,8 +147,8 @@ describe('#i18n_func_run', function()
 					expect(I18N('美好%s生活', [1])).to.be('美好1生活');
 					expect(I18N('美好%s生活', [1,2])).to.be('美好1生活');
 					expect(I18N('%s美好%s生活', [1,2])).to.be('1good2 life');
-					expect(I18N('%s美好%s生活', [1])).to.be('1good%s life');
-					expect(I18N('%s美好%s生活', [1, null])).to.be('1good life');
+					expect(I18N('%s美好%s生活', [1])).to.be('1good life');
+					expect(I18N('%s美好%s生活', [1, null])).to.be('1goodnull life');
 				});
 
 				it('#key %{}', function()
@@ -175,8 +175,8 @@ describe('#i18n_func_run', function()
 					expect(I18N('美好%s生活', [1])).to.be('美好1生活');
 					expect(I18N('美好%s生活', [1,2])).to.be('美好1生活');
 					expect(I18N('%s美好%s生活', [1,2])).to.be('1美好2生活');
-					expect(I18N('%s美好%s生活', [1])).to.be('1美好%s生活');
-					expect(I18N('%s美好%s生活', [1, null])).to.be('1美好生活');
+					expect(I18N('%s美好%s生活', [1])).to.be('1美好生活');
+					expect(I18N('%s美好%s生活', [1, null])).to.be('1美好null生活');
 				});
 
 				it('#key %{}', function()
@@ -262,8 +262,8 @@ describe('#i18n_func_run', function()
 					expect(I18N('美好%s生活', [1])).to.be('美好1生活');
 					expect(I18N('美好%s生活', [1,2])).to.be('美好1生活');
 					expect(I18N('%s美好%s生活', [1,2])).to.be('1美好2生活');
-					expect(I18N('%s美好%s生活', [1])).to.be('1美好%s生活');
-					expect(I18N('%s美好%s生活', [1, null])).to.be('1美好生活');
+					expect(I18N('%s美好%s生活', [1])).to.be('1美好生活');
+					expect(I18N('%s美好%s生活', [1, null])).to.be('1美好null生活');
 				});
 
 				it('#key %{}', function()
@@ -290,8 +290,8 @@ describe('#i18n_func_run', function()
 					expect(I18N('美好%s生活', [1])).to.be('美好1生活');
 					expect(I18N('美好%s生活', [1,2])).to.be('美好1生活');
 					expect(I18N('%s美好%s生活', [1,2])).to.be('1美好2生活');
-					expect(I18N('%s美好%s生活', [1])).to.be('1美好%s生活');
-					expect(I18N('%s美好%s生活', [1, null])).to.be('1美好生活');
+					expect(I18N('%s美好%s生活', [1])).to.be('1美好生活');
+					expect(I18N('%s美好%s生活', [1, null])).to.be('1美好null生活');
 				});
 
 				it('#key %{}', function()
@@ -331,8 +331,8 @@ describe('#i18n_func_run', function()
 					expect(I18N('美好%s生活', [1])).to.be('美好1生活');
 					expect(I18N('美好%s生活', [1,2])).to.be('美好1生活');
 					expect(I18N('%s美好%s生活', [1,2])).to.be('1美好2生活');
-					expect(I18N('%s美好%s生活', [1])).to.be('1美好%s生活');
-					expect(I18N('%s美好%s生活', [1, null])).to.be('1美好生活');
+					expect(I18N('%s美好%s生活', [1])).to.be('1美好生活');
+					expect(I18N('%s美好%s生活', [1, null])).to.be('1美好null生活');
 				});
 
 				it('#key %{}', function()

@@ -5,7 +5,7 @@ module.exports = function code()
 				{
 					var self = I18N;
 					self.__FILE_KEY__ = "default_file_key";
-					self.__FUNCTION_VERSION__ = "G";
+					self.__FUNCTION_VERSION__ = "H";
 					self.__TRANSLATE_JSON__ =
 					{
 						'$': ['zh-TW'],

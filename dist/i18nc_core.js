@@ -935,7 +935,7 @@ exports.UNSUPPORT_AST_TYPS	=
 };
 
 
-exports.I18NFunctionVersion = 'G';
+exports.I18NFunctionVersion = 'H';
 exports.I18NFunctionSubVersion =
 {
 	FULL	: 'f',
@@ -1376,9 +1376,9 @@ module.exports = function $handlerName(msg, tpldata, subtype)
 	// 判断是否需要替换：不需要替换，直接返回
 	if (!tpldata.length || msg.indexOf('%') == -1) return msg;
 
-	return msg.replace(/%s|%\{.+?\}/g, function(all) {
+	return msg.replace(/%s|%\{.+?\}/g, function() {
 		var newVal = tpldata[replace_index++];
-		return newVal === undefined ? all : newVal === null ? '' : newVal;
+		return newVal === undefined ? '' : newVal;
 	});
 }
 
@@ -1421,9 +1421,9 @@ module.exports = function $handlerName(msg, tpldata)
 	self.V = '$FUNCTION_VERSION';
 
 	var replace_index = 0;
-	return msg.replace(/%s|%\{.+?\}/g, function(all) {
+	return msg.replace(/%s|%\{.+?\}/g, function() {
 		var newVal = tpldata[replace_index++];
-		return newVal === undefined ? all : newVal === null ? '' : newVal;
+		return newVal === undefined ? '' : newVal;
 	});
 }
 
