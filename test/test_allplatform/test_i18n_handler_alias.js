@@ -9,8 +9,8 @@ var requireAfterWrite	= autoTestUtils.requireAfterWrite('i18n_alias');
 describe('#I18N_handler_alias', function()
 {
 	console.log('@todo');
-	// var exampleCode = require('../files/casefile/func_code/func_code_i18n').toString();
-	var exampleCode = require('../files/casefile/func_code/func_code_example').toString();
+	var exampleCode = require('../files/casefile/func_code/func_code_i18n').toString();
+	// var exampleCode = require('../files/casefile/func_code/func_code_example').toString();
 	it('#update', function()
 	{
 		var info = i18nc(exampleCode,

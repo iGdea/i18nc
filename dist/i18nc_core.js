@@ -4,7 +4,7 @@
 var debug = require('debug')('i18nc-core');
 var optionsUtils = require('./lib/options');
 
-exports = module.exports = require('./lib/main');
+exports = module.exports = require('./lib/main').main;
 exports.defaults = optionsUtils.defaults;
 exports.version = require('./package.json').version;
 
@@ -528,7 +528,21 @@ var CodeTranslateWords	= ResultObject.CodeTranslateWords;
 var FuncTranslateWords	= ResultObject.FuncTranslateWords;
 var UsedTranslateWords	= ResultObject.UsedTranslateWords;
 var TranslateWords		= ResultObject.TranslateWords;
-var CodeInfoResult		= ResultObject.CodeInfoResult
+var CodeInfoResult		= ResultObject.CodeInfoResult;
+
+var I18NC;
+function runNewI18NC(code, ast, options, originalCode, isInsertHandler)
+{
+	// 存在循环应用，所以在调用的时候，再require
+	if (!I18NC) I18NC = require('./main');
+	options.I18NHandler.insert.enable = false;
+	var codeIndent = astUtil.codeIndent(ast, originalCode);
+	var newCode = I18NC.run(code, options).code;
+	newCode = newCode.split('\n').join('\n'+codeIndent);
+	options.I18NHandler.insert.enable = isInsertHandler;
+
+	return newCode;
+}
 
 exports.ASTScope = ASTScope;
 
@@ -702,8 +716,9 @@ _.extend(ASTScope.prototype,
 		var codeFixOffset	= scope.ast.range[0];
 		var codeStartPos	= 0;
 		var dealAst			= [];
-		var newCode			= [];
+		var newCodes		= [];
 		var selfTWords		= scope.codeTranslateWordInfoOfSelf(options);
+		var isInsertHandler	= options.I18NHandler.insert.enable;
 
 		var codeTranslateWordsJSON = selfTWords.codeTranslateWords.toJSON();
 		var selfFuncTranslateWords = new FuncTranslateWords();
@@ -790,84 +805,110 @@ _.extend(ASTScope.prototype,
 					.join('\n');
 			};
 		}
-		newCode.push(tmpCode.slice(0, codeStartPos), I18NPlaceholderNew);
+		newCodes.push(tmpCode.slice(0, codeStartPos), I18NPlaceholderNew);
 		tmpCode = tmpCode.slice(codeStartPos);
 		codeFixOffset += codeStartPos;
 
+		dealAst = dealAst.sort(function(a, b)
+		{
+			return a.value.range[0] > b.value.range[0] ? 1 : -1;
+		});
+
+		if (dealAst.length > 1)
+		{
+			dealAst.reduce(function(a, b)
+			{
+				// 整理包含关系
+				if (a.value.range[1] > b.value.range[0])
+				{
+					a.include = true;
+					b.included = true;
+					return a;
+				}
+
+				return b;
+			});
+		}
 
 		// 逐个处理需要替换的数据
 		var I18NPlaceholders = [];
 		var subScopeDatas = [];
-		dealAst.sort(function(a, b)
+		dealAst.forEach(function(item)
+		{
+			// 被包含的元素，不进行处理
+			if (item.included) return;
+
+			var ast = item.value;
+			var codeStartPos = ast.range[0] - codeFixOffset;
+			var codeEndPos = ast.range[1] - codeFixOffset;
+
+			newCodes.push(tmpCode.slice(0, codeStartPos));
+			var newCode;
+
+			switch(item.type)
 			{
-				return a.value.range[0] > b.value.range[0] ? 1 : -1;
-			})
-			.forEach(function(item)
+				case 'I18NAliasCallee':
+					var myAst = astTpl.CallExpression(options.I18NHandlerName, ast.arguments);
+					newCode = astUtil.tocode(myAst);
+					break;
+
+				case 'I18NHandler':
+					var myI18NPlaceholder = new I18NPlaceholder(
+							codeTranslateWordsJSON,
+							originalCode,
+							options,
+							ast
+						);
+
+					var handlerName = ast.id && ast.id.name;
+					if (ast !== lastI18NHandlerAst
+						&& ast !== lastI18NHandlerAliasAsts[handlerName])
+					{
+						// 函数保留，但翻译数据全部不要
+						// 翻译数据，全部以pow文件或者最后的函数为准
+						myI18NPlaceholder.renderType = 'simple';
+					}
+					I18NPlaceholders.push(myI18NPlaceholder);
+
+					if (!IGNORE_I18NHandler_alias)
+					{
+						myI18NPlaceholder.handlerName = options.I18NHandlerName;
+					}
+
+					newCode = myI18NPlaceholder;
+					break;
+
+				case 'translateWord':
+					newCode = astUtil.tocode(ast.__i18n_replace_info__.newAst);
+					break;
+
+
+				case 'scope':
+					var scopeData = item.scope.codeAndInfo(tmpCode.slice(codeStartPos, codeEndPos), originalCode, options);
+					newCode = scopeData.code;
+					subScopeDatas.push(scopeData);
+					break;
+
+				default:
+					debug('undefind type:%s ast:%o', item.type, ast);
+					newCode = tmpCode.slice(codeStartPos, codeEndPos);
+			}
+
+			if (item.include && newCode != tmpCode.slice(codeStartPos, codeEndPos))
 			{
-				var ast = item.value;
-				var codeStartPos = ast.range[0] - codeFixOffset;
-				var codeEndPos = ast.range[1] - codeFixOffset;
+				// 包含情况下，对结果再允许一次i18nc解析
+				newCode = runNewI18NC(newCode, ast, options, originalCode, isInsertHandler);
+			}
 
-				newCode.push(tmpCode.slice(0, codeStartPos));
+			newCodes.push(newCode);
 
-				switch(item.type)
-				{
-					case 'I18NAliasCallee':
-						var myAst = astTpl.CallExpression(options.I18NHandlerName, ast.arguments);
-						var myCode = astUtil.tocode(myAst);
-						newCode.push(myCode);
-						break;
-
-					case 'I18NHandler':
-						var myI18NPlaceholder = new I18NPlaceholder(
-								codeTranslateWordsJSON,
-								originalCode,
-								options,
-								ast
-							);
-
-						var handlerName = ast.id && ast.id.name;
-						if (ast !== lastI18NHandlerAst
-							&& ast !== lastI18NHandlerAliasAsts[handlerName])
-						{
-							// 函数保留，但翻译数据全部不要
-							// 翻译数据，全部以pow文件或者最后的函数为准
-							myI18NPlaceholder.renderType = 'simple';
-						}
-						I18NPlaceholders.push(myI18NPlaceholder);
-
-						if (!IGNORE_I18NHandler_alias)
-						{
-							myI18NPlaceholder.handlerName = options.I18NHandlerName;
-						}
-
-						newCode.push(myI18NPlaceholder);
-						break;
-
-					case 'translateWord':
-						var myCode = astUtil.tocode(ast.__i18n_replace_info__.newAst);
-						newCode.push(myCode);
-						break;
-
-
-					case 'scope':
-						var scopeData = item.scope.codeAndInfo(tmpCode.slice(codeStartPos, codeEndPos), originalCode, options);
-						newCode.push(scopeData.code);
-						subScopeDatas.push(scopeData);
-						break;
-
-					default:
-						debug('undefind type:%s ast:%o', item.type, ast);
-						newCode.push(tmpCode.slice(codeStartPos, codeEndPos));
-				}
-
-				tmpCode = tmpCode.slice(codeEndPos);
-				codeFixOffset += codeEndPos;
-			});
+			tmpCode = tmpCode.slice(codeEndPos);
+			codeFixOffset += codeEndPos;
+		});
 
 		// 如果作用域中，已经有I18N函数
 		// 那么头部插入的函数就不需要了
-		if (!options.I18NHandler.insert.enable
+		if (!isInsertHandler
 			|| (!IGNORE_I18NHandler_alias && I18NPlaceholders.length)
 			|| (IGNORE_I18NHandler_alias && lastI18NHandlerAst))
 		{
@@ -876,9 +917,9 @@ _.extend(ASTScope.prototype,
 		}
 
 		// 输出最终代码
-		var resultCode = newCode.join('')+tmpCode;
+		var resultCode = newCodes.join('')+tmpCode;
 
-		if (options.I18NHandler.insert.enable
+		if (isInsertHandler
 			&& options.I18NHandler.insert.checkClosure
 			&& scope.type == 'top'
 			&& I18NPlaceholderNew.getRenderType() == 'complete')
@@ -915,7 +956,7 @@ _.extend(ASTScope.prototype,
 	}
 });
 
-},{"./def":5,"./i18n_placeholder":12,"./result_object":15,"debug":22,"i18nc-ast":87,"lodash":102}],5:[function(require,module,exports){
+},{"./def":5,"./i18n_placeholder":12,"./main":13,"./result_object":15,"debug":22,"i18nc-ast":87,"lodash":102}],5:[function(require,module,exports){
 'use strict';
 
 var AST_FLAGS = require('i18nc-ast').AST_FLAGS;
@@ -1862,7 +1903,7 @@ var optionsUtils	= require('./options');
 var ASTCollector	= require('./ast_collector').ASTCollector;
 
 
-module.exports = function(code, options)
+exports.main = function(code, options)
 {
 	options = optionsUtils.extend(options);
 
@@ -1878,7 +1919,7 @@ module.exports = function(code, options)
 	var result;
 
 	try {
-		result = mainHandler(code, options);
+		result = exports.run(code, options);
 	}
 	catch(err)
 	{
@@ -1891,7 +1932,7 @@ module.exports = function(code, options)
 }
 
 
-function mainHandler(code, options)
+exports.run = function(code, options)
 {
 	var ast		= astUtil.parse(code);
 	// 设置scope type为top，表明是code开始处理的顶层作用区间

@@ -3,7 +3,7 @@
 var debug = require('debug')('i18nc-core');
 var optionsUtils = require('./lib/options');
 
-exports = module.exports = require('./lib/main');
+exports = module.exports = require('./lib/main').main;
 exports.defaults = optionsUtils.defaults;
 exports.version = require('./package.json').version;
 
