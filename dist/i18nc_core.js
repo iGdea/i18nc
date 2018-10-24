@@ -48155,7 +48155,7 @@ module.exports={
     "test-build": "node test/build; cross-env TEST_BUILD=true mocha test/test_*/test_*"
   },
   "dependencies": {
-    "debug": "^4.0.1",
+    "debug": "^4.1.0",
     "depd": "^1.1.2",
     "escodegen": "^1.11.0",
     "esmangle": "^1.0.1",
@@ -48168,16 +48168,17 @@ module.exports={
     "i18nc-jsoncode": "^1.0.1"
   },
   "devDependencies": {
+    "acorn": "^6.0.2",
     "benchmark": "^2.1.4",
     "comment-parser": "^0.5.0",
     "cross-env": "^5.2.0",
-    "eslint": "^5.6.1",
+    "eslint": "^5.7.0",
     "eslint-config-brcjs": "^0.2.0",
     "expect.js": "^0.3.1",
     "glob": "^7.1.3",
     "i18nc-test-req": "^1.2.0",
     "istanbul": "^0.4.5",
-    "karma": "^3.0.0",
+    "karma": "^3.1.1",
     "karma-config-brcjs": "^1.1.0",
     "mocha": "^5.2.0"
   },
