@@ -30,6 +30,7 @@
     "i18nc-jsoncode": "^1.0.1"
   },
   "devDependencies": {
+    "acorn": "^6.0.2",
     "benchmark": "^2.1.4",
     "comment-parser": "^0.5.0",
     "cross-env": "^5.2.0",
