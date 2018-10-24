@@ -2031,7 +2031,8 @@ exports.defaults =
 	/**
 	 * 注入到代码中的I18N函数的定制化配置
 	 *
-	 * @type {Object}
+	 * @remark 值false则关闭
+	 * @type {Object/False}
 	 */
 	I18NHandler:
 	{
@@ -2060,6 +2061,12 @@ exports.defaults =
 			 */
 			ignoreFuncWords: false,
 		},
+		/**
+		 * I18NHandler升级配置
+		 *
+		 * @remark 值false则关闭
+		 * @type {Object/False}
+		 */
 		upgrade:
 		{
 			/**
@@ -2176,6 +2183,12 @@ exports.defaults =
 				keepThisStyle: true,
 			},
 		},
+		/**
+		 * I18NHandler升级配置
+		 *
+		 * @remark 值false则关闭
+		 * @type {Object/False}
+		 */
 		insert:
 		{
 			/**
@@ -3269,7 +3282,7 @@ exports.extend = function(defaults, originalOptions)
 	defaults = extend(true, {}, defaults);
 	var options = extend(true, {}, originalOptions);
 	if (options.depdEnable !== false) depdOptions.before(options);
-	var result = _extendDefault(defaults, options);
+	var result = _extendDefault(defaults, options, '');
 	depdOptions.after(result);
 
 	// for emitter
@@ -3374,7 +3387,7 @@ function _arr2jsonMore(arr)
 }
 
 
-function _extendDefault(defaults, object)
+function _extendDefault(defaults, object, parentKey)
 {
 	if (!object) return defaults;
 
@@ -3385,6 +3398,27 @@ function _extendDefault(defaults, object)
 		{
 			var newVal = object[key];
 			var defaultType = typeof defaultVal;
+
+			if (newVal === false)
+			{
+				if (parentKey == '' && key == 'I18NHandler')
+				{
+					result[key] =
+					{
+						insert: {enable: false},
+						upgrade: {enable: false},
+					};
+
+					return;
+				}
+				else if (parentKey == '.I18NHandler'
+					&& (key == 'insert' || key == 'upgrade'))
+				{
+					result[key] = {enable: false};
+					return;
+				}
+			}
+
 
 			switch(defaultType)
 			{
@@ -3412,15 +3446,21 @@ function _extendDefault(defaults, object)
 					}
 					else if (Array.isArray(newVal))
 					{
-						if (key == 'pluginEnabled' || key == 'codeModifyItems')
+						if (parentKey == '')
 						{
-							result[key] = _arr2jsonOnly(defaultVal, newVal);
+							if (key == 'ignoreScanHandlerNames')
+							{
+								result[key] = _arr2jsonMore(newVal);
+								return;
+							}
+							else if (key == 'pluginEnabled' || key == 'codeModifyItems')
+							{
+								result[key] = _arr2jsonOnly(defaultVal, newVal);
+								return;
+							}
 						}
-						else if (key == 'ignoreScanHandlerNames')
-						{
-							result[key] = _arr2jsonMore(newVal);
-						}
-						else if (Array.isArray(defaultVal))
+
+						if (Array.isArray(defaultVal))
 						{
 							result[key] = newVal;
 						}
@@ -3432,7 +3472,7 @@ function _extendDefault(defaults, object)
 					}
 					else
 					{
-						result[key] = _extendDefault(defaultVal, newVal);
+						result[key] = _extendDefault(defaultVal, newVal, parentKey+'.'+key);
 					}
 					break;
 
@@ -4155,10 +4195,16 @@ function setup(env) {
 	/**
 	* Disable debug output.
 	*
+	* @return {String} namespaces
 	* @api public
 	*/
 	function disable() {
+		const namespaces = [
+			...createDebug.names.map(toNamespace),
+			...createDebug.skips.map(toNamespace).map(namespace => '-' + namespace)
+		].join(',');
 		createDebug.enable('');
+		return namespaces;
 	}
 
 	/**
@@ -4189,6 +4235,19 @@ function setup(env) {
 		}
 
 		return false;
+	}
+
+	/**
+	* Convert regexp to namespace
+	*
+	* @param {RegExp} regxep
+	* @return {String} namespace
+	* @api private
+	*/
+	function toNamespace(regexp) {
+		return regexp.toString()
+			.substring(2, regexp.toString().length - 2)
+			.replace(/\.\*\?$/, '*');
 	}
 
 	/**
@@ -48079,7 +48138,7 @@ exports.SourceNode = require('./lib/source-node').SourceNode;
 },{"./lib/source-map-consumer":111,"./lib/source-map-generator":112,"./lib/source-node":113}],116:[function(require,module,exports){
 module.exports={
   "name": "i18nc-core",
-  "version": "10.9.2",
+  "version": "10.9.3",
   "description": "I18N Tool for JS files",
   "main": "index.js",
   "scripts": {

@@ -92,10 +92,7 @@ describe('#main_options', function()
 				var exampleCode = require('../files/casefile/func_code/func_code_example.js').toString();
 				var info = i18nc(exampleCode,
 				{
-					I18NHandler:
-					{
-						upgrade: {enable: false}
-					},
+					I18NHandler: {upgrade: false},
 					dbTranslateWords: dbTranslateWords,
 				});
 
@@ -130,7 +127,7 @@ describe('#main_options', function()
 			{
 				var info = i18nc('var dd = "中文"',
 				{
-					I18NHandler: {insert: {enable: false}},
+					I18NHandler: {insert: false},
 				});
 
 				var otherCode = requireAfterWrite('func_code_insert_disable.js', info.code);

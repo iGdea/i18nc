@@ -33,15 +33,17 @@
 	<tr><td colspan="3">cutword</td><td>Function</td><td>null</td><td class="table_options_desc">分词之后触发，可对分词结果进行优化</td><td class="table_options_remark"></td></tr>
 	<tr><td colspan="3">loadTranslateJSON</td><td>Function</td><td>null</td><td class="table_options_desc">从源码I18N函数体中提取到翻译数据时触发，可修改数据</td><td class="table_options_remark"></td></tr>
 	<tr><td colspan="3">newTranslateJSON</td><td>Function</td><td>null</td><td class="table_options_desc">生成新的I18N函数时触发，可对翻译数据进行再加工</td><td class="table_options_remark"></td></tr>
-	<tr><td colspan="4">I18NHandler</td><td>Object</td><td></td><td class="table_options_desc">注入到代码中的I18N函数的定制化配置</td><td class="table_options_remark"></td></tr>
-	<tr><td rowspan="28"></td><td>data</td><td colspan="2">defaultFileKey</td><td>String</td><td>*</td><td class="table_options_desc">函数默认标识，可标识出特定的I18N函数体</td><td class="table_options_remark">可以针对filekey，可以提供定制翻译结果</td></tr>
+	<tr><td colspan="4">I18NHandler</td><td>Object/False</td><td></td><td class="table_options_desc">注入到代码中的I18N函数的定制化配置</td><td class="table_options_remark">值false则关闭</td></tr>
+	<tr><td rowspan="30"></td><td>data</td><td colspan="2">defaultFileKey</td><td>String</td><td>*</td><td class="table_options_desc">函数默认标识，可标识出特定的I18N函数体</td><td class="table_options_remark">可以针对filekey，可以提供定制翻译结果</td></tr>
 	<tr><td rowspan="2"></td><td colspan="2">ignoreFuncWords</td><td>Boolean</td><td>false</td><td class="table_options_desc">翻译的时候，不参考代码中I18N里面的数据</td><td class="table_options_remark">启动后，如果dbTranslateWords没有数据，直接删除在I18N已有的翻译</td></tr>
 	<tr><td colspan="2">onlyTheseLanguages</td><td>Array</td><td></td><td class="table_options_desc">只打包这个列表的语言包到代码中</td><td class="table_options_remark">数组为空则不受限制，传入多少种语言，就打包多少种</td></tr>
-	<tr><td>insert</td><td colspan="2">checkClosure</td><td>Boolean</td><td>true</td><td class="table_options_desc">插入I18N函数前，检查插入位置，作用域不能是全局，必须闭包</td><td class="table_options_remark"></td></tr>
-	<tr><td rowspan="2"></td><td colspan="2">enable</td><td>Boolean</td><td>true</td><td class="table_options_desc">[总开关]是否插入新的I18N函数</td><td class="table_options_remark"></td></tr>
+	<tr><td colspan="3">insert</td><td>Object/False</td><td></td><td class="table_options_desc">I18NHandler升级配置</td><td class="table_options_remark">值false则关闭</td></tr>
+	<tr><td rowspan="3"></td><td colspan="2">checkClosure</td><td>Boolean</td><td>true</td><td class="table_options_desc">插入I18N函数前，检查插入位置，作用域不能是全局，必须闭包</td><td class="table_options_remark"></td></tr>
+	<tr><td colspan="2">enable</td><td>Boolean</td><td>true</td><td class="table_options_desc">[总开关]是否插入新的I18N函数</td><td class="table_options_remark"></td></tr>
 	<tr><td colspan="2">priorityDefineHalder</td><td>Boolean</td><td>true</td><td class="table_options_desc">优先将新的I18N函数插入到define函数体中</td><td class="table_options_remark"></td></tr>
-	<tr><td>upgrade</td><td colspan="2">checkVersion</td><td>Boolean</td><td>true</td><td class="table_options_desc">函数版本号不同的时候，是否更新整个函数体</td><td class="table_options_remark"></td></tr>
-	<tr><td rowspan="3"></td><td colspan="2">enable</td><td>Boolean</td><td>true</td><td class="table_options_desc">[总开关]能否更新已插入代码中I18N函数体</td><td class="table_options_remark">已经初始化的I18N函数，不会主动更新</td></tr>
+	<tr><td colspan="3">upgrade</td><td>Object/False</td><td></td><td class="table_options_desc">I18NHandler升级配置</td><td class="table_options_remark">值false则关闭</td></tr>
+	<tr><td rowspan="4"></td><td colspan="2">checkVersion</td><td>Boolean</td><td>true</td><td class="table_options_desc">函数版本号不同的时候，是否更新整个函数体</td><td class="table_options_remark"></td></tr>
+	<tr><td colspan="2">enable</td><td>Boolean</td><td>true</td><td class="table_options_desc">[总开关]能否更新已插入代码中I18N函数体</td><td class="table_options_remark">已经初始化的I18N函数，不会主动更新</td></tr>
 	<tr><td colspan="2">partial</td><td>Boolean</td><td>true</td><td class="table_options_desc">优先进行I18N函数的局部更新（只更新翻译数据）</td><td class="table_options_remark">是否能进行局部更新，受到众多因素影响，这只是一个开关</td></tr>
 	<tr><td colspan="2">updateJSON</td><td>Boolean</td><td>true</td><td class="table_options_desc">是否更新代码中的翻译结果JSON</td><td class="table_options_remark">此配置只影响输出代码的结果，不会影响输出的JSON结果</td></tr>
 	<tr><td>style</td><td colspan="2">codeStyle</td><td>String</td><td>fullHandler</td><td class="table_options_desc">优先使用的代码风格（fullHandler/proxyGlobalHandler）</td><td class="table_options_remark"></td></tr>
