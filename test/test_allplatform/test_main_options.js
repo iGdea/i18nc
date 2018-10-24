@@ -216,7 +216,7 @@ describe('#main_options', function()
 		var info = i18nc('var a = "中文"', {codeModifiedArea: {I18NHandler: false}});
 
 		var wrapCode = autoTestUtils.wrapCode4pkg(info.code);
-		var otherCode = requireAfterWrite('func_code_no_insert_i18n_hanlder.js', wrapCode);
+		var otherCode = requireAfterWrite('func_code_no_insert_i18n_handler.js', wrapCode);
 
 		expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
 	});
