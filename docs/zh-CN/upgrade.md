@@ -48,7 +48,7 @@
 |                                   assignLineStrings | events.assignLineStrings                                |
 |                                          beforeScan | events.beforeScan                                       |
 |                                    codeModifiedArea | codeModifyItems                                         |
-|                        codeModifiedArea.I18NHandler | I18NHandler.upgrade.enable                              |
+|                        codeModifiedArea.I18NHandler | I18NHandler                                             |
 |                                          cutWordReg | cutwordReg                                              |
 |                                             cutword | events.cutword                                          |
 |                                      defaultFileKey | I18NHandler.data.defaultFileKey                         |

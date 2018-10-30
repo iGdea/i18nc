@@ -10,18 +10,10 @@
 		{
 			"codeTranslateWords": {
 				"DEFAULTS": [
-					"中文I18N",
-					"简体"
+					"中文3",
+					"中文5"
 				],
-				"SUBTYPES": {
-					"subtype": [
-						"中文I18N subtype",
-						"I18N(中文)"
-					],
-					"subtype2": [
-						"I18N(中文)"
-					]
-				}
+				"SUBTYPES": {}
 			},
 			"funcTranslateWords": {},
 			"newWord4codeTranslateWords": [],
@@ -29,15 +21,7 @@
 				null
 			],
 			"subScopeDatas": [],
-			"usedTranslateWords": {
-				"zh-TW": {
-					"SUBTYPES": {
-						"subtype": {
-							"I18N(中文)": "中文国际化"
-						}
-					}
-				}
-			}
+			"usedTranslateWords": {}
 		}
 	],
 	"usedTranslateWords": {}

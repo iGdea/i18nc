@@ -139,7 +139,8 @@ describe('#main_options', function()
 
 	describe('#codeModifiedArea', function()
 	{
-		var exampleCode = require('../files/casefile/func_code/func_code_example.js').toString();
+		// var exampleCode = require('../files/casefile/func_code/func_code_example.js').toString();
+		var exampleCode = require('../files/casefile/func_code/func_code_i18n.js').toString();
 
 		it('#only translateWord', function()
 		{
@@ -166,7 +167,7 @@ describe('#main_options', function()
 
 			var info2 = i18nc(code,
 			{
-				isCheckClosureForNewI18NHandler: false,
+				// isCheckClosureForNewI18NHandler: false,
 				codeModifiedArea:
 				{
 					I18NHandler: false,
