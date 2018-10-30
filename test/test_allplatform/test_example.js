@@ -93,7 +93,6 @@ describe('#example', function()
 					debug('newTranslateJSON:%s', emitData.result);
 					expect(emitData.options.originalOptions.mainFile).to.be(mainFile);
 					var content = 'var obj = ' + emitData.result;
-					console.log('1111111', content);
 					var otherContent = requireAfterWrite('require_data.js', content);
 					expect(autoTestUtils.code2arr(content)).to.eql(autoTestUtils.code2arr(otherContent));
 

@@ -1,17 +1,4 @@
-开发文档
-======
-
-## 翻译函数
-
-[I18N风格](./zh-CN/i18n_handler_style)
-
-
-## API
-
-[配置说明](./zh-CN/options)
-[处理结果](./zh-CN/result)
-
-
-## 升级&兼容
-
-[DOC](./zh-CN/upgrade)
+<script>
+var m = location.search.match(/[?&]p=(\w+)/);
+location.replace('./zh_CN/'+(m && m[1] || ''));
+</script>

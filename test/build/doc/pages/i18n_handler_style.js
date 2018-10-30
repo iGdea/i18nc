@@ -1,21 +1,21 @@
 'use strict';
 
 var fs = require('fs');
-var tpl = fs.readFileSync(__dirname+'/doc_lib/tpl/i18n_handler_style.tpl.md').toString();
-var codeMapTable = require('./doc_lib/codemap_table');
+var tpl = fs.readFileSync(__dirname+'/../tpl/i18n_handler_style.tpl.md').toString();
+var codeMapTable = require('../lib/codemap_table');
 
 var fileContent = tpl.replace(/\$(\w+)/g, function(all, key)
 {
 	switch(key)
 	{
 		case 'FULL_HANDLER_CODE':
-			return require('../files/casefile/i18n_handler/i18n_handler_example').toString();
+			return require('../../../files/casefile/i18n_handler/i18n_handler_example').toString();
 
 		case 'SIMPLE_HANDLER_CODE':
-			return require('../files/casefile/i18n_handler/i18n_handler_simple_example').toString();
+			return require('../../../files/casefile/i18n_handler/i18n_handler_simple_example').toString();
 
 		case 'GLOBAL_HANDLER_CODE':
-			return require('../files/casefile/i18n_handler/i18n_handler_global_example').toString();
+			return require('../../../files/casefile/i18n_handler/i18n_handler_global_example').toString();
 
 		case 'FULL_HANDLER_PARGMS':
 			var tableData =
@@ -43,4 +43,4 @@ var fileContent = tpl.replace(/\$(\w+)/g, function(all, key)
 			return all;
 	}
 });
-fs.writeFileSync(__dirname+'/../../docs/zh-CN/i18n_handler_style.md', fileContent);
+fs.writeFileSync(__dirname+'/../../../../docs/zh_CN/i18n_handler_style.md', fileContent);

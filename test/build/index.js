@@ -1,14 +1,14 @@
 'use strict';
 
-require('./i18nc_core');
-require('./i18nc_handler');
-require('./topi18n');
+require('./dist/i18nc_core');
+require('./dist/i18nc_handler');
+require('./dist/topi18n');
 
-require('./doc_options');
-require('./doc_only_options');
-require('./doc_result');
-require('./doc_upgrade');
-require('./doc_i18n_handler_style');
-// require('./doc-events');
+require('./doc/pages/options');
+require('./doc/pages/only_options');
+require('./doc/pages/result');
+require('./doc/pages/upgrade');
+require('./doc/pages/i18n_handler_style');
+// require('./doc/pages/events');
 
 require('../prev_test_files').main();

@@ -2,10 +2,10 @@
 
 var _ = require('lodash');
 var fs = require('fs');
-var resultComment = require('./doc_lib/result_comment');
+var resultComment = require('../lib/result_comment');
 
-var tpl = fs.readFileSync(__dirname+'/doc_lib/tpl/result.tpl.md').toString();
-var content = fs.readFileSync(__dirname+'/../../lib/result_object.js').toString();
+var tpl = fs.readFileSync(__dirname+'/../tpl/result.tpl.md').toString();
+var content = fs.readFileSync(__dirname+'/../../../../lib/result_object.js').toString();
 var funcs = resultComment(content);
 
 var fileContent = tpl.replace(/\$(\w+)/g, function(all, key)
@@ -38,4 +38,4 @@ var fileContent = tpl.replace(/\$(\w+)/g, function(all, key)
 			return all;
 	}
 });
-fs.writeFileSync(__dirname+'/../../docs/zh-CN/result.md', fileContent);
+fs.writeFileSync(__dirname+'/../../../../docs/zh_CN/result.md', fileContent);

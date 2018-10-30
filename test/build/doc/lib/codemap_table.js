@@ -2,7 +2,7 @@
 
 var _ = require('lodash');
 var debug = require('debug')('i18nc-core:codemap_table');
-var valsUtils = require('../../../lib/utils/options_vals');
+var valsUtils = require('../../../../lib/utils/options_vals');
 var ArrayPush = Array.prototype.push;
 
 
