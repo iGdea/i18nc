@@ -1,12 +1,12 @@
 {
   "name": "i18nc-core",
-  "version": "10.9.4",
+  "version": "10.9.5",
   "description": "I18N Tool for JS files",
   "main": "index.js",
   "scripts": {
     "prepublish": "npm ls",
     "build": "node test/build",
-    "bench": "node benchmark/index",
+    "bench": "node benchmark",
     "lint": "eslint .",
     "test": "cross-env DEBUG=i18nc-core* mocha test/test_*/test_*",
     "test-cov": "istanbul cover _mocha -- test/test_*/test_* --reporter dot",
