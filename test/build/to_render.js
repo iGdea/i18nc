@@ -1,6 +1,9 @@
 'use strict';
 
-module.exports = function(code)
+exports = module.exports = toRender;
+var wrapCode = require('./wrap_code.tpl.js').toString();
+
+function toRender(code)
 {
 	return function(tpldata)
 	{
@@ -9,4 +12,19 @@ module.exports = function(code)
 			return tpldata[key] || all;
 		});
 	};
-};
+}
+
+exports.wrapCode = function(tplData)
+{
+	return [
+		';('+wrapCode+')',
+		'(function(r, ctx)',
+		'{',
+			'\t'+tplData.code.replace(/\n\r?/g, '\n\t'),
+			'',
+			'\tctx.'+tplData.handlerName+' = '+tplData.handlerName+';',
+		'});',
+		''
+	]
+	.join('\n');
+}

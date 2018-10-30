@@ -1539,7 +1539,10 @@ _.extend(I18NPlaceholder.prototype,
 	{
 		var options = this.options;
 		if (this.renderType) return this.renderType;
-		if (!options.I18NHandler.upgrade.enable) return 'original';
+		if (this.originalAst && !options.I18NHandler.upgrade.enable)
+		{
+			return 'original';
+		}
 
 		var funcInfo = this.parse();
 		if (funcInfo.isNotI18NHandler)
@@ -2951,6 +2954,7 @@ _.extend(CodeInfoResult.prototype,
 'use strict';
 
 var _					= require('lodash');
+var debug				= require('debug')('i18nc-core:depd_options');
 var deprecate			= require('depd')('i18nc-core:options');
 var i18ncDB				= require('i18nc-db');
 var valUtils			= require('../utils/options_vals.js');
@@ -3001,9 +3005,6 @@ var OPTIONS_RENAME_MAP = exports.OPTIONS_RENAME_MAP =
 	I18NhandlerTpl_GetGlobalCode: 'I18NHandler.tpl.getLanguageCode',
 	'I18NhandlerTpl:GetGlobalCode': 'I18NHandler.tpl.getLanguageCode',
 
-	codeModifiedArea: 'codeModifyItems',
-	'codeModifiedArea.I18NHandler': 'I18NHandler.upgrade.enable',
-
 	'I18NHandler.upgrade.version': 'I18NHandler.upgrade.checkVersion',
 	'I18NHandler.style.proxyGlobalHandler.ignoreFuncCode': 'I18NHandler.style.proxyGlobalHandler.ignoreFuncCodeName',
 
@@ -3012,6 +3013,10 @@ var OPTIONS_RENAME_MAP = exports.OPTIONS_RENAME_MAP =
 	beforeScan: 'events.beforeScan',
 	cutword: 'events.cutword',
 	assignLineStrings: 'events.assignLineStrings',
+
+	// 由于会修改I18NHandler值，所以放到最后去处理
+	codeModifiedArea: 'codeModifyItems',
+	'codeModifiedArea.I18NHandler': 'I18NHandler',
 };
 
 
@@ -3032,6 +3037,10 @@ var rename_1to1 = (function()
 			case 'I18NhandlerTpl_GetGlobalCode':
 			case 'I18NhandlerTpl:GetGlobalCode':
 				val = GetLanguageCodeDepd.replace(/\$GetLanguageCode/, ''+val);
+				break;
+
+			case 'codeModifiedArea.I18NHandler':
+				debug('has codeModifiedArea.I18NHandler set');
 				break;
 		}
 
@@ -3192,7 +3201,7 @@ exports.after = function(result)
 	rmkeys(resultVals);
 };
 
-},{"../utils/options_vals.js":20,"./tpl/depd_getlanguagecode_handler":17,"depd":24,"i18nc-db":92,"lodash":102}],17:[function(require,module,exports){
+},{"../utils/options_vals.js":20,"./tpl/depd_getlanguagecode_handler":17,"debug":22,"depd":24,"i18nc-db":92,"lodash":102}],17:[function(require,module,exports){
 /* global $GetLanguageCode */
 
 'use strict';
@@ -48138,7 +48147,7 @@ exports.SourceNode = require('./lib/source-node').SourceNode;
 },{"./lib/source-map-consumer":111,"./lib/source-map-generator":112,"./lib/source-node":113}],116:[function(require,module,exports){
 module.exports={
   "name": "i18nc-core",
-  "version": "10.9.3",
+  "version": "10.9.4",
   "description": "I18N Tool for JS files",
   "main": "index.js",
   "scripts": {
@@ -48156,7 +48165,7 @@ module.exports={
   },
   "dependencies": {
     "debug": "^4.1.0",
-    "depd": "^1.1.2",
+    "depd": "^2.0.0",
     "escodegen": "^1.11.0",
     "esmangle": "^1.0.1",
     "esprima": "^4.0.1",
@@ -48172,7 +48181,7 @@ module.exports={
     "benchmark": "^2.1.4",
     "comment-parser": "^0.5.0",
     "cross-env": "^5.2.0",
-    "eslint": "^5.7.0",
+    "eslint": "^5.8.0",
     "eslint-config-brcjs": "^0.2.0",
     "expect.js": "^0.3.1",
     "glob": "^7.1.3",

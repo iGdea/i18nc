@@ -1,30 +1,16 @@
 'use strict';
 
 var fs = require('fs');
-var i18ncTpl = require('../../lib/i18n_func/render');
+var toRender = require('./to_render');
+var codeTpl = toRender(require('../../src/i18nc_handler'));
 var optionsUtils = require('../../lib/options');
-var DEF = require('../../lib/def');
-var wrapCode = require('./wrap_code.tpl.js').toString();
 var options = optionsUtils.extend();
 
-var code = i18ncTpl.renderSimple(
+var code = codeTpl(
 	{
-		FILE_KEY: options.I18NHandler.data.defaultFileKey,
-		FUNCTION_VERSION: DEF.I18NFunctionVersion + DEF.I18NFunctionSubVersion.SIMPLE,
 		handlerName: options.I18NHandlerName,
 	});
 
-var content =
-[
-	';('+wrapCode+')',
-	'(function(r, ctx)',
-	'{',
-		'\t'+code.replace(/\n\r?/g, '\n\t'),
-		'',
-		'\tctx.'+options.I18NHandlerName+' = '+options.I18NHandlerName+';',
-	'});',
-	''
-]
-.join('\n');
 
+var content = toRender.wrapCode({code: code, handlerName: options.I18NHandlerName});
 fs.writeFileSync(__dirname+'/../../dist/i18nc_handler.js', content);
