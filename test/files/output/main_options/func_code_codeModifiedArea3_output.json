@@ -3,7 +3,6 @@
 		"DEFAULTS": [],
 		"SUBTYPES": {}
 	},
-	"currentFileKey": "*",
 	"funcTranslateWords": {},
 	"newWord4codeTranslateWords": [],
 	"originalFileKeys": [],
@@ -24,11 +23,10 @@
 					]
 				}
 			},
-			"currentFileKey": "*",
 			"funcTranslateWords": {},
 			"newWord4codeTranslateWords": [],
 			"originalFileKeys": [
-				"*"
+				null
 			],
 			"subScopeDatas": [],
 			"usedTranslateWords": {
