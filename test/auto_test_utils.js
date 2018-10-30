@@ -27,7 +27,7 @@ exports.JsonOfI18ncRet = function JsonOfI18ncRet(info)
 		result[key] = obj[key];
 	});
 
-	return result;
+	return JSON.parse(JSON.stringify(result));
 }
 
 exports.getCodeTranslateAllWords = function getCodeTranslateAllWords(info)
