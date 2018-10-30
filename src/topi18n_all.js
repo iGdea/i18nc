@@ -1,6 +1,7 @@
-/* global topI18N_v2 topI18N_v1 */
-
 'use strict';
+
+var topI18N_v1 = require('./topi18n_v1');
+var topI18N_v2 = require('./topi18n_v2');
 
 module.exports = function topI18N(msg, args, translateJSON, fileKey, data, handler)
 {
