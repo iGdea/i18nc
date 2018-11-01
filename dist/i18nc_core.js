@@ -217,6 +217,7 @@ _.extend(ASTCollector.prototype,
 					astUtil.setAstFlag(ast, AST_FLAGS.I18N_ALIAS);
 
 					var I18NArgReulst = self._parseI18NArgs(ast);
+					I18NArgReulst.alias = calleeName;
 					scope.I18NArgs.push(I18NArgReulst);
 					if (I18NArgReulst.formatArgAsts)
 					{
@@ -628,12 +629,14 @@ _.extend(ASTScope.prototype,
 	/**
 	 * 获取自身除I18N函数之外的translateInfo
 	 */
-	codeTranslateWordInfoOfSelf: function(options)
+	_codeTranslateWordInfoOfSelf: function(options)
 	{
-		var scope				= this;
-		var dirtyWords			= new DirtyWords();
-		var codeTranslateWords	= new CodeTranslateWords();
+		var scope					= this;
+		var dirtyWords				= new DirtyWords();
+		var allCodeTranslateWords	= new CodeTranslateWords();
+		var myCodeTranslateWords	= new CodeTranslateWords();
 
+		var aliasCodeTranslateWords	= {};
 		var IGNORE_translateWord	= !options.codeModifyItems.TranslateWord;
 		var IGNORE_regexp			= !options.codeModifyItems.TranslateWord_RegExp;
 
@@ -659,7 +662,8 @@ _.extend(ASTScope.prototype,
 			}
 			else
 			{
-				codeTranslateWords.pushNewWord(ast);
+				allCodeTranslateWords.pushNewWord(ast);
+				myCodeTranslateWords.pushNewWord(ast);
 			}
 		});
 
@@ -691,21 +695,36 @@ _.extend(ASTScope.prototype,
 
 
 				if (subtype)
+					allCodeTranslateWords.pushSubtype(subtype, translateWordAst);
+				else
+					allCodeTranslateWords.pushWraped(translateWordAst);
+
+				var alias = argsInfo.alias;
+				var aliasCodes;
+				if (alias)
 				{
-					codeTranslateWords.pushSubtype(subtype, translateWordAst);
+					aliasCodes = aliasCodeTranslateWords[alias]
+						|| (aliasCodeTranslateWords[alias] = new CodeTranslateWords());
 				}
 				else
 				{
-					codeTranslateWords.pushWraped(translateWordAst);
+					aliasCodes = myCodeTranslateWords;
 				}
+
+				if (subtype)
+					aliasCodes.pushSubtype(subtype, translateWordAst);
+				else
+					aliasCodes.pushWraped(translateWordAst);
 			});
 
 		// 这里的数据，均不包含子域
 		return {
 			// 脏数据
-			dirtyWords			: dirtyWords,
+			dirtyWords				: dirtyWords,
 			// 从代码中获取到的关键
-			codeTranslateWords	: codeTranslateWords,
+			allCodeTranslateWords	: allCodeTranslateWords,
+			myCodeTranslateWords	: myCodeTranslateWords,
+			aliasCodeTranslateWords	: aliasCodeTranslateWords,
 		};
 	},
 
@@ -717,14 +736,16 @@ _.extend(ASTScope.prototype,
 		var codeStartPos	= 0;
 		var dealAst			= [];
 		var newCodes		= [];
-		var selfTWords		= scope.codeTranslateWordInfoOfSelf(options);
+		var selfTWords		= scope._codeTranslateWordInfoOfSelf(options);
 		var isInsertHandler	= options.I18NHandler.insert.enable;
 
-		var codeTranslateWordsJSON = selfTWords.codeTranslateWords.toJSON();
+		var allCodeTranslateWordsJSON = selfTWords.allCodeTranslateWords.toJSON();
+		var myCodeTranslateWordsJSON = selfTWords.myCodeTranslateWords.toJSON();
+
 		var selfFuncTranslateWords = new FuncTranslateWords();
 		var originalFileKeys = [];
 
-		var IGNORE_I18NHandler_alias	= !options.codeModifyItems.I18NHandlerAlias;
+		var REPLACE_I18NHandler_alias = options.codeModifyItems.I18NHandlerAlias;
 
 		// 预处理 I18N函数 begin
 		var I18NHandlerAsts = scope.I18NHandlerAsts.sort(function(a, b)
@@ -756,7 +777,7 @@ _.extend(ASTScope.prototype,
 		// 预处理 I18N函数 end
 
 
-		if (!IGNORE_I18NHandler_alias)
+		if (REPLACE_I18NHandler_alias)
 		{
 			scope.I18NArgs.forEach(function(item)
 			{
@@ -772,7 +793,7 @@ _.extend(ASTScope.prototype,
 			dealAst.push({type: 'scope', value: item.ast, scope: item});
 		});
 
-		selfTWords.codeTranslateWords.list.forEach(function(item)
+		selfTWords.allCodeTranslateWords.list.forEach(function(item)
 		{
 			if (item.type == 'new'
 				&& !astUtil.checkAstFlag(item.originalAst, AST_FLAGS.SKIP_REPLACE | AST_FLAGS.DIS_REPLACE))
@@ -783,7 +804,11 @@ _.extend(ASTScope.prototype,
 
 
 		// 插入一个默认的翻译函数
-		var I18NPlaceholderNew = new I18NPlaceholder(codeTranslateWordsJSON, originalCode, options);
+		var I18NPlaceholderNew = new I18NPlaceholder(
+				REPLACE_I18NHandler_alias ? allCodeTranslateWordsJSON : myCodeTranslateWordsJSON,
+				originalCode,
+				options
+			);
 		if (scope.ast.type == 'BlockStatement')
 		{
 			codeStartPos++;
@@ -831,7 +856,9 @@ _.extend(ASTScope.prototype,
 		}
 
 		// 逐个处理需要替换的数据
-		var I18NPlaceholders = [];
+		var myI18NPlaceholderList = [];
+		var aliasI18NPlaceholderList = [];
+		var allI18NPlaceholderList = [];
 		var subScopeDatas = [];
 		dealAst.forEach(function(item)
 		{
@@ -853,29 +880,54 @@ _.extend(ASTScope.prototype,
 					break;
 
 				case 'I18NHandler':
-					var myI18NPlaceholder = new I18NPlaceholder(
-							codeTranslateWordsJSON,
+					var handlerName = ast.id && ast.id.name;
+					var isAliasHandler = astUtil.checkAstFlag(ast, AST_FLAGS.I18N_ALIAS);
+					var codeJSON;
+					if (REPLACE_I18NHandler_alias)
+					{
+						debug('use all code json');
+						codeJSON = allCodeTranslateWordsJSON;
+					}
+					else if (isAliasHandler)
+					{
+						debug('use alias code json');
+						codeJSON = selfTWords.aliasCodeTranslateWords[handlerName]
+							&& selfTWords.aliasCodeTranslateWords[handlerName].toJSON()
+							|| {};
+					}
+					else
+					{
+						debug('use my code json');
+						codeJSON = myCodeTranslateWordsJSON;
+					}
+
+					var myPlaceholder = new I18NPlaceholder(
+							codeJSON,
 							originalCode,
 							options,
 							ast
 						);
 
-					var handlerName = ast.id && ast.id.name;
-					if (ast !== lastI18NHandlerAst
-						&& ast !== lastI18NHandlerAliasAsts[handlerName])
+					if ((!isAliasHandler && ast !== lastI18NHandlerAst)
+						&& (isAliasHandler && ast !== lastI18NHandlerAliasAsts[handlerName]))
 					{
 						// 函数保留，但翻译数据全部不要
-						// 翻译数据，全部以pow文件或者最后的函数为准
-						myI18NPlaceholder.renderType = 'simple';
+						// 翻译数据，全部以po文件或者最后的函数为准
+						myPlaceholder.renderType = 'simple';
 					}
-					I18NPlaceholders.push(myI18NPlaceholder);
 
-					if (!IGNORE_I18NHandler_alias)
+					allI18NPlaceholderList.push(myPlaceholder);
+					if (!REPLACE_I18NHandler_alias && isAliasHandler)
 					{
-						myI18NPlaceholder.handlerName = options.I18NHandlerName;
+						aliasI18NPlaceholderList.push(myPlaceholder);
+					}
+					else
+					{
+						myPlaceholder.handlerName = options.I18NHandlerName;
+						myI18NPlaceholderList.push(myPlaceholder);
 					}
 
-					newCode = myI18NPlaceholder;
+					newCode = myPlaceholder;
 					break;
 
 				case 'translateWord':
@@ -908,9 +960,7 @@ _.extend(ASTScope.prototype,
 
 		// 如果作用域中，已经有I18N函数
 		// 那么头部插入的函数就不需要了
-		if (!isInsertHandler
-			|| (!IGNORE_I18NHandler_alias && I18NPlaceholders.length)
-			|| (IGNORE_I18NHandler_alias && lastI18NHandlerAst))
+		if (!isInsertHandler || myI18NPlaceholderList.length)
 		{
 			debug('ignore insert new I18NHandler');
 			I18NPlaceholderNew.renderType = 'empty';
@@ -928,16 +978,17 @@ _.extend(ASTScope.prototype,
 		}
 
 		// 进行最后的附加数据整理、合并
-		I18NPlaceholders.forEach(function(I18NPlaceholder)
-		{
-			var info = I18NPlaceholder.parse();
-			var FILE_KEY = info.__FILE_KEY__;
-			originalFileKeys.push(FILE_KEY);
+		myI18NPlaceholderList.concat(aliasI18NPlaceholderList)
+			.forEach(function(I18NPlaceholder)
+			{
+				var info = I18NPlaceholder.parse();
+				var FILE_KEY = info.__FILE_KEY__;
+				originalFileKeys.push(FILE_KEY);
 
-			selfFuncTranslateWords.add(FILE_KEY, info.__TRANSLATE_JSON__);
-		});
+				selfFuncTranslateWords.add(FILE_KEY, info.__TRANSLATE_JSON__);
+			});
 
-		var currentI18NHandler = I18NPlaceholders[I18NPlaceholders.length - 1] || I18NPlaceholderNew;
+		var currentI18NHandler = allI18NPlaceholderList[allI18NPlaceholderList.length - 1] || I18NPlaceholderNew;
 		var usedTranslateWords = new UsedTranslateWords();
 		usedTranslateWords.add(currentI18NHandler.parse().__FILE_KEY__, currentI18NHandler.getTranslateJSON());
 		var selfScopeData = new CodeInfoResult(
@@ -948,7 +999,7 @@ _.extend(ASTScope.prototype,
 			subScopeDatas    : subScopeDatas,
 			// 脏数据
 			dirtyWords       : selfTWords.dirtyWords,
-			words            : new TranslateWords(selfTWords.codeTranslateWords, selfFuncTranslateWords, usedTranslateWords),
+			words            : new TranslateWords(selfTWords.allCodeTranslateWords, selfFuncTranslateWords, usedTranslateWords),
 		});
 
 		// 返回数据，不包含子域数据
@@ -48147,13 +48198,13 @@ exports.SourceNode = require('./lib/source-node').SourceNode;
 },{"./lib/source-map-consumer":111,"./lib/source-map-generator":112,"./lib/source-node":113}],116:[function(require,module,exports){
 module.exports={
   "name": "i18nc-core",
-  "version": "10.9.4",
+  "version": "10.9.5",
   "description": "I18N Tool for JS files",
   "main": "index.js",
   "scripts": {
     "prepublish": "npm ls",
     "build": "node test/build",
-    "bench": "node benchmark/index",
+    "bench": "node benchmark",
     "lint": "eslint .",
     "test": "cross-env DEBUG=i18nc-core* mocha test/test_*/test_*",
     "test-cov": "istanbul cover _mocha -- test/test_*/test_* --reporter dot",
@@ -48161,7 +48212,7 @@ module.exports={
     "test-e2e-dev": "cross-env DEBUG=i18nc-core* karma start --auto-watch --no-single-run --browsers=Chrome",
     "test-e2e-sauce": "karma start -- sauce",
     "test-travis": "istanbul cover _mocha --report lcovonly -- test/test_*/test_* --reporter dot",
-    "test-build": "node test/build; cross-env TEST_BUILD=true mocha test/test_*/test_*"
+    "test-build": "node test/build && cross-env TEST_BUILD=true mocha test/test_*/test_*"
   },
   "dependencies": {
     "debug": "^4.1.0",

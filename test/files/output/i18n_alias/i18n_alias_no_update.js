@@ -33,9 +33,7 @@ module.exports = function code()
 					'*': {
 						// '中文':
 						// '中文2':
-						// '中文3':
 						// '中文4':
-						// '中文5':
 					}
 				};
 				translateJSON = self.D;
@@ -114,10 +112,7 @@ module.exports = function code()
 				self.V = 'Hf';
 				self.D = {
 					'*': {
-						// '中文':
-						// '中文2':
 						// '中文3':
-						// '中文4':
 						// '中文5':
 					}
 				};
