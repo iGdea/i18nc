@@ -11,6 +11,7 @@ package-lock.json
 .editorconfig
 .npmignore
 .coveralls.yml
+.istanbul.yml
 .tags*
 .DS_Store
 
