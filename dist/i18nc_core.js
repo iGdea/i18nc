@@ -804,6 +804,8 @@ _.extend(ASTScope.prototype,
 
 
 		// 插入一个默认的翻译函数
+		// 注意，alias不会进行处理，
+		// 如果保留alias，但alias本身没有placeholder，处理逻辑也不会忘代码里面插入placeholder
 		var I18NPlaceholderNew = new I18NPlaceholder(
 				REPLACE_I18NHandler_alias ? allCodeTranslateWordsJSON : myCodeTranslateWordsJSON,
 				originalCode,
@@ -3436,9 +3438,9 @@ function _arr2jsonOnly(defaults, arr)
 	return result;
 }
 
-function _arr2jsonMore(arr)
+function _arr2jsonMore(arr, defaultVal)
 {
-	var result = {};
+	var result = _.extend({}, defaultVal);
 	arr.forEach(function(name)
 	{
 		result[name] = true;
@@ -3510,7 +3512,7 @@ function _extendDefault(defaults, object, parentKey)
 						{
 							if (key == 'ignoreScanHandlerNames')
 							{
-								result[key] = _arr2jsonMore(newVal);
+								result[key] = _arr2jsonMore(newVal, defaultVal);
 								return;
 							}
 							else if (key == 'pluginEnabled' || key == 'codeModifyItems')
@@ -48198,7 +48200,7 @@ exports.SourceNode = require('./lib/source-node').SourceNode;
 },{"./lib/source-map-consumer":111,"./lib/source-map-generator":112,"./lib/source-node":113}],116:[function(require,module,exports){
 module.exports={
   "name": "i18nc-core",
-  "version": "10.9.5",
+  "version": "10.9.7",
   "description": "I18N Tool for JS files",
   "main": "index.js",
   "scripts": {

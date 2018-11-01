@@ -1,7 +1,7 @@
 配置说明
 ========
 
-> 表格宽度过大，已经隐藏`描述` `备注` 两列，[点击此处](./only_options)查看完整表格
+> 表格宽度过大，已经隐藏`描述` `备注` 两列，[点击此处](./options_full)查看完整表格
 
 <style>
 .table_options_desc, .table_options_remark {display: none;}
