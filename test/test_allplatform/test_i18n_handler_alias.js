@@ -8,12 +8,10 @@ var requireAfterWrite	= autoTestUtils.requireAfterWrite('i18n_alias');
 
 describe('#I18N_handler_alias', function()
 {
-	console.log('@todo');
-	var exampleCode = require('../files/casefile/func_code/func_code_i18n').toString();
-	// var exampleCode = require('../files/casefile/func_code/func_code_example').toString();
 	it('#update', function()
 	{
-		var info = i18nc(exampleCode,
+		var code = require('../files/casefile/func_code/func_code_i18n').toString();
+		var info = i18nc(code,
 			{
 				I18NHandlerName: 'I18NNew',
 				I18NHandlerAlias: ['I18N'],
@@ -24,17 +22,36 @@ describe('#I18N_handler_alias', function()
 		expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherContent));
 	});
 
-	it('#no_update', function()
+	describe('#update', function()
 	{
-		var info = i18nc(exampleCode,
-			{
-				I18NHandlerName: 'I18NNew',
-				I18NHandlerAlias: ['I18N'],
-				codeModifiedArea: ['I18NHandler', 'TranslateWord'],
-			});
+		it('#alias & new words', function()
+		{
+			var code = require('../files/casefile/func_code/func_code_i18n').toString();
+			var info = i18nc(code,
+				{
+					I18NHandlerName: 'I18NNew',
+					I18NHandlerAlias: ['I18N'],
+					codeModifiedArea: ['I18NHandler', 'TranslateWord'],
+				});
 
-		var otherContent = requireAfterWrite('i18n_alias_no_update.js', info.code);
+			var otherContent = requireAfterWrite('i18n_alias_no_update.js', info.code);
 
-		expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherContent));
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherContent));
+		});
+
+		it('#only alias', function()
+		{
+			var code = require('../files/casefile/func_code/func_code_i18n_all').toString();
+			var info = i18nc(code,
+				{
+					I18NHandlerName: 'I18NNew',
+					I18NHandlerAlias: ['I18N'],
+					codeModifiedArea: ['I18NHandler', 'TranslateWord'],
+				});
+
+			var otherContent = requireAfterWrite('i18n_all_alias_no_update.js', info.code);
+
+			expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherContent));
+		});
 	});
 });
