@@ -54,6 +54,16 @@ describe('#options', function()
 			expect(newOptions.codeModifyItems.I18NHandlerAlias).to.be(true);
 		});
 
+		it('#arr2obj more', function()
+		{
+			var newOptions = optionsUtils.extend(
+				{
+					ignoreScanHandlerNames: ['hihi_do']
+				});
+			expect(newOptions.ignoreScanHandlerNames.hihi_do).to.be(true);
+			expect(newOptions.ignoreScanHandlerNames['console.log']).to.be(true);
+		});
+
 		it('#originalOptions', function()
 		{
 			var originalOptions = {somekey: true};
