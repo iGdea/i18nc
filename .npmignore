@@ -1,20 +1,10 @@
-node_modules
-npm-debug.log
-package-lock.json
 karam.conf.js
 
-.gitignore
-.gitmodules
-.gitattributes
-.travis.yml
-.eslintrc.js
-.eslintignore
-.editorconfig
-.npmignore
-.coveralls.yml
-.istanbul.yml
-.tags*
-.DS_Store
+Gruntfile.js
+gulpfile.js
+webpack.conf.js
+
+.*
 
 test
 dist/test
