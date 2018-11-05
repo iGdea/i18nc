@@ -1,6 +1,6 @@
 {
   "name": "i18nc-core",
-  "version": "10.9.7",
+  "version": "10.9.8",
   "description": "I18N Tool for JS files",
   "main": "index.js",
   "scripts": {
@@ -25,12 +25,12 @@
     "estraverse": "^4.2.0",
     "extend": "^3.0.2",
     "lodash": "^4.17.11",
-    "i18nc-ast": "^1.0.0",
+    "i18nc-ast": "^1.0.1",
     "i18nc-db": "^1.0.0",
     "i18nc-jsoncode": "^1.0.1"
   },
   "devDependencies": {
-    "acorn": "^6.0.2",
+    "acorn": "^6.0.4",
     "benchmark": "^2.1.4",
     "comment-parser": "^0.5.0",
     "cross-env": "^5.2.0",

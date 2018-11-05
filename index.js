@@ -6,6 +6,7 @@ var optionsUtils = require('./lib/options');
 exports = module.exports = require('./lib/main').main;
 exports.defaults = optionsUtils.defaults;
 exports.version = require('./package.json').version;
+exports.extend = optionsUtils.extend;
 
 // 已经采用标准版的json格式去处理翻译数据
 // 所以不用再输出parse的接口
