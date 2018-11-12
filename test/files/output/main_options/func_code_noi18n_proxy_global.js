@@ -11,7 +11,7 @@ module.exports = function code()
 		if (!data) {
 			data = self.$ = {};
 			self.K = '*';
-			self.V = 'Hg';
+			self.V = 'Ig';
 			self.D = {
 				'*': {
 					// '中文':

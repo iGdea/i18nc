@@ -28,7 +28,7 @@ module.exports = function code()
 		if (LAN && LAN.split) {
 			if (self.L != LAN) {
 				self.K = '*';
-				self.V = 'Hf';
+				self.V = 'If';
 				self.D = {
 					'*': {
 						// 'out define 中文':
@@ -69,7 +69,7 @@ module.exports = function code()
 		msg += '';
 		if (!tpldata.length || msg.indexOf('%') == -1) return msg;
 
-		return msg.replace(/%s|%\{.+?\}/g, function() {
+		return msg.replace(/%s|%p|%\{.+?\}/g, function() {
 			var newVal = tpldata[replace_index++];
 			return newVal === undefined ? '' : newVal;
 		});
@@ -110,7 +110,7 @@ module.exports = function code()
 			if (LAN && LAN.split) {
 				if (self.L != LAN) {
 					self.K = '*';
-					self.V = 'Hf';
+					self.V = 'If';
 					self.D = {
 						'*': {
 							// '中文':
@@ -151,7 +151,7 @@ module.exports = function code()
 			msg += '';
 			if (!tpldata.length || msg.indexOf('%') == -1) return msg;
 
-			return msg.replace(/%s|%\{.+?\}/g, function() {
+			return msg.replace(/%s|%p|%\{.+?\}/g, function() {
 				var newVal = tpldata[replace_index++];
 				return newVal === undefined ? '' : newVal;
 			});
@@ -193,7 +193,7 @@ module.exports = function code()
 			if (LAN && LAN.split) {
 				if (self.L != LAN) {
 					self.K = '*';
-					self.V = 'Hf';
+					self.V = 'If';
 					self.D = {
 						'*': {
 							// 'define2 中文':
@@ -234,7 +234,7 @@ module.exports = function code()
 			msg += '';
 			if (!tpldata.length || msg.indexOf('%') == -1) return msg;
 
-			return msg.replace(/%s|%\{.+?\}/g, function() {
+			return msg.replace(/%s|%p|%\{.+?\}/g, function() {
 				var newVal = tpldata[replace_index++];
 				return newVal === undefined ? '' : newVal;
 			});
@@ -277,7 +277,7 @@ module.exports = function code()
 			if (LAN && LAN.split) {
 				if (self.L != LAN) {
 					self.K = '*';
-					self.V = 'Hf';
+					self.V = 'If';
 					self.D = {
 						'*': {
 							// 'define3 中文':
@@ -318,7 +318,7 @@ module.exports = function code()
 			msg += '';
 			if (!tpldata.length || msg.indexOf('%') == -1) return msg;
 
-			return msg.replace(/%s|%\{.+?\}/g, function() {
+			return msg.replace(/%s|%p|%\{.+?\}/g, function() {
 				var newVal = tpldata[replace_index++];
 				return newVal === undefined ? '' : newVal;
 			});
@@ -363,7 +363,7 @@ module.exports = function code()
 			if (LAN && LAN.split) {
 				if (self.L != LAN) {
 					self.K = '*';
-					self.V = 'Hf';
+					self.V = 'If';
 					self.D = {
 						'*': {
 							// 'define4 中文':
@@ -405,7 +405,7 @@ module.exports = function code()
 			msg += '';
 			if (!tpldata.length || msg.indexOf('%') == -1) return msg;
 
-			return msg.replace(/%s|%\{.+?\}/g, function() {
+			return msg.replace(/%s|%p|%\{.+?\}/g, function() {
 				var newVal = tpldata[replace_index++];
 				return newVal === undefined ? '' : newVal;
 			});
@@ -452,7 +452,7 @@ module.exports = function code()
 			if (LAN && LAN.split) {
 				if (self.L != LAN) {
 					self.K = '*';
-					self.V = 'Hf';
+					self.V = 'If';
 					self.D = {
 						'*': {
 							// 'define6 中文':
@@ -493,7 +493,7 @@ module.exports = function code()
 			msg += '';
 			if (!tpldata.length || msg.indexOf('%') == -1) return msg;
 		
-			return msg.replace(/%s|%\{.+?\}/g, function() {
+			return msg.replace(/%s|%p|%\{.+?\}/g, function() {
 				var newVal = tpldata[replace_index++];
 				return newVal === undefined ? '' : newVal;
 			});

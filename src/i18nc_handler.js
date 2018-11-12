@@ -6,7 +6,7 @@ module.exports = function $handlerName(msg, tpldata)
 	if (!tpldata || !tpldata.length || msg.indexOf('%') == -1) return msg;
 
 	var replace_index = 0;
-	return msg.replace(/%s|%\{.+?\}/g, function() {
+	return msg.replace(/%s|%p|%\{.+?\}/g, function() {
 		var newVal = tpldata[replace_index++];
 		return newVal === undefined ? '' : newVal;
 	});

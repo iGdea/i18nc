@@ -7,7 +7,7 @@ function I18N(msg)
 	if (!data) {
 		data = self.$ = {};
 		self.K = 'i18n_handler_example_global';
-		self.V = 'Hg';
+		self.V = 'Ig';
 		self.D = {
 			"$": [
 				"en-US",

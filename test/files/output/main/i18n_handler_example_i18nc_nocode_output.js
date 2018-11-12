@@ -15,7 +15,7 @@ module.exports = function I18N(msg, tpldata, subtype)
 	if (LAN && LAN.split) {
 		if (self.L != LAN) {
 			self.K = 'i18n_handler_example';
-			self.V = 'Hf';
+			self.V = 'If';
 			self.D = {};
 			translateJSON = self.D;
 
@@ -52,7 +52,7 @@ module.exports = function I18N(msg, tpldata, subtype)
 	msg += '';
 	if (!tpldata.length || msg.indexOf('%') == -1) return msg;
 
-	return msg.replace(/%s|%\{.+?\}/g, function() {
+	return msg.replace(/%s|%p|%\{.+?\}/g, function() {
 		var newVal = tpldata[replace_index++];
 		return newVal === undefined ? '' : newVal;
 	});

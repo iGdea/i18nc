@@ -7,6 +7,7 @@ var optionsUtils = require('./lib/options');
 exports = module.exports = require('./lib/main').main;
 exports.defaults = optionsUtils.defaults;
 exports.version = require('./package.json').version;
+exports.extend = optionsUtils.extend;
 
 // 已经采用标准版的json格式去处理翻译数据
 // 所以不用再输出parse的接口
@@ -1029,7 +1030,7 @@ exports.UNSUPPORT_AST_TYPS	=
 };
 
 
-exports.I18NFunctionVersion = 'H';
+exports.I18NFunctionVersion = 'I';
 exports.I18NFunctionSubVersion =
 {
 	FULL	: 'f',
@@ -1470,7 +1471,7 @@ module.exports = function $handlerName(msg, tpldata, subtype)
 	// 判断是否需要替换：不需要替换，直接返回
 	if (!tpldata.length || msg.indexOf('%') == -1) return msg;
 
-	return msg.replace(/%s|%\{.+?\}/g, function() {
+	return msg.replace(/%s|%p|%\{.+?\}/g, function() {
 		var newVal = tpldata[replace_index++];
 		return newVal === undefined ? '' : newVal;
 	});
@@ -1515,7 +1516,7 @@ module.exports = function $handlerName(msg, tpldata)
 	self.V = '$FUNCTION_VERSION';
 
 	var replace_index = 0;
-	return msg.replace(/%s|%\{.+?\}/g, function() {
+	return msg.replace(/%s|%p|%\{.+?\}/g, function() {
 		var newVal = tpldata[replace_index++];
 		return newVal === undefined ? '' : newVal;
 	});
@@ -2410,9 +2411,15 @@ exports.defaults =
 
 
 utils.freeze(exports.defaults);
-exports.extend = function(obj)
+exports.extend = function(defaults, obj)
 {
-	return utils.extend(exports.defaults, obj);
+	if (arguments.length < 2)
+	{
+		obj = defaults;
+		defaults = exports.defaults;
+	}
+
+	return utils.extend(defaults, obj);
 };
 
 },{"./upgrade/tpl/getlanguagecode_handler":18,"./utils/options_utils":19}],15:[function(require,module,exports){
@@ -48200,7 +48207,7 @@ exports.SourceNode = require('./lib/source-node').SourceNode;
 },{"./lib/source-map-consumer":111,"./lib/source-map-generator":112,"./lib/source-node":113}],116:[function(require,module,exports){
 module.exports={
   "name": "i18nc-core",
-  "version": "10.9.7",
+  "version": "10.10.1",
   "description": "I18N Tool for JS files",
   "main": "index.js",
   "scripts": {
@@ -48225,12 +48232,12 @@ module.exports={
     "estraverse": "^4.2.0",
     "extend": "^3.0.2",
     "lodash": "^4.17.11",
-    "i18nc-ast": "^1.0.0",
+    "i18nc-ast": "^1.0.1",
     "i18nc-db": "^1.0.0",
     "i18nc-jsoncode": "^1.0.1"
   },
   "devDependencies": {
-    "acorn": "^6.0.2",
+    "acorn": "^6.0.4",
     "benchmark": "^2.1.4",
     "comment-parser": "^0.5.0",
     "cross-env": "^5.2.0",
