@@ -4,4 +4,4 @@ instrumentation:
     - .js
   default-excludes: true
   excludes:
-    - lib/upgrade/tpl/**
+    - lib/i18n_func/tpl/**
