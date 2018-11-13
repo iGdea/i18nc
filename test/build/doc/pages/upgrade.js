@@ -4,14 +4,14 @@ var _ = require('lodash');
 var fs = require('fs');
 var tpl = fs.readFileSync(__dirname+'/../tpl/upgrade.tpl.md').toString();
 var codeMapTable = require('../lib/codemap_table');
-var depdOptions = require('../../../../lib/upgrade/depd_options');
+var VARS = require('i18nc-options').VARS;
 
 var content = tpl.replace(/\$(\w+)/g, function(all, key)
 {
 	switch(key)
 	{
 		case 'OPTIONS_RENAME_TABLE_DATA':
-			var tableData = _.map(depdOptions.OPTIONS_RENAME_MAP, function(newKey, oldKey)
+			var tableData = _.map(VARS.OLD_RENAME_OPTIONS, function(newKey, oldKey)
 				{
 					return [oldKey, newKey];
 				})
@@ -29,7 +29,7 @@ var content = tpl.replace(/\$(\w+)/g, function(all, key)
 			return info.content;
 
 		case 'OPTIONS_SWITCH_TABLE_DATA':
-			return codeMapTable.table_1toN(depdOptions.OPTIONS_OLDKEY_MAP, '老配置', '新配置');
+			return codeMapTable.table_1toN(VARS.OLD_VALUE_OPTIONS, '老配置', '新配置');
 
 		default:
 			return all;

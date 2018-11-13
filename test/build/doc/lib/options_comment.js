@@ -19,8 +19,8 @@ module.exports = function(content)
 			&& expression.operator == '='
 			&& expression.left
 			&& expression.left.type == 'MemberExpression'
-			&& expression.left.object.name == 'exports'
-			&& expression.left.property.name == 'defaults'
+			&& expression.left.object.name == 'module'
+			&& expression.left.property.name == 'exports'
 			&& expression.right.type == 'ObjectExpression')
 		{
 			astArr = objectAstFind(item.expression.right);

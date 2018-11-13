@@ -4,7 +4,7 @@ var fs = require('fs');
 var optionsComment = require('../lib/options_comment');
 
 var tpl = fs.readFileSync(__dirname+'/../tpl/options_full.tpl.md').toString();
-var content = fs.readFileSync(__dirname+'/../../../../lib/options.js').toString();
+var content = fs.readFileSync(require.resolve('i18nc-options/lib/defaults')).toString();
 
 var fileContent = tpl.replace(/\$(\w+)/g, function(all, key)
 {

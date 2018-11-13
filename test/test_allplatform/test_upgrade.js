@@ -4,7 +4,7 @@ var expect				= require('expect.js');
 var autoTestUtils		= require('../auto_test_utils');
 var requireAfterWrite	= autoTestUtils.requireAfterWrite('upgrade');
 var i18nc				= require('../../');
-var optionsUtils		= require('../../lib/options');
+var initOptions			= require('i18nc-options').init;
 
 describe('#upgrade', function()
 {
@@ -28,17 +28,17 @@ describe('#upgrade', function()
 			{
 				it('#key2obj', function()
 				{
-					var newOptions = optionsUtils.extend();
+					var newOptions = initOptions();
 					expect(newOptions.I18NHandler.insert.checkClosure).to.be(true);
-					newOptions = optionsUtils.extend({isCheckClosureForNewI18NHandler: false});
+					newOptions = initOptions({isCheckClosureForNewI18NHandler: false});
 					expect(newOptions.I18NHandler.insert.checkClosure).to.be(false);
 				});
 
 				it('#obj2obj', function()
 				{
-					var newOptions = optionsUtils.extend();
+					var newOptions = initOptions();
 					expect(newOptions.I18NHandler.upgrade.checkVersion).to.be(true);
-					newOptions = optionsUtils.extend({I18NHandler: {upgrade: {version: false}}});
+					newOptions = initOptions({I18NHandler: {upgrade: {version: false}}});
 					expect(newOptions.I18NHandler.upgrade.checkVersion).to.be(false);
 				});
 
@@ -52,21 +52,21 @@ describe('#upgrade', function()
 			{
 				it('#arr2obj', function()
 				{
-					var newOptions = optionsUtils.extend();
+					var newOptions = initOptions();
 					expect(newOptions.I18NHandler.upgrade.enable).to.be(true);
-					newOptions = optionsUtils.extend({codeModifiedArea: []});
+					newOptions = initOptions({codeModifiedArea: []});
 					expect(newOptions.I18NHandler.upgrade.enable).to.be(false);
-					newOptions = optionsUtils.extend({codeModifiedArea: ['I18NHandler']});
+					newOptions = initOptions({codeModifiedArea: ['I18NHandler']});
 					expect(newOptions.I18NHandler.upgrade.enable).to.be(true);
 				});
 
 				it('#arr2arr', function()
 				{
-					var newOptions = optionsUtils.extend();
+					var newOptions = initOptions();
 					expect(newOptions.codeModifyItems.I18NHandlerAlias).to.be(true);
-					newOptions = optionsUtils.extend({codeModifiedArea: []});
+					newOptions = initOptions({codeModifiedArea: []});
 					expect(newOptions.codeModifyItems.I18NHandlerAlias).to.be(undefined);
-					newOptions = optionsUtils.extend({codeModifiedArea: ['I18NHandlerAlias']});
+					newOptions = initOptions({codeModifiedArea: ['I18NHandlerAlias']});
 					expect(newOptions.codeModifyItems.I18NHandlerAlias).to.be(true);
 				});
 			});

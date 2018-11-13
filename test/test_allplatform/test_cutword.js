@@ -4,12 +4,12 @@ var expect			= require('expect.js');
 var escodegen		= require('escodegen');
 var i18ncAst		= require('i18nc-ast');
 var astTpl			= i18ncAst.tpl;
-var optionsUtils	= require('../../lib/options');
+var initOptions		= require('i18nc-options').init;
 var LiteralHandler	= require('../../lib/ast_literal_handler').LiteralHandler;
 
 describe('#cutword', function()
 {
-	var options = optionsUtils.extend();
+	var options = initOptions();
 	var literalHandler = new LiteralHandler(options);
 
 	it('#ast', function()

@@ -2,7 +2,7 @@
 
 var expect				= require('expect.js');
 var ASTCollector		= require('../../lib/ast_collector').ASTCollector;
-var optionsUtils		= require('../../lib/options');
+var initOptions			= require('i18nc-options').init;
 var i18ncAst			= require('i18nc-ast');
 var astUtil				= i18ncAst.util;
 var i18nc				= require('../../');
@@ -135,7 +135,7 @@ describe('#ASTCollector', function()
 function getCollect(code, options)
 {
 	var ast = astUtil.parse(code.toString());
-	return new ASTCollector(optionsUtils.extend(options)).collect(ast);
+	return new ASTCollector(initOptions(options)).collect(ast);
 }
 
 function getFinalCollect()

@@ -1,7 +1,7 @@
 {
   "name": "i18nc-core",
-  "version": "10.11.0",
-  "description": "I18N Tool for JS files",
+  "version": "10.12.0",
+  "description": "Code of I18NC",
   "main": "index.js",
   "scripts": {
     "prepublish": "npm ls",
@@ -23,18 +23,18 @@
     "esmangle": "^1.0.1",
     "esprima": "^4.0.1",
     "estraverse": "^4.2.0",
-    "extend": "^3.0.2",
     "lodash": "^4.17.11",
     "i18nc-ast": "^1.0.1",
     "i18nc-db": "^1.0.0",
-    "i18nc-jsoncode": "^1.0.1"
+    "i18nc-jsoncode": "^1.0.1",
+    "i18nc-options": "^1.0.0"
   },
   "devDependencies": {
     "acorn": "^6.0.4",
     "benchmark": "^2.1.4",
     "comment-parser": "^0.5.0",
     "cross-env": "^5.2.0",
-    "eslint": "^5.8.0",
+    "eslint": "^5.9.0",
     "eslint-config-brcjs": "^0.2.0",
     "expect.js": "^0.3.1",
     "glob": "^7.1.3",

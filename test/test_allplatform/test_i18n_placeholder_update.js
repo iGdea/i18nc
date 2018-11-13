@@ -2,9 +2,9 @@
 
 var expect			= require('expect.js');
 var astUtil			= require('i18nc-ast').util;
+var initOptions		= require('i18nc-options').init;
 var prevTestFiles	= require('../prev_test_files');
 var DEF				= require('../../lib/def');
-var optionsUtils	= require('../../lib/options');
 var i18nTpl			= require('../../lib/i18n_func/render');
 var I18NPlaceholder	= require('../../lib/i18n_placeholder').I18NPlaceholder;
 
@@ -18,7 +18,7 @@ describe('#i18n_placeholder_update', function()
 			var ast = astUtil.parse(code);
 			var codeTranslateWords = {};
 			var I18NPlaceholderNew = new I18NPlaceholder(
-					codeTranslateWords, code, optionsUtils.extend(options), ast.body[0]
+					codeTranslateWords, code, initOptions(options), ast.body[0]
 				);
 			expect(I18NPlaceholderNew.getRenderType()).to.be(renderType);
 		}
@@ -30,7 +30,7 @@ describe('#i18n_placeholder_update', function()
 				DEFAULTS: ['中文']
 			};
 			var I18NPlaceholderNew = new I18NPlaceholder(
-					codeTranslateWords, code, optionsUtils.extend(options), ast.body[0]
+					codeTranslateWords, code, initOptions(options), ast.body[0]
 				);
 			expect(I18NPlaceholderNew.getRenderType()).to.be(renderType);
 		}
@@ -138,7 +138,7 @@ describe('#i18n_placeholder_update', function()
 		{
 			var ast = astUtil.parse(code);
 			var I18NPlaceholderNew = new I18NPlaceholder(
-					codeTranslateWords, code, optionsUtils.extend(), ast.body[0]
+					codeTranslateWords, code, initOptions(), ast.body[0]
 				);
 
 			I18NPlaceholderNew.renderType = 'partial';
@@ -161,7 +161,7 @@ describe('#i18n_placeholder_update', function()
 		{
 			var ast = astUtil.parse(code);
 			var I18NPlaceholderNew = new I18NPlaceholder(
-					codeTranslateWords, code, optionsUtils.extend(), ast.body[0]
+					codeTranslateWords, code, initOptions(), ast.body[0]
 				);
 
 			I18NPlaceholderNew.renderType = 'original';
@@ -172,7 +172,7 @@ describe('#i18n_placeholder_update', function()
 		{
 			var ast = astUtil.parse(code);
 			var I18NPlaceholderNew = new I18NPlaceholder(
-					codeTranslateWords, code, optionsUtils.extend(), ast.body[0]
+					codeTranslateWords, code, initOptions(), ast.body[0]
 				);
 
 			I18NPlaceholderNew.renderType = 'empty';
@@ -183,7 +183,7 @@ describe('#i18n_placeholder_update', function()
 		{
 			var ast = astUtil.parse(code);
 			var I18NPlaceholderNew = new I18NPlaceholder(
-					codeTranslateWords, code, optionsUtils.extend(), ast.body[0]
+					codeTranslateWords, code, initOptions(), ast.body[0]
 				);
 
 			I18NPlaceholderNew.renderType = 'simple';
@@ -199,11 +199,11 @@ describe('#i18n_placeholder_update', function()
 		{
 			var ast = astUtil.parse(code);
 			var I18NPlaceholderNew = new I18NPlaceholder(
-					{}, code, optionsUtils.extend({I18NHandlerTPL_GetLanguageCode: 'GetLanguageCode'}), ast.body[0]
+					{}, code, initOptions({I18NHandlerTPL_GetLanguageCode: 'GetLanguageCode'}), ast.body[0]
 				);
 
 			I18NPlaceholderNew.renderType = 'complete';
-			var options = optionsUtils.extend();
+			var options = initOptions();
 			var otherCode = i18nTpl.render(
 				{
 					handlerName         : options.I18NHandlerName,

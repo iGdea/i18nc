@@ -2,12 +2,12 @@
 'use strict';
 
 var debug = require('debug')('i18nc-core');
-var optionsUtils = require('./lib/options');
+var options = require('i18nc-options');
 
 exports = module.exports = require('./lib/main').main;
-exports.defaults = optionsUtils.defaults;
 exports.version = require('./package.json').version;
-exports.extend = optionsUtils.extend;
+exports.defaults = options.defaults;
+
 
 // 已经采用标准版的json格式去处理翻译数据
 // 所以不用再输出parse的接口
@@ -18,13 +18,13 @@ require('./lib/emitter').proxy(exports);
 exports.plugins = {};
 exports.registerPlugin = function(name, handler)
 {
-	var defaults = optionsUtils.defaults;
+	var defaults = options.defaults;
 	handler(exports, defaults.pluginSettings, defaults.pluginEnabled);
 	exports.plugins[name] = handler;
 	debug('register plugin:%s', name);
 };
 
-},{"./lib/emitter":6,"./lib/main":13,"./lib/options":14,"./package.json":116,"debug":22}],2:[function(require,module,exports){
+},{"./lib/emitter":6,"./lib/main":13,"./package.json":109,"debug":16,"i18nc-options":110}],2:[function(require,module,exports){
 'use strict';
 
 var _					= require('lodash');
@@ -348,7 +348,7 @@ _.extend(ASTCollector.prototype,
 	}
 });
 
-},{"./ast_literal_handler":3,"./ast_scope":4,"./def":5,"./emitter":6,"debug":22,"estraverse":79,"i18nc-ast":87,"lodash":102}],3:[function(require,module,exports){
+},{"./ast_literal_handler":3,"./ast_scope":4,"./def":5,"./emitter":6,"debug":16,"estraverse":72,"i18nc-ast":80,"lodash":95}],3:[function(require,module,exports){
 'use strict';
 
 var _			= require('lodash');
@@ -510,7 +510,7 @@ _.extend(LiteralHandler.prototype,
 	},
 });
 
-},{"./emitter":6,"./utils/words_utils":21,"debug":22,"i18nc-ast":87,"lodash":102}],4:[function(require,module,exports){
+},{"./emitter":6,"./utils/words_utils":15,"debug":16,"i18nc-ast":80,"lodash":95}],4:[function(require,module,exports){
 'use strict';
 
 var _					= require('lodash');
@@ -1010,7 +1010,7 @@ _.extend(ASTScope.prototype,
 	}
 });
 
-},{"./def":5,"./i18n_placeholder":12,"./main":13,"./result_object":15,"debug":22,"i18nc-ast":87,"lodash":102}],5:[function(require,module,exports){
+},{"./def":5,"./i18n_placeholder":12,"./main":13,"./result_object":14,"debug":16,"i18nc-ast":80,"lodash":95}],5:[function(require,module,exports){
 'use strict';
 
 var AST_FLAGS = require('i18nc-ast').AST_FLAGS;
@@ -1038,7 +1038,7 @@ exports.I18NFunctionSubVersion =
 	GLOBAL	: 'g',
 };
 
-},{"i18nc-ast":87}],6:[function(require,module,exports){
+},{"i18nc-ast":80}],6:[function(require,module,exports){
 'use strict';
 
 var debug			= require('debug')('i18nc-core:emitter');
@@ -1115,7 +1115,7 @@ exports.proxy = function(obj)
 	};
 }
 
-},{"debug":22,"events":85}],7:[function(require,module,exports){
+},{"debug":16,"events":78}],7:[function(require,module,exports){
 'use strict';
 
 var _			= require('lodash');
@@ -1327,7 +1327,7 @@ _.extend(I18NJSON.prototype,
 	},
 });
 
-},{"../emitter":6,"debug":22,"escodegen":25,"i18nc-jsoncode":95,"lodash":102}],8:[function(require,module,exports){
+},{"../emitter":6,"debug":16,"escodegen":18,"i18nc-jsoncode":88,"lodash":95}],8:[function(require,module,exports){
 'use strict';
 
 var esprima		= require('esprima');
@@ -1405,7 +1405,7 @@ exports.render = tpl2render(require('./tpl/full.js').toString());
 exports.renderSimple = tpl2render(require('./tpl/simple.js').toString());
 exports.renderGlobal = tpl2render(require('./tpl/global.js').toString());
 
-},{"./tpl/full.js":9,"./tpl/global.js":10,"./tpl/simple.js":11,"debug":22,"escodegen":25,"esmangle":32,"esprima":72}],9:[function(require,module,exports){
+},{"./tpl/full.js":9,"./tpl/global.js":10,"./tpl/simple.js":11,"debug":16,"escodegen":18,"esmangle":25,"esprima":65}],9:[function(require,module,exports){
 /* global $getLanguageCode $TRANSLATE_JSON_CODE */
 
 'use strict';
@@ -1951,18 +1951,18 @@ _.extend(I18NPlaceholder.prototype,
 	}
 });
 
-},{"./def":5,"./emitter":6,"./i18n_func/parser":7,"./i18n_func/render":8,"debug":22,"i18nc-ast":87,"i18nc-db":92,"i18nc-jsoncode":95,"lodash":102}],13:[function(require,module,exports){
+},{"./def":5,"./emitter":6,"./i18n_func/parser":7,"./i18n_func/render":8,"debug":16,"i18nc-ast":80,"i18nc-db":85,"i18nc-jsoncode":88,"lodash":95}],13:[function(require,module,exports){
 'use strict';
 
 var emitter			= require('./emitter');
 var astUtil			= require('i18nc-ast').util;
-var optionsUtils	= require('./options');
+var initOptions		= require('i18nc-options').init;
 var ASTCollector	= require('./ast_collector').ASTCollector;
 
 
 exports.main = function(code, options)
 {
-	options = optionsUtils.extend(options);
+	options = initOptions(options);
 
 	var tmpEmitter = emitter.new();
 
@@ -2019,410 +2019,7 @@ exports.run = function(code, options)
 	return result;
 }
 
-},{"./ast_collector":2,"./emitter":6,"./options":14,"i18nc-ast":87}],14:[function(require,module,exports){
-/* eslint-disable no-control-regex */
-
-'use strict';
-
-var getLanguageCodeHandler = require('./upgrade/tpl/getlanguagecode_handler');
-var utils = require('./utils/options_utils');
-
-
-exports.defaults =
-{
-	/**
-	 * 提取分词的正则
-	 *
-	 * 前后两个匹配，是为了尽可能匹配多的字符
- 	 * 排除所有的ascii字符，https://zh.wikipedia.org/wiki/ASCII
- 	 * 排除 "' 是因为tag标签属性用这个分隔，而本身很少用这两个引号
- 	 * 排除 <> 是因为html标签
- 	 *
-	 * @type {RegExp|null}
-	 * @default 排除所有ascii字符的正则
-	 */
-	cutwordReg: /[^\u0000-\u001F\u007F"'<>]*[^\u0000-\u007F]+[^\u0000-\u001F\u007F"'<>]*/g,
-
-	/**
-	 * 插入和运行时包裹的函数名
-	 *
-	 * @type {String}
-	 */
-	I18NHandlerName: 'I18N',
-
-	/**
-	 * I18NHandlerName的别名
-	 * 一般都是由于修改I18NHandlerName导致的历史数据遗留
-	 *
-	 * @remark I18NHandlerAlias优先级比ignoreScanHandlerNames低
-	 * @type {Array}
-	 * @default []
-	 */
-	I18NHandlerAlias: [],
-
-	/**
-	 * 这些函数里面的调用或则声明，不进行扫描
-	 *
-	 * @remark 函数名带有.，表示对成员方法的调用
-	 * @type {Object|Array}
-	 * @default [console.xxxx]
-	 */
-	ignoreScanHandlerNames:
-	{
-		'console.log'	: true,
-		'console.warn'	: true,
-		'console.trace'	: true,
-		'console.info'	: true,
-		'console.error'	: true,
-		'console.dir'	: true,
-		'console.table'	: true,
-	},
-
-	/**
-	 * 外部导入的翻译数据
-	 *
-	 * @type {Object}
-	 */
-	dbTranslateWords: null,
-
-	/**
-	 * 注入到代码中的I18N函数的定制化配置
-	 *
-	 * @remark 值false则关闭
-	 * @type {Object/False}
-	 */
-	I18NHandler:
-	{
-		data:
-		{
-			/**
-			 * 函数默认标识，可标识出特定的I18N函数体
-			 * 一般用文件的相对路径
-			 *
-			 * @remark 可以针对filekey，可以提供定制翻译结果
-			 * @type {String}
-			 */
-			defaultFileKey: '*',
-			/**
-			 * 只打包这个列表的语言包到代码中
-			 *
-			 * @remark 数组为空则不受限制，传入多少种语言，就打包多少种
-			 * @type {Array}
-			 */
-			onlyTheseLanguages: [],
-			/**
-			 * 翻译的时候，不参考代码中I18N里面的数据
-			 *
-			 * @remark 启动后，如果dbTranslateWords没有数据，直接删除在I18N已有的翻译
-			 * @type {Boolean}
-			 */
-			ignoreFuncWords: false,
-		},
-		/**
-		 * I18NHandler升级配置
-		 *
-		 * @remark 值false则关闭
-		 * @type {Object/False}
-		 */
-		upgrade:
-		{
-			/**
-			 * [总开关]能否更新已插入代码中I18N函数体
-			 *
-			 * @remark 已经初始化的I18N函数，不会主动更新
-			 * @type {Boolean}
-			 */
-			enable: true,
-			/**
-			 * 优先进行I18N函数的局部更新（只更新翻译数据）
-			 *
-			 * @remark 是否能进行局部更新，受到众多因素影响，这只是一个开关
-			 * @type {Boolean}
-			 */
-			partial: true,
-			/**
-			 * 函数版本号不同的时候，是否更新整个函数体
-			 *
-			 * @type {Boolean}
-			 */
-			checkVersion: true,
-			/**
-			 * 是否更新代码中的翻译结果JSON
-			 * 在只更新函数的时候，方便做文件版本库校验
-			 *
- 			 * @remark 此配置只影响输出代码的结果，不会影响输出的JSON结果
-			 * @type {Boolean}
-			 */
-			updateJSON: true,
-		},
-		style:
-		{
-			/**
-			 * 优先使用的代码风格（fullHandler/proxyGlobalHandler）
-			 *
-			 * @type {String}
-			 */
-			codeStyle: 'fullHandler',
-
-			/**
-			 * 对插入的I18N进行代码压缩
-			 *
-			 * @type {Boolean}
-			 */
-			minFuncCode: false,
-			/**
-			 * 对插入到代码中的翻译结果JSON进行代码压缩
-			 *
-			 * @remark 设置true，会导致 I18NHandler.style.comment4nowords 失效
-			 * @type {Boolean}
-			 */
-			minFuncJSON: false,
-			/**
-			 * 翻译结果JSON，输出所有提取到的关键字；没有翻译结果的关键字，以注释的形式插入
-			 *
-			 * @type {Boolean}
-			 */
-			comment4nowords: true,
-
-			/**
-			 * 在I18N函数体内，调用外部函数，代替插入过多代码的方式
-			 *
-			 * @type {Object}
-			 */
-			proxyGlobalHandler:
-			{
-				/**
-				 * 调用的外部函数名
-				 *
-				 * @type {String}
-				 */
-				name: 'topI18N',
-				/**
-				 * 将源码中类proxyGlobal写法的I18N函数，转换为标准的proxyGlobalHandler
-				 *
-				 * @type {Boolean}
-				 */
-				autoConvert: true,
-				/**
-				 * 已经转的函数，是否维持此状态
-				 *
-				 * @remark 权重高于autoConvert
-				 * @type {Boolean}
-				 */
-				keepThisStyle: true,
-				/**
-				 * 忽略源代码中解析出来的外部函数名，强制使用配置的函数名
- 				 *
- 				 * @remark 如果原来有值，但不同，会触发更新；原来没有，则不会进行更新
-				 * @type {Boolean}
-				 */
-				ignoreFuncCodeName: false,
-			},
-			/**
-			 * 插入完整的I18N函数体，代码不依赖外部任何库或者函数
-			 *
-			 * @type {Object}
-			 */
-			fullHandler:
-			{
-				/**
-				 * 将源码中类fullHandler写法的I18N函数，转换为标准的fullHandler
-				 *
-				 * @type {Boolean}
-				 */
-				autoConvert: true,
-				/**
-				 * 已经转的函数，是否维持此状态
-				 *
-				 * @remark 权重高于autoConvert
-				 * @type {Boolean}
-				 */
-				keepThisStyle: true,
-			},
-		},
-		/**
-		 * I18NHandler升级配置
-		 *
-		 * @remark 值false则关闭
-		 * @type {Object/False}
-		 */
-		insert:
-		{
-			/**
-			 * [总开关]是否插入新的I18N函数
-			 *
-			 * @type {Boolean}
-			 */
-			enable: true,
-			/**
-			 * 插入I18N函数前，检查插入位置，作用域不能是全局，必须闭包
-			 *
-			 * @type {Boolean}
-			 */
-			checkClosure: true,
-			/**
-			 * 优先将新的I18N函数插入到define函数体中
-			 *
-			 * @type {Boolean}
-			 */
-			priorityDefineHalder: true,
-		},
-		tpl:
-		{
-			/**
-			 * I18N函数体中，获取当前语言包的JS业务代码
-			 *
-			 * string，即全局的函数调用
- 			 * function，必须是可被序列化成字符串，能独立运行
- 			 *
-			 * @type {String|Function}
-			 */
-			getLanguageCode: getLanguageCodeHandler,
-			/**
-			 * getLanguageCode中可替换$LanguageVars.xxxx$的变量
-			 *
-			 * @type {Object}
-			 */
-			languageVars:
-			{
-				/**
-				 * 获取语言包通用变量
-				 *
-				 * @type {String}
-				 */
-				name: '__i18n_lan__',
-				/**
-				 * 获取语言包通用变量-cookie版
-				 *
-				 * @type {String}
-				 */
-				cookie: 'proj.i18n_lan',
-			},
-			/**
-			 * 新插入的I18N函数外包裹的内容-开始部分
-			 *
-			 * @type {String}
-			 */
-			newHeaderCode: '\n\n/* eslint-disable */\n',
-			/**
-			 * 新插入的I18N函数外包裹的内容-结束部分
-			 *
-			 * @type {String}
-			 */
-			newFooterCode: '\n/* eslint-enable */\n\n',
-		},
-	},
-
-	/**
-	 * 设置操作的源码可修改的内容
-	 *
-	 * 如果去掉TranslateWord，
-	 * 配合最后输出的I18NArgsTranslateWords和codeTranslateWords，
- 	 * 可以实现check效果
- 	 *
-	 * @remark 空数据则关闭所有，空对象则使用默认
-	 * @type {Object|Array}
-	 */
-	codeModifyItems:
-	{
-		// I18NHandler 已经改名为 I18NHandler.upgrade.enable
-		// I18NHandler: true,
-		/**
-		 * 将提取的需要翻译的关键字，使用I18N函数包裹起来
-		 *
-		 * @type {Boolean}
-		 */
-		TranslateWord: true,
-		/**
-		 * 同TranslateWord，RegExp类型的开关
-		 *
-		 * @type {Boolean}
-		 */
-		TranslateWord_RegExp: false,
-		/**
-		 * 将I18NHandlerAlias替换成I18NHandlerName
-		 *
-		 * @type {Boolean}
-		 */
-		I18NHandlerAlias: true
-	},
-
-	/**
-	 * 当前安装和启用的插件
-	 *
-	 * @remark 空数据则关闭所有，空对象则使用默认
-	 * @type {Object|Array}
-	 */
-	pluginEnabled: {},
-	/**
-	 * 插件的配置
-	 *
-	 * @type {Object}
-	 */
-	pluginSettings: {},
-
-	/**
-	 * 是否开启向前版本兼容逻辑
-	 *
-	 * @remark 向前兼容需要消耗一定的计算资源和时间，建议按照提示修改成最新的配置和接口
-	 * @type {Boolean}
-	 */
-	depdEnable: true,
-
-	/**
-	 * 面向定制化的监听事件
-	 *
-	 * @type {Object}
-	 */
-	events:
-	{
-		/**
-		 * 从源码I18N函数体中提取到翻译数据时触发，可修改数据
-		 *
-		 * @type {Function}
-		 */
-		loadTranslateJSON: null,
-		/**
-		 * 生成新的I18N函数时触发，可对翻译数据进行再加工
-		 *
-		 * @type {Function}
-		 */
-		newTranslateJSON: null,
-		/**
-		 * 逐步扫描源码ast树时触发，可对ast结构进行预处理&判断
-		 *
-		 * @type {Function}
-		 */
-		beforeScan: null,
-		/**
-		 * 分词之后触发，可对分词结果进行优化
-		 *
-		 * @type {Function}
-		 */
-		cutword: null,
-		/**
-		 * 将分词结果绑定ast时触发，可调整分词和ast的对应关系
-		 *
-		 * @type {Function}
-		 */
-		assignLineStrings: null,
-	},
-};
-
-
-utils.freeze(exports.defaults);
-exports.extend = function(defaults, obj)
-{
-	if (arguments.length < 2)
-	{
-		obj = defaults;
-		defaults = exports.defaults;
-	}
-
-	return utils.extend(defaults, obj);
-};
-
-},{"./upgrade/tpl/getlanguagecode_handler":18,"./utils/options_utils":19}],15:[function(require,module,exports){
+},{"./ast_collector":2,"./emitter":6,"i18nc-ast":80,"i18nc-options":110}],14:[function(require,module,exports){
 'use strict';
 
 var _				= require('lodash');
@@ -3010,702 +2607,7 @@ _.extend(CodeInfoResult.prototype,
 	},
 });
 
-},{"debug":22,"extend":86,"i18nc-ast":87,"lodash":102}],16:[function(require,module,exports){
-'use strict';
-
-var _					= require('lodash');
-var debug				= require('debug')('i18nc-core:depd_options');
-var deprecate			= require('depd')('i18nc-core:options');
-var i18ncDB				= require('i18nc-db');
-var valUtils			= require('../utils/options_vals.js');
-var OptionsVals			= valUtils.OptionsVals;
-var GetLanguageCodeDepd	= require('./tpl/depd_getlanguagecode_handler').toString();
-
-
-var OPTIONS_RENAME_MAP = exports.OPTIONS_RENAME_MAP =
-{
-	cutWordReg: 'cutwordReg',
-	handlerName: 'I18NHandlerName',
-
-	defaultFileKey: 'I18NHandler.data.defaultFileKey',
-	// defaultTranslateLanguage: 'I18NHandler.data.defaultLanguage',
-	pickFileLanguages: 'I18NHandler.data.onlyTheseLanguages',
-	isIgnoreI18NHandlerTranslateWords: 'I18NHandler.data.ignoreFuncWords',
-
-	isPartialUpdate: 'I18NHandler.upgrade.partial',
-
-	// minTranslateFuncCode: 'I18NHandler.style.minFuncCode',
-	// minTranslateFuncCode: 'I18NHandler.style.minFuncJSON',
-	// isMinFuncTranslateCode: 'I18NHandler.style.minFuncJSON',
-	isInjectAllTranslateWords: 'I18NHandler.style.comment4nowords',
-
-	// isProxyGlobalHandler: 'I18NHandler.style.proxyGlobalHandler.enable',
-	proxyGlobalHandlerName: 'I18NHandler.style.proxyGlobalHandler.name',
-	isIgnoreCodeProxyGlobalHandlerName: 'I18NHandler.style.proxyGlobalHandler.ignoreFuncCodeName',
-
-
-	isCheckClosureForNewI18NHandler: 'I18NHandler.insert.checkClosure',
-	isClosureWhenInsertedHead: 'I18NHandler.insert.checkClosure',
-	isInsertToDefineHalder: 'I18NHandler.insert.priorityDefineHalder',
-
-
-	I18NHandlerTPL_GetLanguageCode: 'I18NHandler.tpl.getLanguageCode',
-	I18NHandlerTPL_LanguageVars: 'I18NHandler.tpl.languageVars',
-	I18NHandlerTPL_NewHeaderCode: 'I18NHandler.tpl.newHeaderCode',
-	I18NHandlerTPL_NewFooterCode: 'I18NHandler.tpl.newFooterCode',
-
-	I18NhandlerTpl_GetLanguageCode: 'I18NHandler.tpl.getLanguageCode',
-	I18NhandlerTpl_LanguageVars: 'I18NHandler.tpl.languageVars',
-	I18NhandlerTpl_NewHeaderCode: 'I18NHandler.tpl.newHeaderCode',
-	I18NhandlerTpl_NewFooterCode: 'I18NHandler.tpl.newFooterCode',
-
-	I18NhandlerTpl_LanguageVarName: 'I18NHandler.tpl.languageVars.name',
-	'I18NhandlerTpl:LanguageVarName': 'I18NHandler.tpl.languageVars.name',
-
-	I18NhandlerTpl_GetGlobalCode: 'I18NHandler.tpl.getLanguageCode',
-	'I18NhandlerTpl:GetGlobalCode': 'I18NHandler.tpl.getLanguageCode',
-
-	'I18NHandler.upgrade.version': 'I18NHandler.upgrade.checkVersion',
-	'I18NHandler.style.proxyGlobalHandler.ignoreFuncCode': 'I18NHandler.style.proxyGlobalHandler.ignoreFuncCodeName',
-
-	loadTranslateJSON: 'events.loadTranslateJSON',
-	newTranslateJSON: 'events.newTranslateJSON',
-	beforeScan: 'events.beforeScan',
-	cutword: 'events.cutword',
-	assignLineStrings: 'events.assignLineStrings',
-
-	// 由于会修改I18NHandler值，所以放到最后去处理
-	codeModifiedArea: 'codeModifyItems',
-	'codeModifiedArea.I18NHandler': 'I18NHandler',
-};
-
-
-var rename_1to1 = (function()
-{
-	var checkMap = {};
-	_.each(OPTIONS_RENAME_MAP, function(newKey, oldKey)
-	{
-		var config = checkMap[newKey] || (checkMap[newKey] = []);
-		config.push(oldKey);
-	});
-
-
-	function repalceKeyValHandler(newKey, oldKey, val)
-	{
-		switch(oldKey)
-		{
-			case 'I18NhandlerTpl_GetGlobalCode':
-			case 'I18NhandlerTpl:GetGlobalCode':
-				val = GetLanguageCodeDepd.replace(/\$GetLanguageCode/, ''+val);
-				break;
-
-			case 'codeModifiedArea.I18NHandler':
-				debug('has codeModifiedArea.I18NHandler set');
-				break;
-		}
-
-		deprecate('use `'+newKey+'` instead of `'+oldKey+'`');
-		return val;
-	}
-
-	return function(optionsVals)
-	{
-		_.each(checkMap, function(oldKeys, newKey)
-		{
-			// options已经定义了最新的key
-			if (optionsVals.exists(newKey)) return;
-
-			_.some(oldKeys, function(oldKey)
-			{
-				// 判断老的key，有没有可能存在
-				if (optionsVals.exists(oldKey))
-				{
-					var val = repalceKeyValHandler(newKey, oldKey, optionsVals.getVal(oldKey));
-					optionsVals.setVal(newKey, val);
-					return true;
-				}
-			});
-		});
-	};
-})();
-
-
-var OPTIONS_OLDKEY_MAP = exports.OPTIONS_OLDKEY_MAP =
-{
-	'minTranslateFuncCode=all':
-		[
-			'I18NHandler.style.minFuncCode=true',
-			'I18NHandler.style.minFuncJSON=true'
-		],
-	'minTranslateFuncCode=onlyFunc':
-		[
-			'I18NHandler.style.minFuncCode=true',
-			'I18NHandler.style.minFuncJSON=false'
-		],
-	'minTranslateFuncCode=none':
-		[
-			'I18NHandler.style.minFuncCode=false',
-			'I18NHandler.style.minFuncJSON=false'
-		],
-	'isMinFuncTranslateCode=true':
-		[
-			'I18NHandler.style.minFuncCode=true',
-			'I18NHandler.style.minFuncJSON=true'
-		],
-	'isMinFuncTranslateCode=false':
-		[
-			'I18NHandler.style.minFuncCode=true',
-			'I18NHandler.style.minFuncJSON=false'
-		],
-	'I18NHandler.style.proxyGlobalHandler.enable=true':
-		[
-			'I18NHandler.style.codeStyle=proxyGlobalHandler'
-		],
-	'isProxyGlobalHandler=true':
-		[
-			'I18NHandler.style.codeStyle=proxyGlobalHandler'
-		],
-}
-
-function rename_1toN(optionsVals)
-{
-	_.each(OPTIONS_OLDKEY_MAP, function(targetArr, oldKey)
-	{
-		// 老的key是否定义，值是否满足
-		var oldKeyInfo = valUtils.str2keyVal(oldKey);
-		if (!optionsVals.exists(oldKeyInfo.key)
-			|| optionsVals.getVal(oldKeyInfo.key) !== oldKeyInfo.value)
-		{
-			return;
-		}
-
-		// 判断新的是否已经定义
-		var ret = targetArr.some(function(newKey)
-		{
-			return optionsVals.exists(valUtils.str2keyVal(newKey).key);
-		});
-
-		if (ret) return;
-
-		// 值转换
-		targetArr.forEach(function(newKey)
-		{
-			var info = valUtils.str2keyVal(newKey);
-			optionsVals.setVal(info.key, info.value);
-		});
-
-		deprecate('use `'+targetArr.join(';')+'` instead of `'+oldKey+'`');
-	});
-}
-
-var OPTIONS_RM_KEYS =
-{
-	/**
-	 * 当没有找到任何语言包 & 启动了comment4nowords, 使用这个语言，作为代码中的语言包
-	 * 由于没有任何实际数据，对代码结果无影响
-	 *
-	 * @type {String}
-	 */
-	'I18NHandler.data.defaultLanguage': 'en-US',
-};
-
-function rmkeys(optionsVals)
-{
-	_.each(OPTIONS_RM_KEYS, function(defaultVal, key)
-	{
-		switch(key)
-		{
-			case 'I18NHandler.data.defaultLanguage':
-				if (optionsVals.exists(key))
-				{
-					deprecate('`'+key+'` will be removed');
-				}
-				else if (optionsVals.exists('defaultTranslateLanguage'))
-				{
-					deprecate('`defaultTranslateLanguage` will be removed');
-					optionsVals.setVal(key, optionsVals.getVal('defaultTranslateLanguage'));
-				}
-				else
-				{
-					optionsVals.setVal(key, defaultVal);
-				}
-				break;
-
-			default:
-				if (optionsVals.exists(key))
-					deprecate('`'+key+'` will be removed');
-				else
-					optionsVals.setVal(key, defaultVal);
-		}
-	});
-}
-
-
-exports.before = function(options)
-{
-	var optionsVals = new OptionsVals(options);
-	rename_1toN(optionsVals);
-	rename_1to1(optionsVals);
-
-	var dbTranslateWords = i18ncDB.update(options.dbTranslateWords);
-	if (dbTranslateWords)
-	{
-		deprecate('dbTranslateWords v2 is support')
-		options.dbTranslateWords = dbTranslateWords;
-	}
-}
-
-exports.after = function(result)
-{
-	var resultVals = new OptionsVals(result);
-	rmkeys(resultVals);
-};
-
-},{"../utils/options_vals.js":20,"./tpl/depd_getlanguagecode_handler":17,"debug":22,"depd":24,"i18nc-db":92,"lodash":102}],17:[function(require,module,exports){
-/* global $GetLanguageCode */
-
-'use strict';
-
-
-module.exports = function GetLanguageCodeHandler(cache) {
-	var g = cache.g || (cache.g = $GetLanguageCode);
-	return g.$LanguageVars.name$;
-}
-
-// fix istanbul for test
-// if (process.env.running_under_istanbul)
-// {
-// 	var GetLanguageCodeFuncCode = GetLanguageCodeHandler.toString();
-// 	GetLanguageCodeFuncCode = GetLanguageCodeFuncCode
-// 		.replace(/__cov_(.+?)\+\+[,;]?/g, '')
-// 		.replace(/else\{\}/, '');
-// 	GetLanguageCodeHandler.toString = function()
-// 	{
-// 		return GetLanguageCodeFuncCode;
-// 	};
-// }
-
-},{}],18:[function(require,module,exports){
-(function (global){
-/* global window */
-
-'use strict';
-
-
-module.exports = function GetLanguageCodeHandler(cache) {
-	if (!cache.global) {
-		cache.global = (typeof window == 'object' && window)
-			|| (typeof global == 'object' && global)
-			|| {};
-	}
-
-	return cache.global.$LanguageVars.name$;
-}
-
-// fix istanbul for test
-// if (process.env.running_under_istanbul)
-// {
-// 	var GetLanguageCodeFuncCode = GetLanguageCodeHandler.toString();
-// 	GetLanguageCodeFuncCode = GetLanguageCodeFuncCode
-// 		.replace(/__cov_(.+?)\+\+[,;]?/g, '')
-// 		.replace(/else\{\}/, '');
-// 	GetLanguageCodeHandler.toString = function()
-// 	{
-// 		return GetLanguageCodeFuncCode;
-// 	};
-// }
-
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],19:[function(require,module,exports){
-'use strict';
-
-var _				= require('lodash');
-var extend			= require('extend');
-var debug			= require('debug')('i18nc-core:options');
-var depdOptions		= require('../upgrade/depd_options');
-var valUtils		= require('./options_vals.js');
-var OptionsVals		= valUtils.OptionsVals;
-var ObjectToString	= ({}).toString;
-
-var LINK_VALUES = exports.LINK_VALUES =
-{
-	'I18NHandler.style.minFuncJSON=true':
-		'I18NHandler.style.comment4nowords=false',
-
-	'I18NHandler.style.codeStyle=fullHandler':
-		'I18NHandler.style.fullHandler.keepThisStyle=true',
-
-	'I18NHandler.style.codeStyle=proxyGlobalHandler':
-		'I18NHandler.style.proxyGlobalHandler.keepThisStyle=true',
-
-	'I18NHandler.style.fullHandler.keepThisStyle=false':
-		'I18NHandler.style.fullHandler.autoConvert=false',
-
-	'I18NHandler.style.proxyGlobalHandler.keepThisStyle=false':
-		'I18NHandler.style.proxyGlobalHandler.autoConvert=false',
-};
-
-
-exports.extend = function(defaults, originalOptions)
-{
-	defaults = extend(true, {}, defaults);
-	var options = extend(true, {}, originalOptions);
-	if (options.depdEnable !== false) depdOptions.before(options);
-	var result = _extendDefault(defaults, options, '');
-	depdOptions.after(result);
-
-	// for emitter
-	// 回调的时候，可能会带有额外的参数，保留这份
-	result.originalOptions = originalOptions;
-
-	var cutwordReg = result.cutwordReg;
-	// 必须lastIndex必须重制为0，且处于global状态
-	if (cutwordReg instanceof RegExp
-		&& (cutwordReg.lastIndex !== 0 || !cutwordReg.global))
-	{
-		throw new Error('Invalid cutwordReg');
-	}
-
-	_fixOptionsVal(result);
-
-	return result;
-}
-
-function _fixOptionsVal(options)
-{
-	var optionsVals = new OptionsVals(options);
-
-	_.each(LINK_VALUES, function(targetKey, readKey)
-	{
-		var readInfo = valUtils.str2keyVal(readKey);
-
-		if (optionsVals.exists(readInfo.key)
-			&& optionsVals.getVal(readInfo.key) === readInfo.value)
-		{
-			var targetInfo = valUtils.str2keyVal(targetKey);
-			if (optionsVals.getVal(targetInfo.key) !== targetInfo.value)
-			{
-				optionsVals.setVal(targetInfo.key, targetInfo.value);
-				debug('when %s, then %s', readKey, targetKey);
-			}
-		}
-	});
-}
-
-
-
-exports.freeze = function(obj)
-{
-	if (Object.freeze)
-	{
-		_.each(obj, function(val, key)
-		{
-			if (key != 'pluginEnabled' && key != 'pluginSettings')
-			{
-				deepFreeze(val);
-			}
-		});
-
-		Object.freeze(obj);
-	}
-}
-
-
-
-function deepFreeze(obj)
-{
-	if (!obj) return;
-
-	if (checkFreeze(obj))
-	{
-		_.each(obj, function(val)
-		{
-			if (checkFreeze(val)) Object.freeze(val);
-		});
-		Object.freeze(obj);
-	}
-}
-
-function checkFreeze(val)
-{
-	var type = ObjectToString.call(val);
-	return type == '[object Object]' || type == '[object Array]';
-}
-
-function _arr2jsonOnly(defaults, arr)
-{
-	var result = {};
-	arr.forEach(function(name)
-	{
-		if (typeof defaults[name] == 'boolean')
-			result[name] = true;
-		else
-			debug('ignore key <%s>, which are not defined in defaults.', name);
-	});
-	return result;
-}
-
-function _arr2jsonMore(arr, defaultVal)
-{
-	var result = _.extend({}, defaultVal);
-	arr.forEach(function(name)
-	{
-		result[name] = true;
-	});
-	return result;
-}
-
-
-function _extendDefault(defaults, object, parentKey)
-{
-	if (!object) return defaults;
-
-	var result = {};
-	_.each(defaults, function(defaultVal, key)
-	{
-		if (object.hasOwnProperty(key))
-		{
-			var newVal = object[key];
-			var defaultType = typeof defaultVal;
-
-			if (newVal === false)
-			{
-				if (parentKey == '' && key == 'I18NHandler')
-				{
-					result[key] =
-					{
-						insert: {enable: false},
-						upgrade: {enable: false},
-					};
-
-					return;
-				}
-				else if (parentKey == '.I18NHandler'
-					&& (key == 'insert' || key == 'upgrade'))
-				{
-					result[key] = {enable: false};
-					return;
-				}
-			}
-
-
-			switch(defaultType)
-			{
-				case 'object':
-					// 如果默认值为null或者undefined，那么运行newVal为任意值
-					if (!defaultVal)
-					{
-						result[key] = newVal;
-					}
-					else if (defaultVal instanceof RegExp)
-					{
-						if (newVal === null)
-						{
-							debug('clear regexp options');
-							result[key] = null;
-						}
-						else if (newVal instanceof RegExp)
-						{
-							result[key] = newVal;
-						}
-						else
-						{
-							debug('ignore regexp val, key:%s, val:%o', key, newVal);
-						}
-					}
-					else if (Array.isArray(newVal))
-					{
-						if (parentKey == '')
-						{
-							if (key == 'ignoreScanHandlerNames')
-							{
-								result[key] = _arr2jsonMore(newVal, defaultVal);
-								return;
-							}
-							else if (key == 'pluginEnabled' || key == 'codeModifyItems')
-							{
-								result[key] = _arr2jsonOnly(defaultVal, newVal);
-								return;
-							}
-						}
-
-						if (Array.isArray(defaultVal))
-						{
-							result[key] = newVal;
-						}
-						else
-						{
-							debug('ignore array data:%s', key);
-							result[key] = defaultVal;
-						}
-					}
-					else
-					{
-						result[key] = _extendDefault(defaultVal, newVal, parentKey+'.'+key);
-					}
-					break;
-
-				case 'boolean':
-					result[key] = newVal;
-					break;
-
-				default:
-					if (newVal)
-					{
-						result[key] = newVal;
-					}
-					else
-					{
-						result[key] = defaultVal;
-						debug('ignore options val, key:%s', key);
-					}
-			}
-		}
-		else
-		{
-			result[key] = defaultVal;
-		}
-	});
-
-	return result;
-}
-
-},{"../upgrade/depd_options":16,"./options_vals.js":20,"debug":22,"extend":86,"lodash":102}],20:[function(require,module,exports){
-/**
- * 针对options，提供快速获取key和值的接口
- * 例如 options.getVal('I18NHandler.style.codeStyle');
- */
-
-'use strict';
-
-var _ = require('lodash');
-var debug = require('debug')('i18nc-core:options_vals');
-
-
-exports.OptionsVals = OptionsVals;
-
-var KEY_ARRS = {};
-function getKeys(key)
-{
-	return KEY_ARRS[key] || (KEY_ARRS[key] = key.split('.'));
-}
-
-function OptionsVals(options)
-{
-	this.options = options;
-	this._keyCache = {};
-}
-
-_.extend(OptionsVals.prototype,
-{
-	exists: function(key)
-	{
-		var keyCache  = this._keyCache;
-		if (key in keyCache) return true;
-
-		this.getVal(key);
-
-		return key in keyCache;
-	},
-	getVal: function(key)
-	{
-		var keyCache  = this._keyCache;
-		if (key in keyCache) return keyCache[key];
-
-		var key2 = '';
-		var prevVal = this.options;
-		var items = getKeys(key);
-		var exists = !_.some(items, function(name, index)
-		{
-			if (!prevVal) return true;
-
-			if (key2) keyCache[key2] = prevVal;
-			key2 += index === 0 ? name : '.'+name;
-			if (name in prevVal)
-			{
-				prevVal = prevVal[name];
-			}
-			else if (index == items.length - 1 && Array.isArray(prevVal))
-			{
-				debug('val is exists by array mode, key:%s', key);
-				prevVal = prevVal.indexOf(name) != -1;
-			}
-			else
-			{
-				return true;
-			}
-		});
-
-		if (exists)
-		{
-			keyCache[key] = prevVal;
-			return prevVal;
-		}
-	},
-	setVal: function(key, val)
-	{
-		var keyCache = this._keyCache;
-		keyCache[key] = val;
-		var items = getKeys(key);
-		var len = items.length;
-		var prevVal;
-
-		if (len < 3 || !(prevVal = keyCache[items.slice(0, -1).join('.')]))
-		{
-			prevVal = this.options;
-			for(var tmp, name, i = 0, key2 = '', t = len -1; i < t; i++)
-			{
-				name = items[i];
-				key2 += i === 0 ? name : '.'+name;
-				tmp = prevVal[name];
-				if (!tmp || typeof tmp != 'object')
-					prevVal = prevVal[name] = {};
-				else
-					prevVal = tmp;
-
-				keyCache[key2] = prevVal;
-			}
-		}
-
-		var name = items[len -1];
-		if (Array.isArray(prevVal) && val === true)
-		{
-			prevVal.push(name);
-			debug('set val in array mode, key:%s', key);
-		}
-		else
-		{
-			prevVal[name] = val;
-		}
-	}
-});
-
-
-var STR2KEYVAL = {};
-exports.str2keyVal = str2keyVal;
-function str2keyVal(key)
-{
-	var ret = STR2KEYVAL[key];
-
-	if (!ret)
-	{
-		var arr = key.split('=');
-		var val = arr.pop();
-
-		if (val == 'true') val = true;
-		else if (val == 'false') val = false;
-
-		ret = STR2KEYVAL[key] =
-		{
-			key: arr.join('='),
-			value: val
-		};
-	}
-
-	return ret;
-}
-
-},{"debug":22,"lodash":102}],21:[function(require,module,exports){
+},{"debug":16,"extend":79,"i18nc-ast":80,"lodash":95}],15:[function(require,module,exports){
 'use strict';
 
 var debug			= require('debug')('i18nc-core:words_utils');
@@ -3806,7 +2708,7 @@ function getTranslateWordsFromLineStrings(lineStrings)
 	return translateWords;
 }
 
-},{"../emitter":6,"debug":22}],22:[function(require,module,exports){
+},{"../emitter":6,"debug":16}],16:[function(require,module,exports){
 (function (process){
 /* eslint-env browser */
 
@@ -4074,7 +2976,7 @@ formatters.j = function (v) {
 };
 
 }).call(this,require('_process'))
-},{"./common":23,"_process":104}],23:[function(require,module,exports){
+},{"./common":17,"_process":97}],17:[function(require,module,exports){
 
 /**
  * This is the common logic for both the Node.js and web browser
@@ -4340,86 +3242,7 @@ function setup(env) {
 
 module.exports = setup;
 
-},{"ms":103}],24:[function(require,module,exports){
-/*!
- * depd
- * Copyright(c) 2015 Douglas Christopher Wilson
- * MIT Licensed
- */
-
-'use strict'
-
-/**
- * Module exports.
- * @public
- */
-
-module.exports = depd
-
-/**
- * Create deprecate for namespace in caller.
- */
-
-function depd (namespace) {
-  if (!namespace) {
-    throw new TypeError('argument namespace is required')
-  }
-
-  function deprecate (message) {
-    // no-op in browser
-  }
-
-  deprecate._file = undefined
-  deprecate._ignored = true
-  deprecate._namespace = namespace
-  deprecate._traced = false
-  deprecate._warned = Object.create(null)
-
-  deprecate.function = wrapfunction
-  deprecate.property = wrapproperty
-
-  return deprecate
-}
-
-/**
- * Return a wrapped function in a deprecation message.
- *
- * This is a no-op version of the wrapper, which does nothing but call
- * validation.
- */
-
-function wrapfunction (fn, message) {
-  if (typeof fn !== 'function') {
-    throw new TypeError('argument fn must be a function')
-  }
-
-  return fn
-}
-
-/**
- * Wrap property in a deprecation message.
- *
- * This is a no-op version of the wrapper, which does nothing but call
- * validation.
- */
-
-function wrapproperty (obj, prop, message) {
-  if (!obj || (typeof obj !== 'object' && typeof obj !== 'function')) {
-    throw new TypeError('argument obj must be object')
-  }
-
-  var descriptor = Object.getOwnPropertyDescriptor(obj, prop)
-
-  if (!descriptor) {
-    throw new TypeError('must call property on owner object')
-  }
-
-  if (!descriptor.configurable) {
-    throw new TypeError('property must be configurable')
-  }
-}
-
-},{}],25:[function(require,module,exports){
+},{"ms":96}],18:[function(require,module,exports){
 (function (global){
 /*
   Copyright (C) 2012-2014 Yusuke Suzuki <utatane.tea@gmail.com>
@@ -7026,7 +5849,7 @@ function wrapproperty (obj, prop, message) {
 /* vim: set sw=4 ts=4 et tw=80 : */
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./package.json":26,"estraverse":79,"esutils":84,"source-map":115}],26:[function(require,module,exports){
+},{"./package.json":19,"estraverse":72,"esutils":77,"source-map":108}],19:[function(require,module,exports){
 module.exports={
   "_from": "escodegen@^1.11.0",
   "_id": "escodegen@1.11.0",
@@ -7119,7 +5942,7 @@ module.exports={
   "version": "1.11.0"
 }
 
-},{}],27:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
   Copyright (C) 2013 Alex Seville <hi@alexanderseville.com>
@@ -8243,7 +7066,7 @@ module.exports={
 }, this));
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"estraverse":28}],28:[function(require,module,exports){
+},{"estraverse":21}],21:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
   Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com>
@@ -9084,7 +7907,7 @@ module.exports={
 }(exports));
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./package.json":29}],29:[function(require,module,exports){
+},{"./package.json":22}],22:[function(require,module,exports){
 module.exports={
   "_from": "estraverse@^2.0.0",
   "_id": "estraverse@2.0.0",
@@ -9158,7 +7981,7 @@ module.exports={
   "version": "2.0.0"
 }
 
-},{}],30:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -9327,7 +8150,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./common":31}],31:[function(require,module,exports){
+},{"./common":24}],24:[function(require,module,exports){
 /*
   Copyright (C) 2012 Yusuke Suzuki <utatane.tea@gmail.com>
   Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com>
@@ -9797,7 +8620,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"escope":27,"estraverse":67,"esutils":70}],32:[function(require,module,exports){
+},{"escope":20,"estraverse":60,"esutils":63}],25:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -9987,7 +8810,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../package.json":71,"./annotate-directive":30,"./common":31,"./options":35,"./pass":36,"esshorten":73}],33:[function(require,module,exports){
+},{"../package.json":64,"./annotate-directive":23,"./common":24,"./options":28,"./pass":29,"esshorten":66}],26:[function(require,module,exports){
 /*
   Copyright (C) 2012 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -10353,7 +9176,7 @@ module.exports={
     exports.booleanCondition = booleanCondition;
 }());
 
-},{"./common":31}],34:[function(require,module,exports){
+},{"./common":24}],27:[function(require,module,exports){
 (function (global){
 /*
   Copyright (C) 2012 Yusuke Suzuki <utatane.tea@gmail.com>
@@ -10468,7 +9291,7 @@ module.exports={
 /* vim: set sw=4 ts=4 et tw=80 : */
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],35:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -10559,7 +9382,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./common":31}],36:[function(require,module,exports){
+},{"./common":24}],29:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -10671,7 +9494,7 @@ module.exports={
     ];
 }());
 
-},{"./common":31,"./pass/concatenate-variable-definition":37,"./pass/dead-code-elimination":38,"./pass/drop-variable-definition":39,"./pass/eliminate-duplicate-function-declarations":40,"./pass/hoist-variable-to-arguments":41,"./pass/reduce-branch-jump":42,"./pass/reduce-multiple-if-statements":43,"./pass/reduce-sequence-expression":44,"./pass/remove-context-sensitive-expressions":45,"./pass/remove-empty-statement":46,"./pass/remove-side-effect-free-expressions":47,"./pass/remove-unreachable-branch":48,"./pass/remove-unused-label":49,"./pass/remove-wasted-blocks":50,"./pass/reordering-function-declarations":51,"./pass/transform-branch-to-expression":52,"./pass/transform-dynamic-to-static-property-access":53,"./pass/transform-dynamic-to-static-property-definition":54,"./pass/transform-immediate-function-call":55,"./pass/transform-logical-association":56,"./pass/transform-to-compound-assignment":57,"./pass/transform-to-sequence-expression":58,"./pass/transform-typeof-undefined":59,"./pass/tree-based-constant-folding":60,"./post/omit-parens-in-void-context-iife":61,"./post/rewrite-boolean":62,"./post/rewrite-conditional-expression":63,"./post/transform-infinity":64,"./post/transform-static-to-dynamic-property-access":65,"./query":66}],37:[function(require,module,exports){
+},{"./common":24,"./pass/concatenate-variable-definition":30,"./pass/dead-code-elimination":31,"./pass/drop-variable-definition":32,"./pass/eliminate-duplicate-function-declarations":33,"./pass/hoist-variable-to-arguments":34,"./pass/reduce-branch-jump":35,"./pass/reduce-multiple-if-statements":36,"./pass/reduce-sequence-expression":37,"./pass/remove-context-sensitive-expressions":38,"./pass/remove-empty-statement":39,"./pass/remove-side-effect-free-expressions":40,"./pass/remove-unreachable-branch":41,"./pass/remove-unused-label":42,"./pass/remove-wasted-blocks":43,"./pass/reordering-function-declarations":44,"./pass/transform-branch-to-expression":45,"./pass/transform-dynamic-to-static-property-access":46,"./pass/transform-dynamic-to-static-property-definition":47,"./pass/transform-immediate-function-call":48,"./pass/transform-logical-association":49,"./pass/transform-to-compound-assignment":50,"./pass/transform-to-sequence-expression":51,"./pass/transform-typeof-undefined":52,"./pass/tree-based-constant-folding":53,"./post/omit-parens-in-void-context-iife":54,"./post/rewrite-boolean":55,"./post/rewrite-conditional-expression":56,"./post/transform-infinity":57,"./post/transform-static-to-dynamic-property-access":58,"./query":59}],30:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -10760,7 +9583,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":31}],38:[function(require,module,exports){
+},{"../common":24}],31:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -11322,7 +10145,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":31}],39:[function(require,module,exports){
+},{"../common":24}],32:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -11550,7 +10373,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":31,"../evaluator":33,"escope":27}],40:[function(require,module,exports){
+},{"../common":24,"../evaluator":26,"escope":20}],33:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -11713,7 +10536,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":31,"../map":34}],41:[function(require,module,exports){
+},{"../common":24,"../map":27}],34:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -11897,7 +10720,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":31,"escope":27}],42:[function(require,module,exports){
+},{"../common":24,"escope":20}],35:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -12068,7 +10891,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":31}],43:[function(require,module,exports){
+},{"../common":24}],36:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -12147,7 +10970,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":31}],44:[function(require,module,exports){
+},{"../common":24}],37:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -12341,7 +11164,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":31,"../evaluator":33,"escope":27}],45:[function(require,module,exports){
+},{"../common":24,"../evaluator":26,"escope":20}],38:[function(require,module,exports){
 /*
   Copyright (C) 2012 Mihai Bazon <mihai.bazon@gmail.com>
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
@@ -12702,7 +11525,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":31,"../evaluator":33,"escope":27}],46:[function(require,module,exports){
+},{"../common":24,"../evaluator":26,"escope":20}],39:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -12818,7 +11641,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":31}],47:[function(require,module,exports){
+},{"../common":24}],40:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -12977,7 +11800,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":31,"../evaluator":33,"escope":27}],48:[function(require,module,exports){
+},{"../common":24,"../evaluator":26,"escope":20}],41:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -13175,7 +11998,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":31,"../evaluator":33,"escope":27}],49:[function(require,module,exports){
+},{"../common":24,"../evaluator":26,"escope":20}],42:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -13305,7 +12128,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":31,"../map":34}],50:[function(require,module,exports){
+},{"../common":24,"../map":27}],43:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -13419,7 +12242,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":31}],51:[function(require,module,exports){
+},{"../common":24}],44:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -13508,7 +12331,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":31}],52:[function(require,module,exports){
+},{"../common":24}],45:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -13656,7 +12479,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":31}],53:[function(require,module,exports){
+},{"../common":24}],46:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -13732,7 +12555,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":31}],54:[function(require,module,exports){
+},{"../common":24}],47:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -13812,7 +12635,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":31}],55:[function(require,module,exports){
+},{"../common":24}],48:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -13920,7 +12743,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":31}],56:[function(require,module,exports){
+},{"../common":24}],49:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -13993,7 +12816,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":31}],57:[function(require,module,exports){
+},{"../common":24}],50:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -14130,7 +12953,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":31,"escope":27}],58:[function(require,module,exports){
+},{"../common":24,"escope":20}],51:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -14276,7 +13099,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":31}],59:[function(require,module,exports){
+},{"../common":24}],52:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -14377,7 +13200,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":31,"escope":27}],60:[function(require,module,exports){
+},{"../common":24,"escope":20}],53:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -14573,7 +13396,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":31,"../evaluator":33}],61:[function(require,module,exports){
+},{"../common":24,"../evaluator":26}],54:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -14677,7 +13500,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":31}],62:[function(require,module,exports){
+},{"../common":24}],55:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -14773,7 +13596,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":31}],63:[function(require,module,exports){
+},{"../common":24}],56:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -14847,7 +13670,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":31}],64:[function(require,module,exports){
+},{"../common":24}],57:[function(require,module,exports){
 /*
   Copyright (C) 2012 Michael Ficarra <esmangle.copyright@michael.ficarra.me>
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
@@ -14917,7 +13740,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":31}],65:[function(require,module,exports){
+},{"../common":24}],58:[function(require,module,exports){
 /*
   Copyright (C) 2012 Michael Ficarra <esmangle.copyright@michael.ficarra.me>
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
@@ -15013,7 +13836,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../common":31}],66:[function(require,module,exports){
+},{"../common":24}],59:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -15071,7 +13894,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./common":31}],67:[function(require,module,exports){
+},{"./common":24}],60:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
   Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com>
@@ -15762,7 +14585,7 @@ module.exports={
 }));
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{}],68:[function(require,module,exports){
+},{}],61:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -15854,7 +14677,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{}],69:[function(require,module,exports){
+},{}],62:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -15973,7 +14796,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./code":68}],70:[function(require,module,exports){
+},{"./code":61}],63:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -16007,7 +14830,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./code":68,"./keyword":69}],71:[function(require,module,exports){
+},{"./code":61,"./keyword":62}],64:[function(require,module,exports){
 module.exports={
   "_from": "esmangle@^1.0.1",
   "_id": "esmangle@1.0.1",
@@ -16107,7 +14930,7 @@ module.exports={
   "version": "1.0.1"
 }
 
-},{}],72:[function(require,module,exports){
+},{}],65:[function(require,module,exports){
 (function webpackUniversalModuleDefinition(root, factory) {
 /* istanbul ignore next */
 	if(typeof exports === 'object' && typeof module === 'object')
@@ -22817,7 +21640,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ ])
 });
 ;
-},{}],73:[function(require,module,exports){
+},{}],66:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -23109,9 +21932,9 @@ return /******/ (function(modules) { // webpackBootstrap
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"../package.json":78,"./map":74,"./utility":75,"escope":27,"estraverse":76,"esutils":84}],74:[function(require,module,exports){
-arguments[4][34][0].apply(exports,arguments)
-},{"dup":34}],75:[function(require,module,exports){
+},{"../package.json":71,"./map":67,"./utility":68,"escope":20,"estraverse":69,"esutils":77}],67:[function(require,module,exports){
+arguments[4][27][0].apply(exports,arguments)
+},{"dup":27}],68:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -23222,7 +22045,7 @@ arguments[4][34][0].apply(exports,arguments)
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{}],76:[function(require,module,exports){
+},{}],69:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
   Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com>
@@ -24067,7 +22890,7 @@ arguments[4][34][0].apply(exports,arguments)
 }(exports));
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./package.json":77}],77:[function(require,module,exports){
+},{"./package.json":70}],70:[function(require,module,exports){
 module.exports={
   "_from": "estraverse@~4.1.1",
   "_id": "estraverse@4.1.1",
@@ -24136,7 +22959,7 @@ module.exports={
   "version": "4.1.1"
 }
 
-},{}],78:[function(require,module,exports){
+},{}],71:[function(require,module,exports){
 module.exports={
   "_from": "esshorten@~1.1.0",
   "_id": "esshorten@1.1.1",
@@ -24215,7 +23038,7 @@ module.exports={
   "version": "1.1.1"
 }
 
-},{}],79:[function(require,module,exports){
+},{}],72:[function(require,module,exports){
 /*
   Copyright (C) 2012-2013 Yusuke Suzuki <utatane.tea@gmail.com>
   Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com>
@@ -25066,7 +23889,7 @@ module.exports={
 }(exports));
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./package.json":80}],80:[function(require,module,exports){
+},{"./package.json":73}],73:[function(require,module,exports){
 module.exports={
   "_from": "estraverse@^4.2.0",
   "_id": "estraverse@4.2.0",
@@ -25140,7 +23963,7 @@ module.exports={
   "version": "4.2.0"
 }
 
-},{}],81:[function(require,module,exports){
+},{}],74:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -25286,7 +24109,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{}],82:[function(require,module,exports){
+},{}],75:[function(require,module,exports){
 /*
   Copyright (C) 2013-2014 Yusuke Suzuki <utatane.tea@gmail.com>
   Copyright (C) 2014 Ivan Nikulin <ifaaan@gmail.com>
@@ -25423,7 +24246,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{}],83:[function(require,module,exports){
+},{}],76:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -25590,7 +24413,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./code":82}],84:[function(require,module,exports){
+},{"./code":75}],77:[function(require,module,exports){
 /*
   Copyright (C) 2013 Yusuke Suzuki <utatane.tea@gmail.com>
 
@@ -25625,7 +24448,7 @@ module.exports={
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{"./ast":81,"./code":82,"./keyword":83}],85:[function(require,module,exports){
+},{"./ast":74,"./code":75,"./keyword":76}],78:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -26150,7 +24973,7 @@ function functionBindPolyfill(context) {
   };
 }
 
-},{}],86:[function(require,module,exports){
+},{}],79:[function(require,module,exports){
 'use strict';
 
 var hasOwn = Object.prototype.hasOwnProperty;
@@ -26269,7 +25092,7 @@ module.exports = function extend() {
 	return target;
 };
 
-},{}],87:[function(require,module,exports){
+},{}],80:[function(require,module,exports){
 'use strict';
 
 exports.config = require('./lib/config');
@@ -26277,7 +25100,7 @@ exports.tpl = require('./lib/ast_tpl');
 exports.util = require('./lib/ast_util');
 exports.AST_FLAGS = require('./lib/ast_flags').AST_FLAGS;
 
-},{"./lib/ast_flags":88,"./lib/ast_tpl":89,"./lib/ast_util":90,"./lib/config":91}],88:[function(require,module,exports){
+},{"./lib/ast_flags":81,"./lib/ast_tpl":82,"./lib/ast_util":83,"./lib/config":84}],81:[function(require,module,exports){
 'use strict';
 
 exports.AST_FLAGS =
@@ -26295,7 +25118,7 @@ exports.AST_FLAGS =
 	PLACEHOLDER_WORD		: 1 << 10,
 };
 
-},{}],89:[function(require,module,exports){
+},{}],82:[function(require,module,exports){
 'use strict';
 
 var SELF_CREATED_FLAG = require('./ast_flags').AST_FLAGS.SELF_CREATED;
@@ -26392,7 +25215,7 @@ exports.NewExpression = function NewExpression(name, argumentsAst)
 	};
 }
 
-},{"./ast_flags":88}],90:[function(require,module,exports){
+},{"./ast_flags":81}],83:[function(require,module,exports){
 'use strict';
 
 var esprima		= require('esprima');
@@ -26556,7 +25379,7 @@ exports.astMemberExpression2arr = function astMemberExpression2arr(ast)
 	return result;
 }
 
-},{"./ast_tpl":89,"./config":91,"debug":22,"escodegen":25,"esprima":72}],91:[function(require,module,exports){
+},{"./ast_tpl":82,"./config":84,"debug":16,"escodegen":18,"esprima":65}],84:[function(require,module,exports){
 'use strict';
 
 exports.escodegenOptions =
@@ -26599,13 +25422,13 @@ exports.esprimaOptions =
 	loc: true
 };
 
-},{}],92:[function(require,module,exports){
+},{}],85:[function(require,module,exports){
 'use strict';
 
 exports.mergeTranslateData = require('./lib/merge_translate_data');
 exports.update = require('./lib/update');
 
-},{"./lib/merge_translate_data":93,"./lib/update":94}],93:[function(require,module,exports){
+},{"./lib/merge_translate_data":86,"./lib/update":87}],86:[function(require,module,exports){
 'use strict';
 
 var _		= require('lodash');
@@ -26759,7 +25582,7 @@ function _toTranslateJSON(data)
 	return result;
 }
 
-},{"debug":22,"lodash":102}],94:[function(require,module,exports){
+},{"debug":16,"lodash":95}],87:[function(require,module,exports){
 'use strict';
 
 var _			= require('lodash');
@@ -26808,7 +25631,7 @@ function update(dbTranslateWords)
 	};
 }
 
-},{"debug":22,"i18nc-jsoncode":95,"lodash":102}],95:[function(require,module,exports){
+},{"debug":16,"i18nc-jsoncode":88,"lodash":95}],88:[function(require,module,exports){
 'use strict';
 
 var debug	 	= require('debug')('i18nc-jsoncode');
@@ -26859,13 +25682,13 @@ function ltI18NFuncVersion(a, b)
 	return a.toUpperCase().charCodeAt(0) < b.toUpperCase().charCodeAt(0);
 }
 
-},{"debug":22,"i18nc-jsoncode1":96,"i18nc-jsoncode2":99}],96:[function(require,module,exports){
+},{"debug":16,"i18nc-jsoncode1":89,"i18nc-jsoncode2":92}],89:[function(require,module,exports){
 'use strict';
 
 exports.parser = require('./lib/parser');
 exports.generator = require('./lib/generator');
 
-},{"./lib/generator":97,"./lib/parser":98}],97:[function(require,module,exports){
+},{"./lib/generator":90,"./lib/parser":91}],90:[function(require,module,exports){
 'use strict';
 
 var _			= require('lodash');
@@ -27070,7 +25893,7 @@ function _wordJson2ast(words)
 	return astTpl.ObjectExpression(result);
 }
 
-},{"debug":22,"i18nc-ast":87,"lodash":102}],98:[function(require,module,exports){
+},{"debug":16,"i18nc-ast":80,"lodash":95}],91:[function(require,module,exports){
 'use strict';
 
 var debug	= require('debug')('i18nc-jsoncode:parser');
@@ -27184,9 +26007,9 @@ function _wordAst2json(ast)
 	return result;
 }
 
-},{"debug":22,"i18nc-ast":87}],99:[function(require,module,exports){
-arguments[4][96][0].apply(exports,arguments)
-},{"./lib/generator":100,"./lib/parser":101,"dup":96}],100:[function(require,module,exports){
+},{"debug":16,"i18nc-ast":80}],92:[function(require,module,exports){
+arguments[4][89][0].apply(exports,arguments)
+},{"./lib/generator":93,"./lib/parser":94,"dup":89}],93:[function(require,module,exports){
 'use strict';
 
 var _			= require('lodash');
@@ -27454,7 +26277,7 @@ function _getlanArr(translateData)
 		});
 }
 
-},{"debug":22,"i18nc-ast":87,"lodash":102}],101:[function(require,module,exports){
+},{"debug":16,"i18nc-ast":80,"lodash":95}],94:[function(require,module,exports){
 'use strict';
 
 var _		= require('lodash');
@@ -27610,7 +26433,7 @@ function _getSubtypeJSON(subtypeItem, lanIndex)
 	return result;
 }
 
-},{"debug":22,"i18nc-ast":87,"lodash":102}],102:[function(require,module,exports){
+},{"debug":16,"i18nc-ast":80,"lodash":95}],95:[function(require,module,exports){
 (function (global){
 /**
  * @license
@@ -44721,7 +43544,7 @@ function _getSubtypeJSON(subtypeItem, lanIndex)
 }.call(this));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],103:[function(require,module,exports){
+},{}],96:[function(require,module,exports){
 /**
  * Helpers.
  */
@@ -44885,7 +43708,7 @@ function plural(ms, msAbs, n, name) {
   return Math.round(ms / n) + ' ' + name + (isPlural ? 's' : '');
 }
 
-},{}],104:[function(require,module,exports){
+},{}],97:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -45071,7 +43894,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],105:[function(require,module,exports){
+},{}],98:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -45194,7 +44017,7 @@ ArraySet.prototype.toArray = function ArraySet_toArray() {
 
 exports.ArraySet = ArraySet;
 
-},{"./util":114}],106:[function(require,module,exports){
+},{"./util":107}],99:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -45336,7 +44159,7 @@ exports.decode = function base64VLQ_decode(aStr, aIndex, aOutParam) {
   aOutParam.rest = aIndex;
 };
 
-},{"./base64":107}],107:[function(require,module,exports){
+},{"./base64":100}],100:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -45405,7 +44228,7 @@ exports.decode = function (charCode) {
   return -1;
 };
 
-},{}],108:[function(require,module,exports){
+},{}],101:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -45518,7 +44341,7 @@ exports.search = function search(aNeedle, aHaystack, aCompare, aBias) {
   return index;
 };
 
-},{}],109:[function(require,module,exports){
+},{}],102:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2014 Mozilla Foundation and contributors
@@ -45599,7 +44422,7 @@ MappingList.prototype.toArray = function MappingList_toArray() {
 
 exports.MappingList = MappingList;
 
-},{"./util":114}],110:[function(require,module,exports){
+},{"./util":107}],103:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -45715,7 +44538,7 @@ exports.quickSort = function (ary, comparator) {
   doQuickSort(ary, comparator, 0, ary.length - 1);
 };
 
-},{}],111:[function(require,module,exports){
+},{}],104:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -46862,7 +45685,7 @@ IndexedSourceMapConsumer.prototype._parseMappings =
 
 exports.IndexedSourceMapConsumer = IndexedSourceMapConsumer;
 
-},{"./array-set":105,"./base64-vlq":106,"./binary-search":108,"./quick-sort":110,"./util":114}],112:[function(require,module,exports){
+},{"./array-set":98,"./base64-vlq":99,"./binary-search":101,"./quick-sort":103,"./util":107}],105:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -47289,7 +46112,7 @@ SourceMapGenerator.prototype.toString =
 
 exports.SourceMapGenerator = SourceMapGenerator;
 
-},{"./array-set":105,"./base64-vlq":106,"./mapping-list":109,"./util":114}],113:[function(require,module,exports){
+},{"./array-set":98,"./base64-vlq":99,"./mapping-list":102,"./util":107}],106:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -47704,7 +46527,7 @@ SourceNode.prototype.toStringWithSourceMap = function SourceNode_toStringWithSou
 
 exports.SourceNode = SourceNode;
 
-},{"./source-map-generator":112,"./util":114}],114:[function(require,module,exports){
+},{"./source-map-generator":105,"./util":107}],107:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -48194,7 +47017,7 @@ function computeSourceURL(sourceRoot, sourceURL, sourceMapURL) {
 }
 exports.computeSourceURL = computeSourceURL;
 
-},{}],115:[function(require,module,exports){
+},{}],108:[function(require,module,exports){
 /*
  * Copyright 2009-2011 Mozilla Foundation and contributors
  * Licensed under the New BSD license. See LICENSE.txt or:
@@ -48204,11 +47027,11 @@ exports.SourceMapGenerator = require('./lib/source-map-generator').SourceMapGene
 exports.SourceMapConsumer = require('./lib/source-map-consumer').SourceMapConsumer;
 exports.SourceNode = require('./lib/source-node').SourceNode;
 
-},{"./lib/source-map-consumer":111,"./lib/source-map-generator":112,"./lib/source-node":113}],116:[function(require,module,exports){
+},{"./lib/source-map-consumer":104,"./lib/source-map-generator":105,"./lib/source-node":106}],109:[function(require,module,exports){
 module.exports={
   "name": "i18nc-core",
-  "version": "10.10.1",
-  "description": "I18N Tool for JS files",
+  "version": "10.11.0",
+  "description": "Code of I18NC",
   "main": "index.js",
   "scripts": {
     "prepublish": "npm ls",
@@ -48230,10 +47053,10 @@ module.exports={
     "esmangle": "^1.0.1",
     "esprima": "^4.0.1",
     "estraverse": "^4.2.0",
-    "extend": "^3.0.2",
     "lodash": "^4.17.11",
     "i18nc-ast": "^1.0.1",
     "i18nc-db": "^1.0.0",
+    "i18nc-options": "^1.0.0",
     "i18nc-jsoncode": "^1.0.1"
   },
   "devDependencies": {
@@ -48241,7 +47064,7 @@ module.exports={
     "benchmark": "^2.1.4",
     "comment-parser": "^0.5.0",
     "cross-env": "^5.2.0",
-    "eslint": "^5.8.0",
+    "eslint": "^5.9.0",
     "eslint-config-brcjs": "^0.2.0",
     "expect.js": "^0.3.1",
     "glob": "^7.1.3",
@@ -48271,4 +47094,1444 @@ module.exports={
   "homepage": "https://github.com/Bacra/node-i18nc-core"
 }
 
+},{}],110:[function(require,module,exports){
+'use strict';
+
+var utils = require('./lib/utils');
+var globalDefaults = require('./lib/defaults');
+exports.defaults = globalDefaults;
+exports.VARS = require('./lib/vars');
+
+utils.freeze(globalDefaults);
+
+exports.init = function(obj)
+{
+	return utils.extend(globalDefaults, obj);
+}
+
+exports.extend = function(defaults, obj)
+{
+	if (arguments.length < 2)
+	{
+		obj = defaults;
+		defaults = globalDefaults;
+	}
+
+	return utils.extend(defaults, obj);
+};
+
+},{"./lib/defaults":111,"./lib/utils":113,"./lib/vars":114}],111:[function(require,module,exports){
+/* eslint-disable no-control-regex */
+
+'use strict';
+
+var getLanguageCodeHandler = require('../upgrade/tpl/getlanguagecode_handler');
+
+module.exports =
+{
+	/**
+	 * 提取分词的正则
+	 *
+	 * 前后两个匹配，是为了尽可能匹配多的字符
+ 	 * 排除所有的ascii字符，https://zh.wikipedia.org/wiki/ASCII
+ 	 * 排除 "' 是因为tag标签属性用这个分隔，而本身很少用这两个引号
+ 	 * 排除 <> 是因为html标签
+ 	 *
+	 * @type {RegExp|null}
+	 * @default 排除所有ascii字符的正则
+	 */
+	cutwordReg: /[^\u0000-\u001F\u007F"'<>]*[^\u0000-\u007F]+[^\u0000-\u001F\u007F"'<>]*/g,
+
+	/**
+	 * 插入和运行时包裹的函数名
+	 *
+	 * @type {String}
+	 */
+	I18NHandlerName: 'I18N',
+
+	/**
+	 * I18NHandlerName的别名
+	 * 一般都是由于修改I18NHandlerName导致的历史数据遗留
+	 *
+	 * @remark I18NHandlerAlias优先级比ignoreScanHandlerNames低
+	 * @type {Array}
+	 * @default []
+	 */
+	I18NHandlerAlias: [],
+
+	/**
+	 * 这些函数里面的调用或则声明，不进行扫描
+	 *
+	 * @remark 函数名带有.，表示对成员方法的调用
+	 * @type {Object|Array}
+	 * @default [console.xxxx]
+	 */
+	ignoreScanHandlerNames:
+	{
+		'console.log'	: true,
+		'console.warn'	: true,
+		'console.trace'	: true,
+		'console.info'	: true,
+		'console.error'	: true,
+		'console.dir'	: true,
+		'console.table'	: true,
+	},
+
+	/**
+	 * 外部导入的翻译数据
+	 *
+	 * @type {Object}
+	 */
+	dbTranslateWords: null,
+
+	/**
+	 * 注入到代码中的I18N函数的定制化配置
+	 *
+	 * @remark 值false则关闭
+	 * @type {Object/False}
+	 */
+	I18NHandler:
+	{
+		data:
+		{
+			/**
+			 * 函数默认标识，可标识出特定的I18N函数体
+			 * 一般用文件的相对路径
+			 *
+			 * @remark 可以针对filekey，可以提供定制翻译结果
+			 * @type {String}
+			 */
+			defaultFileKey: '*',
+			/**
+			 * 只打包这个列表的语言包到代码中
+			 *
+			 * @remark 数组为空则不受限制，传入多少种语言，就打包多少种
+			 * @type {Array}
+			 */
+			onlyTheseLanguages: [],
+			/**
+			 * 翻译的时候，不参考代码中I18N里面的数据
+			 *
+			 * @remark 启动后，如果dbTranslateWords没有数据，直接删除在I18N已有的翻译
+			 * @type {Boolean}
+			 */
+			ignoreFuncWords: false,
+		},
+		/**
+		 * I18NHandler升级配置
+		 *
+		 * @remark 值false则关闭
+		 * @type {Object/False}
+		 */
+		upgrade:
+		{
+			/**
+			 * [总开关]能否更新已插入代码中I18N函数体
+			 *
+			 * @remark 已经初始化的I18N函数，不会主动更新
+			 * @type {Boolean}
+			 */
+			enable: true,
+			/**
+			 * 优先进行I18N函数的局部更新（只更新翻译数据）
+			 *
+			 * @remark 是否能进行局部更新，受到众多因素影响，这只是一个开关
+			 * @type {Boolean}
+			 */
+			partial: true,
+			/**
+			 * 函数版本号不同的时候，是否更新整个函数体
+			 *
+			 * @type {Boolean}
+			 */
+			checkVersion: true,
+			/**
+			 * 是否更新代码中的翻译结果JSON
+			 * 在只更新函数的时候，方便做文件版本库校验
+			 *
+ 			 * @remark 此配置只影响输出代码的结果，不会影响输出的JSON结果
+			 * @type {Boolean}
+			 */
+			updateJSON: true,
+		},
+		style:
+		{
+			/**
+			 * 优先使用的代码风格（fullHandler/proxyGlobalHandler）
+			 *
+			 * @type {String}
+			 */
+			codeStyle: 'fullHandler',
+
+			/**
+			 * 对插入的I18N进行代码压缩
+			 *
+			 * @type {Boolean}
+			 */
+			minFuncCode: false,
+			/**
+			 * 对插入到代码中的翻译结果JSON进行代码压缩
+			 *
+			 * @remark 设置true，会导致 I18NHandler.style.comment4nowords 失效
+			 * @type {Boolean}
+			 */
+			minFuncJSON: false,
+			/**
+			 * 翻译结果JSON，输出所有提取到的关键字；没有翻译结果的关键字，以注释的形式插入
+			 *
+			 * @type {Boolean}
+			 */
+			comment4nowords: true,
+
+			/**
+			 * 在I18N函数体内，调用外部函数，代替插入过多代码的方式
+			 *
+			 * @type {Object}
+			 */
+			proxyGlobalHandler:
+			{
+				/**
+				 * 调用的外部函数名
+				 *
+				 * @type {String}
+				 */
+				name: 'topI18N',
+				/**
+				 * 将源码中类proxyGlobal写法的I18N函数，转换为标准的proxyGlobalHandler
+				 *
+				 * @type {Boolean}
+				 */
+				autoConvert: true,
+				/**
+				 * 已经转的函数，是否维持此状态
+				 *
+				 * @remark 权重高于autoConvert
+				 * @type {Boolean}
+				 */
+				keepThisStyle: true,
+				/**
+				 * 忽略源代码中解析出来的外部函数名，强制使用配置的函数名
+ 				 *
+ 				 * @remark 如果原来有值，但不同，会触发更新；原来没有，则不会进行更新
+				 * @type {Boolean}
+				 */
+				ignoreFuncCodeName: false,
+			},
+			/**
+			 * 插入完整的I18N函数体，代码不依赖外部任何库或者函数
+			 *
+			 * @type {Object}
+			 */
+			fullHandler:
+			{
+				/**
+				 * 将源码中类fullHandler写法的I18N函数，转换为标准的fullHandler
+				 *
+				 * @type {Boolean}
+				 */
+				autoConvert: true,
+				/**
+				 * 已经转的函数，是否维持此状态
+				 *
+				 * @remark 权重高于autoConvert
+				 * @type {Boolean}
+				 */
+				keepThisStyle: true,
+			},
+		},
+		/**
+		 * I18NHandler升级配置
+		 *
+		 * @remark 值false则关闭
+		 * @type {Object/False}
+		 */
+		insert:
+		{
+			/**
+			 * [总开关]是否插入新的I18N函数
+			 *
+			 * @type {Boolean}
+			 */
+			enable: true,
+			/**
+			 * 插入I18N函数前，检查插入位置，作用域不能是全局，必须闭包
+			 *
+			 * @type {Boolean}
+			 */
+			checkClosure: true,
+			/**
+			 * 优先将新的I18N函数插入到define函数体中
+			 *
+			 * @type {Boolean}
+			 */
+			priorityDefineHalder: true,
+		},
+		tpl:
+		{
+			/**
+			 * I18N函数体中，获取当前语言包的JS业务代码
+			 *
+			 * string，即全局的函数调用
+ 			 * function，必须是可被序列化成字符串，能独立运行
+ 			 *
+			 * @type {String|Function}
+			 */
+			getLanguageCode: getLanguageCodeHandler,
+			/**
+			 * getLanguageCode中可替换$LanguageVars.xxxx$的变量
+			 *
+			 * @type {Object}
+			 */
+			languageVars:
+			{
+				/**
+				 * 获取语言包通用变量
+				 *
+				 * @type {String}
+				 */
+				name: '__i18n_lan__',
+				/**
+				 * 获取语言包通用变量-cookie版
+				 *
+				 * @type {String}
+				 */
+				cookie: 'proj.i18n_lan',
+			},
+			/**
+			 * 新插入的I18N函数外包裹的内容-开始部分
+			 *
+			 * @type {String}
+			 */
+			newHeaderCode: '\n\n/* eslint-disable */\n',
+			/**
+			 * 新插入的I18N函数外包裹的内容-结束部分
+			 *
+			 * @type {String}
+			 */
+			newFooterCode: '\n/* eslint-enable */\n\n',
+		},
+	},
+
+	/**
+	 * 设置操作的源码可修改的内容
+	 *
+	 * 如果去掉TranslateWord，
+	 * 配合最后输出的I18NArgsTranslateWords和codeTranslateWords，
+ 	 * 可以实现check效果
+ 	 *
+	 * @remark 空数据则关闭所有，空对象则使用默认
+	 * @type {Object|Array}
+	 */
+	codeModifyItems:
+	{
+		// I18NHandler 已经改名为 I18NHandler.upgrade.enable
+		// I18NHandler: true,
+		/**
+		 * 将提取的需要翻译的关键字，使用I18N函数包裹起来
+		 *
+		 * @type {Boolean}
+		 */
+		TranslateWord: true,
+		/**
+		 * 同TranslateWord，RegExp类型的开关
+		 *
+		 * @type {Boolean}
+		 */
+		TranslateWord_RegExp: false,
+		/**
+		 * 将I18NHandlerAlias替换成I18NHandlerName
+		 *
+		 * @type {Boolean}
+		 */
+		I18NHandlerAlias: true
+	},
+
+	/**
+	 * 当前安装和启用的插件
+	 *
+	 * @remark 空数据则关闭所有，空对象则使用默认
+	 * @type {Object|Array}
+	 */
+	pluginEnabled: {},
+	/**
+	 * 插件的配置
+	 *
+	 * @type {Object}
+	 */
+	pluginSettings: {},
+
+	/**
+	 * 是否开启向前版本兼容逻辑
+	 *
+	 * @remark 向前兼容需要消耗一定的计算资源和时间，建议按照提示修改成最新的配置和接口
+	 * @type {Boolean}
+	 */
+	depdEnable: true,
+
+	/**
+	 * 面向定制化的监听事件
+	 *
+	 * @type {Object}
+	 */
+	events:
+	{
+		/**
+		 * 从源码I18N函数体中提取到翻译数据时触发，可修改数据
+		 *
+		 * @type {Function}
+		 */
+		loadTranslateJSON: null,
+		/**
+		 * 生成新的I18N函数时触发，可对翻译数据进行再加工
+		 *
+		 * @type {Function}
+		 */
+		newTranslateJSON: null,
+		/**
+		 * 逐步扫描源码ast树时触发，可对ast结构进行预处理&判断
+		 *
+		 * @type {Function}
+		 */
+		beforeScan: null,
+		/**
+		 * 分词之后触发，可对分词结果进行优化
+		 *
+		 * @type {Function}
+		 */
+		cutword: null,
+		/**
+		 * 将分词结果绑定ast时触发，可调整分词和ast的对应关系
+		 *
+		 * @type {Function}
+		 */
+		assignLineStrings: null,
+	},
+};
+
+},{"../upgrade/tpl/getlanguagecode_handler":158}],112:[function(require,module,exports){
+/**
+ * 针对options，提供快速获取key和值的接口
+ * 例如 options.getVal('I18NHandler.style.codeStyle');
+ */
+
+'use strict';
+
+var _ = require('lodash');
+var debug = require('debug')('i18nc-options:options_vals');
+
+
+exports.KeyObj = KeyObj;
+
+var KEY_ARRS = {};
+function getKeys(key)
+{
+	return KEY_ARRS[key] || (KEY_ARRS[key] = key.split('.'));
+}
+
+function KeyObj(options)
+{
+	this.options = options;
+	this._keyCache = {};
+}
+
+_.extend(KeyObj.prototype,
+{
+	exists: function(key)
+	{
+		var keyCache  = this._keyCache;
+		if (key in keyCache) return true;
+
+		this.getVal(key);
+
+		return key in keyCache;
+	},
+	getVal: function(key)
+	{
+		var keyCache  = this._keyCache;
+		if (key in keyCache) return keyCache[key];
+
+		var key2 = '';
+		var prevVal = this.options;
+		var items = getKeys(key);
+		var exists = !_.some(items, function(name, index)
+		{
+			if (!prevVal) return true;
+
+			if (key2) keyCache[key2] = prevVal;
+			key2 += index === 0 ? name : '.'+name;
+			if (name in prevVal)
+			{
+				prevVal = prevVal[name];
+			}
+			else if (index == items.length - 1 && Array.isArray(prevVal))
+			{
+				debug('val is exists by array mode, key:%s', key);
+				prevVal = prevVal.indexOf(name) != -1;
+			}
+			else
+			{
+				return true;
+			}
+		});
+
+		if (exists)
+		{
+			keyCache[key] = prevVal;
+			return prevVal;
+		}
+	},
+	setVal: function(key, val)
+	{
+		var keyCache = this._keyCache;
+		keyCache[key] = val;
+		var items = getKeys(key);
+		var len = items.length;
+		var prevVal;
+
+		if (len < 3 || !(prevVal = keyCache[items.slice(0, -1).join('.')]))
+		{
+			prevVal = this.options;
+			for(var tmp, name, i = 0, key2 = '', t = len -1; i < t; i++)
+			{
+				name = items[i];
+				key2 += i === 0 ? name : '.'+name;
+				tmp = prevVal[name];
+				if (!tmp || typeof tmp != 'object')
+					prevVal = prevVal[name] = {};
+				else
+					prevVal = tmp;
+
+				keyCache[key2] = prevVal;
+			}
+		}
+
+		var name = items[len -1];
+		if (Array.isArray(prevVal) && val === true)
+		{
+			prevVal.push(name);
+			debug('set val in array mode, key:%s', key);
+		}
+		else
+		{
+			prevVal[name] = val;
+		}
+	}
+});
+
+
+var STR2KEYVAL = {};
+exports.str2keyVal = str2keyVal;
+function str2keyVal(key)
+{
+	var ret = STR2KEYVAL[key];
+
+	if (!ret)
+	{
+		var arr = key.split('=');
+		var val = arr.pop();
+
+		if (val == 'true') val = true;
+		else if (val == 'false') val = false;
+
+		ret = STR2KEYVAL[key] =
+		{
+			key: arr.join('='),
+			value: val
+		};
+	}
+
+	return ret;
+}
+
+},{"debug":115,"lodash":143}],113:[function(require,module,exports){
+'use strict';
+
+var _				= require('lodash');
+var extend			= require('extend');
+var debug			= require('debug')('i18nc-options');
+var depdOptions		= require('../upgrade/depd');
+var keyUtils		= require('./key_utils');
+var VARS			= require('./vars');
+var KeyObj			= keyUtils.KeyObj;
+var ObjectToString	= ({}).toString;
+
+
+exports.extend = function(defaults, originalOptions)
+{
+	defaults = extend(true, {}, defaults);
+	var options = extend(true, {}, originalOptions);
+	if (options.depdEnable !== false) depdOptions.before(options);
+	var result = _extendDefault(defaults, options, '');
+	depdOptions.after(result);
+
+	// for emitter
+	// 回调的时候，可能会带有额外的参数，保留这份
+	result.originalOptions = originalOptions;
+
+	var cutwordReg = result.cutwordReg;
+	// 必须lastIndex必须重制为0，且处于global状态
+	if (cutwordReg instanceof RegExp
+		&& (cutwordReg.lastIndex !== 0 || !cutwordReg.global))
+	{
+		throw new Error('Invalid cutwordReg');
+	}
+
+	_fixOptionsVal(result);
+
+	return result;
+}
+
+function _fixOptionsVal(options)
+{
+	var myKeys = new KeyObj(options);
+
+	_.each(VARS.LINK_VALUES, function(targetKey, readKey)
+	{
+		var readInfo = keyUtils.str2keyVal(readKey);
+
+		if (myKeys.exists(readInfo.key)
+			&& myKeys.getVal(readInfo.key) === readInfo.value)
+		{
+			var targetInfo = keyUtils.str2keyVal(targetKey);
+			if (myKeys.getVal(targetInfo.key) !== targetInfo.value)
+			{
+				myKeys.setVal(targetInfo.key, targetInfo.value);
+				debug('when %s, then %s', readKey, targetKey);
+			}
+		}
+	});
+}
+
+
+
+exports.freeze = function(obj)
+{
+	if (Object.freeze)
+	{
+		_.each(obj, function(val, key)
+		{
+			if (key != 'pluginEnabled' && key != 'pluginSettings')
+			{
+				deepFreeze(val);
+			}
+		});
+
+		Object.freeze(obj);
+	}
+}
+
+
+
+function deepFreeze(obj)
+{
+	if (!obj) return;
+
+	if (checkFreeze(obj))
+	{
+		_.each(obj, function(val)
+		{
+			if (checkFreeze(val)) Object.freeze(val);
+		});
+		Object.freeze(obj);
+	}
+}
+
+function checkFreeze(val)
+{
+	var type = ObjectToString.call(val);
+	return type == '[object Object]' || type == '[object Array]';
+}
+
+function _arr2jsonOnly(defaults, arr)
+{
+	var result = {};
+	arr.forEach(function(name)
+	{
+		if (typeof defaults[name] == 'boolean')
+			result[name] = true;
+		else
+			debug('ignore key <%s>, which are not defined in defaults.', name);
+	});
+	return result;
+}
+
+function _arr2jsonMore(arr, defaultVal)
+{
+	var result = _.extend({}, defaultVal);
+	arr.forEach(function(name)
+	{
+		result[name] = true;
+	});
+	return result;
+}
+
+
+function _extendDefault(defaults, object, parentKey)
+{
+	if (!object) return defaults;
+
+	var result = {};
+	_.each(defaults, function(defaultVal, key)
+	{
+		if (object.hasOwnProperty(key))
+		{
+			var newVal = object[key];
+			var defaultType = typeof defaultVal;
+
+			if (newVal === false)
+			{
+				if (parentKey == '' && key == 'I18NHandler')
+				{
+					result[key] =
+					{
+						insert: {enable: false},
+						upgrade: {enable: false},
+					};
+
+					return;
+				}
+				else if (parentKey == '.I18NHandler'
+					&& (key == 'insert' || key == 'upgrade'))
+				{
+					result[key] = {enable: false};
+					return;
+				}
+			}
+
+
+			switch(defaultType)
+			{
+				case 'object':
+					// 如果默认值为null或者undefined，那么运行newVal为任意值
+					if (!defaultVal)
+					{
+						result[key] = newVal;
+					}
+					else if (defaultVal instanceof RegExp)
+					{
+						if (newVal === null)
+						{
+							debug('clear regexp options');
+							result[key] = null;
+						}
+						else if (newVal instanceof RegExp)
+						{
+							result[key] = newVal;
+						}
+						else
+						{
+							debug('ignore regexp val, key:%s, val:%o', key, newVal);
+						}
+					}
+					else if (Array.isArray(newVal))
+					{
+						if (parentKey == '')
+						{
+							if (key == 'ignoreScanHandlerNames')
+							{
+								result[key] = _arr2jsonMore(newVal, defaultVal);
+								return;
+							}
+							else if (key == 'pluginEnabled' || key == 'codeModifyItems')
+							{
+								result[key] = _arr2jsonOnly(defaultVal, newVal);
+								return;
+							}
+						}
+
+						if (Array.isArray(defaultVal))
+						{
+							result[key] = newVal;
+						}
+						else
+						{
+							debug('ignore array data:%s', key);
+							result[key] = defaultVal;
+						}
+					}
+					else
+					{
+						result[key] = _extendDefault(defaultVal, newVal, parentKey+'.'+key);
+					}
+					break;
+
+				case 'boolean':
+					result[key] = newVal;
+					break;
+
+				default:
+					if (newVal)
+					{
+						result[key] = newVal;
+					}
+					else
+					{
+						result[key] = defaultVal;
+						debug('ignore options val, key:%s', key);
+					}
+			}
+		}
+		else
+		{
+			result[key] = defaultVal;
+		}
+	});
+
+	return result;
+}
+
+},{"../upgrade/depd":156,"./key_utils":112,"./vars":114,"debug":115,"extend":127,"lodash":143}],114:[function(require,module,exports){
+'use strict';
+
+
+exports.OLD_RENAME_OPTIONS =
+{
+	cutWordReg: 'cutwordReg',
+	handlerName: 'I18NHandlerName',
+
+	defaultFileKey: 'I18NHandler.data.defaultFileKey',
+	// defaultTranslateLanguage: 'I18NHandler.data.defaultLanguage',
+	pickFileLanguages: 'I18NHandler.data.onlyTheseLanguages',
+	isIgnoreI18NHandlerTranslateWords: 'I18NHandler.data.ignoreFuncWords',
+
+	isPartialUpdate: 'I18NHandler.upgrade.partial',
+
+	// minTranslateFuncCode: 'I18NHandler.style.minFuncCode',
+	// minTranslateFuncCode: 'I18NHandler.style.minFuncJSON',
+	// isMinFuncTranslateCode: 'I18NHandler.style.minFuncJSON',
+	isInjectAllTranslateWords: 'I18NHandler.style.comment4nowords',
+
+	// isProxyGlobalHandler: 'I18NHandler.style.proxyGlobalHandler.enable',
+	proxyGlobalHandlerName: 'I18NHandler.style.proxyGlobalHandler.name',
+	isIgnoreCodeProxyGlobalHandlerName: 'I18NHandler.style.proxyGlobalHandler.ignoreFuncCodeName',
+
+
+	isCheckClosureForNewI18NHandler: 'I18NHandler.insert.checkClosure',
+	isClosureWhenInsertedHead: 'I18NHandler.insert.checkClosure',
+	isInsertToDefineHalder: 'I18NHandler.insert.priorityDefineHalder',
+
+
+	I18NHandlerTPL_GetLanguageCode: 'I18NHandler.tpl.getLanguageCode',
+	I18NHandlerTPL_LanguageVars: 'I18NHandler.tpl.languageVars',
+	I18NHandlerTPL_NewHeaderCode: 'I18NHandler.tpl.newHeaderCode',
+	I18NHandlerTPL_NewFooterCode: 'I18NHandler.tpl.newFooterCode',
+
+	I18NhandlerTpl_GetLanguageCode: 'I18NHandler.tpl.getLanguageCode',
+	I18NhandlerTpl_LanguageVars: 'I18NHandler.tpl.languageVars',
+	I18NhandlerTpl_NewHeaderCode: 'I18NHandler.tpl.newHeaderCode',
+	I18NhandlerTpl_NewFooterCode: 'I18NHandler.tpl.newFooterCode',
+
+	I18NhandlerTpl_LanguageVarName: 'I18NHandler.tpl.languageVars.name',
+	'I18NhandlerTpl:LanguageVarName': 'I18NHandler.tpl.languageVars.name',
+
+	I18NhandlerTpl_GetGlobalCode: 'I18NHandler.tpl.getLanguageCode',
+	'I18NhandlerTpl:GetGlobalCode': 'I18NHandler.tpl.getLanguageCode',
+
+	'I18NHandler.upgrade.version': 'I18NHandler.upgrade.checkVersion',
+	'I18NHandler.style.proxyGlobalHandler.ignoreFuncCode': 'I18NHandler.style.proxyGlobalHandler.ignoreFuncCodeName',
+
+	loadTranslateJSON: 'events.loadTranslateJSON',
+	newTranslateJSON: 'events.newTranslateJSON',
+	beforeScan: 'events.beforeScan',
+	cutword: 'events.cutword',
+	assignLineStrings: 'events.assignLineStrings',
+
+	// 由于会修改I18NHandler值，所以放到最后去处理
+	codeModifiedArea: 'codeModifyItems',
+	'codeModifiedArea.I18NHandler': 'I18NHandler',
+};
+
+
+exports.OLD_VALUE_OPTIONS =
+{
+	'minTranslateFuncCode=all':
+		[
+			'I18NHandler.style.minFuncCode=true',
+			'I18NHandler.style.minFuncJSON=true'
+		],
+	'minTranslateFuncCode=onlyFunc':
+		[
+			'I18NHandler.style.minFuncCode=true',
+			'I18NHandler.style.minFuncJSON=false'
+		],
+	'minTranslateFuncCode=none':
+		[
+			'I18NHandler.style.minFuncCode=false',
+			'I18NHandler.style.minFuncJSON=false'
+		],
+	'isMinFuncTranslateCode=true':
+		[
+			'I18NHandler.style.minFuncCode=true',
+			'I18NHandler.style.minFuncJSON=true'
+		],
+	'isMinFuncTranslateCode=false':
+		[
+			'I18NHandler.style.minFuncCode=true',
+			'I18NHandler.style.minFuncJSON=false'
+		],
+	'I18NHandler.style.proxyGlobalHandler.enable=true':
+		[
+			'I18NHandler.style.codeStyle=proxyGlobalHandler'
+		],
+	'isProxyGlobalHandler=true':
+		[
+			'I18NHandler.style.codeStyle=proxyGlobalHandler'
+		],
+};
+
+
+exports.RM_OPTIONS =
+{
+	/**
+	 * 当没有找到任何语言包 & 启动了comment4nowords, 使用这个语言，作为代码中的语言包
+	 * 由于没有任何实际数据，对代码结果无影响
+	 *
+	 * @type {String}
+	 */
+	'I18NHandler.data.defaultLanguage': 'en-US',
+};
+
+
+// 修改key的值，会导致val的值被强制设置
+exports.LINK_VALUES =
+{
+	'I18NHandler.style.minFuncJSON=true':
+		'I18NHandler.style.comment4nowords=false',
+
+	'I18NHandler.style.codeStyle=fullHandler':
+		'I18NHandler.style.fullHandler.keepThisStyle=true',
+
+	'I18NHandler.style.codeStyle=proxyGlobalHandler':
+		'I18NHandler.style.proxyGlobalHandler.keepThisStyle=true',
+
+	'I18NHandler.style.fullHandler.keepThisStyle=false':
+		'I18NHandler.style.fullHandler.autoConvert=false',
+
+	'I18NHandler.style.proxyGlobalHandler.keepThisStyle=false':
+		'I18NHandler.style.proxyGlobalHandler.autoConvert=false',
+};
+
+},{}],115:[function(require,module,exports){
+arguments[4][16][0].apply(exports,arguments)
+},{"./common":116,"_process":97,"dup":16}],116:[function(require,module,exports){
+arguments[4][17][0].apply(exports,arguments)
+},{"dup":17,"ms":144}],117:[function(require,module,exports){
+/*!
+ * depd
+ * Copyright(c) 2015 Douglas Christopher Wilson
+ * MIT Licensed
+ */
+
+'use strict'
+
+/**
+ * Module exports.
+ * @public
+ */
+
+module.exports = depd
+
+/**
+ * Create deprecate for namespace in caller.
+ */
+
+function depd (namespace) {
+  if (!namespace) {
+    throw new TypeError('argument namespace is required')
+  }
+
+  function deprecate (message) {
+    // no-op in browser
+  }
+
+  deprecate._file = undefined
+  deprecate._ignored = true
+  deprecate._namespace = namespace
+  deprecate._traced = false
+  deprecate._warned = Object.create(null)
+
+  deprecate.function = wrapfunction
+  deprecate.property = wrapproperty
+
+  return deprecate
+}
+
+/**
+ * Return a wrapped function in a deprecation message.
+ *
+ * This is a no-op version of the wrapper, which does nothing but call
+ * validation.
+ */
+
+function wrapfunction (fn, message) {
+  if (typeof fn !== 'function') {
+    throw new TypeError('argument fn must be a function')
+  }
+
+  return fn
+}
+
+/**
+ * Wrap property in a deprecation message.
+ *
+ * This is a no-op version of the wrapper, which does nothing but call
+ * validation.
+ */
+
+function wrapproperty (obj, prop, message) {
+  if (!obj || (typeof obj !== 'object' && typeof obj !== 'function')) {
+    throw new TypeError('argument obj must be object')
+  }
+
+  var descriptor = Object.getOwnPropertyDescriptor(obj, prop)
+
+  if (!descriptor) {
+    throw new TypeError('must call property on owner object')
+  }
+
+  if (!descriptor.configurable) {
+    throw new TypeError('property must be configurable')
+  }
+}
+
+},{}],118:[function(require,module,exports){
+arguments[4][18][0].apply(exports,arguments)
+},{"./package.json":119,"dup":18,"estraverse":121,"esutils":126,"source-map":155}],119:[function(require,module,exports){
+module.exports={
+  "_from": "escodegen@^1.11.0",
+  "_id": "escodegen@1.11.0",
+  "_inBundle": false,
+  "_integrity": "sha512-IeMV45ReixHS53K/OmfKAIztN/igDHzTJUhZM3k1jMhIZWjk45SMwAtBsEXiJp3vSPmTcu6CXn7mDvFHRN66fw==",
+  "_location": "/escodegen",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "escodegen@^1.11.0",
+    "name": "escodegen",
+    "escapedName": "escodegen",
+    "rawSpec": "^1.11.0",
+    "saveSpec": null,
+    "fetchSpec": "^1.11.0"
+  },
+  "_requiredBy": [
+    "/i18nc-ast"
+  ],
+  "_resolved": "https://registry.npmjs.org/escodegen/-/escodegen-1.11.0.tgz",
+  "_shasum": "b27a9389481d5bfd5bec76f7bb1eb3f8f4556589",
+  "_spec": "escodegen@^1.11.0",
+  "_where": "/Users/bacra/dev/node_modules/i18nc-options/node_modules/i18nc-ast",
+  "bin": {
+    "esgenerate": "./bin/esgenerate.js",
+    "escodegen": "./bin/escodegen.js"
+  },
+  "bugs": {
+    "url": "https://github.com/estools/escodegen/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "esprima": "^3.1.3",
+    "estraverse": "^4.2.0",
+    "esutils": "^2.0.2",
+    "optionator": "^0.8.1",
+    "source-map": "~0.6.1"
+  },
+  "deprecated": false,
+  "description": "ECMAScript code generator",
+  "devDependencies": {
+    "acorn": "^4.0.4",
+    "bluebird": "^3.4.7",
+    "bower-registry-client": "^1.0.0",
+    "chai": "^3.5.0",
+    "commonjs-everywhere": "^0.9.7",
+    "gulp": "^3.8.10",
+    "gulp-eslint": "^3.0.1",
+    "gulp-mocha": "^3.0.1",
+    "semver": "^5.1.0"
+  },
+  "engines": {
+    "node": ">=4.0"
+  },
+  "files": [
+    "LICENSE.BSD",
+    "README.md",
+    "bin",
+    "escodegen.js",
+    "package.json"
+  ],
+  "homepage": "http://github.com/estools/escodegen",
+  "license": "BSD-2-Clause",
+  "main": "escodegen.js",
+  "maintainers": [
+    {
+      "name": "Yusuke Suzuki",
+      "email": "utatane.tea@gmail.com",
+      "url": "http://github.com/Constellation"
+    }
+  ],
+  "name": "escodegen",
+  "optionalDependencies": {
+    "source-map": "~0.6.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/estools/escodegen.git"
+  },
+  "scripts": {
+    "build": "cjsify -a path: tools/entry-point.js > escodegen.browser.js",
+    "build-min": "cjsify -ma path: tools/entry-point.js > escodegen.browser.min.js",
+    "lint": "gulp lint",
+    "release": "node tools/release.js",
+    "test": "gulp travis",
+    "unit-test": "gulp test"
+  },
+  "version": "1.11.0"
+}
+
+},{}],120:[function(require,module,exports){
+arguments[4][65][0].apply(exports,arguments)
+},{"dup":65}],121:[function(require,module,exports){
+arguments[4][72][0].apply(exports,arguments)
+},{"./package.json":122,"dup":72}],122:[function(require,module,exports){
+module.exports={
+  "_from": "estraverse@^4.2.0",
+  "_id": "estraverse@4.2.0",
+  "_inBundle": false,
+  "_integrity": "sha1-De4/7TH81GlhjOc0IJn8GvoL2xM=",
+  "_location": "/estraverse",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "estraverse@^4.2.0",
+    "name": "estraverse",
+    "escapedName": "estraverse",
+    "rawSpec": "^4.2.0",
+    "saveSpec": null,
+    "fetchSpec": "^4.2.0"
+  },
+  "_requiredBy": [
+    "/escodegen",
+    "/eslint-scope",
+    "/esquery",
+    "/esrecurse"
+  ],
+  "_resolved": "https://registry.npmjs.org/estraverse/-/estraverse-4.2.0.tgz",
+  "_shasum": "0dee3fed31fcd469618ce7342099fc1afa0bdb13",
+  "_spec": "estraverse@^4.2.0",
+  "_where": "/Users/bacra/dev/node_modules/i18nc-options/node_modules/escodegen",
+  "bugs": {
+    "url": "https://github.com/estools/estraverse/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "ECMAScript JS AST traversal functions",
+  "devDependencies": {
+    "babel-preset-es2015": "^6.3.13",
+    "babel-register": "^6.3.13",
+    "chai": "^2.1.1",
+    "espree": "^1.11.0",
+    "gulp": "^3.8.10",
+    "gulp-bump": "^0.2.2",
+    "gulp-filter": "^2.0.0",
+    "gulp-git": "^1.0.1",
+    "gulp-tag-version": "^1.2.1",
+    "jshint": "^2.5.6",
+    "mocha": "^2.1.0"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "homepage": "https://github.com/estools/estraverse",
+  "license": "BSD-2-Clause",
+  "main": "estraverse.js",
+  "maintainers": [
+    {
+      "name": "Yusuke Suzuki",
+      "email": "utatane.tea@gmail.com",
+      "url": "http://github.com/Constellation"
+    }
+  ],
+  "name": "estraverse",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/estools/estraverse.git"
+  },
+  "scripts": {
+    "lint": "jshint estraverse.js",
+    "test": "npm run-script lint && npm run-script unit-test",
+    "unit-test": "mocha --compilers js:babel-register"
+  },
+  "version": "4.2.0"
+}
+
+},{}],123:[function(require,module,exports){
+arguments[4][74][0].apply(exports,arguments)
+},{"dup":74}],124:[function(require,module,exports){
+arguments[4][75][0].apply(exports,arguments)
+},{"dup":75}],125:[function(require,module,exports){
+arguments[4][76][0].apply(exports,arguments)
+},{"./code":124,"dup":76}],126:[function(require,module,exports){
+arguments[4][77][0].apply(exports,arguments)
+},{"./ast":123,"./code":124,"./keyword":125,"dup":77}],127:[function(require,module,exports){
+arguments[4][79][0].apply(exports,arguments)
+},{"dup":79}],128:[function(require,module,exports){
+arguments[4][80][0].apply(exports,arguments)
+},{"./lib/ast_flags":129,"./lib/ast_tpl":130,"./lib/ast_util":131,"./lib/config":132,"dup":80}],129:[function(require,module,exports){
+arguments[4][81][0].apply(exports,arguments)
+},{"dup":81}],130:[function(require,module,exports){
+arguments[4][82][0].apply(exports,arguments)
+},{"./ast_flags":129,"dup":82}],131:[function(require,module,exports){
+arguments[4][83][0].apply(exports,arguments)
+},{"./ast_tpl":130,"./config":132,"debug":115,"dup":83,"escodegen":118,"esprima":120}],132:[function(require,module,exports){
+arguments[4][84][0].apply(exports,arguments)
+},{"dup":84}],133:[function(require,module,exports){
+arguments[4][85][0].apply(exports,arguments)
+},{"./lib/merge_translate_data":134,"./lib/update":135,"dup":85}],134:[function(require,module,exports){
+arguments[4][86][0].apply(exports,arguments)
+},{"debug":115,"dup":86,"lodash":143}],135:[function(require,module,exports){
+arguments[4][87][0].apply(exports,arguments)
+},{"debug":115,"dup":87,"i18nc-jsoncode":136,"lodash":143}],136:[function(require,module,exports){
+arguments[4][88][0].apply(exports,arguments)
+},{"debug":115,"dup":88,"i18nc-jsoncode1":137,"i18nc-jsoncode2":140}],137:[function(require,module,exports){
+arguments[4][89][0].apply(exports,arguments)
+},{"./lib/generator":138,"./lib/parser":139,"dup":89}],138:[function(require,module,exports){
+arguments[4][90][0].apply(exports,arguments)
+},{"debug":115,"dup":90,"i18nc-ast":128,"lodash":143}],139:[function(require,module,exports){
+arguments[4][91][0].apply(exports,arguments)
+},{"debug":115,"dup":91,"i18nc-ast":128}],140:[function(require,module,exports){
+arguments[4][89][0].apply(exports,arguments)
+},{"./lib/generator":141,"./lib/parser":142,"dup":89}],141:[function(require,module,exports){
+arguments[4][93][0].apply(exports,arguments)
+},{"debug":115,"dup":93,"i18nc-ast":128,"lodash":143}],142:[function(require,module,exports){
+arguments[4][94][0].apply(exports,arguments)
+},{"debug":115,"dup":94,"i18nc-ast":128,"lodash":143}],143:[function(require,module,exports){
+arguments[4][95][0].apply(exports,arguments)
+},{"dup":95}],144:[function(require,module,exports){
+arguments[4][96][0].apply(exports,arguments)
+},{"dup":96}],145:[function(require,module,exports){
+arguments[4][98][0].apply(exports,arguments)
+},{"./util":154,"dup":98}],146:[function(require,module,exports){
+arguments[4][99][0].apply(exports,arguments)
+},{"./base64":147,"dup":99}],147:[function(require,module,exports){
+arguments[4][100][0].apply(exports,arguments)
+},{"dup":100}],148:[function(require,module,exports){
+arguments[4][101][0].apply(exports,arguments)
+},{"dup":101}],149:[function(require,module,exports){
+arguments[4][102][0].apply(exports,arguments)
+},{"./util":154,"dup":102}],150:[function(require,module,exports){
+arguments[4][103][0].apply(exports,arguments)
+},{"dup":103}],151:[function(require,module,exports){
+arguments[4][104][0].apply(exports,arguments)
+},{"./array-set":145,"./base64-vlq":146,"./binary-search":148,"./quick-sort":150,"./util":154,"dup":104}],152:[function(require,module,exports){
+arguments[4][105][0].apply(exports,arguments)
+},{"./array-set":145,"./base64-vlq":146,"./mapping-list":149,"./util":154,"dup":105}],153:[function(require,module,exports){
+arguments[4][106][0].apply(exports,arguments)
+},{"./source-map-generator":152,"./util":154,"dup":106}],154:[function(require,module,exports){
+arguments[4][107][0].apply(exports,arguments)
+},{"dup":107}],155:[function(require,module,exports){
+arguments[4][108][0].apply(exports,arguments)
+},{"./lib/source-map-consumer":151,"./lib/source-map-generator":152,"./lib/source-node":153,"dup":108}],156:[function(require,module,exports){
+'use strict';
+
+var _					= require('lodash');
+var debug				= require('debug')('i18nc-options:depd');
+var deprecate			= require('depd')('i18nc-options');
+var i18ncDB				= require('i18nc-db');
+var keyUtils			= require('../lib/key_utils.js');
+var VARS				= require('../lib/vars');
+var KeyObj				= keyUtils.KeyObj;
+var GetLanguageCodeDepd	= require('./tpl/depd_getlanguagecode_handler').toString();
+
+
+var rename_1to1 = (function()
+{
+	var checkMap = {};
+	_.each(VARS.OLD_RENAME_OPTIONS, function(newKey, oldKey)
+	{
+		var config = checkMap[newKey] || (checkMap[newKey] = []);
+		config.push(oldKey);
+	});
+
+
+	function repalceKeyValHandler(newKey, oldKey, val)
+	{
+		switch(oldKey)
+		{
+			case 'I18NhandlerTpl_GetGlobalCode':
+			case 'I18NhandlerTpl:GetGlobalCode':
+				val = GetLanguageCodeDepd.replace(/\$GetLanguageCode/, ''+val);
+				break;
+
+			case 'codeModifiedArea.I18NHandler':
+				debug('has codeModifiedArea.I18NHandler set');
+				break;
+		}
+
+		deprecate('use `'+newKey+'` instead of `'+oldKey+'`');
+		return val;
+	}
+
+	return function(myKeys)
+	{
+		_.each(checkMap, function(oldKeys, newKey)
+		{
+			// options已经定义了最新的key
+			if (myKeys.exists(newKey)) return;
+
+			_.some(oldKeys, function(oldKey)
+			{
+				// 判断老的key，有没有可能存在
+				if (myKeys.exists(oldKey))
+				{
+					var val = repalceKeyValHandler(newKey, oldKey, myKeys.getVal(oldKey));
+					myKeys.setVal(newKey, val);
+					return true;
+				}
+			});
+		});
+	};
+})();
+
+
+
+function rename_1toN(myKeys)
+{
+	_.each(VARS.OLD_VALUE_OPTIONS, function(targetArr, oldKey)
+	{
+		// 老的key是否定义，值是否满足
+		var oldKeyInfo = keyUtils.str2keyVal(oldKey);
+		if (!myKeys.exists(oldKeyInfo.key)
+			|| myKeys.getVal(oldKeyInfo.key) !== oldKeyInfo.value)
+		{
+			return;
+		}
+
+		// 判断新的是否已经定义
+		var ret = targetArr.some(function(newKey)
+		{
+			return myKeys.exists(keyUtils.str2keyVal(newKey).key);
+		});
+
+		if (ret) return;
+
+		// 值转换
+		targetArr.forEach(function(newKey)
+		{
+			var info = keyUtils.str2keyVal(newKey);
+			myKeys.setVal(info.key, info.value);
+		});
+
+		deprecate('use `'+targetArr.join(';')+'` instead of `'+oldKey+'`');
+	});
+}
+
+
+function rmkeys(myKeys)
+{
+	_.each(VARS.RM_OPTIONS, function(defaultVal, key)
+	{
+		switch(key)
+		{
+			case 'I18NHandler.data.defaultLanguage':
+				if (myKeys.exists(key))
+				{
+					deprecate('`'+key+'` will be removed');
+				}
+				else if (myKeys.exists('defaultTranslateLanguage'))
+				{
+					deprecate('`defaultTranslateLanguage` will be removed');
+					myKeys.setVal(key, myKeys.getVal('defaultTranslateLanguage'));
+				}
+				else
+				{
+					myKeys.setVal(key, defaultVal);
+				}
+				break;
+
+			default:
+				if (myKeys.exists(key))
+					deprecate('`'+key+'` will be removed');
+				else
+					myKeys.setVal(key, defaultVal);
+		}
+	});
+}
+
+
+exports.before = function(options)
+{
+	var myKeys = new KeyObj(options);
+	rename_1toN(myKeys);
+	rename_1to1(myKeys);
+
+	var dbTranslateWords = i18ncDB.update(options.dbTranslateWords);
+	if (dbTranslateWords)
+	{
+		deprecate('dbTranslateWords v2 is support')
+		options.dbTranslateWords = dbTranslateWords;
+	}
+}
+
+exports.after = function(result)
+{
+	var resultVals = new KeyObj(result);
+	rmkeys(resultVals);
+};
+
+},{"../lib/key_utils.js":112,"../lib/vars":114,"./tpl/depd_getlanguagecode_handler":157,"debug":115,"depd":117,"i18nc-db":133,"lodash":143}],157:[function(require,module,exports){
+/* global $GetLanguageCode */
+
+'use strict';
+
+
+module.exports = function GetLanguageCodeHandler(cache) {
+	var g = cache.g || (cache.g = $GetLanguageCode);
+	return g.$LanguageVars.name$;
+}
+
+// fix istanbul for test
+// if (process.env.running_under_istanbul)
+// {
+// 	var GetLanguageCodeFuncCode = GetLanguageCodeHandler.toString();
+// 	GetLanguageCodeFuncCode = GetLanguageCodeFuncCode
+// 		.replace(/__cov_(.+?)\+\+[,;]?/g, '')
+// 		.replace(/else\{\}/, '');
+// 	GetLanguageCodeHandler.toString = function()
+// 	{
+// 		return GetLanguageCodeFuncCode;
+// 	};
+// }
+
+},{}],158:[function(require,module,exports){
+(function (global){
+/* global window */
+
+'use strict';
+
+
+module.exports = function GetLanguageCodeHandler(cache) {
+	if (!cache.global) {
+		cache.global = (typeof window == 'object' && window)
+			|| (typeof global == 'object' && global)
+			|| {};
+	}
+
+	return cache.global.$LanguageVars.name$;
+}
+
+// fix istanbul for test
+// if (process.env.running_under_istanbul)
+// {
+// 	var GetLanguageCodeFuncCode = GetLanguageCodeHandler.toString();
+// 	GetLanguageCodeFuncCode = GetLanguageCodeFuncCode
+// 		.replace(/__cov_(.+?)\+\+[,;]?/g, '')
+// 		.replace(/else\{\}/, '');
+// 	GetLanguageCodeHandler.toString = function()
+// 	{
+// 		return GetLanguageCodeFuncCode;
+// 	};
+// }
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}]},{},[1]);

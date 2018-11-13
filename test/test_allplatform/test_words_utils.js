@@ -1,7 +1,7 @@
 'use strict';
 
 var expect			= require('expect.js');
-var optionsUtils	= require('../../lib/options');
+var initOptions	= require('i18nc-options').init;
 var wordsUtils		= require('../../lib/utils/words_utils');
 
 describe('#words_utils', function()
@@ -10,7 +10,7 @@ describe('#words_utils', function()
 	{
 		describe('#width cutwordReg', function()
 		{
-			var options = optionsUtils.extend();
+			var options = initOptions();
 
 			it('#no translateWord', function()
 			{
@@ -54,7 +54,7 @@ describe('#words_utils', function()
 		{
 			it('#with capture', function()
 			{
-				var options = optionsUtils.extend(
+				var options = initOptions(
 					{
 						cutwordReg: /(\W+)/g
 					});

@@ -3,8 +3,8 @@
 var fs = require('fs');
 var toRender = require('../to_render');
 var codeTpl = toRender(require('../../../src/i18nc_handler'));
-var optionsUtils = require('../../../lib/options');
-var options = optionsUtils.extend();
+var initOptions = require('i18nc-options').init;
+var options = initOptions();
 
 var code = codeTpl(
 	{
