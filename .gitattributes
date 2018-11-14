@@ -1,2 +1,2 @@
 * eol=lf
-dist/* -crlf -diff
+dist/i18nc_core.js -crlf -diff
