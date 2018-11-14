@@ -8,11 +8,11 @@
 'use strict';
 
 var expect				= require('expect.js');
-var i18nc				= require('../../');
-var dbTranslateWords	= require('../files/casefile/translate_words_db');
-var autoTestUtils		= require('../auto_test_utils');
+var i18nc				= require('../');
+var dbTranslateWords	= require('./files/casefile/translate_words_db');
+var autoTestUtils		= require('./auto_test_utils');
 var requireAfterWrite	= autoTestUtils.requireAfterWrite('main_options_mincode');
-var collectFuncs		= require('../files/casefile/func_code/func_code_collect');
+var collectFuncs		= require('./files/casefile/func_code/func_code_collect');
 
 
 describe('#main_options_mincode', function()
@@ -52,8 +52,8 @@ describe('#main_options_mincode', function()
 
 			it('#partialUpdate', function()
 			{
-				var code = require('../files/casefile/i18n_handler/i18n_handler_example.js');
-				var funcInfo = require('../files/casefile/i18n_handler/i18n_handler_example_output.json');
+				var code = require('./files/casefile/i18n_handler/i18n_handler_example.js');
+				var funcInfo = require('./files/casefile/i18n_handler/i18n_handler_example_output.json');
 				var codeData =
 				{
 					DEFAULTS: Object.keys(funcInfo.__TRANSLATE_JSON__['en-US'].DEFAULTS),

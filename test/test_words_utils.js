@@ -2,7 +2,7 @@
 
 var expect			= require('expect.js');
 var initOptions	= require('i18nc-options').init;
-var wordsUtils		= require('../../lib/utils/words_utils');
+var wordsUtils		= require('../lib/utils/words_utils');
 
 describe('#words_utils', function()
 {

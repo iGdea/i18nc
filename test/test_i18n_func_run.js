@@ -6,7 +6,7 @@ describe('#i18n_func_run', function()
 {
 	describe('#full', function()
 	{
-		var I18N = require('../files/casefile/i18n_handler/i18n_handler_example');
+		var I18N = require('./files/casefile/i18n_handler/i18n_handler_example');
 
 		describe('#lan:en-US', function()
 		{
@@ -192,7 +192,7 @@ describe('#i18n_func_run', function()
 
 	describe('#simple', function()
 	{
-		var I18N = require('../files/casefile/i18n_handler/i18n_handler_simple_example');
+		var I18N = require('./files/casefile/i18n_handler/i18n_handler_simple_example');
 
 		describe('#lan:en-US', function()
 		{
@@ -305,7 +305,7 @@ describe('#i18n_func_run', function()
 
 		describe('#dist', function()
 		{
-			var I18N = require('../../dist/i18nc_handler').I18N;
+			var I18N = require('../dist/i18nc_handler').I18N;
 			describe('#base', function()
 			{
 				it('#no msg', function()
@@ -347,7 +347,7 @@ describe('#i18n_func_run', function()
 
 	describe('#global', function()
 	{
-		var I18N = require('../files/casefile/i18n_handler/i18n_handler_global_example');
+		var I18N = require('./files/casefile/i18n_handler/i18n_handler_global_example');
 
 		it('#base', function()
 		{
@@ -366,7 +366,7 @@ describe('#i18n_func_run', function()
 	{
 		describe('#v1', function()
 		{
-			var topI18N = require('../../dist/topi18n_v1').topI18N;
+			var topI18N = require('../dist/topi18n_v1').topI18N;
 			var translateJSON =
 			{
 				"en-US": {
@@ -415,9 +415,9 @@ describe('#i18n_func_run', function()
 
 		describe('#v2', function()
 		{
-			var translateJSON = require('../prev_test_files').TRANSLATE_JSON;
-			var topI18N = require('../../dist/topi18n').topI18N;
-			var I18N = require('../files/casefile/i18n_handler/i18n_handler_example');
+			var translateJSON = require('./prev_test_files').TRANSLATE_JSON;
+			var topI18N = require('../dist/topi18n').topI18N;
+			var I18N = require('./files/casefile/i18n_handler/i18n_handler_example');
 
 			function runTest(msg)
 			{

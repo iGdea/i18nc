@@ -2,16 +2,16 @@
 
 var debug				= require('debug')('i18nc-core:test_example');
 var expect				= require('expect.js');
-var i18nc				= require('../../');
-var autoTestUtils		= require('../auto_test_utils');
-var dbTranslateWords	= require('../files/casefile/translate_words_db');
+var i18nc				= require('../');
+var autoTestUtils		= require('./auto_test_utils');
+var dbTranslateWords	= require('./files/casefile/translate_words_db');
 
 describe('#example', function()
 {
 	describe('#func_code', function()
 	{
 		var requireAfterWrite	= autoTestUtils.requireAfterWrite('example');
-		var exampleCode			= require('../files/casefile/func_code/func_code_example');
+		var exampleCode			= require('./files/casefile/func_code/func_code_example');
 
 		it('#first', function()
 		{
@@ -103,7 +103,7 @@ describe('#example', function()
 				},
 			};
 
-			var exampleCode = require('../files/casefile/func_code/func_code_example_use_require');
+			var exampleCode = require('./files/casefile/func_code/func_code_example_use_require');
 			var info = i18nc(exampleCode.toString(), i18nOptions);
 			var otherCode = requireAfterWrite('func_code_output.js', 'module.exports = '+info.code);
 

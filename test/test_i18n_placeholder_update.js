@@ -3,10 +3,10 @@
 var expect			= require('expect.js');
 var astUtil			= require('i18nc-ast').util;
 var initOptions		= require('i18nc-options').init;
-var prevTestFiles	= require('../prev_test_files');
-var DEF				= require('../../lib/def');
-var i18nTpl			= require('../../lib/i18n_func/render');
-var I18NPlaceholder	= require('../../lib/i18n_placeholder').I18NPlaceholder;
+var prevTestFiles	= require('./prev_test_files');
+var DEF				= require('../lib/def');
+var i18nTpl			= require('../lib/i18n_func/render');
+var I18NPlaceholder	= require('../lib/i18n_placeholder').I18NPlaceholder;
 
 
 describe('#i18n_placeholder_update', function()

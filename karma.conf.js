@@ -14,8 +14,8 @@ module.exports = function(config)
 	config.set(
 	{
 		pkg: require('./package.json'),
-		files: ['test_allplatform/test_*.js'],
-		preprocessors: {'test_allplatform/test_*.js': ['browserify']},
+		files: ['test_*.js'],
+		preprocessors: {'test_*.js': ['browserify']},
 		browserify:
 		{
 			debug: true,

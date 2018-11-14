@@ -5,7 +5,7 @@ var escodegen		= require('escodegen');
 var i18ncAst		= require('i18nc-ast');
 var astTpl			= i18ncAst.tpl;
 var initOptions		= require('i18nc-options').init;
-var LiteralHandler	= require('../../lib/ast_literal_handler').LiteralHandler;
+var LiteralHandler	= require('../lib/ast_literal_handler').LiteralHandler;
 
 describe('#cutword', function()
 {

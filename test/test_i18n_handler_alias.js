@@ -1,8 +1,8 @@
 'use strict';
 
 var expect				= require('expect.js');
-var i18nc				= require('../../');
-var autoTestUtils		= require('../auto_test_utils');
+var i18nc				= require('../');
+var autoTestUtils		= require('./auto_test_utils');
 var requireAfterWrite	= autoTestUtils.requireAfterWrite('i18n_alias');
 
 
@@ -10,7 +10,7 @@ describe('#I18N_handler_alias', function()
 {
 	it('#update', function()
 	{
-		var code = require('../files/casefile/func_code/func_code_i18n').toString();
+		var code = require('./files/casefile/func_code/func_code_i18n').toString();
 		var info = i18nc(code,
 			{
 				I18NHandlerName: 'I18NNew',
@@ -26,7 +26,7 @@ describe('#I18N_handler_alias', function()
 	{
 		it('#alias & new words', function()
 		{
-			var code = require('../files/casefile/func_code/func_code_i18n').toString();
+			var code = require('./files/casefile/func_code/func_code_i18n').toString();
 			var info = i18nc(code,
 				{
 					I18NHandlerName: 'I18NNew',
@@ -41,7 +41,7 @@ describe('#I18N_handler_alias', function()
 
 		it('#only alias', function()
 		{
-			var code = require('../files/casefile/func_code/func_code_i18n_all').toString();
+			var code = require('./files/casefile/func_code/func_code_i18n_all').toString();
 			var info = i18nc(code,
 				{
 					I18NHandlerName: 'I18NNew',

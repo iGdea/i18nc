@@ -1,9 +1,9 @@
 'use strict';
 
 var expect				= require('expect.js');
-var autoTestUtils		= require('../auto_test_utils');
+var autoTestUtils		= require('./auto_test_utils');
 var requireAfterWrite	= autoTestUtils.requireAfterWrite('upgrade');
-var i18nc				= require('../../');
+var i18nc				= require('../');
 var initOptions			= require('i18nc-options').init;
 
 describe('#upgrade', function()
@@ -14,7 +14,7 @@ describe('#upgrade', function()
 		{
 			it('#1keyTo1key', function()
 			{
-				var code = require('../files/casefile/func_code/func_code_noi18n').toString();
+				var code = require('./files/casefile/func_code/func_code_noi18n').toString();
 				var info = i18nc(code,
 					{
 						handlerName: 'oldI18N',
@@ -74,7 +74,7 @@ describe('#upgrade', function()
 
 		it('#I18NhandlerTpl', function()
 		{
-			var code = require('../files/casefile/func_code/func_code_noi18n').toString();
+			var code = require('./files/casefile/func_code/func_code_noi18n').toString();
 			var info = i18nc(code,
 				{
 					I18NhandlerTpl_GetGlobalCode: 'window.settings',
@@ -86,7 +86,7 @@ describe('#upgrade', function()
 
 		describe('#isMinFuncTranslateCode', function()
 		{
-			var code = require('../files/casefile/func_code/func_code_noi18n').toString();
+			var code = require('./files/casefile/func_code/func_code_noi18n').toString();
 			it('#true', function()
 			{
 				var info = i18nc(code,

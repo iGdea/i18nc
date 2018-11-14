@@ -2,7 +2,7 @@
 
 var debug  = require('debug')('i18nc-core:test_main_especial_ast');
 var expect = require('expect.js');
-var i18nc  = require('../../');
+var i18nc  = require('../');
 
 
 describe('#main especial ast', function()

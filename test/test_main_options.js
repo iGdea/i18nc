@@ -1,11 +1,11 @@
 'use strict';
 
 var expect				= require('expect.js');
-var i18nc				= require('../../');
-var dbTranslateWords	= require('../files/casefile/translate_words_db');
-var autoTestUtils		= require('../auto_test_utils');
+var i18nc				= require('../');
+var dbTranslateWords	= require('./files/casefile/translate_words_db');
+var autoTestUtils		= require('./auto_test_utils');
 var requireAfterWrite	= autoTestUtils.requireAfterWrite('main_options');
-var collectFuncs		= require('../files/casefile/func_code/func_code_collect');
+var collectFuncs		= require('./files/casefile/func_code/func_code_collect');
 
 describe('#main_options', function()
 {
@@ -89,7 +89,7 @@ describe('#main_options', function()
 		{
 			it('#enable', function()
 			{
-				var exampleCode = require('../files/casefile/func_code/func_code_example.js').toString();
+				var exampleCode = require('./files/casefile/func_code/func_code_example.js').toString();
 				var info = i18nc(exampleCode,
 				{
 					I18NHandler: {upgrade: false},
@@ -104,7 +104,7 @@ describe('#main_options', function()
 
 			it('#updateJSON', function()
 			{
-				var code = require('../files/casefile/i18n_handler/i18n_handler_example').toString();
+				var code = require('./files/casefile/i18n_handler/i18n_handler_example').toString();
 				var info = i18nc(code,
 				{
 					I18NHandler:
@@ -139,8 +139,8 @@ describe('#main_options', function()
 
 	describe('#codeModifiedArea', function()
 	{
-		// var exampleCode = require('../files/casefile/func_code/func_code_example.js').toString();
-		var exampleCode = require('../files/casefile/func_code/func_code_i18n.js').toString();
+		// var exampleCode = require('./files/casefile/func_code/func_code_example.js').toString();
+		var exampleCode = require('./files/casefile/func_code/func_code_i18n.js').toString();
 
 		it('#only translateWord', function()
 		{
@@ -289,7 +289,7 @@ describe('#main_options', function()
 
 	it('#isIgnoreI18NHandlerTranslateWords', function()
 	{
-		var code = require('../files/casefile/func_code/func_code_example').toString();
+		var code = require('./files/casefile/func_code/func_code_example').toString();
 		var info = i18nc(code,
 			{
 				isIgnoreI18NHandlerTranslateWords: true,
@@ -306,11 +306,11 @@ describe('#main_options', function()
 
 	describe('#proxyGlobalHandler', function()
 	{
-		var code = require('../files/casefile/func_code/func_code_i18n_global_handler').toString();
+		var code = require('./files/casefile/func_code/func_code_i18n_global_handler').toString();
 
 		it('#isProxyGlobalHandler', function()
 		{
-			var code = require('../files/casefile/func_code/func_code_noi18n').toString();
+			var code = require('./files/casefile/func_code/func_code_noi18n').toString();
 			var info = i18nc(code,
 				{
 					isProxyGlobalHandler: true,
@@ -365,7 +365,7 @@ describe('#main_options', function()
 
 	describe('#fullHandler', function()
 	{
-		var code = require('../files/casefile/func_code/func_code_i18n_full_handler').toString();
+		var code = require('./files/casefile/func_code/func_code_i18n_full_handler').toString();
 
 		it('#autoConvert', function()
 		{

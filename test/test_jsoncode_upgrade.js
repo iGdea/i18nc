@@ -2,15 +2,15 @@
 
 var _					= require('lodash');
 var expect				= require('expect.js');
-var i18nc				= require('../../');
-var autoTestUtils		= require('../auto_test_utils');
+var i18nc				= require('../');
+var autoTestUtils		= require('./auto_test_utils');
 var requireAfterWrite	= autoTestUtils.requireAfterWrite('jsoncode_upgrade');
 
 describe('#jsoncode upgrade', function()
 {
 	describe('#v1', function()
 	{
-		var code = require('../files/casefile/i18n_handler/i18n_handler_jsoncode_v1').toString();
+		var code = require('./files/casefile/i18n_handler/i18n_handler_jsoncode_v1').toString();
 		var info = i18nc(code);
 		var funcTranslateWords = info.allFuncTranslateWords();
 		var dbTranslateWords =

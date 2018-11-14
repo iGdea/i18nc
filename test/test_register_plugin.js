@@ -1,7 +1,7 @@
 'use strict';
 
 var expect	= require('expect.js');
-var i18nc	= require('../../');
+var i18nc	= require('../');
 
 describe('#register_plugin', function()
 {
