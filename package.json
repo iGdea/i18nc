@@ -30,7 +30,6 @@
     "i18nc-options": "^1.0.0"
   },
   "devDependencies": {
-    "acorn": "^6.0.4",
     "benchmark": "^2.1.4",
     "comment-parser": "^0.5.0",
     "cross-env": "^5.2.0",
