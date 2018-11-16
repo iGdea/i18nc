@@ -4,7 +4,7 @@
   "description": "Code of I18NC",
   "main": "index.js",
   "scripts": {
-    "prepublish": "npm ls",
+    "prepublish": "npm run build && npm run lint && npm ls",
     "build": "node test/build",
     "bench": "node benchmark",
     "lint": "eslint .",
