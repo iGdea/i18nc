@@ -1,7 +1,7 @@
 'use strict';
 
 var fs = require('fs');
-var tpl = fs.readFileSync(__dirname+'/../tpl/i18n_handler_style.tpl.md').toString();
+var tpl = fs.readFileSync(__dirname+'/i18n_handler_style.tpl.md').toString();
 var codeMapTable = require('../lib/codemap_table');
 
 var fileContent = tpl.replace(/\$(\w+)/g, function(all, key)

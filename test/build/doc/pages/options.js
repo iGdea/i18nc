@@ -5,7 +5,7 @@ var optionsComment = require('../lib/options_comment');
 var codeMapTable = require('../lib/codemap_table');
 var VARS = require('i18nc-options').VARS;
 
-var tpl = fs.readFileSync(__dirname+'/../tpl/options.tpl.md').toString();
+var tpl = fs.readFileSync(__dirname+'/options.tpl.md').toString();
 var content = fs.readFileSync(require.resolve('i18nc-options/lib/defaults')).toString();
 
 var fileContent = tpl.replace(/\$(\w+)/g, function(all, key)

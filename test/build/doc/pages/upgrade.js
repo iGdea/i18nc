@@ -2,7 +2,7 @@
 
 var _ = require('lodash');
 var fs = require('fs');
-var tpl = fs.readFileSync(__dirname+'/../tpl/upgrade.tpl.md').toString();
+var tpl = fs.readFileSync(__dirname+'/upgrade.tpl.md').toString();
 var codeMapTable = require('../lib/codemap_table');
 var VARS = require('i18nc-options').VARS;
 
