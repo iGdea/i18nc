@@ -18679,6 +18679,11 @@ exports.mergeTranslateData = require('./lib/merge_translate_data');
 exports.update = require('./lib/update');
 
 },{"./lib/merge_translate_data":45,"./lib/update":46}],45:[function(require,module,exports){
+/**
+ * 将db数据和函数解析出来的结果进行合并
+ * 得到最后落地到I18N函数中的翻译结果
+ */
+
 'use strict';
 
 var _		= require('lodash');
@@ -18833,6 +18838,10 @@ function _toTranslateJSON(data)
 }
 
 },{"debug":16,"lodash":62}],46:[function(require,module,exports){
+/**
+ * 将不同版本的db数据，解析成统一的结构体
+ */
+
 'use strict';
 
 var _			= require('lodash');
@@ -18844,8 +18853,16 @@ var parserV2	= jsoncode.jsoncode.v2.parser;
 module.exports = update;
 function update(dbTranslateWords)
 {
-	if (!dbTranslateWords || dbTranslateWords.version == 2) return false;
-	if (!dbTranslateWords.version) dbTranslateWords.version = 1;
+	if (!dbTranslateWords) return dbTranslateWords;
+
+	if (!dbTranslateWords.version)
+	{
+		dbTranslateWords =
+		{
+			version: 1,
+			data: dbTranslateWords
+		};
+	}
 
 	debug('update version:%s', dbTranslateWords.version);
 
@@ -18853,7 +18870,7 @@ function update(dbTranslateWords)
 	switch(dbTranslateWords.version)
 	{
 		case 1:
-			_.each(dbTranslateWords, function(item, lan)
+			_.each(dbTranslateWords.data || dbTranslateWords, function(item, lan)
 			{
 				if (lan == 'version') return;
 				_.each(item, function(data, fileKey)
@@ -18864,9 +18881,22 @@ function update(dbTranslateWords)
 			});
 			break;
 
-		case 3:
-			_.each(dbTranslateWords.data, function(val, key)
+		case 2:
+			if (dbTranslateWords.data)
 			{
+				return dbTranslateWords;
+			}
+			else
+			{
+				result = dbTranslateWords;
+				delete result.version;
+			}
+			break;
+
+		case 3:
+			_.each(dbTranslateWords.data || dbTranslateWords, function(val, key)
+			{
+				if (key == 'version') return;
 				result[key] = parserV2.codeJSON2translateJSON(val);
 			});
 			break;
@@ -41400,21 +41430,21 @@ exports.SourceNode = require('./lib/source-node').SourceNode;
 },{"./lib/source-map-consumer":71,"./lib/source-map-generator":72,"./lib/source-node":73}],76:[function(require,module,exports){
 module.exports={
   "name": "i18nc-core",
-  "version": "10.12.0",
+  "version": "10.12.1",
   "description": "Code of I18NC",
   "main": "index.js",
   "scripts": {
-    "prepublish": "npm ls",
+    "prepublish": "npm run build && npm run lint && npm ls",
     "build": "node test/build",
     "bench": "node benchmark",
     "lint": "eslint .",
-    "test": "cross-env DEBUG=i18nc-core* mocha test/test_*/test_*",
-    "test-cov": "istanbul cover _mocha -- test/test_*/test_* --reporter dot",
+    "test": "cross-env DEBUG=i18nc-core* mocha test/test_*",
+    "test-cov": "istanbul cover _mocha -- test/test_* --reporter dot",
     "test-e2e": "karma start --",
     "test-e2e-dev": "cross-env DEBUG=i18nc-core* karma start --auto-watch --no-single-run --browsers=Chrome",
     "test-e2e-sauce": "karma start -- sauce",
-    "test-travis": "istanbul cover _mocha --report lcovonly -- test/test_*/test_* --reporter dot",
-    "test-build": "node test/build && cross-env TEST_BUILD=true mocha test/test_*/test_*"
+    "test-travis": "istanbul cover _mocha --report lcovonly -- test/test_* --reporter dot",
+    "test-build": "node test/build && cross-env TEST_BUILD=true mocha test/test_*"
   },
   "dependencies": {
     "debug": "^4.1.0",
@@ -41425,12 +41455,11 @@ module.exports={
     "estraverse": "^4.2.0",
     "lodash": "^4.17.11",
     "i18nc-ast": "^1.0.1",
-    "i18nc-db": "^1.0.0",
+    "i18nc-db": "^1.1.1",
     "i18nc-jsoncode": "^1.0.1",
-    "i18nc-options": "^1.0.0"
+    "i18nc-options": "^1.1.0"
   },
   "devDependencies": {
-    "acorn": "^6.0.4",
     "benchmark": "^2.1.4",
     "comment-parser": "^0.5.0",
     "cross-env": "^5.2.0",
