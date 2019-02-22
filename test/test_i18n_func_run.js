@@ -22,7 +22,7 @@ describe('#i18n_func_run', function()
 
 			it('#no msg', function()
 			{
-				expect(I18N()).to.be('undefined');
+				expect(I18N()).to.be('');
 			});
 
 			it('#number', function()
@@ -208,7 +208,7 @@ describe('#i18n_func_run', function()
 
 			it('#no msg', function()
 			{
-				expect(I18N()).to.be('undefined');
+				expect(I18N()).to.be('');
 			});
 
 			it('#number', function()
@@ -310,7 +310,7 @@ describe('#i18n_func_run', function()
 			{
 				it('#no msg', function()
 				{
-					expect(I18N()).to.be('undefined');
+					expect(I18N()).to.be('');
 				});
 
 				it('#number', function()
@@ -405,7 +405,7 @@ describe('#i18n_func_run', function()
 
 			it('#base', function()
 			{
-				expect(run()).to.be('undefined');
+				expect(run()).to.be('');
 				expect(run(111)).to.be('111');
 				expect(run('中文')).to.be('中文');
 				expect(run('%{中文}词典', ['English'])).to.be('English dictionary');

@@ -5,6 +5,8 @@ module.exports = function code()
 	/* eslint-disable */
 	function oldI18N(msg, tpldata, subtype)
 	{
+		if (!msg) return msg === undefined || msg === null ? '' : '' + msg;
+
 		var self = oldI18N,
 			data = self.$ || (self.$ = {}),
 			translateJSON,

@@ -7,6 +7,8 @@ I18N函数风格
 ```javascript
 function I18N(msg, tpldata, subtype)
 {
+	if (!msg) return msg === undefined || msg === null ? '' : '' + msg;
+
 	var self = I18N,
 		data = self.$ || (self.$ = {}),
 		translateJSON,
@@ -110,6 +112,8 @@ function I18N(msg, tpldata, subtype)
 ```javascript
 function I18N(msg, tpldata)
 {
+	if (!msg) return msg === undefined || msg === null ? '' : '' + msg;
+
 	msg += '';
 	if (!tpldata || !tpldata.length || msg.indexOf('%') == -1) return msg;
 

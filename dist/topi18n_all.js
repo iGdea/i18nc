@@ -21,6 +21,8 @@
 	
 	function topI18N_v1(msg, args, translateJSON, fileKey, data, handler)
 	{
+		if (!msg) return msg === undefined || msg === null ? '' : '' + msg;
+	
 		var self = handler,
 			tpldata = args[1],
 			subtype = args[2],
@@ -83,6 +85,8 @@
 	
 	function topI18N_v2(msg, args, translateJSON, fileKey, data, handler)
 	{
+		if (!msg) return msg === undefined || msg === null ? '' : '' + msg;
+	
 		var self = handler,
 			tpldata = args[1],
 			subtype = args[2],

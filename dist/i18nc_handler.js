@@ -11,6 +11,8 @@
 {
 	function I18N(msg, tpldata)
 	{
+		if (!msg) return msg === undefined || msg === null ? '' : '' + msg;
+	
 		msg += '';
 		if (!tpldata || !tpldata.length || msg.indexOf('%') == -1) return msg;
 	

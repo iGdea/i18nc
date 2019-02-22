@@ -11,6 +11,8 @@
 {
 	function topI18N(msg, args, translateJSON, fileKey, data, handler)
 	{
+		if (!msg) return msg === undefined || msg === null ? '' : '' + msg;
+	
 		var self = handler,
 			tpldata = args[1],
 			subtype = args[2],

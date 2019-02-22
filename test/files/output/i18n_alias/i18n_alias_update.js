@@ -9,6 +9,8 @@ module.exports = function code()
 
 	function I18NNew(msg, tpldata, subtype)
 	{
+		if (!msg) return msg === undefined || msg === null ? '' : '' + msg;
+	
 		var self = I18NNew,
 			data = self.$ || (self.$ = {}),
 			translateJSON,

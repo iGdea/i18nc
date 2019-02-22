@@ -1412,6 +1412,8 @@ exports.renderGlobal = tpl2render(require('./tpl/global.js').toString());
 
 module.exports = function $handlerName(msg, tpldata, subtype)
 {
+	if (!msg) return msg === undefined || msg === null ? '' : '' + msg;
+
 	var self = $handlerName,
 		data = self.$ || (self.$ = {}),
 		translateJSON,
@@ -1505,6 +1507,8 @@ module.exports = function $handlerName(msg)
 
 module.exports = function $handlerName(msg, tpldata)
 {
+	if (!msg) return msg === undefined || msg === null ? '' : '' + msg;
+
 	msg += '';
 	if (!tpldata || !tpldata.length || msg.indexOf('%') == -1) return msg;
 

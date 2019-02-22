@@ -7,6 +7,8 @@ define(function(){
 	/* eslint-disable */
 	function I18N(msg, tpldata, subtype)
 	{
+		if (!msg) return msg === undefined || msg === null ? '' : '' + msg;
+
 		var self = I18N,
 			data = self.$ || (self.$ = {}),
 			translateJSON,
