@@ -32,7 +32,7 @@ module.exports = function code()
 				self.D = {
 					'*': {
 						// '中文':
-						// '这个中文还在':
+						// '这个中文还在skip_replace':
 					}
 				};
 				translateJSON = self.D;
@@ -83,6 +83,6 @@ module.exports = function code()
 
 	{
 		"[i18nc] skip_replace"
-		var v2 = "这个中文还在";
+		var v2 = "这个中文还在skip_replace";
 	}
 }

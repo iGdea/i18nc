@@ -5,6 +5,7 @@
 	},
 	"funcTranslateWords": {},
 	"newWord4codeTranslateWords": [],
+	"newWord4nowrappedWords": [],
 	"originalFileKeys": [],
 	"subScopeDatas": [
 		{
@@ -17,6 +18,7 @@
 			},
 			"funcTranslateWords": {},
 			"newWord4codeTranslateWords": [],
+			"newWord4nowrappedWords": [],
 			"originalFileKeys": [
 				null
 			],

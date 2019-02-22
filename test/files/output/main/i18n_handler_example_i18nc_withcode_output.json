@@ -41,6 +41,13 @@
 		"%{中文}词典",
 		"简体"
 	],
+	"newWord4nowrappedWords": [
+		"简体",
+		"空白",
+		"%s美好%s生活",
+		"%{中文}词典",
+		"简体"
+	],
 	"originalFileKeys": [
 		"i18n_handler_example"
 	],

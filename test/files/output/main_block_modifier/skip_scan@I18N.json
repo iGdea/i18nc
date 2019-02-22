@@ -6,13 +6,14 @@
 	"currentFileKey": "*",
 	"funcTranslateWords": {},
 	"newWord4codeTranslateWords": [],
+	"newWord4nowrappedWords": [],
 	"originalFileKeys": [],
 	"subScopeDatas": [
 		{
 			"codeTranslateWords": {
 				"DEFAULTS": [
 					"中文",
-					"这个中文还在2"
+					"这个中文还在skip_scan@I18N2"
 				],
 				"SUBTYPES": {}
 			},
@@ -20,7 +21,11 @@
 			"funcTranslateWords": {},
 			"newWord4codeTranslateWords": [
 				"中文",
-				"这个中文还在2"
+				"这个中文还在skip_scan@I18N2"
+			],
+			"newWord4nowrappedWords": [
+				"中文",
+				"这个中文还在skip_scan@I18N2"
 			],
 			"originalFileKeys": [],
 			"subScopeDatas": [],

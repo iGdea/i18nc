@@ -5,6 +5,7 @@
 	},
 	"funcTranslateWords": {},
 	"newWord4codeTranslateWords": [],
+	"newWord4nowrappedWords": [],
 	"originalFileKeys": [],
 	"subScopeDatas": [
 		{
@@ -20,6 +21,11 @@
 			},
 			"funcTranslateWords": {},
 			"newWord4codeTranslateWords": [
+				"中文",
+				"中文2",
+				"中文4"
+			],
+			"newWord4nowrappedWords": [
 				"中文",
 				"中文2",
 				"中文4"

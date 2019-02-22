@@ -1,6 +1,6 @@
 {
   "name": "i18nc-core",
-  "version": "10.12.2",
+  "version": "10.13.0",
   "description": "Code of I18NC",
   "main": "index.js",
   "scripts": {
@@ -25,7 +25,7 @@
     "estraverse": "^4.2.0",
     "lodash": "^4.17.11",
     "i18nc-ast": "^1.0.1",
-    "i18nc-db": "^1.1.1",
+    "i18nc-db": "^1.1.2",
     "i18nc-jsoncode": "^1.0.1",
     "i18nc-options": "^1.1.0"
   },
@@ -40,7 +40,7 @@
     "i18nc-test-req": "^1.2.0",
     "istanbul": "^0.4.5",
     "karma": "^3.1.1",
-    "karma-config-brcjs": "^1.1.0",
+    "karma-config-brcjs": "^1.1.1",
     "mocha": "^5.2.0"
   },
   "repository": {

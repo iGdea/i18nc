@@ -40,14 +40,16 @@ CodeTranslateWords(list)
 
 ### 成员方法
 
-| 方法名                     | 返回值              | 说明                   |
-|:--------------------------|:-------------------|:----------------------|
-| toJSON()                  | Object             | 输出JSON格式的结果       |
-| clone()                   | CodeTranslateWords | 拷贝                   |
-| merge(codeTranslateWords) |                    | 合并数据                |
-| allwords()                | String             | 输出所有需要翻译的词条    |
-| list4newWordAsts()        | Ast                | 输出所有需要翻译的新的词条 |
-| list4newWords()           | String             | 输出所有需要翻译的新的词条 |
+| 方法名                     | 返回值              | 说明                          |
+|:--------------------------|:-------------------|:-----------------------------|
+| toJSON()                  | Object             | 输出JSON格式的结果              |
+| clone()                   | CodeTranslateWords | 拷贝                          |
+| merge(codeTranslateWords) |                    | 合并数据                       |
+| allwords()                | String             | 输出所有需要翻译的词条           |
+| list4newWordAsts()        | Ast                | 输出所有需要翻译的新词条         |
+| list4nowrappedWordAsts()  | Ast                | 输出所有没有包裹的需要翻译的新词条 |
+| list4newWords()           | String             | 输出所有需要翻译的新词条         |
+| list4nowrappedWords()     | String             | 输出所有没有包裹的需要翻译的新词条 |
 
 ## TranslateWords
 

@@ -82,6 +82,6 @@ module.exports = function code()
 
 	{
 		"[i18nc] skip_scan"
-		var v2 = "跳过这个中文";
+		var v2 = "跳过这个中文skip_scan";
 	}
 }

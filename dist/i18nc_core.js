@@ -2025,7 +2025,9 @@ exports.run = function(code, options)
 var _				= require('lodash');
 var debug			= require('debug')('i18nc-core:result_obj');
 var extend			= require('extend');
-var astUtil			= require('i18nc-ast').util;
+var i18ncAst		= require('i18nc-ast');
+var astUtil			= i18ncAst.util;
+var AST_FLAGS		= i18ncAst.AST_FLAGS;
 var ArrayPush		= Array.prototype.push;
 var ArrayConcat		= Array.prototype.concat;
 
@@ -2191,7 +2193,7 @@ _.extend(CodeTranslateWords.prototype,
 		return result;
 	},
 	/**
-	 * 输出所有需要翻译的新的词条
+	 * 输出所有需要翻译的新词条
 	 *
 	 * @return {Ast}
 	 */
@@ -2203,13 +2205,39 @@ _.extend(CodeTranslateWords.prototype,
 			});
 	},
 	/**
-	 * 输出所有需要翻译的新的词条
+	 * 输出所有没有包裹的需要翻译的新词条
+	 *
+	 * @return {Ast}
+	 */
+	list4nowrappedWordAsts: function()
+	{
+		return this.list.filter(function(item)
+			{
+				return item.type == 'new'
+					&& !astUtil.checkAstFlag(item.originalAst, AST_FLAGS.SKIP_REPLACE | AST_FLAGS.DIS_REPLACE);
+			});
+	},
+	/**
+	 * 输出所有需要翻译的新词条
 	 *
 	 * @return {String}
 	 */
 	list4newWords: function()
 	{
 		var arrs = this.list4newWordAsts().map(function(item)
+			{
+				return item.translateWords;
+			});
+		return ArrayConcat.apply([], arrs);
+	},
+	/**
+	 * 输出所有没有包裹的需要翻译的新词条
+	 *
+	 * @return {String}
+	 */
+	list4nowrappedWords: function()
+	{
+		var arrs = this.list4nowrappedWordAsts().map(function(item)
 			{
 				return item.translateWords;
 			});
@@ -18888,8 +18916,13 @@ function update(dbTranslateWords)
 			}
 			else
 			{
-				result = dbTranslateWords;
-				delete result.version;
+				// 为了去掉version，同时不修改原来的结构体
+				// 如果修改，下次require会导致version判断错误
+				_.each(dbTranslateWords, function(item, key)
+				{
+					if (key == 'version') return;
+					result[key] = item;
+				});
 			}
 			break;
 
@@ -41430,7 +41463,7 @@ exports.SourceNode = require('./lib/source-node').SourceNode;
 },{"./lib/source-map-consumer":71,"./lib/source-map-generator":72,"./lib/source-node":73}],76:[function(require,module,exports){
 module.exports={
   "name": "i18nc-core",
-  "version": "10.12.1",
+  "version": "10.13.0",
   "description": "Code of I18NC",
   "main": "index.js",
   "scripts": {
@@ -41455,7 +41488,7 @@ module.exports={
     "estraverse": "^4.2.0",
     "lodash": "^4.17.11",
     "i18nc-ast": "^1.0.1",
-    "i18nc-db": "^1.1.1",
+    "i18nc-db": "^1.1.2",
     "i18nc-jsoncode": "^1.0.1",
     "i18nc-options": "^1.1.0"
   },
@@ -41470,7 +41503,7 @@ module.exports={
     "i18nc-test-req": "^1.2.0",
     "istanbul": "^0.4.5",
     "karma": "^3.1.1",
-    "karma-config-brcjs": "^1.1.0",
+    "karma-config-brcjs": "^1.1.1",
     "mocha": "^5.2.0"
   },
   "repository": {

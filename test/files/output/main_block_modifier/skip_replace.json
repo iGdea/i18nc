@@ -6,13 +6,14 @@
 	"currentFileKey": "*",
 	"funcTranslateWords": {},
 	"newWord4codeTranslateWords": [],
+	"newWord4nowrappedWords": [],
 	"originalFileKeys": [],
 	"subScopeDatas": [
 		{
 			"codeTranslateWords": {
 				"DEFAULTS": [
 					"中文",
-					"这个中文还在"
+					"这个中文还在skip_replace"
 				],
 				"SUBTYPES": {}
 			},
@@ -20,7 +21,10 @@
 			"funcTranslateWords": {},
 			"newWord4codeTranslateWords": [
 				"中文",
-				"这个中文还在"
+				"这个中文还在skip_replace"
+			],
+			"newWord4nowrappedWords": [
+				"中文"
 			],
 			"originalFileKeys": [],
 			"subScopeDatas": [],

@@ -6,6 +6,7 @@
 	"currentFileKey": "*",
 	"funcTranslateWords": {},
 	"newWord4codeTranslateWords": [],
+	"newWord4nowrappedWords": [],
 	"originalFileKeys": [],
 	"subScopeDatas": [
 		{
@@ -52,6 +53,7 @@
 				}
 			},
 			"newWord4codeTranslateWords": [],
+			"newWord4nowrappedWords": [],
 			"originalFileKeys": [
 				"*"
 			],

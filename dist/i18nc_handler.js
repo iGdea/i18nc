@@ -1,4 +1,4 @@
-;(function (handler)
+;(function(handler)
 {
 	if (typeof define == 'function')
 		define(handler);

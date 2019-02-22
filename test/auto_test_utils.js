@@ -17,6 +17,7 @@ exports.JsonOfI18ncRet = function JsonOfI18ncRet(info)
 			currentFileKey				: info.currentFileKey,
 			originalFileKeys			: info.originalFileKeys,
 			newWord4codeTranslateWords	: info.words.codeTranslateWords.list4newWords(),
+			newWord4nowrappedWords		: info.words.codeTranslateWords.list4nowrappedWords(),
 			subScopeDatas				: _.map(info.subScopeDatas, exports.JsonOfI18ncRet),
 		});
 
