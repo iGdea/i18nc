@@ -1030,7 +1030,7 @@ exports.UNSUPPORT_AST_TYPS	=
 };
 
 
-exports.I18NFunctionVersion = 'I';
+exports.I18NFunctionVersion = 'J';
 exports.I18NFunctionSubVersion =
 {
 	FULL	: 'f',
@@ -41467,7 +41467,7 @@ exports.SourceNode = require('./lib/source-node').SourceNode;
 },{"./lib/source-map-consumer":71,"./lib/source-map-generator":72,"./lib/source-node":73}],76:[function(require,module,exports){
 module.exports={
   "name": "i18nc-core",
-  "version": "10.13.0",
+  "version": "10.14.1",
   "description": "Code of I18NC",
   "main": "index.js",
   "scripts": {
@@ -41512,7 +41512,7 @@ module.exports={
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:Bacra/node-i18nc-core.git"
+    "url": "git@github.com:Bacra/i18nc-core.git"
   },
   "keywords": [
     "i18n",
@@ -41525,9 +41525,9 @@ module.exports={
   "author": "Bacra Woo<bacra.woo@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Bacra/node-i18nc-core/issues"
+    "url": "https://github.com/Bacra/i18nc-core/issues"
   },
-  "homepage": "https://github.com/Bacra/node-i18nc-core"
+  "homepage": "https://github.com/Bacra/i18nc-core"
 }
 
 },{}]},{},[1]);
