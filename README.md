@@ -19,7 +19,7 @@ npm install i18nc-core --save
 
 ```javascript
 var i18nc = require('i18nc-core');
-// options: https://bacra.github.io/node-i18nc-core/?p=options
+// options: https://bacra.github.io/i18nc-core/?p=options
 var ret = i18nc(code, options);
 
 ret.code    // output code
@@ -73,17 +73,17 @@ function I18N(h,f,i){
 
 # Upgrade
 
-[Wiki](https://bacra.github.io/node-i18nc-core/?p=upgrade)
+[Wiki](https://bacra.github.io/i18nc-core/?p=upgrade)
 
 
 
 [npm-image]: http://img.shields.io/npm/v/i18nc-core.svg
 [downloads-image]: http://img.shields.io/npm/dm/i18nc-core.svg
 [npm-url]: https://www.npmjs.org/package/i18nc-core
-[travis-image]: http://img.shields.io/travis/Bacra/node-i18nc-core/master.svg?label=linux
-[travis-url]: https://travis-ci.org/Bacra/node-i18nc-core
-[coveralls-image]: https://img.shields.io/coveralls/Bacra/node-i18nc-core.svg
-[coveralls-url]: https://coveralls.io/github/Bacra/node-i18nc-core
+[travis-image]: http://img.shields.io/travis/Bacra/i18nc-core/master.svg?label=linux
+[travis-url]: https://travis-ci.org/Bacra/i18nc-core
+[coveralls-image]: https://img.shields.io/coveralls/Bacra/i18nc-core.svg
+[coveralls-url]: https://coveralls.io/github/Bacra/i18nc-core
 [license-image]: http://img.shields.io/npm/l/i18nc-core.svg
-[license-status-url]: https://app.fossa.io/projects/git%2Bgithub.com%2FBacra%2Fnode-i18nc-core?ref=badge_shield
-[license-status-image]: https://app.fossa.io/api/projects/git%2Bgithub.com%2FBacra%2Fnode-i18nc-core.svg?type=shield
+[license-status-url]: https://app.fossa.io/projects/git%2Bgithub.com%2FBacra%2Fi18nc-core?ref=badge_shield
+[license-status-image]: https://app.fossa.io/api/projects/git%2Bgithub.com%2FBacra%2Fi18nc-core.svg?type=shield
