@@ -65,7 +65,7 @@ module.exports = function code()
 		if (LAN && LAN.split) {
 			if (self.L != LAN) {
 				self.K = '*';
-				self.V = 'If';
+				self.V = 'Jf';
 				self.D = {
 					'$': ['zh-TW'],
 					'*': {

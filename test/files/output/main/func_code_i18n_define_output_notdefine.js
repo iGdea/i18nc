@@ -30,7 +30,7 @@ module.exports = function code()
 		if (LAN && LAN.split) {
 			if (self.L != LAN) {
 				self.K = '*';
-				self.V = 'If';
+				self.V = 'Jf';
 				self.D = {
 					'*': {
 						// 'define2 中文':
@@ -148,7 +148,7 @@ module.exports = function code()
 			if (LAN && LAN.split) {
 				if (self.L != LAN) {
 					self.K = '*';
-					self.V = 'If';
+					self.V = 'Jf';
 					self.D = {
 						'*': {
 							// 'define6 中文':

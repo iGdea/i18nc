@@ -31,7 +31,7 @@ function I18N(msg, tpldata, subtype)
 	if (LAN && LAN.split) {
 		if (self.L != LAN) {
 			self.K = '*';
-			self.V = 'If';
+			self.V = 'Jf';
 			self.D = {
 				'*': {
 					// '中文':

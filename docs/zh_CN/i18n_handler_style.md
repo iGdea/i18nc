@@ -24,7 +24,7 @@ function I18N(msg, tpldata, subtype)
 	if (LAN && LAN.split) {
 		if (self.L != LAN) {
 			self.K = 'i18n_handler_example';
-			self.V = 'If';
+			self.V = 'Jf';
 			self.D = {
 				"$": [
 					"en-US",
@@ -120,7 +120,7 @@ function I18N(msg, tpldata)
 	var self = I18N;
 
 	self.K = 'i18n_handler_example_simple';
-	self.V = 'Is';
+	self.V = 'Js';
 
 	var replace_index = 0;
 	return msg.replace(/%s|%p|%\{.+?\}/g, function() {
@@ -142,7 +142,7 @@ function I18N(msg)
 	if (!data) {
 		data = self.$ = {};
 		self.K = 'i18n_handler_example_global';
-		self.V = 'Ig';
+		self.V = 'Jg';
 		self.D = {
 			"$": [
 				"en-US",

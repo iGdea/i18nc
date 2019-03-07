@@ -19,7 +19,7 @@ function I18N(msg, tpldata, subtype)
 	if (LAN && LAN.split) {
 		if (self.L != LAN) {
 			self.K = 'i18n_handler_example';
-			self.V = 'If';
+			self.V = 'Jf';
 			self.D = {'$':['en-US','zh-TW'],'*':{'%s美好%s生活':['%sgood%s life'],'%{中文}词典':['%{Chinese} dictionary'],'简体':['simplified','簡體']}};
 			translateJSON = self.D;
 

@@ -3154,7 +3154,9 @@ function setup(env) {
 	}
 
 	function extend(namespace, delimiter) {
-		return createDebug(this.namespace + (typeof delimiter === 'undefined' ? ':' : delimiter) + namespace);
+		const newDebug = createDebug(this.namespace + (typeof delimiter === 'undefined' ? ':' : delimiter) + namespace);
+		newDebug.log = this.log;
+		return newDebug;
 	}
 
 	/**
@@ -3439,7 +3441,6 @@ function wrapproperty (obj, prop, message) {
     Precedence = {
         Sequence: 0,
         Yield: 1,
-        Await: 1,
         Assignment: 1,
         Conditional: 2,
         ArrowFunction: 2,
@@ -3453,6 +3454,7 @@ function wrapproperty (obj, prop, message) {
         BitwiseSHIFT: 10,
         Additive: 11,
         Multiplicative: 12,
+        Await: 13,
         Unary: 13,
         Postfix: 14,
         Call: 15,
@@ -4324,7 +4326,7 @@ function wrapproperty (obj, prop, message) {
             result = join(result, operator);
             result = [join(
                 result,
-                that.generateExpression(stmt.right, Precedence.Sequence, E_TTT)
+                that.generateExpression(stmt.right, Precedence.Assignment, E_TTT)
             ), ')'];
         });
         result.push(this.maybeBlock(stmt.body, flags));
@@ -5962,30 +5964,54 @@ function wrapproperty (obj, prop, message) {
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"./package.json":20,"estraverse":31,"esutils":36,"source-map":75}],20:[function(require,module,exports){
 module.exports={
-  "_from": "escodegen@^1.11.0",
-  "_id": "escodegen@1.11.0",
-  "_inBundle": false,
-  "_integrity": "sha512-IeMV45ReixHS53K/OmfKAIztN/igDHzTJUhZM3k1jMhIZWjk45SMwAtBsEXiJp3vSPmTcu6CXn7mDvFHRN66fw==",
+  "_args": [
+    [
+      {
+        "raw": "escodegen@^1.11.1",
+        "scope": null,
+        "escapedName": "escodegen",
+        "name": "escodegen",
+        "rawSpec": "^1.11.1",
+        "spec": ">=1.11.1 <2.0.0",
+        "type": "range"
+      },
+      "/Users/bacra/dev/git_dev/node_modules/i18nc-core"
+    ]
+  ],
+  "_from": "escodegen@>=1.11.1 <2.0.0",
+  "_hasShrinkwrap": false,
+  "_id": "escodegen@1.11.1",
+  "_inCache": true,
   "_location": "/escodegen",
+  "_nodeVersion": "11.6.0",
+  "_npmOperationalInternal": {
+    "host": "s3://npm-registry-packages",
+    "tmp": "tmp/escodegen_1.11.1_1550586685457_0.004158698030969132"
+  },
+  "_npmUser": {
+    "name": "michaelficarra",
+    "email": "npm@michael.ficarra.me"
+  },
+  "_npmVersion": "6.5.0-next.0",
   "_phantomChildren": {},
   "_requested": {
-    "type": "range",
-    "registry": true,
-    "raw": "escodegen@^1.11.0",
-    "name": "escodegen",
+    "raw": "escodegen@^1.11.1",
+    "scope": null,
     "escapedName": "escodegen",
-    "rawSpec": "^1.11.0",
-    "saveSpec": null,
-    "fetchSpec": "^1.11.0"
+    "name": "escodegen",
+    "rawSpec": "^1.11.1",
+    "spec": ">=1.11.1 <2.0.0",
+    "type": "range"
   },
   "_requiredBy": [
     "/",
     "/i18nc-ast"
   ],
-  "_resolved": "https://registry.npmjs.org/escodegen/-/escodegen-1.11.0.tgz",
-  "_shasum": "b27a9389481d5bfd5bec76f7bb1eb3f8f4556589",
-  "_spec": "escodegen@^1.11.0",
-  "_where": "/Users/bacra/dev/node_modules/i18nc-core",
+  "_resolved": "https://registry.npmjs.org/escodegen/-/escodegen-1.11.1.tgz",
+  "_shasum": "c485ff8d6b4cdb89e27f4a856e91f118401ca510",
+  "_shrinkwrap": null,
+  "_spec": "escodegen@^1.11.1",
+  "_where": "/Users/bacra/dev/git_dev/node_modules/i18nc-core",
   "bin": {
     "esgenerate": "./bin/esgenerate.js",
     "escodegen": "./bin/escodegen.js"
@@ -5993,7 +6019,6 @@ module.exports={
   "bugs": {
     "url": "https://github.com/estools/escodegen/issues"
   },
-  "bundleDependencies": false,
   "dependencies": {
     "esprima": "^3.1.3",
     "estraverse": "^4.2.0",
@@ -6001,7 +6026,6 @@ module.exports={
     "optionator": "^0.8.1",
     "source-map": "~0.6.1"
   },
-  "deprecated": false,
   "description": "ECMAScript code generator",
   "devDependencies": {
     "acorn": "^4.0.4",
@@ -6014,30 +6038,37 @@ module.exports={
     "gulp-mocha": "^3.0.1",
     "semver": "^5.1.0"
   },
+  "directories": {},
+  "dist": {
+    "integrity": "sha512-JwiqFD9KdGVVpeuRa68yU3zZnBEOcPs0nKW7wZzXky8Z7tffdYUHbe11bPCV5jYlK6DVdKLWLm0f5I/QlL0Kmw==",
+    "shasum": "c485ff8d6b4cdb89e27f4a856e91f118401ca510",
+    "tarball": "https://registry.npmjs.org/escodegen/-/escodegen-1.11.1.tgz",
+    "fileCount": 6,
+    "unpackedSize": 106130,
+    "npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJcbBM+CRA9TVsSAnZWagAAnkEP/06UJ97j32aJDg5KEQ6g\nKIL7BbgPL0DfDi+rZrhK1O+Ex6scdcoXbtqW1TjnOgK0xAfoVuMfQYRVR8Oa\nCXTFpSDYer9Sj9wiW7WVR/zwlY8+EyFzMzStSeWxhw+apsP82JjsQY6YfyQV\neE1I/MFnMv3BlKmfmim1fyU7KdT25k5/afNbSiIwhA6aS+z+/JjYOLpqwCzx\nK9BEBUcp5/XB4Or2Oh/yufrYsC8HeDcw90+0NDqypfT5+L6uYOiXcanFMaTb\n/NBAYK4VoG/O9raBkBi4dWKB4OIAEzph4vTQAydMxVmp8luBGNEqsOq/8mIj\nfvVQus1HNKjDDJS4U3VUJolQTFlvBOQ/QBktL6Fw0Xu+lr/6zoUZ2o63/vtb\n5UPXu1vAdDKDejWatzcdyhzfX2fxfmUzLIDMiru/eCHl4X2U/eNRIJc9/GSY\nTEqFohxuv6UrZmHTR0dzBl0vwj8/L90c1YRvAm3enYYLjxqGVZaCSurOoYm4\nX987/jmOsZik9ZPOXJncHf+ZYAqEZPcYcOCMpXHxUQmmwmj+jci+7oPxcqHB\nUSOapFL9wd4H4cxhDVzTWQwXeI6V78TH3Hoc16u8OMtWNWazhetqaUdR7S+K\nWRx4cwhdLcx0t0UBqEe2KhIR0MhE9NAcaB4N+bFRDKUNkoOaOWknBHFoDCQJ\nLzku\r\n=cmBR\r\n-----END PGP SIGNATURE-----\r\n"
+  },
   "engines": {
     "node": ">=4.0"
   },
-  "files": [
-    "LICENSE.BSD",
-    "README.md",
-    "bin",
-    "escodegen.js",
-    "package.json"
-  ],
+  "gitHead": "4a93ffc24378722dbfd8859d633746ef5916ce86",
   "homepage": "http://github.com/estools/escodegen",
   "license": "BSD-2-Clause",
   "main": "escodegen.js",
   "maintainers": [
     {
-      "name": "Yusuke Suzuki",
-      "email": "utatane.tea@gmail.com",
-      "url": "http://github.com/Constellation"
+      "name": "constellation",
+      "email": "utatane.tea@gmail.com"
+    },
+    {
+      "name": "michaelficarra",
+      "email": "npm@michael.ficarra.me"
     }
   ],
   "name": "escodegen",
   "optionalDependencies": {
     "source-map": "~0.6.1"
   },
+  "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/estools/escodegen.git"
@@ -6050,7 +6081,7 @@ module.exports={
     "test": "gulp travis",
     "unit-test": "gulp test"
   },
-  "version": "1.11.0"
+  "version": "1.11.1"
 }
 
 },{}],21:[function(require,module,exports){
@@ -41484,9 +41515,9 @@ module.exports={
     "test-build": "node test/build && cross-env TEST_BUILD=true mocha test/test_*"
   },
   "dependencies": {
-    "debug": "^4.1.0",
+    "debug": "^4.1.1",
     "depd": "^2.0.0",
-    "escodegen": "^1.11.0",
+    "escodegen": "^1.11.1",
     "esshorten4node11": "^1.1.2",
     "esprima": "^4.0.1",
     "estraverse": "^4.2.0",
@@ -41498,17 +41529,17 @@ module.exports={
   },
   "devDependencies": {
     "benchmark": "^2.1.4",
-    "comment-parser": "^0.5.0",
+    "comment-parser": "^0.5.4",
     "cross-env": "^5.2.0",
-    "eslint": "^5.9.0",
+    "eslint": "^5.14.1",
     "eslint-config-brcjs": "^0.2.0",
     "expect.js": "^0.3.1",
     "glob": "^7.1.3",
     "i18nc-test-req": "^1.2.0",
     "istanbul": "^0.4.5",
-    "karma": "^3.1.1",
-    "karma-config-brcjs": "^1.1.1",
-    "mocha": "^5.2.0"
+    "karma": "^4.0.1",
+    "karma-config-brcjs": "^2.0.0",
+    "mocha": "^6.0.2"
   },
   "repository": {
     "type": "git",

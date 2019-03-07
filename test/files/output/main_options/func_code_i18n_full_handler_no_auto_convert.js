@@ -9,7 +9,7 @@ module.exports = function code()
 		if (!data) {
 			data = self.$ = {};
 			self.K = '*';
-			self.V = 'Ig';
+			self.V = 'Jg';
 			self.D = {
 				'*': {
 					// '中文':

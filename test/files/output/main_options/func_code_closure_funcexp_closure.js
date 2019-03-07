@@ -31,7 +31,7 @@ module.exports = function textWrapCode(){
 		if (LAN && LAN.split) {
 			if (self.L != LAN) {
 				self.K = '*';
-				self.V = 'If';
+				self.V = 'Jf';
 				self.D = {
 					'*': {
 						// '中文':
