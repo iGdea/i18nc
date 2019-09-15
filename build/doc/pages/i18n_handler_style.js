@@ -43,4 +43,5 @@ var fileContent = tpl.replace(/\$(\w+)/g, function(all, key)
 			return all;
 	}
 });
+
 fs.writeFileSync(__dirname+'/../../../../docs/zh_CN/i18n_handler_style.md', fileContent);
