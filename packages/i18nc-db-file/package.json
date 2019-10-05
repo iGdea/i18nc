@@ -8,8 +8,8 @@
     "build": "babel src --out-dir dist --source-maps",
     "build-dev": "babel src --out-dir dist --watch",
     "test": "cross-env DEBUG=i18nc-db-file* mocha test/test_*.js",
-    "test-cov": "istanbul cover ./node_modules/.bin/_mocha -- test/test_*.js --reporter dot",
-    "test-ci": "istanbul cover ./node_modules/.bin/_mocha --report lcovonly -- test/test_*.js --reporter dot",
+    "test-cov": "istanbul cover _mocha -- test/test_*.js --reporter dot",
+    "test-ci": "istanbul cover _mocha --report lcovonly -- test/test_*.js --reporter dot",
     "test-build": "cross-env TEST_BUILD=true mocha test/test_*.js"
   },
   "repository": {

@@ -1,0 +1,13 @@
+# Create by I18NC PO
+msgid ""
+msgstr ""
+"Project-Id-Version: 第一份翻译稿v1.0\n"
+"Report-Msgid-Bugs-To: bacra.woo@gmail.com\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"MIME-Versio: 1.0\n"
+"X-Generator: I18NC-PO\n"
+"Language: zh-HK\n"
+
+msgid "中文词典"
+msgstr ""

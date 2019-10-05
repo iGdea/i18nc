@@ -1,0 +1,49 @@
+{
+	"version": 2,
+	"data": {
+		"*": {
+			"en-US": {
+				"DEFAULTS": {
+					"中文": "zh",
+					"I18N(中文)%pI18N(中文2)": "I18N(zh)%pI18N(zh2)",
+					"简体": "zh-cn",
+					"词典": "dictionary"
+				},
+				"SUBTYPES": {
+					":subtype": {
+						"I18N(中文)": "I18N(zh)",
+						"I18N(中文2)": "I18N(zh2)"
+					},
+					"subtype": {
+						"I18N(中文)": "I18N(zh)",
+						"I18N(中文2)": "I18N(zh2)"
+					}
+				}
+			}
+		},
+		"fileKey": {
+			"en-US": {
+				"SUBTYPES": {
+					":subtype": {
+						"I18N(中文)": "I18N(zh)"
+					},
+					":subtype@sub": {
+						"I18N(中文2)": "I18N(zh2)"
+					}
+				},
+				"DEFAULTS": {
+					"I18N(中文)%pI18N(中文2)": "I18N(zh)%pI18N(zh2)"
+				}
+			}
+		},
+		"fileKey1,fileKey2": {
+			"en-US": {
+				"SUBTYPES": {
+					"subtype": {
+						"I18N(中文)%pI18N(中文2)": "I18N(zh)%pI18N(zh2)"
+					}
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,30 @@
+# Create by I18NC PO
+msgid ""
+msgstr ""
+"Project-Id-Version: 第一份翻译稿v1.0\n"
+"Report-Msgid-Bugs-To: bacra.woo@gmail.com\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"MIME-Versio: 1.0\n"
+"X-Generator: I18NC-PO\n"
+"Language: en-US\n"
+
+#: @@0,*
+msgid "中文"
+msgstr "zh"
+
+#: @@3,1,0,,,8,:subtype,*
+#: @@3,1,0,,3,sub,8,:subtype,fileKey
+#: @@0
+#: @@1,1,0,7,subtype,*
+#: @@2,7,subtype,fileKey1,fileKey2
+#: @@0,fileKey
+msgid "I18N(中文)%pI18N(中文2)"
+msgstr "I18N(zh)%pI18N(zh2)"
+
+msgid "简体"
+msgstr "zh-cn"
+
+#: filename,1
+msgid "词典"
+msgstr "dictionary"

@@ -1,0 +1,42 @@
+# Create by I18NC PO
+msgid ""
+msgstr ""
+"Project-Id-Version: I18N Project - Create By I18NC Tool\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"MIME-Versio: 1.0\n"
+"X-Generator: I18NC-PO\n"
+"Language: zh-TW\n"
+
+msgid "中文"
+msgstr ""
+
+msgid "中文I18N"
+msgstr ""
+
+#: @@2,7,subtype,*
+#: @@2,8,subtype2,*
+msgid "中文I18N subtype"
+msgstr ""
+
+#: @@1,1,0,8,:subtype,fileKey
+msgid "中文I18N subtype%s中文I18N subtype2"
+msgstr ""
+
+#: @@2,7,subtype,*
+msgid "中文I18N subtype2"
+msgstr ""
+
+#: @@1,1,0,8,:subtype,*
+msgid "中文I18N subtype3%s中文I18N subtype4"
+msgstr ""
+
+#: @@3,1,0,,3,sub,8,:subtype,*
+msgid "中文I18N subtype5%s中文I18N subtype6"
+msgstr ""
+
+#: @@0,*
+#: @@2,7,subtype,*
+#: @@2,8,subtype2,*
+msgid "简体"
+msgstr ""
