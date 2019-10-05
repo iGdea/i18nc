@@ -2,6 +2,8 @@
 **/test/output/
 **/test/example/
 **/test/files/
+packages/i18nc/test/input/
+packages/i18nc-options-getlans/test/input/
 
 coverage/
 dist/

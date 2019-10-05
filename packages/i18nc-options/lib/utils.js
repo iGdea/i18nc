@@ -8,6 +8,7 @@ var keyUtils		= require('./key_utils');
 var VARS			= require('./vars');
 var KeyObj			= keyUtils.KeyObj;
 var ObjectToString	= ({}).toString;
+var hasOwnProperty	= Object.prototype.hasOwnProperty;
 
 
 exports.extend = function(defaults, originalOptions)
@@ -127,7 +128,7 @@ function _extendDefault(defaults, object, parentKey)
 	var result = {};
 	_.each(defaults, function(defaultVal, key)
 	{
-		if (object.hasOwnProperty(key))
+		if (hasOwnProperty.call(object, key))
 		{
 			var newVal = object[key];
 			var defaultType = typeof defaultVal;
