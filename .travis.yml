@@ -31,5 +31,6 @@ matrix:
         chrome: stable
         firefox: latest
       script:
+        - npm run bootstrap
         - npm run test-e2e ChromeHeadlessNoSandbox,FirefoxHeadless
       after_script:
