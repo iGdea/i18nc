@@ -19,7 +19,7 @@
 | i18nc-key-combo        | [![NPM Version](https://img.shields.io/npm/v/i18nc-key-combo.svg)](https://www.npmjs.org/package/i18nc-key-combo)  |
 | i18nc-key-end          | [![NPM Version](https://img.shields.io/npm/v/i18nc-key-end.svg)](https://www.npmjs.org/package/i18nc-key-end)  |
 | i18nc-key-trim         | [![NPM Version](https://img.shields.io/npm/v/i18nc-key-trim.svg)](https://www.npmjs.org/package/i18nc-key-trim)  |
-| i18nc-test-require     | [![NPM Version](https://img.shields.io/npm/v/i18nc-test-require.svg)](https://www.npmjs.org/package/i18nc-test-require)  |
+| i18nc-test-req         | [![NPM Version](https://img.shields.io/npm/v/i18nc-test-req.svg)](https://www.npmjs.org/package/i18nc-test-req)  |
 
 [travis-image]: https://img.shields.io/travis/Bacra/i18nc/master.svg?label=linux
 [travis-url]: https://travis-ci.org/Bacra/i18nc
