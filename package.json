@@ -3,12 +3,12 @@
   "private": true,
   "scripts": {
     "lint": "eslint .",
-    "bootstrap": "lerna bootstrap",
+    "bootstrap": "lerna bootstrap --no-ci",
     "ls": "lerna ls",
     "pub": "lerna publish",
     "build": "lerna run build && node build/index",
     "test": "lerna run test",
-    "test-travis": "lerna run test-travis",
+    "test-ci": "lerna run test-ci",
     "test-cov": "lerna run test-cov"
   },
   "devDependencies": {

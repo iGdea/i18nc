@@ -13,7 +13,7 @@
     "test-e2e": "karma start --",
     "test-e2e-dev": "cross-env DEBUG=i18nc-core* karma start --auto-watch --no-single-run --browsers=Chrome",
     "test-e2e-sauce": "karma start -- sauce",
-    "test-travis": "istanbul cover _mocha --report lcovonly -- test/test_* --reporter dot",
+    "test-ci": "istanbul cover _mocha --report lcovonly -- test/test_* --reporter dot",
     "test-build": "node test/build && cross-env TEST_BUILD=true mocha test/test_*"
   },
   "dependencies": {
