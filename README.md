@@ -7,6 +7,8 @@
 |--------------------|---------------------------|
 | i18nc-core         | [![NPM Version](https://img.shields.io/npm/v/i18nc-core.svg)](https://www.npmjs.org/package/i18nc-core)  |
 | i18nc-ast          | [![NPM Version](https://img.shields.io/npm/v/i18nc-ast.svg)](https://www.npmjs.org/package/i18nc-ast)  |
+| i18nc-db           | [![NPM Version](https://img.shields.io/npm/v/i18nc-db.svg)](https://www.npmjs.org/package/i18nc-db)  |
+| i18nc-db-file      | [![NPM Version](https://img.shields.io/npm/v/i18nc-db-file.svg)](https://www.npmjs.org/package/i18nc-db-file)  |
 | i18nc-jsoncode     | [![NPM Version](https://img.shields.io/npm/v/i18nc-jsoncode.svg)](https://www.npmjs.org/package/i18nc-jsoncode)  |
 | i18nc-jsoncode1    | [![NPM Version](https://img.shields.io/npm/v/i18nc-jsoncode1.svg)](https://www.npmjs.org/package/i18nc-jsoncode1)  |
 | i18nc-jsoncode2    | [![NPM Version](https://img.shields.io/npm/v/i18nc-jsoncode2.svg)](https://www.npmjs.org/package/i18nc-jsoncode2)  |

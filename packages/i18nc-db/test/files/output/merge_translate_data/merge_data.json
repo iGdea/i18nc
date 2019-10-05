@@ -1,0 +1,24 @@
+{
+	"DEFAULTS": {
+		"简体": {
+			"en-US": "simplified",
+			"zh-TW": "簡體"
+		},
+		"空白": {
+			"en-US": ""
+		},
+		"%s美好%s生活": {
+			"en-US": "%sgood%s life"
+		},
+		"%{中文}词典": {
+			"en-US": "%{Chinese} dictionary"
+		}
+	},
+	"SUBTYPES": {
+		"subtype": {
+			"简体": {
+				"en-US": "simplified subtype"
+			}
+		}
+	}
+}

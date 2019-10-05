@@ -1,0 +1,52 @@
+{
+  "name": "i18nc-db-file",
+  "version": "1.1.0",
+  "description": "Load file for i18nc dbs",
+  "main": "index.js",
+  "scripts": {
+    "prepublish": "npm run build",
+    "build": "babel src --out-dir dist --source-maps",
+    "build-dev": "babel src --out-dir dist --watch",
+    "test": "cross-env DEBUG=i18nc-db-file* mocha test/test_*.js",
+    "test-cov": "istanbul cover ./node_modules/.bin/_mocha -- test/test_*.js --reporter dot",
+    "test-ci": "istanbul cover ./node_modules/.bin/_mocha --report lcovonly -- test/test_*.js --reporter dot",
+    "test-build": "cross-env TEST_BUILD=true mocha test/test_*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Bacra/i18nc.git"
+  },
+  "keywords": [
+    "i18n",
+    "db",
+    "loader"
+  ],
+  "author": "Bacra Woo <bacra.woo@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Bacra/i18nc/issues"
+  },
+  "homepage": "https://github.com/Bacra/i18nc",
+  "dependencies": {
+    "@babel/runtime": "^7.1.5",
+    "bluebird": "^3.5.3",
+    "debug": "^4.1.0",
+    "extend": "^3.0.2",
+    "glob": "^7.1.3",
+    "i18nc-db": "^1.1.2",
+    "i18nc-po": "^2.6.1",
+    "lodash": "^4.17.11",
+    "strip-bom": "^3.0.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.1.5",
+    "@babel/core": "^7.1.6",
+    "@babel/plugin-transform-runtime": "^7.1.0",
+    "@babel/preset-env": "^7.1.6",
+    "cross-env": "^5.2.0",
+    "expect.js": "^0.3.1",
+    "i18nc-test-req": "^1.2.0",
+    "istanbul": "^0.4.5",
+    "mocha": "^5.2.0"
+  }
+}

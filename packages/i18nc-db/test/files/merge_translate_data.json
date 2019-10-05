@@ -1,0 +1,86 @@
+{
+	"FILE_KEY": "i18n_handler_example",
+	"funcTranslateWords": {
+		"en-US": {
+			"DEFAULTS": {
+				"简体": "simplified",
+				"空白": "",
+				"%s美好%s生活": "%sgood%s life",
+				"%{中文}词典": "%{Chinese} dictionary"
+			},
+			"SUBTYPES": {
+				"subtype": {
+					"简体": "simplified subtype"
+				}
+			}
+		},
+		"zh-TW": {
+			"DEFAULTS": {
+				"简体": "簡體",
+				"无": "無"
+			}
+		}
+	},
+	"dbTranslateWords": {
+		"version": 2,
+		"data": {
+			"*": {
+				"en-US": {
+					"DEFAULTS": {
+						"中文db *": "indb *"
+					},
+					"SUBTYPES": {
+						"subtype": {
+							"中文 allfile subtype1": "indb * subtype1",
+							"中文 thisfile subtype2": "indb * subtype2"
+						}
+					}
+				},
+				"zh-TW": {
+					"DEFAULTS": {
+						"中文key": "中文键",
+						"中文 only db": "中文只在数据库",
+						"I18N(中文)": "国际化中文"
+					},
+					"SUBTYPES": {
+						"subtype": {
+							"I18N(中文)": "中文国际化"
+						}
+					}
+				}
+			},
+			"i18n_handler_example": {
+				"en-US": {
+					"DEFAULTS": {
+						"中文0": "indb <thisfile> db0"
+					},
+					"SUBTYPES": {
+						"subtype": {
+							"中文 thisfile subtype2": "indb <thisfile> subtype2"
+						}
+					}
+				}
+			},
+			"func_code_file_key": {
+				"en-US": {
+					"DEFAULTS": {
+						"中文 only db": "中文只在数据库"
+					}
+				}
+			}
+		}
+	},
+	"codeTranslateWords": {
+		"DEFAULTS": [
+			"简体",
+			"空白",
+			"%s美好%s生活",
+			"%{中文}词典"
+		],
+		"SUBTYPES": {
+			"subtype": [
+				"简体"
+			]
+		}
+	}
+}
