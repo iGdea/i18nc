@@ -42,7 +42,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:Bacra/i18nc-core.git"
+    "url": "git@github.com:Bacra/i18nc.git"
   },
   "keywords": [
     "i18n",
@@ -55,7 +55,7 @@
   "author": "Bacra Woo<bacra.woo@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Bacra/i18nc-core/issues"
+    "url": "https://github.com/Bacra/i18nc/issues"
   },
-  "homepage": "https://github.com/Bacra/i18nc-core"
+  "homepage": "https://github.com/Bacra/i18nc"
 }

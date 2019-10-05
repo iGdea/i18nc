@@ -3,8 +3,6 @@ I18NC-CORE
 
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][npm-url]
-[![Build Status][travis-image]][travis-url]
-[![Coveralls][coveralls-image]][coveralls-url]
 [![NPM License][license-image]][npm-url]
 [![License Status][license-status-image]][license-status-url]
 
@@ -80,10 +78,6 @@ function I18N(h,f,i){
 [npm-image]: https://img.shields.io/npm/v/i18nc-core.svg
 [downloads-image]: https://img.shields.io/npm/dm/i18nc-core.svg
 [npm-url]: https://www.npmjs.org/package/i18nc-core
-[travis-image]: https://img.shields.io/travis/Bacra/i18nc-core/master.svg?label=linux
-[travis-url]: https://travis-ci.org/Bacra/i18nc-core
-[coveralls-image]: https://img.shields.io/coveralls/Bacra/i18nc-core.svg
-[coveralls-url]: https://coveralls.io/github/Bacra/i18nc-core
 [license-image]: https://img.shields.io/npm/l/i18nc-core.svg
 [license-status-url]: https://app.fossa.io/projects/git%2Bgithub.com%2FBacra%2Fi18nc-core?ref=badge_shield
 [license-status-image]: https://app.fossa.io/api/projects/git%2Bgithub.com%2FBacra%2Fi18nc-core.svg?type=shield
