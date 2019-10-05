@@ -10,6 +10,10 @@
 | i18nc-jsoncode     | [![NPM Version](https://img.shields.io/npm/v/i18nc-jsoncode.svg)](https://www.npmjs.org/package/i18nc-jsoncode)  |
 | i18nc-jsoncode1    | [![NPM Version](https://img.shields.io/npm/v/i18nc-jsoncode1.svg)](https://www.npmjs.org/package/i18nc-jsoncode1)  |
 | i18nc-jsoncode2    | [![NPM Version](https://img.shields.io/npm/v/i18nc-jsoncode2.svg)](https://www.npmjs.org/package/i18nc-jsoncode2)  |
+| i18nc-key-clear    | [![NPM Version](https://img.shields.io/npm/v/i18nc-key-clear.svg)](https://www.npmjs.org/package/i18nc-key-clear)  |
+| i18nc-key-combo    | [![NPM Version](https://img.shields.io/npm/v/i18nc-key-combo.svg)](https://www.npmjs.org/package/i18nc-key-combo)  |
+| i18nc-key-end      | [![NPM Version](https://img.shields.io/npm/v/i18nc-key-end.svg)](https://www.npmjs.org/package/i18nc-key-end)  |
+| i18nc-key-trim     | [![NPM Version](https://img.shields.io/npm/v/i18nc-key-trim.svg)](https://www.npmjs.org/package/i18nc-key-trim)  |
 
 [travis-image]: https://img.shields.io/travis/Bacra/i18nc/master.svg?label=linux
 [travis-url]: https://travis-ci.org/Bacra/i18nc
