@@ -1,0 +1,17 @@
+# Create by I18NC PO
+msgid ""
+msgstr ""
+"Project-Id-Version: I18N Project - Create By I18NC Tool\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"MIME-Versio: 1.0\n"
+"X-Generator: I18NC-PO\n"
+"Language: zh-TW\n"
+
+msgid "中文"
+msgstr ""
+
+#: @@0,*
+#: @@2,7,subtype,*
+msgid "简体"
+msgstr ""
