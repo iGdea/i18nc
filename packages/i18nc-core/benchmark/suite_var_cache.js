@@ -49,7 +49,7 @@ function globalFunc(cache)
 	if (cache.gb){return cache.gb.lan}else if(typeof process == 'object'){cache.db = process}else{cache.gb = {}}
 }
 
-function getCacheVarByFunc()
+function getCacheVarByGlobalFunc()
 {
 	var self = getCacheVarByFunc;
 	var cache = self.data || (self.data = {});
@@ -80,7 +80,7 @@ module.exports = suite.add('var&func', function()
 	})
 	.add('globalfunc', function()
 	{
-		getCacheVarByFunc();
+		getCacheVarByGlobalFunc();
 	})
 	.on('cycle', function(event)
 	{
