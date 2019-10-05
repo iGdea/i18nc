@@ -1,0 +1,30 @@
+{
+  "name": "grunt-i18nc",
+  "version": "1.10.0",
+  "description": "grunt for i18nc",
+  "main": "tasks/i18nc.js",
+  "dependencies": {
+    "bluebird": "^3.5.3",
+    "extend": "^3.0.2",
+    "grunt-legacy-log": "^2.0.0",
+    "i18nc": "^4.6.2"
+  },
+  "devDependencies": {
+    "grunt": "^1.0.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Bacra/i18nc.git"
+  },
+  "keywords": [
+    "gruntplugin",
+    "i18n",
+    "ast"
+  ],
+  "author": "Bacra Woo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Bacra/i18nc/issues"
+  },
+  "homepage": "https://github.com/Bacra/i18nc"
+}

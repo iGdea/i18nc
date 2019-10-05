@@ -1,0 +1,34 @@
+{
+    "en":
+    {
+        "*":
+        {
+            "DEFAULTS":
+            {
+                "简体": "zh",
+                "简体1": "zh1"
+            },
+            "SUBTYPES":
+            {
+                "subtype1":
+                {
+                    "简体": "zh subtype1"
+                },
+                "subtype2":
+                {
+                    "简体": "zh subtype2"
+                }
+            }
+        }
+    },
+    "tw":
+    {
+        "*":
+        {
+            "DEFAULTS":
+            {
+                "简体": "簡體"
+            }
+        }
+    }
+}

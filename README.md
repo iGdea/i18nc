@@ -5,6 +5,7 @@
 
 | Name                   | Npm                       |
 |------------------------|---------------------------|
+| grunt-i18nc            | [![NPM Version](https://img.shields.io/npm/v/grunt-i18nc.svg)](https://www.npmjs.org/package/grunt-i18nc)  |
 | i18nc-core             | [![NPM Version](https://img.shields.io/npm/v/i18nc-core.svg)](https://www.npmjs.org/package/i18nc-core)  |
 | i18nc-ast              | [![NPM Version](https://img.shields.io/npm/v/i18nc-ast.svg)](https://www.npmjs.org/package/i18nc-ast)  |
 | i18nc-db               | [![NPM Version](https://img.shields.io/npm/v/i18nc-db.svg)](https://www.npmjs.org/package/i18nc-db)  |
