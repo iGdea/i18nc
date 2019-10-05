@@ -1,4 +1,4 @@
-# CCR
+# I18NC
 
 [![Build Status][travis-image]][travis-url]
 [![Coveralls][coveralls-image]][coveralls-url]
