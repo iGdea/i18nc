@@ -1,0 +1,38 @@
+{
+  "name": "i18nc-jsoncode",
+  "version": "1.0.1",
+  "description": "I18N Json Code Tool",
+  "main": "index.js",
+  "scripts": {
+    "test": "cross-env DEBUG=i18nc-jsoncode* mocha test/test_*",
+    "test-cov": "istanbul cover _mocha -- test/test_* --reporter dot",
+    "test-ci": "istanbul cover _mocha --report lcovonly -- test/test_* --reporter dot"
+  },
+  "dependencies": {
+    "debug": "^4.1.0",
+    "i18nc-jsoncode1": "^2.0.0",
+    "i18nc-jsoncode2": "^2.1.0"
+  },
+  "devDependencies": {
+    "cross-env": "^5.2.0",
+    "expect.js": "^0.3.1",
+    "istanbul": "^0.4.5",
+    "mkdirp": "^0.5.1",
+    "mocha": "^5.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Bacra/i18nc.git"
+  },
+  "keywords": [
+    "i18n",
+    "jsoncode",
+    "ast"
+  ],
+  "author": "Bacra Woo<bacra.woo@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Bacra/i18nc/issues"
+  },
+  "homepage": "https://github.com/Bacra/i18nc"
+}
