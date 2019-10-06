@@ -23,8 +23,13 @@ module.exports = function(cache)
 		if (!lan && lan !== false)
 		{
 			// 最好修改cookie的key
-			lan = document.cookie.match(/(?:^|;) *test_lan=([^;]+)/);
-			if (lan) lan = decodeURIComponent(lan[1]);
+			var cookieLans = [];
+			document.cookie.replace(/(?:^|;) *test_lan(\d*?)=([^;]+)/g, function(all, version, val) {
+				cookieLans[+version || 0] = val;
+				return all;
+			});
+			lan = cookieLans[cookieLans.length - 1];
+			if (lan) lan = decodeURIComponent(lan);
 			win[key] = lan || false;
 		}
 

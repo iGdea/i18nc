@@ -22,7 +22,8 @@ describe('#base', function()
 	beforeEach(function()
 	{
 		window.__i18n_lan__ = null;
-		document.cookie = 'test_lan=zh-tw,cht';
+		document.cookie = 'test_lan=zh,cht;';
+		document.cookie = 'test_lan1=zh-tw,cht;';
 	});
 
 	it('#onlyWebCookie', function()
