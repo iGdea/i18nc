@@ -1,6 +1,6 @@
 {
   "name": "i18nc-test-req",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "I18N Test Tool",
   "main": "index.js",
   "scripts": {

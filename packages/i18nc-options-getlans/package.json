@@ -1,6 +1,6 @@
 {
   "name": "i18nc-options-getlans",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Getlans options of i18nc",
   "main": "index.js",
   "scripts": {

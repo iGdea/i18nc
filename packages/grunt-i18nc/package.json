@@ -1,6 +1,6 @@
 {
   "name": "grunt-i18nc",
-  "version": "1.10.0",
+  "version": "1.10.1",
   "description": "grunt for i18nc",
   "main": "tasks/i18nc.js",
   "dependencies": {

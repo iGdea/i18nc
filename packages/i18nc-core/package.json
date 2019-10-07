@@ -1,6 +1,6 @@
 {
   "name": "i18nc-core",
-  "version": "10.14.1",
+  "version": "10.14.2",
   "description": "Code of I18NC",
   "main": "index.js",
   "scripts": {
@@ -19,14 +19,14 @@
     "debug": "^4.1.1",
     "depd": "^2.0.0",
     "escodegen": "^1.11.1",
-    "esshorten4node11": "^1.1.2",
     "esprima": "^4.0.1",
+    "esshorten4node11": "^1.1.2",
     "estraverse": "^4.2.0",
-    "lodash": "^4.17.11",
-    "i18nc-ast": "^1.0.1",
-    "i18nc-db": "^1.1.2",
-    "i18nc-jsoncode": "^1.0.1",
-    "i18nc-options": "^1.1.0"
+    "i18nc-ast": "^1.0.2",
+    "i18nc-db": "^1.1.3",
+    "i18nc-jsoncode": "^1.0.2",
+    "i18nc-options": "^1.1.1",
+    "lodash": "^4.17.11"
   },
   "devDependencies": {
     "benchmark": "^2.1.4",
@@ -34,7 +34,7 @@
     "cross-env": "^5.2.0",
     "expect.js": "^0.3.1",
     "glob": "^7.1.3",
-    "i18nc-test-req": "^1.2.0",
+    "i18nc-test-req": "^1.2.1",
     "istanbul": "^0.4.5",
     "karma": "^4.0.1",
     "karma-config-brcjs": "^2.0.0",
