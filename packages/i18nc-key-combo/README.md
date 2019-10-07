@@ -12,7 +12,7 @@ I18NC-KEY-COMBO
 npm install i18nc i18nc-key-combo --save
 ```
 
-# Useage
+# Usage
 
 ```javascript
 var i18nc = require('i18nc');

@@ -12,7 +12,7 @@ I18NC-JSONCODE
 npm install i18nc-jsoncode --save
 ```
 
-# Useage
+# Usage
 
 
 # Doc

@@ -12,7 +12,7 @@ I18NC-Test-Req
 npm install i18nc-test-req --save-dev
 ```
 
-# Useage
+# Usage
 
 ```javascript
 var expect = require('expect.js');

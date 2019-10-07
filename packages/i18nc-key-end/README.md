@@ -12,7 +12,7 @@ I18NC-KEY-END
 npm install i18nc i18nc-key-end --save
 ```
 
-# Useage
+# Usage
 
 ```javascript
 var i18nc = require('i18nc');

@@ -12,7 +12,7 @@ I18NC-DB-FILE
 npm install i18nc-db-file --save
 ```
 
-# Useage
+# Usage
 
 ```javascript
 var dbfile = require('i18nc-db-file');

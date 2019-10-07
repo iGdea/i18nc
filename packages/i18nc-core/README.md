@@ -13,7 +13,7 @@ I18NC-CORE
 npm install i18nc-core --save
 ```
 
-# Useage
+# Usage
 
 ```javascript
 var i18nc = require('i18nc-core');

@@ -12,7 +12,7 @@ I18NC-OPTIONS
 npm install i18nc-options --save
 ```
 
-# Useage
+# Usage
 
 ## iop.defaults
 

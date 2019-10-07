@@ -12,7 +12,7 @@ I18NC-PO
 npm install i18nc-po --save
 ```
 
-# Useage
+# Usage
 
 ```javascript
 var fs = require('fs');
