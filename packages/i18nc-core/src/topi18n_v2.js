@@ -64,9 +64,14 @@ module.exports = function $handlerName(msg, args, translateJSON, fileKey, data, 
 	// 判断是否需要替换：不需要替换，直接返回
 	if (!tpldata.length || msg.indexOf('%') == -1) return msg;
 
-	return msg.replace(/%s|%p|%\{.+?\}/g, function()
-	{
-		var newVal = tpldata[replace_index++];
-		return newVal === undefined ? '' : newVal;
-	});
+	return msg.replace(/%\{(\d+)\}/g, function(all, index)
+		{
+			var newVal = tpldata[+index];
+			return newVal === undefined ? '' : newVal;
+		})
+		.replace(/%s|%p|%\{.+?\}/g, function()
+		{
+			var newVal = tpldata[replace_index++];
+			return newVal === undefined ? '' : newVal;
+		});
 }

@@ -151,10 +151,15 @@ describe('#i18n_func_run', function()
 					expect(I18N('%s美好%s生活', [1, null])).to.be('1goodnull life');
 				});
 
-				it('#key %{}', function()
+				it('#key %{word}', function()
 				{
 					expect(I18N('%{中文}词典', ['English'])).to.be('English dictionary');
 					expect(I18N('%{{中文}}词典', [1])).to.be('1}词典');
+				});
+
+				it('#key %{number}', function()
+				{
+					expect(I18N('%{1}词典%{0}', ['out', 'English'])).to.be('English词典out');
 				});
 			});
 
@@ -179,10 +184,15 @@ describe('#i18n_func_run', function()
 					expect(I18N('%s美好%s生活', [1, null])).to.be('1美好null生活');
 				});
 
-				it('#key %{}', function()
+				it('#key %{word}', function()
 				{
 					expect(I18N('%{中文}词典', ['English'])).to.be('English词典');
 					expect(I18N('%{{中文}}词典', [1])).to.be('1}词典');
+				});
+
+				it('#key %{number}', function()
+				{
+					expect(I18N('%{1}词典%{0}', ['out', 'English'])).to.be('English词典out');
 				});
 			});
 		});
@@ -266,10 +276,15 @@ describe('#i18n_func_run', function()
 					expect(I18N('%s美好%s生活', [1, null])).to.be('1美好null生活');
 				});
 
-				it('#key %{}', function()
+				it('#key %{word}', function()
 				{
 					expect(I18N('%{中文}词典', ['English'])).to.be('English词典');
 					expect(I18N('%{{中文}}词典', [1])).to.be('1}词典');
+				});
+
+				it('#key %{number}', function()
+				{
+					expect(I18N('%{1}词典%{0}', ['out', 'English'])).to.be('English词典out');
 				});
 			});
 
@@ -294,10 +309,15 @@ describe('#i18n_func_run', function()
 					expect(I18N('%s美好%s生活', [1, null])).to.be('1美好null生活');
 				});
 
-				it('#key %{}', function()
+				it('#key %{word}', function()
 				{
 					expect(I18N('%{中文}词典', ['English'])).to.be('English词典');
 					expect(I18N('%{{中文}}词典', [1])).to.be('1}词典');
+				});
+
+				it('#key %{number}', function()
+				{
+					expect(I18N('%{1}词典%{0}', ['out', 'English'])).to.be('English词典out');
 				});
 			});
 
@@ -335,10 +355,15 @@ describe('#i18n_func_run', function()
 					expect(I18N('%s美好%s生活', [1, null])).to.be('1美好null生活');
 				});
 
-				it('#key %{}', function()
+				it('#key %{word}', function()
 				{
 					expect(I18N('%{中文}词典', ['English'])).to.be('English词典');
 					expect(I18N('%{{中文}}词典', [1])).to.be('1}词典');
+				});
+
+				it('#key %{number}', function()
+				{
+					expect(I18N('%{1}词典%{0}', ['out', 'English'])).to.be('English词典out');
 				});
 			});
 		});

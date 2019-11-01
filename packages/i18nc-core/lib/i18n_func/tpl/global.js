@@ -17,5 +17,5 @@ module.exports = function $handlerName(msg)
 		self.D = $TRANSLATE_JSON_CODE;
 	}
 
-	return ''+$globalHandlerName(msg, arguments, self.D, self.K, data, self);
+	return '' + $globalHandlerName(msg, arguments, self.D, self.K, data, self);
 }

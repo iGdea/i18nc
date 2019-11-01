@@ -15,8 +15,12 @@ module.exports = function $handlerName(msg, tpldata)
 	self.V = '$FUNCTION_VERSION';
 
 	var replace_index = 0;
-	return msg.replace(/%s|%p|%\{.+?\}/g, function() {
-		var newVal = tpldata[replace_index++];
-		return newVal === undefined ? '' : newVal;
-	});
+	return msg.replace(/%\{(\d+)\}/g, function(all, index) {
+			var newVal = tpldata[+index];
+			return newVal === undefined ? '' : newVal;
+		})
+		.replace(/%s|%p|%\{.+?\}/g, function() {
+			var newVal = tpldata[replace_index++];
+			return newVal === undefined ? '' : newVal;
+		});
 }
