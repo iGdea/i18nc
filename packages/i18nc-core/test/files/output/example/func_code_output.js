@@ -46,21 +46,27 @@ module.exports = function code()
 			data = self.$ || (self.$ = {}),
 			translateJSON,
 			replace_index = 0,
-			lanIndexArr, i, lanIndex, msgResult, translateValues,
-			LAN = (function(cache) {
-				if (!cache.global) {
-					cache.global = (typeof window == 'object' && window)
-						|| (typeof global == 'object' && global)
-						|| {};
-				}
-			
-				return cache.global.__i18n_lan__;
-			})(data);
+			options = {},
+			lanIndexArr, i, lanIndex, msgResult, translateValues;
 	
 		if (!tpldata || !tpldata.join) {
 			subtype = tpldata;
 			tpldata = [];
 		}
+		if (subtype && typeof subtype == 'object') {
+			options = subtype;
+			subtype = options.subtype;
+		}
+	
+		var LAN = options.language || (function(cache) {
+			if (!cache.global) {
+				cache.global = (typeof window == 'object' && window)
+					|| (typeof global == 'object' && global)
+					|| {};
+			}
+		
+			return cache.global.__i18n_lan__;
+		})(data);
 	
 		if (LAN && LAN.split) {
 			if (self.L != LAN) {
@@ -126,10 +132,14 @@ module.exports = function code()
 		msg += '';
 		if (!tpldata.length || msg.indexOf('%') == -1) return msg;
 	
-		return msg.replace(/%s|%p|%\{.+?\}/g, function() {
-			var newVal = tpldata[replace_index++];
-			return newVal === undefined ? '' : newVal;
-		});
+		return msg.replace(/%\{(\d+)\}/g, function(all, index) {
+				var newVal = tpldata[+index];
+				return newVal === undefined ? '' : newVal;
+			})
+			.replace(/%s|%p|%\{.+?\}/g, function() {
+				var newVal = tpldata[replace_index++];
+				return newVal === undefined ? '' : newVal;
+			});
 	}
 
 	result += I18N('I18N(中文)', 'subtype');

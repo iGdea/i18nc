@@ -7,13 +7,19 @@ function I18N(msg, tpldata, subtype)
 		data = self.$ || (self.$ = {}),
 		translateJSON,
 		replace_index = 0,
-		lanIndexArr, i, lanIndex, msgResult, translateValues,
-		LAN = (function(){return global.__i18n_lan__})(data);
+		options = {},
+		lanIndexArr, i, lanIndex, msgResult, translateValues;
 
 	if (!tpldata || !tpldata.join) {
 		subtype = tpldata;
 		tpldata = [];
 	}
+	if (subtype && typeof subtype == 'object') {
+		options = subtype;
+		subtype = options.subtype;
+	}
+
+	var LAN = options.language || (function(){return global.__i18n_lan__})(data);
 
 	if (LAN && LAN.split) {
 		if (self.L != LAN) {
@@ -84,8 +90,12 @@ function I18N(msg, tpldata, subtype)
 	msg += '';
 	if (!tpldata.length || msg.indexOf('%') == -1) return msg;
 
-	return msg.replace(/%s|%p|%\{.+?\}/g, function() {
-		var newVal = tpldata[replace_index++];
-		return newVal === undefined ? '' : newVal;
-	});
+	return msg.replace(/%\{(\d+)\}/g, function(all, index) {
+			var newVal = tpldata[+index];
+			return newVal === undefined ? '' : newVal;
+		})
+		.replace(/%s|%p|%\{.+?\}/g, function() {
+			var newVal = tpldata[replace_index++];
+			return newVal === undefined ? '' : newVal;
+		});
 }

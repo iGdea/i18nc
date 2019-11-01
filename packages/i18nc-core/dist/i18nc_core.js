@@ -16337,13 +16337,19 @@ module.exports = function $handlerName(msg, tpldata, subtype)
 		data = self.$ || (self.$ = {}),
 		translateJSON,
 		replace_index = 0,
-		lanIndexArr, i, lanIndex, msgResult, translateValues,
-		LAN = $getLanguageCode(data);
+		options = {},
+		lanIndexArr, i, lanIndex, msgResult, translateValues;
 
 	if (!tpldata || !tpldata.join) {
 		subtype = tpldata;
 		tpldata = [];
 	}
+	if (subtype && typeof subtype == 'object') {
+		options = subtype;
+		subtype = options.subtype;
+	}
+
+	var LAN = options.language || $getLanguageCode(data);
 
 	if (LAN && LAN.split) {
 		if (self.L != LAN) {
@@ -16392,10 +16398,14 @@ module.exports = function $handlerName(msg, tpldata, subtype)
 	// 判断是否需要替换：不需要替换，直接返回
 	if (!tpldata.length || msg.indexOf('%') == -1) return msg;
 
-	return msg.replace(/%s|%p|%\{.+?\}/g, function() {
-		var newVal = tpldata[replace_index++];
-		return newVal === undefined ? '' : newVal;
-	});
+	return msg.replace(/%\{(\d+)\}/g, function(all, index) {
+			var newVal = tpldata[+index];
+			return newVal === undefined ? '' : newVal;
+		})
+		.replace(/%s|%p|%\{.+?\}/g, function() {
+			var newVal = tpldata[replace_index++];
+			return newVal === undefined ? '' : newVal;
+		});
 }
 
 },{}],38:[function(require,module,exports){
@@ -16418,7 +16428,7 @@ module.exports = function $handlerName(msg)
 		self.D = $TRANSLATE_JSON_CODE;
 	}
 
-	return ''+$globalHandlerName(msg, arguments, self.D, self.K, data, self);
+	return '' + $globalHandlerName(msg, arguments, self.D, self.K, data, self);
 }
 
 },{}],39:[function(require,module,exports){
@@ -16439,10 +16449,14 @@ module.exports = function $handlerName(msg, tpldata)
 	self.V = '$FUNCTION_VERSION';
 
 	var replace_index = 0;
-	return msg.replace(/%s|%p|%\{.+?\}/g, function() {
-		var newVal = tpldata[replace_index++];
-		return newVal === undefined ? '' : newVal;
-	});
+	return msg.replace(/%\{(\d+)\}/g, function(all, index) {
+			var newVal = tpldata[+index];
+			return newVal === undefined ? '' : newVal;
+		})
+		.replace(/%s|%p|%\{.+?\}/g, function() {
+			var newVal = tpldata[replace_index++];
+			return newVal === undefined ? '' : newVal;
+		});
 }
 
 },{}],40:[function(require,module,exports){
@@ -39374,7 +39388,7 @@ arguments[4][28][0].apply(exports,arguments)
 },{"./lib/source-map-consumer":75,"./lib/source-map-generator":76,"./lib/source-node":77,"dup":28}],80:[function(require,module,exports){
 module.exports={
   "name": "i18nc-core",
-  "version": "10.14.1",
+  "version": "10.14.2",
   "description": "Code of I18NC",
   "main": "index.js",
   "scripts": {
@@ -39393,14 +39407,14 @@ module.exports={
     "debug": "^4.1.1",
     "depd": "^2.0.0",
     "escodegen": "^1.11.1",
-    "esshorten4node11": "^1.1.2",
     "esprima": "^4.0.1",
+    "esshorten4node11": "^1.1.2",
     "estraverse": "^4.2.0",
-    "lodash": "^4.17.11",
-    "i18nc-ast": "^1.0.1",
-    "i18nc-db": "^1.1.2",
-    "i18nc-jsoncode": "^1.0.1",
-    "i18nc-options": "^1.1.0"
+    "i18nc-ast": "^1.0.2",
+    "i18nc-db": "^1.1.3",
+    "i18nc-jsoncode": "^1.0.2",
+    "i18nc-options": "^1.1.1",
+    "lodash": "^4.17.11"
   },
   "devDependencies": {
     "benchmark": "^2.1.4",
@@ -39408,7 +39422,7 @@ module.exports={
     "cross-env": "^5.2.0",
     "expect.js": "^0.3.1",
     "glob": "^7.1.3",
-    "i18nc-test-req": "^1.2.0",
+    "i18nc-test-req": "^1.2.1",
     "istanbul": "^0.4.5",
     "karma": "^4.0.1",
     "karma-config-brcjs": "^2.0.0",
@@ -41070,6 +41084,7 @@ var keyUtils		= require('./key_utils');
 var VARS			= require('./vars');
 var KeyObj			= keyUtils.KeyObj;
 var ObjectToString	= ({}).toString;
+var hasOwnProperty	= Object.prototype.hasOwnProperty;
 
 
 exports.extend = function(defaults, originalOptions)
@@ -41189,7 +41204,7 @@ function _extendDefault(defaults, object, parentKey)
 	var result = {};
 	_.each(defaults, function(defaultVal, key)
 	{
-		if (object.hasOwnProperty(key))
+		if (hasOwnProperty.call(object, key))
 		{
 			var newVal = object[key];
 			var defaultType = typeof defaultVal;

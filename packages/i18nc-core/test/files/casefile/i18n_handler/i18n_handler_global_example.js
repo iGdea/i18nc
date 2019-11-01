@@ -40,5 +40,5 @@ function I18N(msg)
 		};
 	}
 
-	return ''+I18N.topI18N(msg, arguments, self.D, self.K, data, self);
+	return '' + I18N.topI18N(msg, arguments, self.D, self.K, data, self);
 }

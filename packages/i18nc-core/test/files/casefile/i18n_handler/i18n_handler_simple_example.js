@@ -12,8 +12,12 @@ function I18N(msg, tpldata)
 	self.V = 'Js';
 
 	var replace_index = 0;
-	return msg.replace(/%s|%p|%\{.+?\}/g, function() {
-		var newVal = tpldata[replace_index++];
-		return newVal === undefined ? '' : newVal;
-	});
+	return msg.replace(/%\{(\d+)\}/g, function(all, index) {
+			var newVal = tpldata[+index];
+			return newVal === undefined ? '' : newVal;
+		})
+		.replace(/%s|%p|%\{.+?\}/g, function() {
+			var newVal = tpldata[replace_index++];
+			return newVal === undefined ? '' : newVal;
+		});
 }

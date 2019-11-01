@@ -17,14 +17,20 @@
 			tpldata = args[1],
 			subtype = args[2],
 			replace_index = 0,
-			lanIndexArr, i, lanIndex, msgResult, translateValues,
-			LAN = $I18N_getLanguageCode(data);
+			options = {},
+			lanIndexArr, i, lanIndex, msgResult, translateValues;
 	
 		if (!tpldata || !tpldata.join)
 		{
 			subtype = tpldata;
 			tpldata = [];
 		}
+		if (subtype && typeof subtype == 'object') {
+			options = subtype;
+			subtype = options.subtype;
+		}
+	
+		var LAN = options.language || $I18N_getLanguageCode(data);
 	
 		if (LAN && LAN.split)
 		{
@@ -71,11 +77,16 @@
 		// 判断是否需要替换：不需要替换，直接返回
 		if (!tpldata.length || msg.indexOf('%') == -1) return msg;
 	
-		return msg.replace(/%s|%p|%\{.+?\}/g, function()
-		{
-			var newVal = tpldata[replace_index++];
-			return newVal === undefined ? '' : newVal;
-		});
+		return msg.replace(/%\{(\d+)\}/g, function(all, index)
+			{
+				var newVal = tpldata[+index];
+				return newVal === undefined ? '' : newVal;
+			})
+			.replace(/%s|%p|%\{.+?\}/g, function()
+			{
+				var newVal = tpldata[replace_index++];
+				return newVal === undefined ? '' : newVal;
+			});
 	}
 
 	ctx.topI18N = topI18N;

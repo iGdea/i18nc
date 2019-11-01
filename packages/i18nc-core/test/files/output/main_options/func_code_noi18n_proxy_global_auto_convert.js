@@ -17,6 +17,6 @@ module.exports = function code()
 			};
 		}
 	
-		return ''+window.topI18N(msg, arguments, self.D, self.K, data, self);
+		return '' + window.topI18N(msg, arguments, self.D, self.K, data, self);
 	}
 }
