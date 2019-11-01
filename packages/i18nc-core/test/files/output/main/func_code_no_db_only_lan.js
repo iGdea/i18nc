@@ -37,7 +37,7 @@ function I18N(msg, tpldata, subtype)
 	if (LAN && LAN.split) {
 		if (self.L != LAN) {
 			self.K = '*';
-			self.V = 'Jf';
+			self.V = 'Kf';
 			self.D = {
 				'*': {
 					// '不可能存在的中文翻译词组':

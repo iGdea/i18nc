@@ -33,7 +33,7 @@ function I18N(msg, tpldata, subtype)
 	if (LAN && LAN.split) {
 		if (self.L != LAN) {
 			self.K = 'i18n_handler_example';
-			self.V = 'Jf';
+			self.V = 'Kf';
 			self.D = {
 				'$': [
 					'en-US',

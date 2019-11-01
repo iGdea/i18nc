@@ -15949,7 +15949,7 @@ exports.UNSUPPORT_AST_TYPS	=
 };
 
 
-exports.I18NFunctionVersion = 'J';
+exports.I18NFunctionVersion = 'K';
 exports.I18NFunctionSubVersion =
 {
 	FULL	: 'f',
@@ -39388,7 +39388,7 @@ arguments[4][28][0].apply(exports,arguments)
 },{"./lib/source-map-consumer":75,"./lib/source-map-generator":76,"./lib/source-node":77,"dup":28}],80:[function(require,module,exports){
 module.exports={
   "name": "i18nc-core",
-  "version": "10.14.2",
+  "version": "10.15.1",
   "description": "Code of I18NC",
   "main": "index.js",
   "scripts": {

@@ -36,7 +36,7 @@ module.exports = function code()
 		if (LAN && LAN.split) {
 			if (self.L != LAN) {
 				self.K = '*';
-				self.V = 'Jf';
+				self.V = 'Kf';
 				self.D = {
 					'*': {
 						// 'out define 中文':
@@ -130,7 +130,7 @@ module.exports = function code()
 			if (LAN && LAN.split) {
 				if (self.L != LAN) {
 					self.K = '*';
-					self.V = 'Jf';
+					self.V = 'Kf';
 					self.D = {
 						'*': {
 							// '中文':
@@ -225,7 +225,7 @@ module.exports = function code()
 			if (LAN && LAN.split) {
 				if (self.L != LAN) {
 					self.K = '*';
-					self.V = 'Jf';
+					self.V = 'Kf';
 					self.D = {
 						'*': {
 							// 'define2 中文':
@@ -321,7 +321,7 @@ module.exports = function code()
 			if (LAN && LAN.split) {
 				if (self.L != LAN) {
 					self.K = '*';
-					self.V = 'Jf';
+					self.V = 'Kf';
 					self.D = {
 						'*': {
 							// 'define3 中文':
@@ -419,7 +419,7 @@ module.exports = function code()
 			if (LAN && LAN.split) {
 				if (self.L != LAN) {
 					self.K = '*';
-					self.V = 'Jf';
+					self.V = 'Kf';
 					self.D = {
 						'*': {
 							// 'define4 中文':
@@ -520,7 +520,7 @@ module.exports = function code()
 			if (LAN && LAN.split) {
 				if (self.L != LAN) {
 					self.K = '*';
-					self.V = 'Jf';
+					self.V = 'Kf';
 					self.D = {
 						'*': {
 							// 'define6 中文':

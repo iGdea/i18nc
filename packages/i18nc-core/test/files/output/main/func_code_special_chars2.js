@@ -35,7 +35,7 @@ module.exports = function a(){
 		if (LAN && LAN.split) {
 			if (self.L != LAN) {
 				self.K = '*';
-				self.V = 'Jf';
+				self.V = 'Kf';
 				self.D = {
 					'$': ['en-US'],
 					'*': {
