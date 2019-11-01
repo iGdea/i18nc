@@ -17,7 +17,7 @@ exports.UNSUPPORT_AST_TYPS	=
 };
 
 
-exports.I18NFunctionVersion = 'J';
+exports.I18NFunctionVersion = 'K';
 exports.I18NFunctionSubVersion =
 {
 	FULL	: 'f',
