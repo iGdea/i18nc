@@ -1,6 +1,6 @@
 {
   "name": "i18nc-key-trim",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "TranslateWord Trim for I18N",
   "main": "keytrim.js",
   "scripts": {
@@ -14,7 +14,7 @@
   "devDependencies": {
     "cross-env": "^5.2.0",
     "expect.js": "^0.3.1",
-    "i18nc-core": "^10.14.2",
+    "i18nc-core": "^10.15.0",
     "istanbul": "^0.4.5",
     "mocha": "^5.2.0"
   },
