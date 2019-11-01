@@ -1,6 +1,6 @@
 {
   "name": "i18nc-po",
-  "version": "2.6.3",
+  "version": "2.6.4",
   "description": "I18NC PO File utils",
   "main": "index.js",
   "scripts": {
@@ -20,7 +20,7 @@
   "devDependencies": {
     "cross-env": "^5.2.0",
     "expect.js": "^0.3.1",
-    "i18nc-core": "^10.15.0",
+    "i18nc-core": "^10.15.1",
     "istanbul": "^0.4.5",
     "mkdirp": "^0.5.1",
     "mocha": "^5.2.0"
