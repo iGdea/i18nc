@@ -161,6 +161,10 @@ describe('#i18n_func_run', function()
 				{
 					expect(I18N('%{1}词典%{0}', ['out', 'English'])).to.be('English词典out');
 				});
+
+				it('#optons language', function() {
+					expect(I18N('%s美好%s生活', [1,2], { language: 'zh' })).to.be('1美好2生活');
+				});
 			});
 
 			describe('#widthout lan', function()

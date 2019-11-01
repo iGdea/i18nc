@@ -10,14 +10,20 @@ module.exports = function $handlerName(msg, args, translateJSON, fileKey, data, 
 		tpldata = args[1],
 		subtype = args[2],
 		replace_index = 0,
-		lanIndexArr, i, lanIndex, msgResult, translateValues,
-		LAN = $I18N_getLanguageCode(data);
+		options = {},
+		lanIndexArr, i, lanIndex, msgResult, translateValues;
 
 	if (!tpldata || !tpldata.join)
 	{
 		subtype = tpldata;
 		tpldata = [];
 	}
+	if (subtype && typeof subtype == 'object') {
+		options = subtype;
+		subtype = options.subtype;
+	}
+
+	var LAN = options.language || $I18N_getLanguageCode(data);
 
 	if (LAN && LAN.split)
 	{

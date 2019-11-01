@@ -10,13 +10,19 @@ module.exports = function $handlerName(msg, tpldata, subtype)
 		data = self.$ || (self.$ = {}),
 		translateJSON,
 		replace_index = 0,
-		lanIndexArr, i, lanIndex, msgResult, translateValues,
-		LAN = $getLanguageCode(data);
+		options = {},
+		lanIndexArr, i, lanIndex, msgResult, translateValues;
 
 	if (!tpldata || !tpldata.join) {
 		subtype = tpldata;
 		tpldata = [];
 	}
+	if (subtype && typeof subtype == 'object') {
+		options = subtype;
+		subtype = options.subtype;
+	}
+
+	var LAN = options.language || $getLanguageCode(data);
 
 	if (LAN && LAN.split) {
 		if (self.L != LAN) {
