@@ -6,6 +6,9 @@ module.exports = function code()
 		I18NNew('中文4'),
 		I18NNew('中文5')
 	]);
+	I18NNew('中文4', 'subkey');
+	I18NNew('中文5', { subkey: 'subkey' });
+
 
 	function I18NNew(msg, tpldata, subkey)
 	{
@@ -46,6 +49,10 @@ module.exports = function code()
 						// '中文':
 						// '中文2':
 						// '中文3':
+						// '中文4':
+						// '中文5':
+					},
+					'subkey': {
 						// '中文4':
 						// '中文5':
 					}

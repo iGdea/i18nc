@@ -17,7 +17,12 @@
 					"中文4",
 					"中文5"
 				],
-				"SUBKEYS": {}
+				"SUBKEYS": {
+					"subkey": [
+						"中文4",
+						"中文5"
+					]
+				}
 			},
 			"funcTranslateWords": {},
 			"newWord4codeTranslateWords": [

@@ -43,22 +43,43 @@ _.extend(ASTCollector.prototype,
 			translateWordAst: args[0]
 		};
 
+		var maybeSubkeyAst;
+
 		if (args.length > 1)
 		{
 			if (args[1].type == 'ArrayExpression')
 			{
 				result.formatArgAsts = args[1];
-				if (args[2]) result.subkeyAst = args[2];
+				if (args[2]) maybeSubkeyAst = args[2];
 			}
 			else
 			{
-				result.subkeyAst = args[1];
+				maybeSubkeyAst = args[1];
+			}
+		}
+
+		// 获取subkey ast
+		// 两种情况：字符串，或者options.subkey
+		if (maybeSubkeyAst)
+		{
+			if (maybeSubkeyAst.type == 'Literal')
+			{
+				result.subkeyAst = maybeSubkeyAst;
+			}
+			else if (maybeSubkeyAst.type == 'ObjectExpression' && maybeSubkeyAst.properties)
+			{
+				maybeSubkeyAst.properties.forEach(function(ast)
+				{
+					if (ast.key && ast.key.name == 'subkey')
+					{
+						result.subkeyAst = ast.value;
+					}
+				});
 			}
 		}
 
 		return result;
 	},
-
 
 	scan: function(scope, ast)
 	{
