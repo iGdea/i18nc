@@ -48,11 +48,11 @@ _.extend(ASTCollector.prototype,
 			if (args[1].type == 'ArrayExpression')
 			{
 				result.formatArgAsts = args[1];
-				if (args[2]) result.subtypeAst = args[2];
+				if (args[2]) result.subkeyAst = args[2];
 			}
 			else
 			{
-				result.subtypeAst = args[1];
+				result.subkeyAst = args[1];
 			}
 		}
 

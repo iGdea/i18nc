@@ -24,7 +24,7 @@ describe('#fileresult', function()
 		{
 			var json1 = i18nc('talkme("中文")', {isCheckClosureForNewI18NHandler: false});
 			var json2 = i18nc('I18N("简体")', {isCheckClosureForNewI18NHandler: false});
-			var json3 = i18nc('I18N("简体", "subtype")', {isCheckClosureForNewI18NHandler: false});
+			var json3 = i18nc('I18N("简体", "subkey")', {isCheckClosureForNewI18NHandler: false});
 
 			return i18ncUtil.mulitResult2POFiles(
 				{

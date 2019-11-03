@@ -29,11 +29,11 @@ describe('#jsoncode upgrade', function()
 			})
 			.join('\n')
 			+'\n\n'
-			+_.map(funcTranslateWordsList.SUBTYPES, function(vals, subtype)
+			+_.map(funcTranslateWordsList.SUBKEYS, function(vals, subkey)
 			{
 				return vals.map(function(val)
 				{
-					return 'I18N("'+val+'", "'+subtype+'")';
+					return 'I18N("'+val+'", "'+subkey+'")';
 				})
 				.join('\n');
 			})

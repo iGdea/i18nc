@@ -96,8 +96,8 @@ function getInputData()
 							"简体": "cn",
 							"中文": "zh"
 						},
-						"SUBTYPES": {
-							"subtype": {
+						"SUBKEYS": {
+							"subkey": {
 								"简体": "zh"
 							}
 						}

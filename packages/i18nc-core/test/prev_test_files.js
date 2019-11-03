@@ -16,9 +16,9 @@ exports.TRANSLATE_JSON =
 		'%s美好%s生活': ['%sgood%s life'],
 		'%{中文}词典': ['%{Chinese} dictionary']
 	},
-	'subtype':
+	'subkey':
 	{
-		'简体': ['simplified subtype'],
+		'简体': ['simplified subkey'],
 	}
 };
 

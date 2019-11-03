@@ -3,7 +3,7 @@
 	"originalFileKeys": [],
 	"subScopeDatas": [
 		{
-			"code": "{\n\n\n\t/* eslint-disable */\n\tfunction I18N(msg, tpldata, subtype)\n\t{\n\t\tif (!msg) return msg === undefined || msg === null ? '' : '' + msg;\n\n\t\tvar self = I18N,\n\t\t\tdata = self.$ || (self.$ = {}),\n\t\t\ttranslateJSON,\n\t\t\treplace_index = 0,\n\t\t\tlanIndexArr, i, lanIndex, msgResult, translateValues,\n\t\t\tLAN = (function(cache) {\n\t\t\t\tif (!cache.global) {\n\t\t\t\t\tcache.global = (typeof window == 'object' && window)\n\t\t\t\t\t\t|| (typeof global == 'object' && global)\n\t\t\t\t\t\t|| {};\n\t\t\t\t}\n\t\t\n\t\t\t\treturn cache.global.__i18n_lan__;\n\t\t\t})(data);\n\n\t\tif (!tpldata || !tpldata.join) {\n\t\t\tsubtype = tpldata;\n\t\t\ttpldata = [];\n\t\t}\n\n\t\tif (LAN && LAN.split) {\n\t\t\tif (self.L != LAN) {\n\t\t\t\tself.K = '*';\n\t\t\t\tself.V = 'Jf';\n\t\t\t\tself.D = {\n\t\t\t\t\t'*': {\n\t\t\t\t\t\t// '中文':\n\t\t\t\t\t\t// '中文词典':\n\t\t\t\t\t}\n\t\t\t\t};\n\t\t\t\ttranslateJSON = self.D;\n\n\t\t\t\tvar dblans = translateJSON.$ || [],\n\t\t\t\t\tdblansMap = {},\n\t\t\t\t\tlanKeys = LAN.split(',');\n\t\t\t\tlanIndexArr = self.M = [];\n\t\t\t\tfor(i = dblans.length; i--;) dblansMap[dblans[i]] = i;\n\t\t\t\tfor(i = lanKeys.length; i--;) {\n\t\t\t\t\tlanIndex = dblansMap[lanKeys[i]];\n\t\t\t\t\tif (lanIndex || lanIndex === 0) lanIndexArr.push(lanIndex);\n\t\t\t\t}\n\t\t\t\tself.L = LAN;\n\t\t\t}\n\n\t\t\tlanIndexArr = self.M;\n\t\t\ttranslateJSON = self.D;\n\t\t\tvar _getVaule = function(subtype) {\n\t\t\t\ttranslateValues = translateJSON[subtype] && translateJSON[subtype][msg];\n\t\t\t\tif (translateValues) {\n\t\t\t\t\tmsgResult = translateValues[lanIndex];\n\t\t\t\t\tif (typeof msgResult == 'number') msgResult = translateValues[msgResult];\n\t\t\t\t}\n\t\t\t};\n\t\t\tfor(i = lanIndexArr.length; !msgResult && i--;) {\n\t\t\t\tlanIndex = lanIndexArr[i];\n\t\t\t\tif (subtype) _getVaule(subtype);\n\t\t\t\tif (!msgResult) _getVaule('*');\n\t\t\t}\n\n\t\t\tif (msgResult) msg = msgResult;\n\t\t}\n\n\t\tmsg += '';\n\t\tif (!tpldata.length || msg.indexOf('%') == -1) return msg;\n\n\t\treturn msg.replace(/%s|%p|%\\{.+?\\}/g, function() {\n\t\t\tvar newVal = tpldata[replace_index++];\n\t\t\treturn newVal === undefined ? '' : newVal;\n\t\t});\n\t}\n\t/* eslint-enable */\n\n\n\n\tvar val = I18N('中文');\n\tconsole.log(\"日志不翻译\");\n\ttalkme(I18N('中文词典'));\n}",
+			"code": "{\n\n\n\t/* eslint-disable */\n\tfunction I18N(msg, tpldata, subkey)\n\t{\n\t\tif (!msg) return msg === undefined || msg === null ? '' : '' + msg;\n\n\t\tvar self = I18N,\n\t\t\tdata = self.$ || (self.$ = {}),\n\t\t\ttranslateJSON,\n\t\t\treplace_index = 0,\n\t\t\tlanIndexArr, i, lanIndex, msgResult, translateValues,\n\t\t\tLAN = (function(cache) {\n\t\t\t\tif (!cache.global) {\n\t\t\t\t\tcache.global = (typeof window == 'object' && window)\n\t\t\t\t\t\t|| (typeof global == 'object' && global)\n\t\t\t\t\t\t|| {};\n\t\t\t\t}\n\t\t\n\t\t\t\treturn cache.global.__i18n_lan__;\n\t\t\t})(data);\n\n\t\tif (!tpldata || !tpldata.join) {\n\t\t\tsubkey = tpldata;\n\t\t\ttpldata = [];\n\t\t}\n\n\t\tif (LAN && LAN.split) {\n\t\t\tif (self.L != LAN) {\n\t\t\t\tself.K = '*';\n\t\t\t\tself.V = 'Jf';\n\t\t\t\tself.D = {\n\t\t\t\t\t'*': {\n\t\t\t\t\t\t// '中文':\n\t\t\t\t\t\t// '中文词典':\n\t\t\t\t\t}\n\t\t\t\t};\n\t\t\t\ttranslateJSON = self.D;\n\n\t\t\t\tvar dblans = translateJSON.$ || [],\n\t\t\t\t\tdblansMap = {},\n\t\t\t\t\tlanKeys = LAN.split(',');\n\t\t\t\tlanIndexArr = self.M = [];\n\t\t\t\tfor(i = dblans.length; i--;) dblansMap[dblans[i]] = i;\n\t\t\t\tfor(i = lanKeys.length; i--;) {\n\t\t\t\t\tlanIndex = dblansMap[lanKeys[i]];\n\t\t\t\t\tif (lanIndex || lanIndex === 0) lanIndexArr.push(lanIndex);\n\t\t\t\t}\n\t\t\t\tself.L = LAN;\n\t\t\t}\n\n\t\t\tlanIndexArr = self.M;\n\t\t\ttranslateJSON = self.D;\n\t\t\tvar _getVaule = function(subkey) {\n\t\t\t\ttranslateValues = translateJSON[subkey] && translateJSON[subkey][msg];\n\t\t\t\tif (translateValues) {\n\t\t\t\t\tmsgResult = translateValues[lanIndex];\n\t\t\t\t\tif (typeof msgResult == 'number') msgResult = translateValues[msgResult];\n\t\t\t\t}\n\t\t\t};\n\t\t\tfor(i = lanIndexArr.length; !msgResult && i--;) {\n\t\t\t\tlanIndex = lanIndexArr[i];\n\t\t\t\tif (subkey) _getVaule(subkey);\n\t\t\t\tif (!msgResult) _getVaule('*');\n\t\t\t}\n\n\t\t\tif (msgResult) msg = msgResult;\n\t\t}\n\n\t\tmsg += '';\n\t\tif (!tpldata.length || msg.indexOf('%') == -1) return msg;\n\n\t\treturn msg.replace(/%s|%p|%\\{.+?\\}/g, function() {\n\t\t\tvar newVal = tpldata[replace_index++];\n\t\t\treturn newVal === undefined ? '' : newVal;\n\t\t});\n\t}\n\t/* eslint-enable */\n\n\n\n\tvar val = I18N('中文');\n\tconsole.log(\"日志不翻译\");\n\ttalkme(I18N('中文词典'));\n}",
 			"currentFileKey": "*",
 			"originalFileKeys": [],
 			"subScopeDatas": [],
@@ -14,7 +14,7 @@
 						"中文",
 						"中文词典"
 					],
-					"SUBTYPES": {}
+					"SUBKEYS": {}
 				},
 				"funcTranslateWords": {},
 				"usedTranslateWords": {}
@@ -25,7 +25,7 @@
 	"words": {
 		"codeTranslateWords": {
 			"DEFAULTS": [],
-			"SUBTYPES": {}
+			"SUBKEYS": {}
 		},
 		"funcTranslateWords": {},
 		"usedTranslateWords": {}

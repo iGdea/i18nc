@@ -29,7 +29,7 @@ exports._mergeData = _mergeData;
 function _mergeData(mainData)
 {
 	// 先用一个不规范的数据保存，最后要把语言作为一级key处理
-	var result = {DEFAULTS: {}, SUBTYPES: {}};
+	var result = {DEFAULTS: {}, SUBKEYS: {}};
 	var codeTranslateWords = mainData.codeTranslateWords || {};
 	var FILE_KEY = mainData.FILE_KEY;
 	var dbTranslateWords = mainData.dbTranslateWords && mainData.dbTranslateWords.data || {};
@@ -50,12 +50,12 @@ function _mergeData(mainData)
 		result.DEFAULTS[word] = info.result;
 	});
 
-	_.each(codeTranslateWords.SUBTYPES, function(words, subtype)
+	_.each(codeTranslateWords.SUBKEYS, function(words, subkey)
 	{
-		var subresult = result.SUBTYPES[subtype] = {};
+		var subresult = result.SUBKEYS[subkey] = {};
 		_.each(_.uniq(words), function(word)
 		{
-			var info = _getOneTypeListData('SUBTYPES', word, typeData, onlyTheseLanguages, subtype);
+			var info = _getOneTypeListData('SUBKEYS', word, typeData, onlyTheseLanguages, subkey);
 			subresult[word] = info.result;
 		});
 	});
@@ -64,14 +64,14 @@ function _mergeData(mainData)
 }
 
 /**
- * 针对单个type(DEFAULTS/SUBTYPES)，单个单词的 所有语言
+ * 针对单个type(DEFAULTS/SUBKEYS)，单个单词的 所有语言
  * 返回其翻译结果的数组
  *
  * 处理任务
  *     db下所有文件和指定文件的两份数据融合
  *     和函数中分析出来的数据融合
  */
-function _getOneTypeListData(maintype, word, typeData, onlyTheseLanguages, subtype)
+function _getOneTypeListData(maintype, word, typeData, onlyTheseLanguages, subkey)
 {
 	var lans = {};
 	var results = {};
@@ -87,7 +87,7 @@ function _getOneTypeListData(maintype, word, typeData, onlyTheseLanguages, subty
 			if (onlyTheseLanguages && onlyTheseLanguages.indexOf(lan) == -1) return;
 
 			var subLanInfo = lanInfo[maintype];
-			if (subtype && subLanInfo) subLanInfo = subLanInfo[subtype];
+			if (subkey && subLanInfo) subLanInfo = subLanInfo[subkey];
 			var translateWord = subLanInfo && subLanInfo[word];
 
 			if (translateWord || translateWord === '')
@@ -100,7 +100,7 @@ function _getOneTypeListData(maintype, word, typeData, onlyTheseLanguages, subty
 
 
 	var lans = Object.keys(lans);
-	debug('word:%s, subtype:%s lans:%o, results:%o', word, subtype, lans, results);
+	debug('word:%s, subkey:%s lans:%o, results:%o', word, subkey, lans, results);
 
 	// 对获取到的所有数据进行合并操作
 	var result = {};
@@ -138,15 +138,15 @@ function _toTranslateJSON(data)
 		});
 	});
 
-	_.each(data.SUBTYPES, function(item, subtype)
+	_.each(data.SUBKEYS, function(item, subkey)
 	{
 		_.each(item, function(lanData, word)
 		{
 			_.each(lanData, function(translateData, lan)
 			{
 				var lanObj = result[lan] || (result[lan] = {});
-				var subtypeObj = lanObj.SUBTYPES || (lanObj.SUBTYPES = {});
-				var wordObj = subtypeObj[subtype] || (subtypeObj[subtype] = {});
+				var subkeyObj = lanObj.SUBKEYS || (lanObj.SUBKEYS = {});
+				var wordObj = subkeyObj[subkey] || (subkeyObj[subkey] = {});
 
 				wordObj[word] = translateData;
 			});

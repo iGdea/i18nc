@@ -70,10 +70,10 @@ function _oneRef_msgid_msgstr(ref, msgid, msgstr)
 	var extendData2 = {};
 	switch(info.type)
 	{
-		case refsUtils.TYPES.SUBTYPE:
+		case refsUtils.TYPES.SUBKEY:
 			extendData1[msgid] = msgstr;
-			extendData2[info.subtype] = extendData1;
-			extendData2 = {SUBTYPES: extendData2};
+			extendData2[info.subkey] = extendData1;
+			extendData2 = {SUBKEYS: extendData2};
 			break;
 
 		case refsUtils.TYPES.SIMPLE_LINE:
@@ -83,10 +83,10 @@ function _oneRef_msgid_msgstr(ref, msgid, msgstr)
 			var translateData = refsUtils.mixMsgsByJoinIndexs(info);
 			_.each(translateData, function(data, subkey)
 			{
-				var subtype = subkey == '*' ? info.subtype : info.subtype+'@'+subkey;
-				extendData1[subtype] = data;
+				var subkey = subkey == '*' ? info.subkey : info.subkey+'@'+subkey;
+				extendData1[subkey] = data;
 			});
-			extendData2.SUBTYPES = extendData1;
+			extendData2.SUBKEYS = extendData1;
 			break;
 
 

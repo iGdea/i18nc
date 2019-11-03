@@ -1,7 +1,7 @@
 {
 	"codeTranslateWords": {
 		"DEFAULTS": [],
-		"SUBTYPES": {}
+		"SUBKEYS": {}
 	},
 	"currentFileKey": "*",
 	"funcTranslateWords": {},
@@ -15,7 +15,7 @@
 					"中文",
 					"这个中文还在skip_scan@I18N2"
 				],
-				"SUBTYPES": {}
+				"SUBKEYS": {}
 			},
 			"currentFileKey": "*",
 			"funcTranslateWords": {},

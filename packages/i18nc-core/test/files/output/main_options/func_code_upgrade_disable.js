@@ -35,13 +35,13 @@ module.exports = function code()
 	}
 
 	I18N('中文I18N');
-	I18N('中文I18N subtype', 'subtype');
+	I18N('中文I18N subkey', 'subkey');
 
 	// I18N
 	function I18N(msg){return msg}
 
-	result += I18N('I18N(中文)', 'subtype');
-	result += I18N('I18N(中文)', 'subtype2');
+	result += I18N('I18N(中文)', 'subkey');
+	result += I18N('I18N(中文)', 'subkey2');
 	result += I18N('简体');
 
 	return result;

@@ -13,55 +13,55 @@ describe('#refs_utils', function()
 			expect(refsUtils.genOnlyFileKey()).to.be('0');
 		});
 
-		it('#genSimpleSubtype', function()
+		it('#genSimpleSubkey', function()
 		{
-			expect(refsUtils.genSimpleSubtype('fileKey', 'subtype')).to.be('2,7,subtype,fileKey');
-			expect(refsUtils.genSimpleSubtype('fileKey')).to.be('2,,fileKey');
+			expect(refsUtils.genSimpleSubkey('fileKey', 'subkey')).to.be('2,7,subkey,fileKey');
+			expect(refsUtils.genSimpleSubkey('fileKey')).to.be('2,,fileKey');
 		});
 
-		it('#genSimpleLineSubtype', function()
+		it('#genSimpleLineSubkey', function()
 		{
-			expect(refsUtils.genSimpleLineSubtype('fileKey', 'subtype', ['msg1']))
-				.to.be('1,0,7,subtype,fileKey');
-			expect(refsUtils.genSimpleLineSubtype('', 'subtype', ['msg1']))
-				.to.be('1,0,7,subtype');
-			expect(refsUtils.genSimpleLineSubtype('fileKey', 'subtype', ['msg1', 'msg2']))
-				.to.be('1,1,0,7,subtype,fileKey');
-			expect(refsUtils.genSimpleLineSubtype('fileKey', 'subtype', ['msg1', 'msg2%pMsg3']))
-				.to.be('1,1,0,7,subtype,fileKey');
-			expect(refsUtils.genSimpleLineSubtype('fileKey', 'subtype', ['msg1%pMsg2', 'msg3']))
-				.to.be('1,1,1,7,subtype,fileKey');
-			expect(refsUtils.genSimpleLineSubtype('fileKey', 'subtype', ['msg1%pMsg2', 'msg3%pMsg4']))
-				.to.be('1,1,1,7,subtype,fileKey');
-			expect(refsUtils.genSimpleLineSubtype('fileKey', 'subtype', ['msg1%pMsg2', 'msg3%pMsg4', 'msg5']))
-				.to.be('1,2,1,3,7,subtype,fileKey');
+			expect(refsUtils.genSimpleLineSubkey('fileKey', 'subkey', ['msg1']))
+				.to.be('1,0,7,subkey,fileKey');
+			expect(refsUtils.genSimpleLineSubkey('', 'subkey', ['msg1']))
+				.to.be('1,0,7,subkey');
+			expect(refsUtils.genSimpleLineSubkey('fileKey', 'subkey', ['msg1', 'msg2']))
+				.to.be('1,1,0,7,subkey,fileKey');
+			expect(refsUtils.genSimpleLineSubkey('fileKey', 'subkey', ['msg1', 'msg2%pMsg3']))
+				.to.be('1,1,0,7,subkey,fileKey');
+			expect(refsUtils.genSimpleLineSubkey('fileKey', 'subkey', ['msg1%pMsg2', 'msg3']))
+				.to.be('1,1,1,7,subkey,fileKey');
+			expect(refsUtils.genSimpleLineSubkey('fileKey', 'subkey', ['msg1%pMsg2', 'msg3%pMsg4']))
+				.to.be('1,1,1,7,subkey,fileKey');
+			expect(refsUtils.genSimpleLineSubkey('fileKey', 'subkey', ['msg1%pMsg2', 'msg3%pMsg4', 'msg5']))
+				.to.be('1,2,1,3,7,subkey,fileKey');
 		});
 
-		it('#genLineSubtype', function()
+		it('#genLineSubkey', function()
 		{
-			expect(refsUtils.genLineSubtype('fileKey', 'subtype', [{msg: 'msg1'}]))
-				.to.be('3,0,,7,subtype,fileKey');
-			expect(refsUtils.genLineSubtype('', 'subtype', [{msg: 'msg1'}]))
-				.to.be('3,0,,7,subtype');
-			expect(refsUtils.genLineSubtype('fileKey', 'subtype', [{msg: 'msg1'}, {msg: 'msg2'}]))
-				.to.be('3,1,0,,,7,subtype,fileKey');
-			expect(refsUtils.genLineSubtype('fileKey', 'subtype', [{msg: 'msg1'}, {msg: 'msg2%pMsg3'}]))
-				.to.be('3,1,0,,,7,subtype,fileKey');
-			expect(refsUtils.genLineSubtype('fileKey', 'subtype', [{msg: 'msg1%pMsg2'}, {msg: 'msg3'}]))
-				.to.be('3,1,1,,,7,subtype,fileKey');
-			expect(refsUtils.genLineSubtype('fileKey', 'subtype', [{msg: 'msg1%pMsg2'}, {msg: 'msg3%pMsg4'}]))
-				.to.be('3,1,1,,,7,subtype,fileKey');
-			expect(refsUtils.genLineSubtype('fileKey', 'subtype', [{msg: 'msg1%pMsg2'}, {msg: 'msg3%pMsg4'}, {msg: 'msg5'}]))
-				.to.be('3,2,1,3,,,,7,subtype,fileKey');
+			expect(refsUtils.genLineSubkey('fileKey', 'subkey', [{msg: 'msg1'}]))
+				.to.be('3,0,,7,subkey,fileKey');
+			expect(refsUtils.genLineSubkey('', 'subkey', [{msg: 'msg1'}]))
+				.to.be('3,0,,7,subkey');
+			expect(refsUtils.genLineSubkey('fileKey', 'subkey', [{msg: 'msg1'}, {msg: 'msg2'}]))
+				.to.be('3,1,0,,,7,subkey,fileKey');
+			expect(refsUtils.genLineSubkey('fileKey', 'subkey', [{msg: 'msg1'}, {msg: 'msg2%pMsg3'}]))
+				.to.be('3,1,0,,,7,subkey,fileKey');
+			expect(refsUtils.genLineSubkey('fileKey', 'subkey', [{msg: 'msg1%pMsg2'}, {msg: 'msg3'}]))
+				.to.be('3,1,1,,,7,subkey,fileKey');
+			expect(refsUtils.genLineSubkey('fileKey', 'subkey', [{msg: 'msg1%pMsg2'}, {msg: 'msg3%pMsg4'}]))
+				.to.be('3,1,1,,,7,subkey,fileKey');
+			expect(refsUtils.genLineSubkey('fileKey', 'subkey', [{msg: 'msg1%pMsg2'}, {msg: 'msg3%pMsg4'}, {msg: 'msg5'}]))
+				.to.be('3,2,1,3,,,,7,subkey,fileKey');
 
-			expect(refsUtils.genLineSubtype('', 'subtype', [{msg: 'msg1', subkey: 'sub'}]))
-				.to.be('3,0,3,sub,7,subtype');
+			expect(refsUtils.genLineSubkey('', 'subkey', [{msg: 'msg1', subkey: 'sub'}]))
+				.to.be('3,0,3,sub,7,subkey');
 		});
 
 		it('#error', function()
 		{
-			expect(function(){refsUtils.genLineSubtype(null, 'subtype')}).to.throwError(/Error Input/);
-			expect(function(){refsUtils.genLineSubtype(null, 'subtype', [])}).to.throwError(/Error Input/);
+			expect(function(){refsUtils.genLineSubkey(null, 'subkey')}).to.throwError(/Error Input/);
+			expect(function(){refsUtils.genLineSubkey(null, 'subkey', [])}).to.throwError(/Error Input/);
 		});
 	});
 
@@ -96,46 +96,46 @@ describe('#refs_utils', function()
 		{
 			it('#base', function()
 			{
-				expect(refsUtils.parse('1,0,7,subtype,fileKey1,fileKey2')).to.eql(
+				expect(refsUtils.parse('1,0,7,subkey,fileKey1,fileKey2')).to.eql(
 					{
 						type: 1,
 						fileKey: 'fileKey1,fileKey2',
-						subtype: 'subtype',
+						subkey: 'subkey',
 						joinIndexs: []
 					});
 			});
 
 			it('#joinIndexs', function()
 			{
-				expect(refsUtils.parse('1,1,0,7,subtype,fileKey')).to.eql(
+				expect(refsUtils.parse('1,1,0,7,subkey,fileKey')).to.eql(
 					{
 						type: 1,
 						fileKey: 'fileKey',
-						subtype: 'subtype',
+						subkey: 'subkey',
 						joinIndexs: [0]
 					});
 
-				expect(refsUtils.parse('1,2,0,1,7,subtype,fileKey')).to.eql(
+				expect(refsUtils.parse('1,2,0,1,7,subkey,fileKey')).to.eql(
 					{
 						type: 1,
 						fileKey: 'fileKey',
-						subtype: 'subtype',
+						subkey: 'subkey',
 						joinIndexs: [0, 1]
 					});
 
-				expect(refsUtils.parse('1,1,1,7,subtype,fileKey')).to.eql(
+				expect(refsUtils.parse('1,1,1,7,subkey,fileKey')).to.eql(
 					{
 						type: 1,
 						fileKey: 'fileKey',
-						subtype: 'subtype',
+						subkey: 'subkey',
 						joinIndexs: [1]
 					});
 
-				expect(refsUtils.parse('1,2,1,2,7,subtype,fileKey')).to.eql(
+				expect(refsUtils.parse('1,2,1,2,7,subkey,fileKey')).to.eql(
 					{
 						type: 1,
 						fileKey: 'fileKey',
-						subtype: 'subtype',
+						subkey: 'subkey',
 						joinIndexs: [1, 2]
 					});
 			});
@@ -149,43 +149,43 @@ describe('#refs_utils', function()
 					{
 						type: 2,
 						fileKey: '',
-						subtype: ''
+						subkey: ''
 					});
 				expect(refsUtils.parse('2,0')).to.eql(
 					{
 						type: 2,
 						fileKey: '',
-						subtype: ''
+						subkey: ''
 					});
 				expect(refsUtils.parse('2,0,')).to.eql(
 					{
 						type: 2,
 						fileKey: '',
-						subtype: ''
+						subkey: ''
 					});
 				expect(refsUtils.parse('2,0,fileKey')).to.eql(
 					{
 						type: 2,
 						fileKey: 'fileKey',
-						subtype: ''
+						subkey: ''
 					});
-				expect(refsUtils.parse('2,7,subtype,')).to.eql(
+				expect(refsUtils.parse('2,7,subkey,')).to.eql(
 					{
 						type: 2,
 						fileKey: '',
-						subtype: 'subtype'
+						subkey: 'subkey'
 					});
-				expect(refsUtils.parse('2,7,subtype,fileKey')).to.eql(
+				expect(refsUtils.parse('2,7,subkey,fileKey')).to.eql(
 					{
 						type: 2,
 						fileKey: 'fileKey',
-						subtype: 'subtype'
+						subkey: 'subkey'
 					});
-				expect(refsUtils.parse('2,7,subtype,fileKey1,fileKey2')).to.eql(
+				expect(refsUtils.parse('2,7,subkey,fileKey1,fileKey2')).to.eql(
 					{
 						type: 2,
 						fileKey: 'fileKey1,fileKey2',
-						subtype: 'subtype'
+						subkey: 'subkey'
 					});
 			});
 		});
@@ -194,11 +194,11 @@ describe('#refs_utils', function()
 		{
 			it('#base', function()
 			{
-				expect(refsUtils.parse('3,0,,7,subtype,fileKey1,fileKey2')).to.eql(
+				expect(refsUtils.parse('3,0,,7,subkey,fileKey1,fileKey2')).to.eql(
 					{
 						type: 3,
 						fileKey: 'fileKey1,fileKey2',
-						subtype: 'subtype',
+						subkey: 'subkey',
 						joinIndexs: [],
 						subkeys: {}
 					});
@@ -206,38 +206,38 @@ describe('#refs_utils', function()
 
 			it('#joinIndexs', function()
 			{
-				expect(refsUtils.parse('3,1,0,,,7,subtype,fileKey')).to.eql(
+				expect(refsUtils.parse('3,1,0,,,7,subkey,fileKey')).to.eql(
 					{
 						type: 3,
 						fileKey: 'fileKey',
-						subtype: 'subtype',
+						subkey: 'subkey',
 						joinIndexs: [0],
 						subkeys: {}
 					});
 
-				expect(refsUtils.parse('3,2,0,1,,,,7,subtype,fileKey')).to.eql(
+				expect(refsUtils.parse('3,2,0,1,,,,7,subkey,fileKey')).to.eql(
 					{
 						type: 3,
 						fileKey: 'fileKey',
-						subtype: 'subtype',
+						subkey: 'subkey',
 						joinIndexs: [0, 1],
 						subkeys: {}
 					});
 
-				expect(refsUtils.parse('3,1,1,,,7,subtype,fileKey')).to.eql(
+				expect(refsUtils.parse('3,1,1,,,7,subkey,fileKey')).to.eql(
 					{
 						type: 3,
 						fileKey: 'fileKey',
-						subtype: 'subtype',
+						subkey: 'subkey',
 						joinIndexs: [1],
 						subkeys: {}
 					});
 
-				expect(refsUtils.parse('3,2,1,2,,,2,ab,7,subtype,fileKey')).to.eql(
+				expect(refsUtils.parse('3,2,1,2,,,2,ab,7,subkey,fileKey')).to.eql(
 					{
 						type: 3,
 						fileKey: 'fileKey',
-						subtype: 'subtype',
+						subkey: 'subkey',
 						joinIndexs: [1, 2],
 						subkeys:
 						{
@@ -267,12 +267,12 @@ describe('#refs_utils', function()
 				expHanlder('3,1,-1', /JoinIndex Is Wrong/);
 			});
 
-			it('#subtype', function()
+			it('#subkey', function()
 			{
-				expHanlder('3,0,a,subtype', /String Length Is Wrong/);
-				expHanlder('3,0,-1,subtype', /String Length Is Wrong/);
-				expHanlder('3,0,6,subtype', /String Length Is Wrong/);
-				expHanlder('3,0,8,subtype', /String Length Is Wrong/);
+				expHanlder('3,0,a,subkey', /String Length Is Wrong/);
+				expHanlder('3,0,-1,subkey', /String Length Is Wrong/);
+				expHanlder('3,0,6,subkey', /String Length Is Wrong/);
+				expHanlder('3,0,8,subkey', /String Length Is Wrong/);
 			});
 
 			it('#fileKey', function()

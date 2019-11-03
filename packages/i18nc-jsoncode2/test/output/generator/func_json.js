@@ -16,9 +16,9 @@ var json = {
 			1
 		]
 	},
-	'subtype': {
+	'subkey': {
 		'简体': [
-			'simplified subtype',
+			'simplified subkey',
 			'簡體'
 		]
 	}

@@ -37,14 +37,14 @@ function translateAst2JSON(ast)
 					debug('TranslateData JSON Key <%s> end, lan:%', key, lan);
 					break;
 
-				case 'SUBTYPES':
-					var SUBTYPES_data = lan_data.SUBTYPES = {};
+				case 'SUBKEYS':
+					var SUBKEYS_data = lan_data.SUBKEYS = {};
 
-					lan_ast.value.properties.forEach(function(subtype_ast)
+					lan_ast.value.properties.forEach(function(subkey_ast)
 					{
-						var subkey = astUtil.ast2constVal(subtype_ast.key);
+						var subkey = astUtil.ast2constVal(subkey_ast.key);
 						debug('TranslateData JSON Key <%s> begin, lan:%, subkey:%s', key, lan, subkey);
-						SUBTYPES_data[subkey] = _wordAst2json(subtype_ast.value);
+						SUBKEYS_data[subkey] = _wordAst2json(subkey_ast.value);
 						debug('TranslateData JSON Key <%s> begin, lan:%, subkey:%s', key, lan, subkey);
 					});
 					break;

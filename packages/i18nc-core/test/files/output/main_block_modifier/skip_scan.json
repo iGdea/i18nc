@@ -1,7 +1,7 @@
 {
 	"codeTranslateWords": {
 		"DEFAULTS": [],
-		"SUBTYPES": {}
+		"SUBKEYS": {}
 	},
 	"currentFileKey": "*",
 	"funcTranslateWords": {},
@@ -14,7 +14,7 @@
 				"DEFAULTS": [
 					"中文"
 				],
-				"SUBTYPES": {}
+				"SUBKEYS": {}
 			},
 			"currentFileKey": "*",
 			"funcTranslateWords": {},

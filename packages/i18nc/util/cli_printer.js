@@ -68,7 +68,7 @@ function printRefs(info, paddingLeft)
 	[
 		[exports.colors.gray('type'), ''+info.type],
 		[exports.colors.gray('fileKey'), info.fileKey || emptySymbol],
-		[exports.colors.gray('subtype'), info.subtype || emptySymbol],
+		[exports.colors.gray('subkey'), info.subkey || emptySymbol],
 		[exports.colors.gray('joinIndexs'), info.joinIndexs && info.joinIndexs.join(',') || emptySymbol]
 	];
 

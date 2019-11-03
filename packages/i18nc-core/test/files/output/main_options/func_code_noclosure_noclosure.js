@@ -4,7 +4,7 @@ module.exports = function textWrapCode(){
 
 
 /* eslint-disable */
-function I18N(msg, tpldata, subtype)
+function I18N(msg, tpldata, subkey)
 {
 	if (!msg) return msg === undefined || msg === null ? '' : '' + msg;
 
@@ -16,12 +16,12 @@ function I18N(msg, tpldata, subtype)
 		lanIndexArr, i, lanIndex, msgResult, translateValues;
 
 	if (!tpldata || !tpldata.join) {
-		subtype = tpldata;
+		subkey = tpldata;
 		tpldata = [];
 	}
-	if (subtype && typeof subtype == 'object') {
-		options = subtype;
-		subtype = options.subtype;
+	if (subkey && typeof subkey == 'object') {
+		options = subkey;
+		subkey = options.subkey;
 	}
 
 	var LAN = options.language || (function(cache) {
@@ -59,8 +59,8 @@ function I18N(msg, tpldata, subtype)
 
 		lanIndexArr = self.M;
 		translateJSON = self.D;
-		var _getVaule = function(subtype) {
-			translateValues = translateJSON[subtype] && translateJSON[subtype][msg];
+		var _getVaule = function(subkey) {
+			translateValues = translateJSON[subkey] && translateJSON[subkey][msg];
 			if (translateValues) {
 				msgResult = translateValues[lanIndex];
 				if (typeof msgResult == 'number') msgResult = translateValues[msgResult];
@@ -68,7 +68,7 @@ function I18N(msg, tpldata, subtype)
 		};
 		for(i = lanIndexArr.length; !msgResult && i--;) {
 			lanIndex = lanIndexArr[i];
-			if (subtype) _getVaule(subtype);
+			if (subkey) _getVaule(subkey);
 			if (!msgResult) _getVaule('*');
 		}
 

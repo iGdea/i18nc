@@ -23,9 +23,9 @@ function toTranslateJSON(data)
 	var LANGS = _getlanArr(data);
 	if (LANGS.length) result.$ = LANGS;
 
-	function _addkey(subtype, srcWord, targetWord, langIndex)
+	function _addkey(subkey, srcWord, targetWord, langIndex)
 	{
-		var obj = result[subtype] || (result[subtype] = {});
+		var obj = result[subkey] || (result[subkey] = {});
 		var arr = obj[srcWord];
 		if (arr)
 		{
@@ -49,18 +49,18 @@ function toTranslateJSON(data)
 			_addkey('*', srcWord, targetWord, langIndex);
 		});
 
-		_.each(lang_data.SUBTYPES, function(item, subtype)
+		_.each(lang_data.SUBKEYS, function(item, subkey)
 		{
-			if (subtype == '*')
+			if (subkey == '*')
 				throw new Error('`*` IS SYSTEM RESERVED FIELD');
-			else if (subtype == '$')
+			else if (subkey == '$')
 				throw new Error('`$` IS SYSTEM RESERVED FIELD');
-			else if ((''+subtype)[0] == '$')
+			else if ((''+subkey)[0] == '$')
 				throw new Error('`$...` ARE SYSTEM RESERVED FIELD');
 
 			_.each(item, function(targetWord, srcWord)
 			{
-				_addkey(subtype, srcWord, targetWord, langIndex);
+				_addkey(subkey, srcWord, targetWord, langIndex);
 			});
 		});
 	});
@@ -85,13 +85,13 @@ function fillNoUsedCodeTranslateWords(translateDataJSON, codeTranslateWords)
 		});
 	}
 
-	_.each(codeTranslateWords.SUBTYPES, function(subtype_words, subtype)
+	_.each(codeTranslateWords.SUBKEYS, function(subkey_words, subkey)
 	{
-		var SUBTYPE_WORDS = _.uniq(subtype_words);
-		if (!SUBTYPE_WORDS.length) return;
+		var SUBKEY_WORDS = _.uniq(subkey_words);
+		if (!SUBKEY_WORDS.length) return;
 
-		var result = translateDataJSON[subtype] || (translateDataJSON[subtype] = {});
-		_.each(SUBTYPE_WORDS, function(word)
+		var result = translateDataJSON[subkey] || (translateDataJSON[subkey] = {});
+		_.each(SUBKEY_WORDS, function(word)
 		{
 			if (!result[word]) result[word] = null;
 		});
@@ -237,7 +237,7 @@ function _getlanArr(translateData)
 {
 	return _.map(translateData, function(obj, lang)
 		{
-			var subtypeWordsLen = _(obj.SUBTYPES)
+			var subkeyWordsLen = _(obj.SUBKEYS)
 				.map(function(obj)
 				{
 					return Object.keys(obj).length;
@@ -247,11 +247,11 @@ function _getlanArr(translateData)
 					return a + b;
 				});
 
-			debug('subtypeWordsLen:%s', subtypeWordsLen);
+			debug('subkeyWordsLen:%s', subkeyWordsLen);
 
 			return {
 				lang: lang,
-				words_len: _.keys(obj.DEFAULTS).length + (subtypeWordsLen || 0)
+				words_len: _.keys(obj.DEFAULTS).length + (subkeyWordsLen || 0)
 			};
 		})
 		.sort(function(a, b)

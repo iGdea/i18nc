@@ -8,19 +8,19 @@ module.exports = function $handlerName(msg, args, translateJSON, fileKey, data, 
 
 	var self = handler,
 		tpldata = args[1],
-		subtype = args[2],
+		subkey = args[2],
 		replace_index = 0,
 		options = {},
-		lanArr, lanKeys, i, lanItem, translateMsg, subtypeJSON;
+		lanArr, lanKeys, i, lanItem, translateMsg, subkeyJSON;
 
 	if (!tpldata || !tpldata.join)
 	{
-		subtype = tpldata;
+		subkey = tpldata;
 		tpldata = [];
 	}
-	if (subtype && typeof subtype == 'object') {
-		options = subtype;
-		subtype = options.subtype;
+	if (subkey && typeof subkey == 'object') {
+		options = subkey;
+		subkey = options.subkey;
 	}
 
 	var LAN = options.language || $I18N_getLanguageCode(data);
@@ -44,16 +44,16 @@ module.exports = function $handlerName(msg, args, translateJSON, fileKey, data, 
 		for(i = lanArr.length; !translateMsg && i--;)
 		{
 			lanItem = lanArr[i];
-			if (subtype)
+			if (subkey)
 			{
-				subtypeJSON = lanItem.SUBTYPES;
-				subtypeJSON = subtypeJSON && subtypeJSON[subtype];
-				translateMsg = subtypeJSON && subtypeJSON[msg];
+				subkeyJSON = lanItem.SUBKEYS;
+				subkeyJSON = subkeyJSON && subkeyJSON[subkey];
+				translateMsg = subkeyJSON && subkeyJSON[msg];
 			}
 			if (!translateMsg)
 			{
-				subtypeJSON = lanItem.DEFAULTS;
-				translateMsg = subtypeJSON && subtypeJSON[msg];
+				subkeyJSON = lanItem.DEFAULTS;
+				translateMsg = subkeyJSON && subkeyJSON[msg];
 			}
 		}
 

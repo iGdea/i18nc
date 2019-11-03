@@ -25,19 +25,19 @@
 	
 		var self = handler,
 			tpldata = args[1],
-			subtype = args[2],
+			subkey = args[2],
 			replace_index = 0,
 			options = {},
-			lanArr, lanKeys, i, lanItem, translateMsg, subtypeJSON;
+			lanArr, lanKeys, i, lanItem, translateMsg, subkeyJSON;
 	
 		if (!tpldata || !tpldata.join)
 		{
-			subtype = tpldata;
+			subkey = tpldata;
 			tpldata = [];
 		}
-		if (subtype && typeof subtype == 'object') {
-			options = subtype;
-			subtype = options.subtype;
+		if (subkey && typeof subkey == 'object') {
+			options = subkey;
+			subkey = options.subkey;
 		}
 	
 		var LAN = options.language || $I18N_getLanguageCode(data);
@@ -61,16 +61,16 @@
 			for(i = lanArr.length; !translateMsg && i--;)
 			{
 				lanItem = lanArr[i];
-				if (subtype)
+				if (subkey)
 				{
-					subtypeJSON = lanItem.SUBTYPES;
-					subtypeJSON = subtypeJSON && subtypeJSON[subtype];
-					translateMsg = subtypeJSON && subtypeJSON[msg];
+					subkeyJSON = lanItem.SUBKEYS;
+					subkeyJSON = subkeyJSON && subkeyJSON[subkey];
+					translateMsg = subkeyJSON && subkeyJSON[msg];
 				}
 				if (!translateMsg)
 				{
-					subtypeJSON = lanItem.DEFAULTS;
-					translateMsg = subtypeJSON && subtypeJSON[msg];
+					subkeyJSON = lanItem.DEFAULTS;
+					translateMsg = subkeyJSON && subkeyJSON[msg];
 				}
 			}
 	
@@ -100,19 +100,19 @@
 	
 		var self = handler,
 			tpldata = args[1],
-			subtype = args[2],
+			subkey = args[2],
 			replace_index = 0,
 			options = {},
 			lanIndexArr, i, lanIndex, msgResult, translateValues;
 	
 		if (!tpldata || !tpldata.join)
 		{
-			subtype = tpldata;
+			subkey = tpldata;
 			tpldata = [];
 		}
-		if (subtype && typeof subtype == 'object') {
-			options = subtype;
-			subtype = options.subtype;
+		if (subkey && typeof subkey == 'object') {
+			options = subkey;
+			subkey = options.subkey;
 		}
 	
 		var LAN = options.language || $I18N_getLanguageCode(data);
@@ -139,9 +139,9 @@
 			}
 	
 			lanIndexArr = self.M;
-			var _getVaule = function(subtype)
+			var _getVaule = function(subkey)
 			{
-				translateValues = translateJSON[subtype] && translateJSON[subtype][msg];
+				translateValues = translateJSON[subkey] && translateJSON[subkey][msg];
 				if (translateValues)
 				{
 					msgResult = translateValues[lanIndex];
@@ -151,7 +151,7 @@
 			for(i = lanIndexArr.length; !msgResult && i--;)
 			{
 				lanIndex = lanIndexArr[i];
-				if (subtype) _getVaule(subtype);
+				if (subkey) _getVaule(subkey);
 				if (!msgResult) _getVaule('*');
 			}
 	

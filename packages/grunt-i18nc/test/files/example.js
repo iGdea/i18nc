@@ -8,8 +8,8 @@ module.exports = function code()
     // I18N
 	function I18N(){}
 
-    result += I18N('简体', 'subtype1');
-    result += I18N('简体', 'subtype2');
+    result += I18N('简体', 'subkey1');
+    result += I18N('简体', 'subkey2');
 
     return result;
 }

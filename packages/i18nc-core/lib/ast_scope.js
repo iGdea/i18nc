@@ -162,7 +162,7 @@ _.extend(ASTScope.prototype,
 			.forEach(function(argsInfo)
 			{
 				var translateWordAst = argsInfo.translateWordAst;
-				var subtypeAst = argsInfo.subtypeAst;
+				var subkeyAst = argsInfo.subkeyAst;
 
 				if (!translateWordAst || !translateWordAst.value) return;
 				if (translateWordAst.type != 'Literal')
@@ -179,11 +179,11 @@ _.extend(ASTScope.prototype,
 					return;
 				}
 
-				var subtype = subtypeAst && astUtil.ast2constVal(subtypeAst);
+				var subkey = subkeyAst && astUtil.ast2constVal(subkeyAst);
 
 
-				if (subtype)
-					allCodeTranslateWords.pushSubtype(subtype, translateWordAst);
+				if (subkey)
+					allCodeTranslateWords.pushSubkey(subkey, translateWordAst);
 				else
 					allCodeTranslateWords.pushWraped(translateWordAst);
 
@@ -199,8 +199,8 @@ _.extend(ASTScope.prototype,
 					aliasCodes = myCodeTranslateWords;
 				}
 
-				if (subtype)
-					aliasCodes.pushSubtype(subtype, translateWordAst);
+				if (subkey)
+					aliasCodes.pushSubkey(subkey, translateWordAst);
 				else
 					aliasCodes.pushWraped(translateWordAst);
 			});

@@ -131,8 +131,8 @@
 							"type": "Property",
 							"key": {
 								"type": "Literal",
-								"value": "SUBTYPES",
-								"raw": "\"SUBTYPES\""
+								"value": "SUBKEYS",
+								"raw": "\"SUBKEYS\""
 							},
 							"computed": false,
 							"value": {
@@ -142,8 +142,8 @@
 										"type": "Property",
 										"key": {
 											"type": "Literal",
-											"value": "subtype",
-											"raw": "\"subtype\""
+											"value": "subkey",
+											"raw": "\"subkey\""
 										},
 										"computed": false,
 										"value": {
@@ -159,8 +159,8 @@
 													"computed": false,
 													"value": {
 														"type": "Literal",
-														"value": "simplified subtype",
-														"raw": "\"simplified subtype\""
+														"value": "simplified subkey",
+														"raw": "\"simplified subkey\""
 													},
 													"kind": "init",
 													"method": false,
@@ -262,9 +262,9 @@
 				"%s美好%s生活": "%sgood%s life",
 				"%{中文}词典": "%{Chinese} dictionary"
 			},
-			"SUBTYPES": {
-				"subtype": {
-					"简体": "simplified subtype"
+			"SUBKEYS": {
+				"subkey": {
+					"简体": "simplified subkey"
 				}
 			}
 		},

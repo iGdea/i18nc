@@ -9,12 +9,12 @@
 					"简体": "zh-cn",
 					"词典": "dictionary"
 				},
-				"SUBTYPES": {
-					":subtype": {
+				"SUBKEYS": {
+					":subkey": {
 						"I18N(中文)": "I18N(zh)",
 						"I18N(中文2)": "I18N(zh2)"
 					},
-					"subtype": {
+					"subkey": {
 						"I18N(中文)": "I18N(zh)",
 						"I18N(中文2)": "I18N(zh2)"
 					}
@@ -23,11 +23,11 @@
 		},
 		"fileKey": {
 			"en-US": {
-				"SUBTYPES": {
-					":subtype": {
+				"SUBKEYS": {
+					":subkey": {
 						"I18N(中文)": "I18N(zh)"
 					},
-					":subtype@sub": {
+					":subkey@sub": {
 						"I18N(中文2)": "I18N(zh2)"
 					}
 				},
@@ -38,8 +38,8 @@
 		},
 		"fileKey1,fileKey2": {
 			"en-US": {
-				"SUBTYPES": {
-					"subtype": {
+				"SUBKEYS": {
+					"subkey": {
 						"I18N(中文)%pI18N(中文2)": "I18N(zh)%pI18N(zh2)"
 					}
 				}

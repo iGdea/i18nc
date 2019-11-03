@@ -8,15 +8,15 @@
                 "简体": "zh",
                 "简体1": "zh1"
             },
-            "SUBTYPES":
+            "SUBKEYS":
             {
-                "subtype1":
+                "subkey1":
                 {
-                    "简体": "zh subtype1"
+                    "简体": "zh subkey1"
                 },
-                "subtype2":
+                "subkey2":
                 {
-                    "简体": "zh subtype2"
+                    "简体": "zh subkey2"
                 }
             }
         }

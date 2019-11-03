@@ -3,7 +3,7 @@ module.exports = function code()
 
 
 	/* eslint-disable */
-	function I18N(msg, tpldata, subtype)
+	function I18N(msg, tpldata, subkey)
 	{
 		if (!msg) return msg === undefined || msg === null ? '' : '' + msg;
 
@@ -15,12 +15,12 @@ module.exports = function code()
 			lanIndexArr, i, lanIndex, msgResult, translateValues;
 
 		if (!tpldata || !tpldata.join) {
-			subtype = tpldata;
+			subkey = tpldata;
 			tpldata = [];
 		}
-		if (subtype && typeof subtype == 'object') {
-			options = subtype;
-			subtype = options.subtype;
+		if (subkey && typeof subkey == 'object') {
+			options = subkey;
+			subkey = options.subkey;
 		}
 
 		var LAN = options.language || (function(cache) {
@@ -58,8 +58,8 @@ module.exports = function code()
 
 			lanIndexArr = self.M;
 			translateJSON = self.D;
-			var _getVaule = function(subtype) {
-				translateValues = translateJSON[subtype] && translateJSON[subtype][msg];
+			var _getVaule = function(subkey) {
+				translateValues = translateJSON[subkey] && translateJSON[subkey][msg];
 				if (translateValues) {
 					msgResult = translateValues[lanIndex];
 					if (typeof msgResult == 'number') msgResult = translateValues[msgResult];
@@ -67,7 +67,7 @@ module.exports = function code()
 			};
 			for(i = lanIndexArr.length; !msgResult && i--;) {
 				lanIndex = lanIndexArr[i];
-				if (subtype) _getVaule(subtype);
+				if (subkey) _getVaule(subkey);
 				if (!msgResult) _getVaule('*');
 			}
 
@@ -97,7 +97,7 @@ module.exports = function code()
 
 
 		/* eslint-disable */
-		function I18N(msg, tpldata, subtype)
+		function I18N(msg, tpldata, subkey)
 		{
 			if (!msg) return msg === undefined || msg === null ? '' : '' + msg;
 
@@ -109,12 +109,12 @@ module.exports = function code()
 				lanIndexArr, i, lanIndex, msgResult, translateValues;
 
 			if (!tpldata || !tpldata.join) {
-				subtype = tpldata;
+				subkey = tpldata;
 				tpldata = [];
 			}
-			if (subtype && typeof subtype == 'object') {
-				options = subtype;
-				subtype = options.subtype;
+			if (subkey && typeof subkey == 'object') {
+				options = subkey;
+				subkey = options.subkey;
 			}
 
 			var LAN = options.language || (function(cache) {
@@ -152,8 +152,8 @@ module.exports = function code()
 
 				lanIndexArr = self.M;
 				translateJSON = self.D;
-				var _getVaule = function(subtype) {
-					translateValues = translateJSON[subtype] && translateJSON[subtype][msg];
+				var _getVaule = function(subkey) {
+					translateValues = translateJSON[subkey] && translateJSON[subkey][msg];
 					if (translateValues) {
 						msgResult = translateValues[lanIndex];
 						if (typeof msgResult == 'number') msgResult = translateValues[msgResult];
@@ -161,7 +161,7 @@ module.exports = function code()
 				};
 				for(i = lanIndexArr.length; !msgResult && i--;) {
 					lanIndex = lanIndexArr[i];
-					if (subtype) _getVaule(subtype);
+					if (subkey) _getVaule(subkey);
 					if (!msgResult) _getVaule('*');
 				}
 
@@ -192,7 +192,7 @@ module.exports = function code()
 
 
 		/* eslint-disable */
-		function I18N(msg, tpldata, subtype)
+		function I18N(msg, tpldata, subkey)
 		{
 			if (!msg) return msg === undefined || msg === null ? '' : '' + msg;
 
@@ -204,12 +204,12 @@ module.exports = function code()
 				lanIndexArr, i, lanIndex, msgResult, translateValues;
 
 			if (!tpldata || !tpldata.join) {
-				subtype = tpldata;
+				subkey = tpldata;
 				tpldata = [];
 			}
-			if (subtype && typeof subtype == 'object') {
-				options = subtype;
-				subtype = options.subtype;
+			if (subkey && typeof subkey == 'object') {
+				options = subkey;
+				subkey = options.subkey;
 			}
 
 			var LAN = options.language || (function(cache) {
@@ -247,8 +247,8 @@ module.exports = function code()
 
 				lanIndexArr = self.M;
 				translateJSON = self.D;
-				var _getVaule = function(subtype) {
-					translateValues = translateJSON[subtype] && translateJSON[subtype][msg];
+				var _getVaule = function(subkey) {
+					translateValues = translateJSON[subkey] && translateJSON[subkey][msg];
 					if (translateValues) {
 						msgResult = translateValues[lanIndex];
 						if (typeof msgResult == 'number') msgResult = translateValues[msgResult];
@@ -256,7 +256,7 @@ module.exports = function code()
 				};
 				for(i = lanIndexArr.length; !msgResult && i--;) {
 					lanIndex = lanIndexArr[i];
-					if (subtype) _getVaule(subtype);
+					if (subkey) _getVaule(subkey);
 					if (!msgResult) _getVaule('*');
 				}
 
@@ -288,7 +288,7 @@ module.exports = function code()
 
 
 		/* eslint-disable */
-		function I18N(msg, tpldata, subtype)
+		function I18N(msg, tpldata, subkey)
 		{
 			if (!msg) return msg === undefined || msg === null ? '' : '' + msg;
 
@@ -300,12 +300,12 @@ module.exports = function code()
 				lanIndexArr, i, lanIndex, msgResult, translateValues;
 
 			if (!tpldata || !tpldata.join) {
-				subtype = tpldata;
+				subkey = tpldata;
 				tpldata = [];
 			}
-			if (subtype && typeof subtype == 'object') {
-				options = subtype;
-				subtype = options.subtype;
+			if (subkey && typeof subkey == 'object') {
+				options = subkey;
+				subkey = options.subkey;
 			}
 
 			var LAN = options.language || (function(cache) {
@@ -343,8 +343,8 @@ module.exports = function code()
 
 				lanIndexArr = self.M;
 				translateJSON = self.D;
-				var _getVaule = function(subtype) {
-					translateValues = translateJSON[subtype] && translateJSON[subtype][msg];
+				var _getVaule = function(subkey) {
+					translateValues = translateJSON[subkey] && translateJSON[subkey][msg];
 					if (translateValues) {
 						msgResult = translateValues[lanIndex];
 						if (typeof msgResult == 'number') msgResult = translateValues[msgResult];
@@ -352,7 +352,7 @@ module.exports = function code()
 				};
 				for(i = lanIndexArr.length; !msgResult && i--;) {
 					lanIndex = lanIndexArr[i];
-					if (subtype) _getVaule(subtype);
+					if (subkey) _getVaule(subkey);
 					if (!msgResult) _getVaule('*');
 				}
 
@@ -386,7 +386,7 @@ module.exports = function code()
 
 
 		/* eslint-disable */
-		function I18N(msg, tpldata, subtype)
+		function I18N(msg, tpldata, subkey)
 		{
 			if (!msg) return msg === undefined || msg === null ? '' : '' + msg;
 
@@ -398,12 +398,12 @@ module.exports = function code()
 				lanIndexArr, i, lanIndex, msgResult, translateValues;
 
 			if (!tpldata || !tpldata.join) {
-				subtype = tpldata;
+				subkey = tpldata;
 				tpldata = [];
 			}
-			if (subtype && typeof subtype == 'object') {
-				options = subtype;
-				subtype = options.subtype;
+			if (subkey && typeof subkey == 'object') {
+				options = subkey;
+				subkey = options.subkey;
 			}
 
 			var LAN = options.language || (function(cache) {
@@ -442,8 +442,8 @@ module.exports = function code()
 
 				lanIndexArr = self.M;
 				translateJSON = self.D;
-				var _getVaule = function(subtype) {
-					translateValues = translateJSON[subtype] && translateJSON[subtype][msg];
+				var _getVaule = function(subkey) {
+					translateValues = translateJSON[subkey] && translateJSON[subkey][msg];
 					if (translateValues) {
 						msgResult = translateValues[lanIndex];
 						if (typeof msgResult == 'number') msgResult = translateValues[msgResult];
@@ -451,7 +451,7 @@ module.exports = function code()
 				};
 				for(i = lanIndexArr.length; !msgResult && i--;) {
 					lanIndex = lanIndexArr[i];
-					if (subtype) _getVaule(subtype);
+					if (subkey) _getVaule(subkey);
 					if (!msgResult) _getVaule('*');
 				}
 
@@ -487,7 +487,7 @@ module.exports = function code()
 	// 预先定义了I18N函数
 	function somehadler()
 	{
-		function I18N(msg, tpldata, subtype)
+		function I18N(msg, tpldata, subkey)
 		{
 			if (!msg) return msg === undefined || msg === null ? '' : '' + msg;
 		
@@ -499,12 +499,12 @@ module.exports = function code()
 				lanIndexArr, i, lanIndex, msgResult, translateValues;
 		
 			if (!tpldata || !tpldata.join) {
-				subtype = tpldata;
+				subkey = tpldata;
 				tpldata = [];
 			}
-			if (subtype && typeof subtype == 'object') {
-				options = subtype;
-				subtype = options.subtype;
+			if (subkey && typeof subkey == 'object') {
+				options = subkey;
+				subkey = options.subkey;
 			}
 		
 			var LAN = options.language || (function(cache) {
@@ -542,8 +542,8 @@ module.exports = function code()
 		
 				lanIndexArr = self.M;
 				translateJSON = self.D;
-				var _getVaule = function(subtype) {
-					translateValues = translateJSON[subtype] && translateJSON[subtype][msg];
+				var _getVaule = function(subkey) {
+					translateValues = translateJSON[subkey] && translateJSON[subkey][msg];
 					if (translateValues) {
 						msgResult = translateValues[lanIndex];
 						if (typeof msgResult == 'number') msgResult = translateValues[msgResult];
@@ -551,7 +551,7 @@ module.exports = function code()
 				};
 				for(i = lanIndexArr.length; !msgResult && i--;) {
 					lanIndex = lanIndexArr[i];
-					if (subtype) _getVaule(subtype);
+					if (subkey) _getVaule(subkey);
 					if (!msgResult) _getVaule('*');
 				}
 		

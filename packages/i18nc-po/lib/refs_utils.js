@@ -9,7 +9,7 @@ var TYPES = exports.TYPES =
 	BASE        : 0,
 	// 比line，少了subkey，生成的key更加简单些
 	SIMPLE_LINE : 1,
-	SUBTYPE     : 2,
+	SUBKEY     : 2,
 	LINE        : 3,
 }
 
@@ -21,12 +21,12 @@ function genOnlyFileKey(fileKey)
 	return ret.join(',');
 }
 
-exports.genSimpleSubtype = genSimpleSubtype;
-function genSimpleSubtype(fileKey, subtype)
+exports.genSimpleSubkey = genSimpleSubkey;
+function genSimpleSubkey(fileKey, subkey)
 {
-	var ret = [TYPES.SUBTYPE];
-	if (subtype)
-		ret.push(subtype.length, subtype);
+	var ret = [TYPES.SUBKEY];
+	if (subkey)
+		ret.push(subkey.length, subkey);
 	else
 		ret.push('');
 
@@ -34,10 +34,10 @@ function genSimpleSubtype(fileKey, subtype)
 	return ret.join(',');
 }
 
-exports.genLineSubtype = genLineSubtype;
-function genLineSubtype(fileKey, subtype, msgItems)
+exports.genLineSubkey = genLineSubkey;
+function genLineSubkey(fileKey, subkey, msgItems)
 {
-	if (!subtype || !msgItems || !msgItems.length) throw new Error('Error Input');
+	if (!subkey || !msgItems || !msgItems.length) throw new Error('Error Input');
 
 	var joinIndexs = [];
 	var joinIndex = -1;
@@ -61,16 +61,16 @@ function genLineSubtype(fileKey, subtype, msgItems)
 	else
 		ret.push(0);
 
-	ret.push(subkeys.join(','), subtype.length, subtype);
+	ret.push(subkeys.join(','), subkey.length, subkey);
 
 	if (fileKey) ret.push(fileKey);
 	return ret.join(',');
 }
 
-exports.genSimpleLineSubtype = genSimpleLineSubtype;
-function genSimpleLineSubtype(fileKey, subtype, msgs)
+exports.genSimpleLineSubkey = genSimpleLineSubkey;
+function genSimpleLineSubkey(fileKey, subkey, msgs)
 {
-	if (!subtype || !msgs || !msgs.length) throw new Error('Error Input');
+	if (!subkey || !msgs || !msgs.length) throw new Error('Error Input');
 
 	var joinIndexs = [];
 	var joinIndex = -1;
@@ -88,7 +88,7 @@ function genSimpleLineSubtype(fileKey, subtype, msgs)
 	else
 		ret.push(0);
 
-	ret.push(subtype.length, subtype);
+	ret.push(subkey.length, subkey);
 
 	if (fileKey) ret.push(fileKey);
 	return ret.join(',');
@@ -113,8 +113,8 @@ function parse(refstr)
 			var ret = _parseKey4LINE(refstr, refstrArr);
 			break;
 
-		case TYPES.SUBTYPE:
-			var ret = _parseKey4SUBTYPE(refstr, refstrArr);
+		case TYPES.SUBKEY:
+			var ret = _parseKey4SUBKEY(refstr, refstrArr);
 			break;
 
 		case TYPES.SIMPLE_LINE:
@@ -168,22 +168,22 @@ function mixMsgsByJoinIndexs(info)
 
 
 /**
- * 单纯简单的subtype解析
+ * 单纯简单的subkey解析
  */
-function _parseKey4SUBTYPE(refstr, refstrArr)
+function _parseKey4SUBKEY(refstr, refstrArr)
 {
 	if (!refstrArr) refstrArr = refstr.split(',');
-	var subtypeInfo = _getStringFromArrayWidthLengthInfo(refstrArr.slice(1), 1);
+	var subkeyInfo = _getStringFromArrayWidthLengthInfo(refstrArr.slice(1), 1);
 
 	return {
-		fileKey : refstrArr.slice(subtypeInfo.walkOffset+1).join(','),
-		subtype : subtypeInfo.list[0] || '',
+		fileKey : refstrArr.slice(subkeyInfo.walkOffset+1).join(','),
+		subkey : subkeyInfo.list[0] || '',
 	};
 }
 
 
 /**
- * 将类似于 1,2,0,3,,3,sub,0,7,subtype,fileKey 这种路径
+ * 将类似于 1,2,0,3,,3,sub,0,7,subkey,fileKey 这种路径
  * 解析成数据
  *
  * 数据格式依次为:
@@ -196,7 +196,7 @@ function _parseKey4SUBTYPE(refstr, refstrArr)
  *    3,sub              => 第二个分段是字符串长度为3，只为sub的subkey
  *    0                  => 第三个分段（最后一个分段）subkey为空，（一般使用留空表示，0是做兼容）
  *
- *    7,subtype          => 长度为7的subtype
+ *    7,subkey          => 长度为7的subkey
  *    fileKey（剩下部分）  => 对应的fileKey值
  */
 function _parseKey4LINE(refstr, refstrArr)
@@ -219,15 +219,15 @@ function _parseKey4LINE(refstr, refstrArr)
 	debug('joinIndexs len:%d, arr:%o', joinIndexs.length, joinIndexs);
 
 
-	// tailArr 包含subkeys,subtype,fileKey
+	// tailArr 包含subkeys,subkey,fileKey
 	var tailArr = refstrArr.slice(joinLen+2);
 	// 开始解析定长数据
 	// 注意：subkeys比joinIndex必定多一个（分隔和端的问题）
-	// 再加上subtype，所以length+2
+	// 再加上subkey，所以length+2
 	var stringInfo = _getStringFromArrayWidthLengthInfo(tailArr, joinIndexs.length+2);
 
 	var fileKey = tailArr.slice(stringInfo.walkOffset).join(',');
-	var subtype = stringInfo.list.pop() || '';
+	var subkey = stringInfo.list.pop() || '';
 
 	var subkeys = {};
 	stringInfo.list.forEach(function(val, index)
@@ -235,10 +235,10 @@ function _parseKey4LINE(refstr, refstrArr)
 		if (val) subkeys[index] = val;
 	});
 
-	debug('fileKey:%s subtype:%s subkeys:%o', fileKey, subtype, subkeys);
+	debug('fileKey:%s subkey:%s subkeys:%o', fileKey, subkey, subkeys);
 	return {
 		fileKey    : fileKey,
-		subtype    : subtype,
+		subkey    : subkey,
 		joinIndexs : joinIndexs,
 		subkeys    : subkeys,
 	};
@@ -272,12 +272,12 @@ function _parseKey4SimpleLINE(refstr, refstrArr)
 	var stringInfo = _getStringFromArrayWidthLengthInfo(tailArr, 1);
 
 	var fileKey = tailArr.slice(stringInfo.walkOffset).join(',');
-	var subtype = stringInfo.list[0] || '';
+	var subkey = stringInfo.list[0] || '';
 
-	debug('fileKey:%s subtype:%s', fileKey, subtype);
+	debug('fileKey:%s subkey:%s', fileKey, subkey);
 	return {
 		fileKey    : fileKey,
-		subtype    : subtype,
+		subkey    : subkey,
 		joinIndexs : joinIndexs,
 	};
 }

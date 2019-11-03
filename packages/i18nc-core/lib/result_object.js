@@ -91,7 +91,7 @@ _.extend(CodeTranslateWords.prototype,
 	toJSON: function()
 	{
 		var DEFAULTS = [];
-		var SUBTYPES = {};
+		var SUBKEYS = {};
 
 		// 排序，保证数组是按照code先后顺序生成
 		this.list.sort(function(a, b)
@@ -106,8 +106,8 @@ _.extend(CodeTranslateWords.prototype,
 					ArrayPush.apply(DEFAULTS, item.translateWords);
 					break;
 
-				case 'subtype':
-					var arr = SUBTYPES[item.subtype] || (SUBTYPES[item.subtype] = []);
+				case 'subkey':
+					var arr = SUBKEYS[item.subkey] || (SUBKEYS[item.subkey] = []);
 					arr.push(item.translateWord);
 					break;
 
@@ -119,7 +119,7 @@ _.extend(CodeTranslateWords.prototype,
 
 		return {
 			DEFAULTS: DEFAULTS,
-			SUBTYPES: SUBTYPES,
+			SUBKEYS: SUBKEYS,
 		};
 	},
 	/**
@@ -161,7 +161,7 @@ _.extend(CodeTranslateWords.prototype,
 					ArrayPush.apply(result, item.translateWords);
 					break;
 
-				case 'subtype':
+				case 'subkey':
 				case 'wraped':
 					result.push(item.translateWord);
 					break;
@@ -230,13 +230,13 @@ _.extend(CodeTranslateWords.prototype,
 			translateWords : ast.__i18n_replace_info__.translateWords
 		});
 	},
-	pushSubtype: function(subtype, ast)
+	pushSubkey: function(subkey, ast)
 	{
 		this.list.push(
 		{
-			type          : 'subtype',
+			type          : 'subkey',
 			originalAst   : ast,
-			subtype       : subtype,
+			subkey       : subkey,
 			translateWord : astUtil.ast2constVal(ast),
 		});
 	},
@@ -313,18 +313,18 @@ _.extend(FileKeyTranslateWords.prototype,
 	words: function(lan)
 	{
 		var data = this.toJSON();
-		var SUBTYPES = {};
+		var SUBKEYS = {};
 		if (lan)
 		{
 			var json = data[lan] || {};
-			_.each(json.SUBTYPES, function(obj, subtype)
+			_.each(json.SUBKEYS, function(obj, subkey)
 			{
-				SUBTYPES[subtype] = Object.keys(obj);
+				SUBKEYS[subkey] = Object.keys(obj);
 			});
 
 			return {
 				DEFAULTS: json.DEFAULTS && Object.keys(json.DEFAULTS) || [],
-				SUBTYPES: SUBTYPES,
+				SUBKEYS: SUBKEYS,
 			};
 		}
 
@@ -332,24 +332,24 @@ _.extend(FileKeyTranslateWords.prototype,
 		_.each(data, function(json)
 		{
 			ArrayPush.apply(DEFAULTS, json.DEFAULTS && Object.keys(json.DEFAULTS) || []);
-			_.each(json.SUBTYPES, function(obj, subtype)
+			_.each(json.SUBKEYS, function(obj, subkey)
 			{
-				var arr = SUBTYPES[subtype];
+				var arr = SUBKEYS[subkey];
 				if (arr)
 				{
 					ArrayPush.apply(arr, Object.keys(obj));
-					SUBTYPES[subtype] = _.uniq(arr);
+					SUBKEYS[subkey] = _.uniq(arr);
 				}
 				else
 				{
-					SUBTYPES[subtype] = Object.keys(obj);
+					SUBKEYS[subkey] = Object.keys(obj);
 				}
 			});
 		});
 
 		return {
 			DEFAULTS: _.uniq(DEFAULTS),
-			SUBTYPES: SUBTYPES,
+			SUBKEYS: SUBKEYS,
 		};
 	},
 });

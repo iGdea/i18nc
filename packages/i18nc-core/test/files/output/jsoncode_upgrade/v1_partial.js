@@ -1,13 +1,13 @@
 module.exports = function textWrapCode(){
 
-function I18N(msg, tpldata, subtype)
+function I18N(msg, tpldata, subkey)
 {
 	var self = I18N;
 	var data = self.$ || (self.$ = {});
 	var LAN = (function(){return global.__i18n_lan__})(data);
 	if (!tpldata || !tpldata.join)
 	{
-		subtype = tpldata;
+		subkey = tpldata;
 		tpldata = [];
 	}
 
@@ -27,7 +27,7 @@ function I18N(msg, tpldata, subtype)
 						// '空白':
 						'简体': 'simplified'
 					},
-					'SUBTYPES': { 'subtype': { '简体': 'simplified subtype' } }
+					'SUBKEYS': { 'subkey': { '简体': 'simplified subkey' } }
 				},
 				'zh-TW': {
 					'DEFAULTS': {
@@ -37,8 +37,8 @@ function I18N(msg, tpldata, subtype)
 						// '空白':
 						'简体': '簡體'
 					},
-					'SUBTYPES': {
-						'subtype': {
+					'SUBKEYS': {
+						'subkey': {
 							// '简体':
 						}
 					}
@@ -57,15 +57,15 @@ function I18N(msg, tpldata, subtype)
 		}
 
 		lanArr = self.M;
-		var resultDefault, resultSubject, allsubtypes, alldefaults, subtypeJSON;
+		var resultDefault, resultSubject, allsubkeys, alldefaults, subkeyJSON;
 		for(i = 0, len = lanArr.length; i < len; i++)
 		{
 			lanItem = lanArr[i];
-			if (subtype)
+			if (subkey)
 			{
-				allsubtypes = lanItem.SUBTYPES;
-				subtypeJSON = allsubtypes && allsubtypes[subtype];
-				resultSubject = subtypeJSON && subtypeJSON[msg];
+				allsubkeys = lanItem.SUBKEYS;
+				subkeyJSON = allsubkeys && allsubkeys[subkey];
+				resultSubject = subkeyJSON && subkeyJSON[msg];
 				if (resultSubject) break;
 			}
 			if (!resultDefault)
@@ -96,6 +96,6 @@ I18N("%s美好%s生活")
 I18N("%{中文}词典")
 I18N("无")
 
-I18N("简体", "subtype")
+I18N("简体", "subkey")
 
 }

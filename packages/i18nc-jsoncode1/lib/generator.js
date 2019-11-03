@@ -38,18 +38,18 @@ function fillNoUsedCodeTranslateWords(translateDataJSON, codeTranslateWords, def
 		});
 	}
 
-	_.each(codeTranslateWords.SUBTYPES, function(subtype_words, subtype)
+	_.each(codeTranslateWords.SUBKEYS, function(subkey_words, subkey)
 	{
-		var SUBTYPE_WORDS = _.uniq(subtype_words);
-		if (!SUBTYPE_WORDS.length) return;
+		var SUBKEY_WORDS = _.uniq(subkey_words);
+		if (!SUBKEY_WORDS.length) return;
 
 		lans.forEach(function(lan)
 		{
 			var lanItem = translateDataJSON[lan] || (translateDataJSON[lan] = {});
-			lanItem = lanItem.SUBTYPES || (lanItem.SUBTYPES = {});
-			var result = lanItem[subtype] || (lanItem[subtype] = {});
+			lanItem = lanItem.SUBKEYS || (lanItem.SUBKEYS = {});
+			var result = lanItem[subkey] || (lanItem[subkey] = {});
 
-			_.each(SUBTYPE_WORDS, function(word)
+			_.each(SUBKEY_WORDS, function(word)
 			{
 				if (!result[word]) result[word] = null;
 			});
@@ -105,24 +105,24 @@ function _translateJSON2ast(mainData)
 		}
 
 
-		// 处理 SUBTYPES
-		if (translateData.SUBTYPES)
+		// 处理 SUBKEYS
+		if (translateData.SUBKEYS)
 		{
-			var tmpSubtypesPropertiesAst = _.map(Object.keys(translateData.SUBTYPES).sort(), function(subtype)
+			var tmpSubkeysPropertiesAst = _.map(Object.keys(translateData.SUBKEYS).sort(), function(subkey)
 				{
-					var tmp = _wordJson2ast(translateData.SUBTYPES[subtype]);
+					var tmp = _wordJson2ast(translateData.SUBKEYS[subkey]);
 					if (!tmp) return;
 
-					return astTpl.Property(subtype, tmp);
+					return astTpl.Property(subkey, tmp);
 				})
 				.filter(function(val)
 				{
 					return val;
 				});
 
-			if (tmpSubtypesPropertiesAst.length)
+			if (tmpSubkeysPropertiesAst.length)
 			{
-				lanPropertiesAst.push(astTpl.Property('SUBTYPES', astTpl.ObjectExpression(tmpSubtypesPropertiesAst)));
+				lanPropertiesAst.push(astTpl.Property('SUBKEYS', astTpl.ObjectExpression(tmpSubkeysPropertiesAst)));
 			}
 		}
 

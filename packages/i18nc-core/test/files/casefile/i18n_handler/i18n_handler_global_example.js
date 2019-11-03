@@ -32,9 +32,9 @@ function I18N(msg)
 					"%{Chinese} dictionary"
 				]
 			},
-			"subtype": {
+			"subkey": {
 				"简体": [
-					"simplified subtype"
+					"simplified subkey"
 				]
 			}
 		};

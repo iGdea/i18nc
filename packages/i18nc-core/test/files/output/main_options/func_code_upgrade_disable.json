@@ -1,7 +1,7 @@
 {
 	"codeTranslateWords": {
 		"DEFAULTS": [],
-		"SUBTYPES": {}
+		"SUBKEYS": {}
 	},
 	"currentFileKey": "*",
 	"funcTranslateWords": {},
@@ -28,12 +28,12 @@
 					"中文I18N",
 					"简体"
 				],
-				"SUBTYPES": {
-					"subtype": [
-						"中文I18N subtype",
+				"SUBKEYS": {
+					"subkey": [
+						"中文I18N subkey",
 						"I18N(中文)"
 					],
-					"subtype2": [
+					"subkey2": [
 						"I18N(中文)"
 					]
 				}
@@ -79,8 +79,8 @@
 					"DEFAULTS": {
 						"中文key": "中文键"
 					},
-					"SUBTYPES": {
-						"subtype": {
+					"SUBKEYS": {
+						"subkey": {
 							"I18N(中文)": "中文国际化"
 						}
 					}

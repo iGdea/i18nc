@@ -14,10 +14,10 @@
 			"en-US": "%{Chinese} dictionary"
 		}
 	},
-	"SUBTYPES": {
-		"subtype": {
+	"SUBKEYS": {
+		"subkey": {
 			"简体": {
-				"en-US": "simplified subtype"
+				"en-US": "simplified subkey"
 			}
 		}
 	}

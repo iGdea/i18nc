@@ -1,12 +1,12 @@
 module.exports = I18N;
-function I18N(msg, tpldata, subtype)
+function I18N(msg, tpldata, subkey)
 {
 	var self = I18N;
 	var data = self.$ || (self.$ = {});
 	var LAN = (function(){return global.__i18n_lan__})(data);
 	if (!tpldata || !tpldata.join)
 	{
-		subtype = tpldata;
+		subkey = tpldata;
 		tpldata = [];
 	}
 
@@ -26,9 +26,9 @@ function I18N(msg, tpldata, subtype)
 						"%s美好%s生活": "%sgood%s life",
 						"%{中文}词典": "%{Chinese} dictionary"
 					},
-					"SUBTYPES": {
-						"subtype": {
-							"简体": "simplified subtype"
+					"SUBKEYS": {
+						"subkey": {
+							"简体": "simplified subkey"
 						}
 					}
 				},
@@ -52,15 +52,15 @@ function I18N(msg, tpldata, subtype)
 		}
 
 		lanArr = self.M;
-		var resultDefault, resultSubject, allsubtypes, alldefaults, subtypeJSON;
+		var resultDefault, resultSubject, allsubkeys, alldefaults, subkeyJSON;
 		for(i = 0, len = lanArr.length; i < len; i++)
 		{
 			lanItem = lanArr[i];
-			if (subtype)
+			if (subkey)
 			{
-				allsubtypes = lanItem.SUBTYPES;
-				subtypeJSON = allsubtypes && allsubtypes[subtype];
-				resultSubject = subtypeJSON && subtypeJSON[msg];
+				allsubkeys = lanItem.SUBKEYS;
+				subkeyJSON = allsubkeys && allsubkeys[subkey];
+				resultSubject = subkeyJSON && subkeyJSON[msg];
 				if (resultSubject) break;
 			}
 			if (!resultDefault)

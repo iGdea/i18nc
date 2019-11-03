@@ -8,7 +8,7 @@ var json = {
 			'空白': [],
 			'简体': 'simplified'
 		},
-		'SUBTYPES': { 'subtype': { '简体': 'simplified subtype' } }
+		'SUBKEYS': { 'subkey': { '简体': 'simplified subkey' } }
 	},
 	'zh-TW': { 'DEFAULTS': { '简体': '簡體' } }
 }

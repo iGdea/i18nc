@@ -80,10 +80,10 @@ _.extend(I18NPlaceholder.prototype,
 			var codeTranslateWords = this.codeTranslateWords || {};
 			var defaults_length = codeTranslateWords.DEFAULTS
 					&& codeTranslateWords.DEFAULTS.length;
-			var subtypes_length = codeTranslateWords.SUBTYPES
-					&& Object.keys(codeTranslateWords.SUBTYPES).length;
+			var subkeys_length = codeTranslateWords.SUBKEYS
+					&& Object.keys(codeTranslateWords.SUBKEYS).length;
 
-			if (!defaults_length && !subtypes_length)
+			if (!defaults_length && !subkeys_length)
 			{
 				debug('ignore generate I18NHandler');
 				return 'original';

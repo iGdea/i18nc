@@ -7,12 +7,12 @@
 			{
 				"中文db *": "indb *"
 			},
-			"SUBTYPES":
+			"SUBKEYS":
 			{
-				"subtype":
+				"subkey":
 				{
-					"中文 allfile subtype1": "indb * subtype1",
-					"中文 thisfile subtype2": "indb * subtype2"
+					"中文 allfile subkey1": "indb * subkey1",
+					"中文 thisfile subkey2": "indb * subkey2"
 				}
 			}
 		},
@@ -24,11 +24,11 @@
 			{
 				"中文0": "indb <thisfile> db0"
 			},
-			"SUBTYPES":
+			"SUBKEYS":
 			{
-				"subtype":
+				"subkey":
 				{
-					"中文 thisfile subtype2": "indb <thisfile> subtype2"
+					"中文 thisfile subkey2": "indb <thisfile> subkey2"
 				}
 			}
 		},
@@ -51,9 +51,9 @@
 				"中文 only db": "中文只在数据库",
 				"I18N(中文)": "国际化中文"
 			},
-			"SUBTYPES":
+			"SUBKEYS":
 			{
-				"subtype":
+				"subkey":
 				{
 					"I18N(中文)": "中文国际化"
 				}

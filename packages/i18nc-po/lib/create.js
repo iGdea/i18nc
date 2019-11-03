@@ -79,7 +79,7 @@ function filterTranslateWords(json, lan, existedTranslateFilter)
 	usedTranslateWords = usedTranslateWords[lan] || {};
 
 	var usedTranslateWordsDEFAULTS = usedTranslateWords.DEFAULTS || {};
-	var usedTranslateWordsSUBTYPES = usedTranslateWords.SUBTYPES || {};
+	var usedTranslateWordsSUBKEYS = usedTranslateWords.SUBKEYS || {};
 
 	debug('DEFAULT, codeTranslateWords:%o, usedTranslateWords:%o, code:%s',
 		codeTranslateWords.DEFAULTS,
@@ -101,23 +101,23 @@ function filterTranslateWords(json, lan, existedTranslateFilter)
 	});
 
 
-	// 处理subtypeList
-	var lineSubtypeList = {};
-	var hasLineSubtype = false;
-	_.each(codeTranslateWords.SUBTYPES, function(words, subtype)
+	// 处理subkeyList
+	var lineSubkeyList = {};
+	var hasLineSubkey = false;
+	_.each(codeTranslateWords.SUBKEYS, function(words, subkey)
 	{
-		var usedWordsInfo = usedTranslateWordsSUBTYPES[subtype] || {};
+		var usedWordsInfo = usedTranslateWordsSUBKEYS[subkey] || {};
 
-		// 创建line subtype
+		// 创建line subkey
 		// 这里先做收集
-		if (subtype[0] == ':')
+		if (subkey[0] == ':')
 		{
-			hasLineSubtype = true;
-			var mainSubtype = subtype.split('@')[0];
-			var arr = lineSubtypeList[mainSubtype] || (lineSubtypeList[mainSubtype] = []);
-			arr.push(subtype);
+			hasLineSubkey = true;
+			var mainSubkey = subkey.split('@')[0];
+			var arr = lineSubkeyList[mainSubkey] || (lineSubkeyList[mainSubkey] = []);
+			arr.push(subkey);
 		}
-		// 普通的subtype
+		// 普通的subkey
 		else
 		{
 			words.forEach(function(msgid)
@@ -132,29 +132,29 @@ function filterTranslateWords(json, lan, existedTranslateFilter)
 				var key = msgid+':'+msgstr;
 				debug('lan:%s msgid:%s msgstr:%s', lan, msgid, msgstr);
 				var item = items[key] || (items[key] = new TPOItem(msgid, msgstr));
-				item.addKeyInfo(refsUtils.genSimpleSubtype(fileKey, subtype));
+				item.addKeyInfo(refsUtils.genSimpleSubkey(fileKey, subkey));
 			});
 		}
 	});
 
-	// 处理line subtype
-	if (hasLineSubtype)
+	// 处理line subkey
+	if (hasLineSubkey)
 	{
-		var subtypeAstMap = {};
+		var subkeyAstMap = {};
 		words.codeTranslateWords.list.forEach(function(item)
 		{
-			if (item.type != 'subtype') return;
-			var arr = subtypeAstMap[item.subtype] || (subtypeAstMap[item.subtype] = []);
+			if (item.type != 'subkey') return;
+			var arr = subkeyAstMap[item.subkey] || (subkeyAstMap[item.subkey] = []);
 			arr.push(item);
 		});
 
-		_.each(lineSubtypeList, function(subtypeList, mainSubtype)
+		_.each(lineSubkeyList, function(subkeyList, mainSubkey)
 		{
-			var isDiff = _.some(subtypeList, function(subtype)
+			var isDiff = _.some(subkeyList, function(subkey)
 				{
-					var usedWordsInfo = usedTranslateWordsSUBTYPES[subtype] || {};
+					var usedWordsInfo = usedTranslateWordsSUBKEYS[subkey] || {};
 					var usedWordsArr = Object.keys(usedWordsInfo);
-					var allWordsItemArr = subtypeAstMap[subtype];
+					var allWordsItemArr = subkeyAstMap[subkey];
 
 					if (usedWordsArr.length != allWordsItemArr.length) return true;
 
@@ -171,14 +171,14 @@ function filterTranslateWords(json, lan, existedTranslateFilter)
 			var msgidArr = [];
 			var msgstrArr = [];
 			var msgidSubkeyItmes = [];
-			var mySubtypeAstMap = [];
+			var mySubkeyAstMap = [];
 			var hasSubkeys = false;
-			_.map(subtypeList, function(subtype)
+			_.map(subkeyList, function(subkey)
 			{
-				ArrayPush.apply(mySubtypeAstMap, subtypeAstMap[subtype]);
+				ArrayPush.apply(mySubkeyAstMap, subkeyAstMap[subkey]);
 			});
 
-			mySubtypeAstMap.sort(function(a, b)
+			mySubkeyAstMap.sort(function(a, b)
 				{
 					return a.originalAst.range[0] > b.originalAst.range[0] ? 1 : -1;
 				})
@@ -186,14 +186,14 @@ function filterTranslateWords(json, lan, existedTranslateFilter)
 				{
 					var val = item.translateWord;
 					msgidArr.push(val);
-					var subkey = item.subtype.split('@').slice(1).join('@');
+					var subkey = item.subkey.split('@').slice(1).join('@');
 					if (subkey) hasSubkeys = true;
 					msgidSubkeyItmes.push({msg: val, subkey: subkey});
 
 					if (!isDiff)
 					{
-						var myMsgid = usedTranslateWordsSUBTYPES[item.subtype]
-								&& usedTranslateWordsSUBTYPES[item.subtype][item.value];
+						var myMsgid = usedTranslateWordsSUBKEYS[item.subkey]
+								&& usedTranslateWordsSUBKEYS[item.subkey][item.value];
 						msgstrArr.push(myMsgid);
 					}
 				});
@@ -205,8 +205,8 @@ function filterTranslateWords(json, lan, existedTranslateFilter)
 			debug('lan:%s msgid:%s msgstr:%s', lan, msgid, msgstr);
 			var item = items[key] || (items[key] = new TPOItem(msgid, msgstr));
 			var fileInfo = hasSubkeys
-				? refsUtils.genLineSubtype(fileKey, mainSubtype, msgidSubkeyItmes)
-				: refsUtils.genSimpleLineSubtype(fileKey, mainSubtype, msgidArr);
+				? refsUtils.genLineSubkey(fileKey, mainSubkey, msgidSubkeyItmes)
+				: refsUtils.genSimpleLineSubkey(fileKey, mainSubkey, msgidArr);
 			item.addKeyInfo(fileInfo);
 		});
 	}

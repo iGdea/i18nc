@@ -1,7 +1,7 @@
 {
 	"codeTranslateWords": {
 		"DEFAULTS": [],
-		"SUBTYPES": {}
+		"SUBKEYS": {}
 	},
 	"funcTranslateWords": {},
 	"newWord4codeTranslateWords": [],
@@ -14,7 +14,7 @@
 					"中文3",
 					"中文5"
 				],
-				"SUBTYPES": {}
+				"SUBKEYS": {}
 			},
 			"funcTranslateWords": {},
 			"newWord4codeTranslateWords": [],

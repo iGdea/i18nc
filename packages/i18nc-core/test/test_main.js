@@ -36,9 +36,9 @@ describe('#main', function()
 			var codeData =
 			{
 				DEFAULTS: Object.keys(funcInfo.__TRANSLATE_JSON__['en-US'].DEFAULTS),
-				SUBTYPES:
+				SUBKEYS:
 				{
-					subtype: Object.keys(funcInfo.__TRANSLATE_JSON__['en-US'].SUBTYPES.subtype)
+					subkey: Object.keys(funcInfo.__TRANSLATE_JSON__['en-US'].SUBKEYS.subkey)
 				}
 			};
 

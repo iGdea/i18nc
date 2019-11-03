@@ -10,10 +10,10 @@
 			"中文 only db": [null, "中文只在数据库"],
 			"I18N(中文)": [null, "国际化中文"]
 		},
-		"subtype":
+		"subkey":
 		{
-			"中文 allfile subtype1": ["indb * subtype1"],
-			"中文 thisfile subtype2": ["indb * subtype2"],
+			"中文 allfile subkey1": ["indb * subkey1"],
+			"中文 thisfile subkey2": ["indb * subkey2"],
 			"I18N(中文)": [null, "中文国际化"]
 		}
 	},
@@ -24,9 +24,9 @@
 		{
 			"中文0": ["indb <thisfile> db0"]
 		},
-		"subtype":
+		"subkey":
 		{
-			"中文 thisfile subtype2": ["indb <thisfile> subtype2"]
+			"中文 thisfile subkey2": ["indb <thisfile> subkey2"]
 		}
 	},
 	"func_code_file_key":

@@ -46,14 +46,14 @@ describe('#i18n_func_run', function()
 				expect(I18N('无')).to.be('无');
 			});
 
-			it('#match subtype', function()
+			it('#match subkey', function()
 			{
-				expect(I18N('简体', 'subtype')).to.be('simplified subtype');
+				expect(I18N('简体', 'subkey')).to.be('simplified subkey');
 			});
 
-			it('#no has subtype', function()
+			it('#no has subkey', function()
 			{
-				expect(I18N('简体', 'not existed subtype')).to.be('simplified');
+				expect(I18N('简体', 'not existed subkey')).to.be('simplified');
 			});
 		});
 
@@ -75,9 +75,9 @@ describe('#i18n_func_run', function()
 				expect(I18N('简体')).to.be('简体');
 			});
 
-			it('#match subtype', function()
+			it('#match subkey', function()
 			{
-				expect(I18N('简体', 'subtype')).to.be('简体');
+				expect(I18N('简体', 'subkey')).to.be('简体');
 			});
 		});
 
@@ -99,9 +99,9 @@ describe('#i18n_func_run', function()
 				expect(I18N('简体')).to.be('simplified');
 			});
 
-			it('#match subtype', function()
+			it('#match subkey', function()
 			{
-				expect(I18N('简体', 'subtype')).to.be('simplified subtype');
+				expect(I18N('简体', 'subkey')).to.be('simplified subkey');
 			});
 		});
 
@@ -122,9 +122,9 @@ describe('#i18n_func_run', function()
 				expect(I18N('简体')).to.be('簡體');
 			});
 
-			it('#match subtype', function()
+			it('#match subkey', function()
 			{
-				expect(I18N('简体', 'subtype')).to.be('簡體');
+				expect(I18N('简体', 'subkey')).to.be('簡體');
 			});
 		});
 
@@ -246,14 +246,14 @@ describe('#i18n_func_run', function()
 				expect(I18N('无')).to.be('无');
 			});
 
-			it('#match subtype', function()
+			it('#match subkey', function()
 			{
-				expect(I18N('简体', 'subtype')).to.be('简体');
+				expect(I18N('简体', 'subkey')).to.be('简体');
 			});
 
-			it('#no has subtype', function()
+			it('#no has subkey', function()
 			{
-				expect(I18N('简体', 'not existed subtype')).to.be('简体');
+				expect(I18N('简体', 'not existed subkey')).to.be('简体');
 			});
 		});
 
@@ -342,9 +342,9 @@ describe('#i18n_func_run', function()
 					expect(I18N(11)).to.be('11');
 				});
 
-				it('#match subtype', function()
+				it('#match subkey', function()
 				{
-					expect(I18N('简体', 'subtype')).to.be('简体');
+					expect(I18N('简体', 'subkey')).to.be('简体');
 				});
 			});
 
@@ -403,9 +403,9 @@ describe('#i18n_func_run', function()
 						"简体": "simplified",
 						"%{中文}词典": "%{Chinese} dictionary"
 					},
-					"SUBTYPES": {
-						"subtype": {
-							"简体": "simplified subtype"
+					"SUBKEYS": {
+						"subkey": {
+							"简体": "simplified subkey"
 						}
 					}
 				}
@@ -438,7 +438,7 @@ describe('#i18n_func_run', function()
 				expect(run(111)).to.be('111');
 				expect(run('中文')).to.be('中文');
 				expect(run('%{中文}词典', ['English'])).to.be('English dictionary');
-				expect(run('简体', 'subtype')).to.be('simplified subtype');
+				expect(run('简体', 'subkey')).to.be('simplified subkey');
 			});
 		});
 
@@ -478,7 +478,7 @@ describe('#i18n_func_run', function()
 				runTest(111);
 				runTest('中文');
 				runTest('%{中文}词典', ['English']);
-				runTest('简体', 'subtype');
+				runTest('简体', 'subkey');
 			});
 		});
 	});

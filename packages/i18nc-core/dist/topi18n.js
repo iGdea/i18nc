@@ -15,19 +15,19 @@
 	
 		var self = handler,
 			tpldata = args[1],
-			subtype = args[2],
+			subkey = args[2],
 			replace_index = 0,
 			options = {},
 			lanIndexArr, i, lanIndex, msgResult, translateValues;
 	
 		if (!tpldata || !tpldata.join)
 		{
-			subtype = tpldata;
+			subkey = tpldata;
 			tpldata = [];
 		}
-		if (subtype && typeof subtype == 'object') {
-			options = subtype;
-			subtype = options.subtype;
+		if (subkey && typeof subkey == 'object') {
+			options = subkey;
+			subkey = options.subkey;
 		}
 	
 		var LAN = options.language || $I18N_getLanguageCode(data);
@@ -54,9 +54,9 @@
 			}
 	
 			lanIndexArr = self.M;
-			var _getVaule = function(subtype)
+			var _getVaule = function(subkey)
 			{
-				translateValues = translateJSON[subtype] && translateJSON[subtype][msg];
+				translateValues = translateJSON[subkey] && translateJSON[subkey][msg];
 				if (translateValues)
 				{
 					msgResult = translateValues[lanIndex];
@@ -66,7 +66,7 @@
 			for(i = lanIndexArr.length; !msgResult && i--;)
 			{
 				lanIndex = lanIndexArr[i];
-				if (subtype) _getVaule(subtype);
+				if (subkey) _getVaule(subkey);
 				if (!msgResult) _getVaule('*');
 			}
 	

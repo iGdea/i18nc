@@ -14994,11 +14994,11 @@ _.extend(ASTCollector.prototype,
 			if (args[1].type == 'ArrayExpression')
 			{
 				result.formatArgAsts = args[1];
-				if (args[2]) result.subtypeAst = args[2];
+				if (args[2]) result.subkeyAst = args[2];
 			}
 			else
 			{
-				result.subtypeAst = args[1];
+				result.subkeyAst = args[1];
 			}
 		}
 
@@ -15594,7 +15594,7 @@ _.extend(ASTScope.prototype,
 			.forEach(function(argsInfo)
 			{
 				var translateWordAst = argsInfo.translateWordAst;
-				var subtypeAst = argsInfo.subtypeAst;
+				var subkeyAst = argsInfo.subkeyAst;
 
 				if (!translateWordAst || !translateWordAst.value) return;
 				if (translateWordAst.type != 'Literal')
@@ -15611,11 +15611,11 @@ _.extend(ASTScope.prototype,
 					return;
 				}
 
-				var subtype = subtypeAst && astUtil.ast2constVal(subtypeAst);
+				var subkey = subkeyAst && astUtil.ast2constVal(subkeyAst);
 
 
-				if (subtype)
-					allCodeTranslateWords.pushSubtype(subtype, translateWordAst);
+				if (subkey)
+					allCodeTranslateWords.pushSubkey(subkey, translateWordAst);
 				else
 					allCodeTranslateWords.pushWraped(translateWordAst);
 
@@ -15631,8 +15631,8 @@ _.extend(ASTScope.prototype,
 					aliasCodes = myCodeTranslateWords;
 				}
 
-				if (subtype)
-					aliasCodes.pushSubtype(subtype, translateWordAst);
+				if (subkey)
+					aliasCodes.pushSubkey(subkey, translateWordAst);
 				else
 					aliasCodes.pushWraped(translateWordAst);
 			});
@@ -16329,7 +16329,7 @@ exports.renderGlobal = tpl2render(require('./tpl/global.js').toString());
 
 'use strict';
 
-module.exports = function $handlerName(msg, tpldata, subtype)
+module.exports = function $handlerName(msg, tpldata, subkey)
 {
 	if (!msg) return msg === undefined || msg === null ? '' : '' + msg;
 
@@ -16341,12 +16341,12 @@ module.exports = function $handlerName(msg, tpldata, subtype)
 		lanIndexArr, i, lanIndex, msgResult, translateValues;
 
 	if (!tpldata || !tpldata.join) {
-		subtype = tpldata;
+		subkey = tpldata;
 		tpldata = [];
 	}
-	if (subtype && typeof subtype == 'object') {
-		options = subtype;
-		subtype = options.subtype;
+	if (subkey && typeof subkey == 'object') {
+		options = subkey;
+		subkey = options.subkey;
 	}
 
 	var LAN = options.language || $getLanguageCode(data);
@@ -16378,8 +16378,8 @@ module.exports = function $handlerName(msg, tpldata, subtype)
 
 		lanIndexArr = self.M;
 		translateJSON = self.D;
-		var _getVaule = function(subtype) {
-			translateValues = translateJSON[subtype] && translateJSON[subtype][msg];
+		var _getVaule = function(subkey) {
+			translateValues = translateJSON[subkey] && translateJSON[subkey][msg];
 			if (translateValues) {
 				msgResult = translateValues[lanIndex];
 				if (typeof msgResult == 'number') msgResult = translateValues[msgResult];
@@ -16387,7 +16387,7 @@ module.exports = function $handlerName(msg, tpldata, subtype)
 		};
 		for(i = lanIndexArr.length; !msgResult && i--;) {
 			lanIndex = lanIndexArr[i];
-			if (subtype) _getVaule(subtype);
+			if (subkey) _getVaule(subkey);
 			if (!msgResult) _getVaule('*');
 		}
 
@@ -16542,10 +16542,10 @@ _.extend(I18NPlaceholder.prototype,
 			var codeTranslateWords = this.codeTranslateWords || {};
 			var defaults_length = codeTranslateWords.DEFAULTS
 					&& codeTranslateWords.DEFAULTS.length;
-			var subtypes_length = codeTranslateWords.SUBTYPES
-					&& Object.keys(codeTranslateWords.SUBTYPES).length;
+			var subkeys_length = codeTranslateWords.SUBKEYS
+					&& Object.keys(codeTranslateWords.SUBKEYS).length;
 
-			if (!defaults_length && !subtypes_length)
+			if (!defaults_length && !subkeys_length)
 			{
 				debug('ignore generate I18NHandler');
 				return 'original';
@@ -17050,7 +17050,7 @@ _.extend(CodeTranslateWords.prototype,
 	toJSON: function()
 	{
 		var DEFAULTS = [];
-		var SUBTYPES = {};
+		var SUBKEYS = {};
 
 		// 排序，保证数组是按照code先后顺序生成
 		this.list.sort(function(a, b)
@@ -17065,8 +17065,8 @@ _.extend(CodeTranslateWords.prototype,
 					ArrayPush.apply(DEFAULTS, item.translateWords);
 					break;
 
-				case 'subtype':
-					var arr = SUBTYPES[item.subtype] || (SUBTYPES[item.subtype] = []);
+				case 'subkey':
+					var arr = SUBKEYS[item.subkey] || (SUBKEYS[item.subkey] = []);
 					arr.push(item.translateWord);
 					break;
 
@@ -17078,7 +17078,7 @@ _.extend(CodeTranslateWords.prototype,
 
 		return {
 			DEFAULTS: DEFAULTS,
-			SUBTYPES: SUBTYPES,
+			SUBKEYS: SUBKEYS,
 		};
 	},
 	/**
@@ -17120,7 +17120,7 @@ _.extend(CodeTranslateWords.prototype,
 					ArrayPush.apply(result, item.translateWords);
 					break;
 
-				case 'subtype':
+				case 'subkey':
 				case 'wraped':
 					result.push(item.translateWord);
 					break;
@@ -17189,13 +17189,13 @@ _.extend(CodeTranslateWords.prototype,
 			translateWords : ast.__i18n_replace_info__.translateWords
 		});
 	},
-	pushSubtype: function(subtype, ast)
+	pushSubkey: function(subkey, ast)
 	{
 		this.list.push(
 		{
-			type          : 'subtype',
+			type          : 'subkey',
 			originalAst   : ast,
-			subtype       : subtype,
+			subkey       : subkey,
 			translateWord : astUtil.ast2constVal(ast),
 		});
 	},
@@ -17272,18 +17272,18 @@ _.extend(FileKeyTranslateWords.prototype,
 	words: function(lan)
 	{
 		var data = this.toJSON();
-		var SUBTYPES = {};
+		var SUBKEYS = {};
 		if (lan)
 		{
 			var json = data[lan] || {};
-			_.each(json.SUBTYPES, function(obj, subtype)
+			_.each(json.SUBKEYS, function(obj, subkey)
 			{
-				SUBTYPES[subtype] = Object.keys(obj);
+				SUBKEYS[subkey] = Object.keys(obj);
 			});
 
 			return {
 				DEFAULTS: json.DEFAULTS && Object.keys(json.DEFAULTS) || [],
-				SUBTYPES: SUBTYPES,
+				SUBKEYS: SUBKEYS,
 			};
 		}
 
@@ -17291,24 +17291,24 @@ _.extend(FileKeyTranslateWords.prototype,
 		_.each(data, function(json)
 		{
 			ArrayPush.apply(DEFAULTS, json.DEFAULTS && Object.keys(json.DEFAULTS) || []);
-			_.each(json.SUBTYPES, function(obj, subtype)
+			_.each(json.SUBKEYS, function(obj, subkey)
 			{
-				var arr = SUBTYPES[subtype];
+				var arr = SUBKEYS[subkey];
 				if (arr)
 				{
 					ArrayPush.apply(arr, Object.keys(obj));
-					SUBTYPES[subtype] = _.uniq(arr);
+					SUBKEYS[subkey] = _.uniq(arr);
 				}
 				else
 				{
-					SUBTYPES[subtype] = Object.keys(obj);
+					SUBKEYS[subkey] = Object.keys(obj);
 				}
 			});
 		});
 
 		return {
 			DEFAULTS: _.uniq(DEFAULTS),
-			SUBTYPES: SUBTYPES,
+			SUBKEYS: SUBKEYS,
 		};
 	},
 });
@@ -39486,7 +39486,7 @@ exports._mergeData = _mergeData;
 function _mergeData(mainData)
 {
 	// 先用一个不规范的数据保存，最后要把语言作为一级key处理
-	var result = {DEFAULTS: {}, SUBTYPES: {}};
+	var result = {DEFAULTS: {}, SUBKEYS: {}};
 	var codeTranslateWords = mainData.codeTranslateWords || {};
 	var FILE_KEY = mainData.FILE_KEY;
 	var dbTranslateWords = mainData.dbTranslateWords && mainData.dbTranslateWords.data || {};
@@ -39507,12 +39507,12 @@ function _mergeData(mainData)
 		result.DEFAULTS[word] = info.result;
 	});
 
-	_.each(codeTranslateWords.SUBTYPES, function(words, subtype)
+	_.each(codeTranslateWords.SUBKEYS, function(words, subkey)
 	{
-		var subresult = result.SUBTYPES[subtype] = {};
+		var subresult = result.SUBKEYS[subkey] = {};
 		_.each(_.uniq(words), function(word)
 		{
-			var info = _getOneTypeListData('SUBTYPES', word, typeData, onlyTheseLanguages, subtype);
+			var info = _getOneTypeListData('SUBKEYS', word, typeData, onlyTheseLanguages, subkey);
 			subresult[word] = info.result;
 		});
 	});
@@ -39521,14 +39521,14 @@ function _mergeData(mainData)
 }
 
 /**
- * 针对单个type(DEFAULTS/SUBTYPES)，单个单词的 所有语言
+ * 针对单个type(DEFAULTS/SUBKEYS)，单个单词的 所有语言
  * 返回其翻译结果的数组
  *
  * 处理任务
  *     db下所有文件和指定文件的两份数据融合
  *     和函数中分析出来的数据融合
  */
-function _getOneTypeListData(maintype, word, typeData, onlyTheseLanguages, subtype)
+function _getOneTypeListData(maintype, word, typeData, onlyTheseLanguages, subkey)
 {
 	var lans = {};
 	var results = {};
@@ -39544,7 +39544,7 @@ function _getOneTypeListData(maintype, word, typeData, onlyTheseLanguages, subty
 			if (onlyTheseLanguages && onlyTheseLanguages.indexOf(lan) == -1) return;
 
 			var subLanInfo = lanInfo[maintype];
-			if (subtype && subLanInfo) subLanInfo = subLanInfo[subtype];
+			if (subkey && subLanInfo) subLanInfo = subLanInfo[subkey];
 			var translateWord = subLanInfo && subLanInfo[word];
 
 			if (translateWord || translateWord === '')
@@ -39557,7 +39557,7 @@ function _getOneTypeListData(maintype, word, typeData, onlyTheseLanguages, subty
 
 
 	var lans = Object.keys(lans);
-	debug('word:%s, subtype:%s lans:%o, results:%o', word, subtype, lans, results);
+	debug('word:%s, subkey:%s lans:%o, results:%o', word, subkey, lans, results);
 
 	// 对获取到的所有数据进行合并操作
 	var result = {};
@@ -39595,15 +39595,15 @@ function _toTranslateJSON(data)
 		});
 	});
 
-	_.each(data.SUBTYPES, function(item, subtype)
+	_.each(data.SUBKEYS, function(item, subkey)
 	{
 		_.each(item, function(lanData, word)
 		{
 			_.each(lanData, function(translateData, lan)
 			{
 				var lanObj = result[lan] || (result[lan] = {});
-				var subtypeObj = lanObj.SUBTYPES || (lanObj.SUBTYPES = {});
-				var wordObj = subtypeObj[subtype] || (subtypeObj[subtype] = {});
+				var subkeyObj = lanObj.SUBKEYS || (lanObj.SUBKEYS = {});
+				var wordObj = subkeyObj[subkey] || (subkeyObj[subkey] = {});
 
 				wordObj[word] = translateData;
 			});
@@ -39804,18 +39804,18 @@ function fillNoUsedCodeTranslateWords(translateDataJSON, codeTranslateWords, def
 		});
 	}
 
-	_.each(codeTranslateWords.SUBTYPES, function(subtype_words, subtype)
+	_.each(codeTranslateWords.SUBKEYS, function(subkey_words, subkey)
 	{
-		var SUBTYPE_WORDS = _.uniq(subtype_words);
-		if (!SUBTYPE_WORDS.length) return;
+		var SUBKEY_WORDS = _.uniq(subkey_words);
+		if (!SUBKEY_WORDS.length) return;
 
 		lans.forEach(function(lan)
 		{
 			var lanItem = translateDataJSON[lan] || (translateDataJSON[lan] = {});
-			lanItem = lanItem.SUBTYPES || (lanItem.SUBTYPES = {});
-			var result = lanItem[subtype] || (lanItem[subtype] = {});
+			lanItem = lanItem.SUBKEYS || (lanItem.SUBKEYS = {});
+			var result = lanItem[subkey] || (lanItem[subkey] = {});
 
-			_.each(SUBTYPE_WORDS, function(word)
+			_.each(SUBKEY_WORDS, function(word)
 			{
 				if (!result[word]) result[word] = null;
 			});
@@ -39871,24 +39871,24 @@ function _translateJSON2ast(mainData)
 		}
 
 
-		// 处理 SUBTYPES
-		if (translateData.SUBTYPES)
+		// 处理 SUBKEYS
+		if (translateData.SUBKEYS)
 		{
-			var tmpSubtypesPropertiesAst = _.map(Object.keys(translateData.SUBTYPES).sort(), function(subtype)
+			var tmpSubkeysPropertiesAst = _.map(Object.keys(translateData.SUBKEYS).sort(), function(subkey)
 				{
-					var tmp = _wordJson2ast(translateData.SUBTYPES[subtype]);
+					var tmp = _wordJson2ast(translateData.SUBKEYS[subkey]);
 					if (!tmp) return;
 
-					return astTpl.Property(subtype, tmp);
+					return astTpl.Property(subkey, tmp);
 				})
 				.filter(function(val)
 				{
 					return val;
 				});
 
-			if (tmpSubtypesPropertiesAst.length)
+			if (tmpSubkeysPropertiesAst.length)
 			{
-				lanPropertiesAst.push(astTpl.Property('SUBTYPES', astTpl.ObjectExpression(tmpSubtypesPropertiesAst)));
+				lanPropertiesAst.push(astTpl.Property('SUBKEYS', astTpl.ObjectExpression(tmpSubkeysPropertiesAst)));
 			}
 		}
 
@@ -40008,14 +40008,14 @@ function translateAst2JSON(ast)
 					debug('TranslateData JSON Key <%s> end, lan:%', key, lan);
 					break;
 
-				case 'SUBTYPES':
-					var SUBTYPES_data = lan_data.SUBTYPES = {};
+				case 'SUBKEYS':
+					var SUBKEYS_data = lan_data.SUBKEYS = {};
 
-					lan_ast.value.properties.forEach(function(subtype_ast)
+					lan_ast.value.properties.forEach(function(subkey_ast)
 					{
-						var subkey = astUtil.ast2constVal(subtype_ast.key);
+						var subkey = astUtil.ast2constVal(subkey_ast.key);
 						debug('TranslateData JSON Key <%s> begin, lan:%, subkey:%s', key, lan, subkey);
-						SUBTYPES_data[subkey] = _wordAst2json(subtype_ast.value);
+						SUBKEYS_data[subkey] = _wordAst2json(subkey_ast.value);
 						debug('TranslateData JSON Key <%s> begin, lan:%, subkey:%s', key, lan, subkey);
 					});
 					break;
@@ -40118,9 +40118,9 @@ function toTranslateJSON(data)
 	var LANGS = _getlanArr(data);
 	if (LANGS.length) result.$ = LANGS;
 
-	function _addkey(subtype, srcWord, targetWord, langIndex)
+	function _addkey(subkey, srcWord, targetWord, langIndex)
 	{
-		var obj = result[subtype] || (result[subtype] = {});
+		var obj = result[subkey] || (result[subkey] = {});
 		var arr = obj[srcWord];
 		if (arr)
 		{
@@ -40144,18 +40144,18 @@ function toTranslateJSON(data)
 			_addkey('*', srcWord, targetWord, langIndex);
 		});
 
-		_.each(lang_data.SUBTYPES, function(item, subtype)
+		_.each(lang_data.SUBKEYS, function(item, subkey)
 		{
-			if (subtype == '*')
+			if (subkey == '*')
 				throw new Error('`*` IS SYSTEM RESERVED FIELD');
-			else if (subtype == '$')
+			else if (subkey == '$')
 				throw new Error('`$` IS SYSTEM RESERVED FIELD');
-			else if ((''+subtype)[0] == '$')
+			else if ((''+subkey)[0] == '$')
 				throw new Error('`$...` ARE SYSTEM RESERVED FIELD');
 
 			_.each(item, function(targetWord, srcWord)
 			{
-				_addkey(subtype, srcWord, targetWord, langIndex);
+				_addkey(subkey, srcWord, targetWord, langIndex);
 			});
 		});
 	});
@@ -40180,13 +40180,13 @@ function fillNoUsedCodeTranslateWords(translateDataJSON, codeTranslateWords)
 		});
 	}
 
-	_.each(codeTranslateWords.SUBTYPES, function(subtype_words, subtype)
+	_.each(codeTranslateWords.SUBKEYS, function(subkey_words, subkey)
 	{
-		var SUBTYPE_WORDS = _.uniq(subtype_words);
-		if (!SUBTYPE_WORDS.length) return;
+		var SUBKEY_WORDS = _.uniq(subkey_words);
+		if (!SUBKEY_WORDS.length) return;
 
-		var result = translateDataJSON[subtype] || (translateDataJSON[subtype] = {});
-		_.each(SUBTYPE_WORDS, function(word)
+		var result = translateDataJSON[subkey] || (translateDataJSON[subkey] = {});
+		_.each(SUBKEY_WORDS, function(word)
 		{
 			if (!result[word]) result[word] = null;
 		});
@@ -40332,7 +40332,7 @@ function _getlanArr(translateData)
 {
 	return _.map(translateData, function(obj, lang)
 		{
-			var subtypeWordsLen = _(obj.SUBTYPES)
+			var subkeyWordsLen = _(obj.SUBKEYS)
 				.map(function(obj)
 				{
 					return Object.keys(obj).length;
@@ -40342,11 +40342,11 @@ function _getlanArr(translateData)
 					return a + b;
 				});
 
-			debug('subtypeWordsLen:%s', subtypeWordsLen);
+			debug('subkeyWordsLen:%s', subkeyWordsLen);
 
 			return {
 				lang: lang,
-				words_len: _.keys(obj.DEFAULTS).length + (subtypeWordsLen || 0)
+				words_len: _.keys(obj.DEFAULTS).length + (subkeyWordsLen || 0)
 			};
 		})
 		.sort(function(a, b)
@@ -40407,7 +40407,7 @@ function _ast2json(ast)
 					if (key == '*')
 						throw new Error('DEFAULT TRANSLATE JSON `*` MUST BE AN OBJECT');
 					else
-						throw new Error('SUBTYPE TRANSLATE JSON MUST BE AN OBJECT');
+						throw new Error('SUBKEY TRANSLATE JSON MUST BE AN OBJECT');
 				}
 				var lan_data = translateJSON[key] = {};
 				value.properties.forEach(function(ast)
@@ -40456,13 +40456,13 @@ function codeJSON2translateJSON(translateJSON)
 	var lans = translateJSON.$ || [];
 	// 转数据结构，提速
 	var translateJSON2 = Object.keys(translateJSON)
-		.map(function(subtype)
+		.map(function(subkey)
 		{
-			if (subtype == '$') return;
+			if (subkey == '$') return;
 
 			return {
-				subtype: subtype,
-				items: _.map(translateJSON[subtype], function(values, word)
+				subkey: subkey,
+				items: _.map(translateJSON[subkey], function(values, word)
 					{
 						return {word: word, values: values};
 					})
@@ -40473,18 +40473,18 @@ function codeJSON2translateJSON(translateJSON)
 	{
 		var lan_data = result[lan] = {};
 
-		translateJSON2.forEach(function(subtypeItem)
+		translateJSON2.forEach(function(subkeyItem)
 		{
-			if (!subtypeItem) return;
+			if (!subkeyItem) return;
 
-			if (subtypeItem.subtype == '*')
+			if (subkeyItem.subkey == '*')
 			{
-				lan_data.DEFAULTS = _getSubtypeJSON(subtypeItem, lanIndex);
+				lan_data.DEFAULTS = _getSubkeyJSON(subkeyItem, lanIndex);
 			}
 			else
 			{
-				var SUBTYPES_data = lan_data.SUBTYPES || (lan_data.SUBTYPES = {});
-				SUBTYPES_data[subtypeItem.subtype] = _getSubtypeJSON(subtypeItem, lanIndex);
+				var SUBKEYS_data = lan_data.SUBKEYS || (lan_data.SUBKEYS = {});
+				SUBKEYS_data[subkeyItem.subkey] = _getSubkeyJSON(subkeyItem, lanIndex);
 			}
 		});
 	});
@@ -40495,13 +40495,13 @@ function codeJSON2translateJSON(translateJSON)
 
 /**
  * 从多个语言翻译结果合并的数组中，找到对应语言的翻译数据
- * 是对一个语言包的一个subtype完整处理，不是单个词
+ * 是对一个语言包的一个subkey完整处理，不是单个词
  */
-function _getSubtypeJSON(subtypeItem, lanIndex)
+function _getSubkeyJSON(subkeyItem, lanIndex)
 {
 	var result = {};
 
-	_.each(subtypeItem.items, function(item)
+	_.each(subkeyItem.items, function(item)
 	{
 		var target = item.values[lanIndex];
 		if (target === undefined || target === null) return;

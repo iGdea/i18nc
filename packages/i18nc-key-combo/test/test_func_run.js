@@ -296,17 +296,17 @@ describe('#func run', function()
 					// }
 				});
 
-			_checkAll('1+2+a+I18N(b,subtype)',
+			_checkAll('1+2+a+I18N(b,subkey)',
 				{
 					LITERAL:
 					{
 						combo: [1, 2, 'a', '[callee]I18N'],
-						comboCode: '1+2+a+I18N(b,subtype)'
+						comboCode: '1+2+a+I18N(b,subkey)'
 					},
 					I18N:
 					{
 						combo: [1, 2, 'a', '[callee]I18N'],
-						comboCode: '1+2+a+I18N(b,subtype)'
+						comboCode: '1+2+a+I18N(b,subkey)'
 					},
 					// ALL_I18N:
 					// {

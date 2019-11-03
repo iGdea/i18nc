@@ -44,7 +44,7 @@ function _ast2json(ast)
 					if (key == '*')
 						throw new Error('DEFAULT TRANSLATE JSON `*` MUST BE AN OBJECT');
 					else
-						throw new Error('SUBTYPE TRANSLATE JSON MUST BE AN OBJECT');
+						throw new Error('SUBKEY TRANSLATE JSON MUST BE AN OBJECT');
 				}
 				var lan_data = translateJSON[key] = {};
 				value.properties.forEach(function(ast)
@@ -93,13 +93,13 @@ function codeJSON2translateJSON(translateJSON)
 	var lans = translateJSON.$ || [];
 	// 转数据结构，提速
 	var translateJSON2 = Object.keys(translateJSON)
-		.map(function(subtype)
+		.map(function(subkey)
 		{
-			if (subtype == '$') return;
+			if (subkey == '$') return;
 
 			return {
-				subtype: subtype,
-				items: _.map(translateJSON[subtype], function(values, word)
+				subkey: subkey,
+				items: _.map(translateJSON[subkey], function(values, word)
 					{
 						return {word: word, values: values};
 					})
@@ -110,18 +110,18 @@ function codeJSON2translateJSON(translateJSON)
 	{
 		var lan_data = result[lan] = {};
 
-		translateJSON2.forEach(function(subtypeItem)
+		translateJSON2.forEach(function(subkeyItem)
 		{
-			if (!subtypeItem) return;
+			if (!subkeyItem) return;
 
-			if (subtypeItem.subtype == '*')
+			if (subkeyItem.subkey == '*')
 			{
-				lan_data.DEFAULTS = _getSubtypeJSON(subtypeItem, lanIndex);
+				lan_data.DEFAULTS = _getSubkeyJSON(subkeyItem, lanIndex);
 			}
 			else
 			{
-				var SUBTYPES_data = lan_data.SUBTYPES || (lan_data.SUBTYPES = {});
-				SUBTYPES_data[subtypeItem.subtype] = _getSubtypeJSON(subtypeItem, lanIndex);
+				var SUBKEYS_data = lan_data.SUBKEYS || (lan_data.SUBKEYS = {});
+				SUBKEYS_data[subkeyItem.subkey] = _getSubkeyJSON(subkeyItem, lanIndex);
 			}
 		});
 	});
@@ -132,13 +132,13 @@ function codeJSON2translateJSON(translateJSON)
 
 /**
  * 从多个语言翻译结果合并的数组中，找到对应语言的翻译数据
- * 是对一个语言包的一个subtype完整处理，不是单个词
+ * 是对一个语言包的一个subkey完整处理，不是单个词
  */
-function _getSubtypeJSON(subtypeItem, lanIndex)
+function _getSubkeyJSON(subkeyItem, lanIndex)
 {
 	var result = {};
 
-	_.each(subtypeItem.items, function(item)
+	_.each(subkeyItem.items, function(item)
 	{
 		var target = item.values[lanIndex];
 		if (target === undefined || target === null) return;
