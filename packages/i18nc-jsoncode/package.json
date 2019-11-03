@@ -1,6 +1,6 @@
 {
   "name": "i18nc-jsoncode",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "I18N Json Code Tool",
   "main": "index.js",
   "scripts": {
@@ -10,8 +10,8 @@
   },
   "dependencies": {
     "debug": "^4.1.0",
-    "i18nc-jsoncode1": "^2.0.1",
-    "i18nc-jsoncode2": "^2.1.1"
+    "i18nc-jsoncode1": "^2.0.2",
+    "i18nc-jsoncode2": "^2.1.2"
   },
   "devDependencies": {
     "cross-env": "^5.2.0",

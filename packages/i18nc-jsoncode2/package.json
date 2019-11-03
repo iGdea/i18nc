@@ -1,6 +1,6 @@
 {
   "name": "i18nc-jsoncode2",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "I18N JSON Code Tool",
   "main": "index.js",
   "scripts": {

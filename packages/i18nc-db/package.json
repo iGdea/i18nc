@@ -1,6 +1,6 @@
 {
   "name": "i18nc-db",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "description": "I18N DB Tool",
   "main": "index.js",
   "scripts": {
@@ -12,7 +12,7 @@
   "dependencies": {
     "debug": "^4.1.0",
     "i18nc-ast": "^1.0.2",
-    "i18nc-jsoncode": "^1.0.2",
+    "i18nc-jsoncode": "^1.0.3",
     "lodash": "^4.17.11"
   },
   "devDependencies": {
