@@ -1,0 +1,44 @@
+{
+  "name": "i18nc-loader",
+  "version": "1.0.0",
+  "description": "I18N Loader for Webpack",
+  "main": "index.js",
+  "scripts": {
+    "example": "webpack --config example/webpack.config.js",
+    "test": "npm run example && cross-env DEBUG=i18nc-loader* mocha test/test_*",
+    "test-cov": "npm run example && istanbul cover _mocha -- test/test_* --reporter dot",
+    "test-travis": "npm run example && istanbul cover _mocha --report lcovonly -- test/test_* --reporter dot"
+  },
+  "dependencies": {
+    "loader-utils": "^1.1.0",
+    "debug": "^4.1.0",
+    "lodash": "^4.17.11",
+    "i18nc": "^4.6.1"
+  },
+  "devDependencies": {
+    "webpack-cli": "^3.1.2",
+    "webpack": "^4.23.1",
+    "cross-env": "^5.2.0",
+    "eslint": "^5.8.0",
+    "eslint-config-brcjs": "^0.2.0",
+    "expect.js": "^0.3.1",
+    "istanbul": "^0.4.5",
+    "mocha": "^5.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Bacra/i18nc.git"
+  },
+  "keywords": [
+    "i18n",
+    "i18nc",
+    "translate",
+    "extract"
+  ],
+  "author": "Bacra Woo<bacra.woo@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Bacra/i18nc/issues"
+  },
+  "homepage": "https://github.com/Bacra/i18nc"
+}
