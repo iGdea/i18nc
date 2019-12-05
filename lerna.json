@@ -6,7 +6,8 @@
     "publish": {
       "ignoreChanges": [
         "test/*",
-        "*.md"
+        "*.md",
+        "packages/i18nc-core/dist/i18nc_core.js"
       ]
     },
     "bootstrap": {

@@ -39409,7 +39409,7 @@ arguments[4][28][0].apply(exports,arguments)
 },{"./lib/source-map-consumer":75,"./lib/source-map-generator":76,"./lib/source-node":77,"dup":28}],80:[function(require,module,exports){
 module.exports={
   "name": "i18nc-core",
-  "version": "10.15.2",
+  "version": "10.15.3",
   "description": "Code of I18NC",
   "main": "index.js",
   "scripts": {
@@ -39466,7 +39466,8 @@ module.exports={
   "bugs": {
     "url": "https://github.com/Bacra/i18nc/issues"
   },
-  "homepage": "https://github.com/Bacra/i18nc"
+  "homepage": "https://github.com/Bacra/i18nc",
+  "gitHead": "8c887760b5a39b31265cbd3840bca63bd68c3a99"
 }
 
 },{}],81:[function(require,module,exports){
