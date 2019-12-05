@@ -1,6 +1,6 @@
 {
   "name": "i18nc-core",
-  "version": "10.15.2",
+  "version": "10.15.3",
   "description": "Code of I18NC",
   "main": "index.js",
   "scripts": {
