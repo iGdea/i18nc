@@ -13,6 +13,7 @@
     "loader-utils": "^1.1.0",
     "debug": "^4.1.0",
     "lodash": "^4.17.11",
+    "extend": "^3.0.2",
     "i18nc": "^4.6.1"
   },
   "devDependencies": {
