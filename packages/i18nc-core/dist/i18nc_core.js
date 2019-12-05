@@ -39409,7 +39409,7 @@ arguments[4][28][0].apply(exports,arguments)
 },{"./lib/source-map-consumer":75,"./lib/source-map-generator":76,"./lib/source-node":77,"dup":28}],80:[function(require,module,exports){
 module.exports={
   "name": "i18nc-core",
-  "version": "10.15.1",
+  "version": "10.15.2",
   "description": "Code of I18NC",
   "main": "index.js",
   "scripts": {
@@ -39432,9 +39432,9 @@ module.exports={
     "esshorten4node11": "^1.1.2",
     "estraverse": "^4.2.0",
     "i18nc-ast": "^1.0.2",
-    "i18nc-db": "^1.1.3",
-    "i18nc-jsoncode": "^1.0.2",
-    "i18nc-options": "^1.1.1",
+    "i18nc-db": "^1.1.4",
+    "i18nc-jsoncode": "^1.0.3",
+    "i18nc-options": "^1.1.2",
     "lodash": "^4.17.11"
   },
   "devDependencies": {
