@@ -1,18 +1,16 @@
 'use strict';
 
-var path = require('path');
-var i18nc = require('i18nc');
-var extend = require('extend');
-var Promise = require('bluebird');
-var log = require('./log');
+const path = require('path');
+const i18nc = require('i18nc');
+const extend = require('extend');
+const Promise = require('bluebird');
+const log = require('./log');
 
-function toLinux(p)
-{
+function toLinux(p) {
 	return p && path.normalize(p).replace(/\\/g, '/');
 }
 
-function _removeResultCode(json)
-{
+function _removeResultCode(json) {
 	delete json.code;
 	json.subScopeDatas.forEach(_removeResultCode);
 }
@@ -20,35 +18,31 @@ function _removeResultCode(json)
 exports.data = {};
 exports.dbloadCache = {};
 
-exports.handler = function(srcCwd, srcFile, content, options)
-{
-	var dbTranslateWords = options.dbTranslateWords || {};
+exports.handler = function(srcCwd, srcFile, content, options) {
+	let dbTranslateWords = options.dbTranslateWords || {};
 
-	function main(dbTranslateWords)
-	{
-		var pcwd = process.cwd();
-		var fullCwd = path.resolve(pcwd, srcCwd);
-		var fullSrcFile = path.resolve(pcwd, srcFile);
+	function main(dbTranslateWords) {
+		const pcwd = process.cwd();
+		const fullCwd = path.resolve(pcwd, srcCwd);
+		const fullSrcFile = path.resolve(pcwd, srcFile);
 
 		log.verbose.writeln('full cwd:%s src:%s', fullCwd, fullSrcFile);
 
-		var opts = extend({}, options,
-			{
-				cwd					: fullCwd,
-				srcFile				: toLinux(path.resolve(fullCwd, fullSrcFile)),
-				dbTranslateWords	: dbTranslateWords,
-			});
+		const opts = extend({}, options, {
+			cwd: fullCwd,
+			srcFile: toLinux(path.resolve(fullCwd, fullSrcFile)),
+			dbTranslateWords: dbTranslateWords
+		});
 
-		var info = i18nc(content, opts);
-		var dirtyWords = info.allDirtyWords();
-		if (dirtyWords.list.length)
-		{
-			var output = i18nc.util.cli.printDirtyWords(dirtyWords, 2);
-			log.writeln('  File DirtyWords: '+srcFile);
+		const info = i18nc(content, opts);
+		const dirtyWords = info.allDirtyWords();
+		if (dirtyWords.list.length) {
+			const output = i18nc.util.cli.printDirtyWords(dirtyWords, 2);
+			log.writeln('  File DirtyWords: ' + srcFile);
 			log.writeln(output);
 		}
 
-		var code = info.code;
+		const code = info.code;
 
 		_removeResultCode(info);
 		exports.data[fullSrcFile] = info;
@@ -56,20 +50,19 @@ exports.handler = function(srcCwd, srcFile, content, options)
 		return code;
 	}
 
-	var poFilesInputDir = options.poFilesInputDir;
-	if (poFilesInputDir)
-	{
-		var promise = exports.dbloadCache[poFilesInputDir]
-			|| (exports.dbloadCache[poFilesInputDir] = i18nc.util.file.loadPOFiles(poFilesInputDir));
-		return promise.then(function(data)
-			{
-				dbTranslateWords = extend(true, {}, data, dbTranslateWords);
+	const poFilesInputDir = options.poFilesInputDir;
+	if (poFilesInputDir) {
+		const promise =
+			exports.dbloadCache[poFilesInputDir] ||
+			(exports.dbloadCache[poFilesInputDir] = i18nc.util.file.loadPOFiles(
+				poFilesInputDir
+			));
+		return promise.then(function(data) {
+			dbTranslateWords = extend(true, {}, data, dbTranslateWords);
 
-				return main(dbTranslateWords);
-			});
-	}
-	else
-	{
+			return main(dbTranslateWords);
+		});
+	} else {
 		return Promise.resolve(dbTranslateWords).then(main);
 	}
-}
+};

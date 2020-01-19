@@ -1,17 +1,14 @@
 'use strict';
 
-var testReq			= require('../');
-var checkResult		= require('./check_result');
-testReq.ROOT_PATH	= __dirname + '/output';
+const testReq = require('../');
+const checkResult = require('./check_result');
+testReq.ROOT_PATH = __dirname + '/output';
 
-describe('#build', function()
-{
-	beforeEach(function()
-	{
+describe('#build', function() {
+	beforeEach(function() {
 		testReq.BUILD = true;
 	});
-	afterEach(function()
-	{
+	afterEach(function() {
 		testReq.BUILD = false;
 	});
 

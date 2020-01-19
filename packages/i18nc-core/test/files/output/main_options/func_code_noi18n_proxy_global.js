@@ -3,8 +3,7 @@ module.exports = function code()
 
 
 	/* eslint-disable */
-	function I18N(msg)
-	{
+	function I18N(msg) {
 		var self = I18N;
 		var data = self.$;
 

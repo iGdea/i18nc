@@ -1,37 +1,32 @@
 'use strict';
 
-var _				= require('lodash');
-var debug			= require('debug')('i18nc-core:result_obj');
-var extend			= require('extend');
-var i18ncAst		= require('i18nc-ast');
-var astUtil			= i18ncAst.util;
-var AST_FLAGS		= i18ncAst.AST_FLAGS;
-var ArrayPush		= Array.prototype.push;
-var ArrayConcat		= Array.prototype.concat;
-
+const _ = require('lodash');
+const debug = require('debug')('i18nc-core:result_obj');
+const extend = require('extend');
+const i18ncAst = require('i18nc-ast');
+const astUtil = i18ncAst.util;
+const AST_FLAGS = i18ncAst.AST_FLAGS;
+const ArrayPush = Array.prototype.push;
+const ArrayConcat = Array.prototype.concat;
 
 exports.DirtyWords = DirtyWords;
 exports.TranslateWords = TranslateWords;
 exports.CodeInfoResult = CodeInfoResult;
 exports.CodeTranslateWords = CodeTranslateWords;
 
-var FuncTranslateWords = exports.FuncTranslateWords = FileKeyTranslateWords;
-var UsedTranslateWords = exports.UsedTranslateWords = FileKeyTranslateWords;
+const FuncTranslateWords = (exports.FuncTranslateWords = FileKeyTranslateWords);
+const UsedTranslateWords = (exports.UsedTranslateWords = FileKeyTranslateWords);
 
-function DirtyWords(list)
-{
+function DirtyWords(list) {
 	this.list = list || [];
 }
 
-_.extend(DirtyWords.prototype,
-{
-	add: function(ast, reason)
-	{
-		this.list.push(
-		{
-			code		: astUtil.tocode(ast),
-			reason		: reason,
-			originalAst	: ast,
+_.extend(DirtyWords.prototype, {
+	add: function(ast, reason) {
+		this.list.push({
+			code: astUtil.tocode(ast),
+			reason: reason,
+			originalAst: ast
 		});
 	},
 	/**
@@ -39,10 +34,8 @@ _.extend(DirtyWords.prototype,
 	 *
 	 * @return {Array} [源码片段]
 	 */
-	toArray: function()
-	{
-		return this.list.map(function(item)
-		{
+	toArray: function() {
+		return this.list.map(function(item) {
 			return item.code;
 		});
 	},
@@ -51,8 +44,7 @@ _.extend(DirtyWords.prototype,
 	 *
 	 * @return {Object}
 	 */
-	toJSON: function()
-	{
+	toJSON: function() {
 		return this.toArray();
 	},
 	/**
@@ -60,8 +52,7 @@ _.extend(DirtyWords.prototype,
 	 *
 	 * @return {DirtyWords}
 	 */
-	clone: function()
-	{
+	clone: function() {
 		return new DirtyWords(this.list.slice());
 	},
 	/**
@@ -69,57 +60,52 @@ _.extend(DirtyWords.prototype,
 	 *
 	 * @param  {DirtyWords} dirtyWords
 	 */
-	merge: function(dirtyWords)
-	{
+	merge: function(dirtyWords) {
 		ArrayPush.apply(this.list, dirtyWords.list);
 	}
 });
 
-
-function CodeTranslateWords(list)
-{
+function CodeTranslateWords(list) {
 	this.list = list || [];
 }
 
-_.extend(CodeTranslateWords.prototype,
-{
+_.extend(CodeTranslateWords.prototype, {
 	/**
 	 * 输出JSON格式的结果
 	 *
 	 * @return {Object}
 	 */
-	toJSON: function()
-	{
-		var DEFAULTS = [];
-		var SUBKEYS = {};
+	toJSON: function() {
+		const DEFAULTS = [];
+		const SUBKEYS = {};
 
 		// 排序，保证数组是按照code先后顺序生成
-		this.list.sort(function(a, b)
-		{
-			return a.originalAst.range[0] > b.originalAst.range[0] ? 1 : -1;
-		})
-		.forEach(function(item)
-		{
-			switch (item.type)
-			{
-				case 'new':
-					ArrayPush.apply(DEFAULTS, item.translateWords);
-					break;
+		this.list
+			.sort(function(a, b) {
+				return a.originalAst.range[0] > b.originalAst.range[0] ? 1 : -1;
+			})
+			.forEach(function(item) {
+				switch (item.type) {
+					case 'new':
+						ArrayPush.apply(DEFAULTS, item.translateWords);
+						break;
 
-				case 'subkey':
-					var arr = SUBKEYS[item.subkey] || (SUBKEYS[item.subkey] = []);
-					arr.push(item.translateWord);
-					break;
+					case 'subkey': {
+						const arr =
+							SUBKEYS[item.subkey] || (SUBKEYS[item.subkey] = []);
+						arr.push(item.translateWord);
+						break;
+					}
 
-				case 'wraped':
-					DEFAULTS.push(item.translateWord);
-					break;
-			}
-		});
+					case 'wraped':
+						DEFAULTS.push(item.translateWord);
+						break;
+				}
+			});
 
 		return {
 			DEFAULTS: DEFAULTS,
-			SUBKEYS: SUBKEYS,
+			SUBKEYS: SUBKEYS
 		};
 	},
 	/**
@@ -127,8 +113,7 @@ _.extend(CodeTranslateWords.prototype,
 	 *
 	 * @return {CodeTranslateWords}
 	 */
-	clone: function()
-	{
+	clone: function() {
 		return new CodeTranslateWords(this.list.slice());
 	},
 	/**
@@ -136,8 +121,7 @@ _.extend(CodeTranslateWords.prototype,
 	 *
 	 * @param  {CodeTranslateWords} codeTranslateWords
 	 */
-	merge: function(codeTranslateWords)
-	{
+	merge: function(codeTranslateWords) {
 		ArrayPush.apply(this.list, codeTranslateWords.list);
 	},
 	/**
@@ -145,28 +129,25 @@ _.extend(CodeTranslateWords.prototype,
 	 *
 	 * @return {String}
 	 */
-	allwords: function()
-	{
-		var result = [];
+	allwords: function() {
+		const result = [];
 
-		this.list.sort(function(a, b)
-		{
-			return a.originalAst.range[0] > b.originalAst.range[0] ? 1 : -1;
-		})
-		.forEach(function(item)
-		{
-			switch (item.type)
-			{
-				case 'new':
-					ArrayPush.apply(result, item.translateWords);
-					break;
+		this.list
+			.sort(function(a, b) {
+				return a.originalAst.range[0] > b.originalAst.range[0] ? 1 : -1;
+			})
+			.forEach(function(item) {
+				switch (item.type) {
+					case 'new':
+						ArrayPush.apply(result, item.translateWords);
+						break;
 
-				case 'subkey':
-				case 'wraped':
-					result.push(item.translateWord);
-					break;
-			}
-		});
+					case 'subkey':
+					case 'wraped':
+						result.push(item.translateWord);
+						break;
+				}
+			});
 
 		return result;
 	},
@@ -175,37 +156,36 @@ _.extend(CodeTranslateWords.prototype,
 	 *
 	 * @return {Ast}
 	 */
-	list4newWordAsts: function()
-	{
-		return this.list.filter(function(item)
-			{
-				return item.type == 'new';
-			});
+	list4newWordAsts: function() {
+		return this.list.filter(function(item) {
+			return item.type == 'new';
+		});
 	},
 	/**
 	 * 输出所有没有包裹的需要翻译的新词条
 	 *
 	 * @return {Ast}
 	 */
-	list4nowrappedWordAsts: function()
-	{
-		return this.list.filter(function(item)
-			{
-				return item.type == 'new'
-					&& !astUtil.checkAstFlag(item.originalAst, AST_FLAGS.SKIP_REPLACE | AST_FLAGS.DIS_REPLACE);
-			});
+	list4nowrappedWordAsts: function() {
+		return this.list.filter(function(item) {
+			return (
+				item.type == 'new' &&
+				!astUtil.checkAstFlag(
+					item.originalAst,
+					AST_FLAGS.SKIP_REPLACE | AST_FLAGS.DIS_REPLACE
+				)
+			);
+		});
 	},
 	/**
 	 * 输出所有需要翻译的新词条
 	 *
 	 * @return {String}
 	 */
-	list4newWords: function()
-	{
-		var arrs = this.list4newWordAsts().map(function(item)
-			{
-				return item.translateWords;
-			});
+	list4newWords: function() {
+		const arrs = this.list4newWordAsts().map(function(item) {
+			return item.translateWords;
+		});
 		return ArrayConcat.apply([], arrs);
 	},
 	/**
@@ -213,65 +193,54 @@ _.extend(CodeTranslateWords.prototype,
 	 *
 	 * @return {String}
 	 */
-	list4nowrappedWords: function()
-	{
-		var arrs = this.list4nowrappedWordAsts().map(function(item)
-			{
-				return item.translateWords;
-			});
+	list4nowrappedWords: function() {
+		const arrs = this.list4nowrappedWordAsts().map(function(item) {
+			return item.translateWords;
+		});
 		return ArrayConcat.apply([], arrs);
 	},
-	pushNewWord: function(ast)
-	{
-		this.list.push(
-		{
-			type           : 'new',
-			originalAst    : ast,
-			translateWords : ast.__i18n_replace_info__.translateWords
+	pushNewWord: function(ast) {
+		this.list.push({
+			type: 'new',
+			originalAst: ast,
+			translateWords: ast.__i18n_replace_info__.translateWords
 		});
 	},
-	pushSubkey: function(subkey, ast)
-	{
-		this.list.push(
-		{
-			type          : 'subkey',
-			originalAst   : ast,
-			subkey       : subkey,
-			translateWord : astUtil.ast2constVal(ast),
+	pushSubkey: function(subkey, ast) {
+		this.list.push({
+			type: 'subkey',
+			originalAst: ast,
+			subkey: subkey,
+			translateWord: astUtil.ast2constVal(ast)
 		});
 	},
-	pushWraped: function(ast)
-	{
-		this.list.push(
-		{
-			type          : 'wraped',
-			originalAst   : ast,
-			translateWord : astUtil.ast2constVal(ast),
+	pushWraped: function(ast) {
+		this.list.push({
+			type: 'wraped',
+			originalAst: ast,
+			translateWord: astUtil.ast2constVal(ast)
 		});
 	}
 });
 
-
-function FileKeyTranslateWords(list)
-{
+function FileKeyTranslateWords(list) {
 	this.list = list || [];
 }
 
-_.extend(FileKeyTranslateWords.prototype,
-{
-	add: function(fileKey, json)
-	{
-		this.list.push({fileKey: fileKey, data: json || {}});
+_.extend(FileKeyTranslateWords.prototype, {
+	add: function(fileKey, json) {
+		this.list.push({
+			fileKey: fileKey,
+			data: json || {}
+		});
 	},
 	/**
 	 * 输出JSON格式的结果
 	 *
 	 * @return {Object}
 	 */
-	toJSON: function()
-	{
-		var arrs = this.list.map(function(item)
-		{
+	toJSON: function() {
+		const arrs = this.list.map(function(item) {
 			return item.data;
 		});
 
@@ -283,8 +252,7 @@ _.extend(FileKeyTranslateWords.prototype,
 	 *
 	 * @return {FileKeyTranslateWords}
 	 */
-	clone: function()
-	{
+	clone: function() {
 		return new FileKeyTranslateWords(this.list.slice());
 	},
 	/**
@@ -292,8 +260,7 @@ _.extend(FileKeyTranslateWords.prototype,
 	 *
 	 * @param  {FileKeyTranslateWords} fileKeyTranslateWords
 	 */
-	merge: function(fileKeyTranslateWords)
-	{
+	merge: function(fileKeyTranslateWords) {
 		ArrayPush.apply(this.list, fileKeyTranslateWords.list);
 	},
 	/**
@@ -301,47 +268,40 @@ _.extend(FileKeyTranslateWords.prototype,
 	 *
 	 * @return {Array}
 	 */
-	lans: function()
-	{
-		var lanArrs = this.list.map(function(item)
-		{
+	lans: function() {
+		const lanArrs = this.list.map(function(item) {
 			return Object.keys(item.data);
 		});
 
 		return _.uniq(ArrayConcat.apply([], lanArrs));
 	},
-	words: function(lan)
-	{
-		var data = this.toJSON();
-		var SUBKEYS = {};
-		if (lan)
-		{
-			var json = data[lan] || {};
-			_.each(json.SUBKEYS, function(obj, subkey)
-			{
+	words: function(lan) {
+		const data = this.toJSON();
+		const SUBKEYS = {};
+		if (lan) {
+			const json = data[lan] || {};
+			_.each(json.SUBKEYS, function(obj, subkey) {
 				SUBKEYS[subkey] = Object.keys(obj);
 			});
 
 			return {
-				DEFAULTS: json.DEFAULTS && Object.keys(json.DEFAULTS) || [],
-				SUBKEYS: SUBKEYS,
+				DEFAULTS: (json.DEFAULTS && Object.keys(json.DEFAULTS)) || [],
+				SUBKEYS: SUBKEYS
 			};
 		}
 
-		var DEFAULTS = [];
-		_.each(data, function(json)
-		{
-			ArrayPush.apply(DEFAULTS, json.DEFAULTS && Object.keys(json.DEFAULTS) || []);
-			_.each(json.SUBKEYS, function(obj, subkey)
-			{
-				var arr = SUBKEYS[subkey];
-				if (arr)
-				{
+		const DEFAULTS = [];
+		_.each(data, function(json) {
+			ArrayPush.apply(
+				DEFAULTS,
+				(json.DEFAULTS && Object.keys(json.DEFAULTS)) || []
+			);
+			_.each(json.SUBKEYS, function(obj, subkey) {
+				const arr = SUBKEYS[subkey];
+				if (arr) {
 					ArrayPush.apply(arr, Object.keys(obj));
 					SUBKEYS[subkey] = _.uniq(arr);
-				}
-				else
-				{
+				} else {
 					SUBKEYS[subkey] = Object.keys(obj);
 				}
 			});
@@ -349,81 +309,85 @@ _.extend(FileKeyTranslateWords.prototype,
 
 		return {
 			DEFAULTS: _.uniq(DEFAULTS),
-			SUBKEYS: SUBKEYS,
+			SUBKEYS: SUBKEYS
 		};
-	},
+	}
 });
 
-
-
-function TranslateWords(codeTranslateWords, funcTranslateWords, usedTranslateWords)
-{
+function TranslateWords(
+	codeTranslateWords,
+	funcTranslateWords,
+	usedTranslateWords
+) {
 	// 从代码中获取到的关键字
-	this.codeTranslateWords = codeTranslateWords instanceof CodeTranslateWords
-		? codeTranslateWords : new CodeTranslateWords(codeTranslateWords);
+	this.codeTranslateWords =
+		codeTranslateWords instanceof CodeTranslateWords
+			? codeTranslateWords
+			: new CodeTranslateWords(codeTranslateWords);
 	// 从i18n函数中解出来的翻译数据 数据带filekey
-	this.funcTranslateWords = funcTranslateWords instanceof FuncTranslateWords
-		? funcTranslateWords : new FuncTranslateWords(funcTranslateWords);
+	this.funcTranslateWords =
+		funcTranslateWords instanceof FuncTranslateWords
+			? funcTranslateWords
+			: new FuncTranslateWords(funcTranslateWords);
 	// 处理后，正在使用的翻译数据  数据不带filekey
-	this.usedTranslateWords = usedTranslateWords instanceof UsedTranslateWords
-		? usedTranslateWords : new UsedTranslateWords(usedTranslateWords);
+	this.usedTranslateWords =
+		usedTranslateWords instanceof UsedTranslateWords
+			? usedTranslateWords
+			: new UsedTranslateWords(usedTranslateWords);
 }
 
-_.extend(TranslateWords.prototype,
-{
+_.extend(TranslateWords.prototype, {
 	/**
 	 * 输出JSON格式的结果
 	 *
 	 * @return {Object}
 	 */
-	toJSON: function()
-	{
+	toJSON: function() {
 		return {
 			codeTranslateWords: this.codeTranslateWords.toJSON(),
 			funcTranslateWords: this.funcTranslateWords.toJSON(),
-			usedTranslateWords: this.usedTranslateWords.toJSON(),
+			usedTranslateWords: this.usedTranslateWords.toJSON()
 		};
 	}
 });
 
+function CodeInfoResult(data) {
+	const self = this;
 
-function CodeInfoResult(data)
-{
-	var self = this;
-
-	['code', 'currentFileKey', 'originalFileKeys', 'subScopeDatas', 'currentFileKeys']
-		.forEach(function(name)
-		{
-			self[name] = data[name];
-		});
+	[
+		'code',
+		'currentFileKey',
+		'originalFileKeys',
+		'subScopeDatas',
+		'currentFileKeys'
+	].forEach(function(name) {
+		self[name] = data[name];
+	});
 
 	self.dirtyWords = data.dirtyWords instanceof DirtyWords
-		? data.dirtyWords : new DirtyWords(data.dirtyWords);
+		? data.dirtyWords
+		: new DirtyWords(data.dirtyWords);
 
-	if (data.words)
-	{
+	if (data.words) {
 		self.words = data.words instanceof TranslateWords
-			? data.words : new TranslateWords(
+			? data.words
+			: new TranslateWords(
 					data.words.codeTranslateWords,
 					data.words.funcTranslateWords,
 					data.words.usedTranslateWords
 				);
-	}
-	else
-	{
+	} else {
 		self.words = new TranslateWords();
 	}
 }
 
-_.extend(CodeInfoResult.prototype,
-{
+_.extend(CodeInfoResult.prototype, {
 	/**
 	 * 输出处理后的源码
 	 *
 	 * @return {String}
 	 */
-	toString: function()
-	{
+	toString: function() {
 		return this.code;
 	},
 	/**
@@ -431,16 +395,16 @@ _.extend(CodeInfoResult.prototype,
 	 *
 	 * @return {Object}
 	 */
-	toJSON: function()
-	{
-		var json =
-		{
-			code             : this.code,
-			currentFileKey   : this.currentFileKey,
-			originalFileKeys : this.originalFileKeys,
-			subScopeDatas    : this.subScopeDatas.map(function(item){return item.toJSON()}),
-			dirtyWords       : this.dirtyWords.toArray(),
-			words            : this.words.toJSON(),
+	toJSON: function() {
+		const json = {
+			code: this.code,
+			currentFileKey: this.currentFileKey,
+			originalFileKeys: this.originalFileKeys,
+			subScopeDatas: this.subScopeDatas.map(function(item) {
+				return item.toJSON();
+			}),
+			dirtyWords: this.dirtyWords.toArray(),
+			words: this.words.toJSON()
 		};
 
 		if (this.currentFileKeys) json.currentFileKeys = this.currentFileKeys;
@@ -452,26 +416,25 @@ _.extend(CodeInfoResult.prototype,
 	 *
 	 * @return {CodeInfoResult}
 	 */
-	squeeze: function()
-	{
-		var lans = this.allFuncLans();
+	squeeze: function() {
+		let lans = this.allFuncLans();
 		ArrayPush.apply(lans, this.allUsedLans());
 		lans = _.uniq(lans);
 		debug('alllans:%o', lans);
 
-		return new CodeInfoResult(
-		{
-			code             : this.code,
-			lans             : lans,
-			currentFileKey   : this.currentFileKey,
-			currentFileKeys  : this.allCurrentFileKeys(),
-			originalFileKeys : this.allOriginalFileKeys(),
-			subScopeDatas    : [],
-			dirtyWords       : this.allDirtyWords(),
+		return new CodeInfoResult({
+			code: this.code,
+			lans: lans,
+			currentFileKey: this.currentFileKey,
+			currentFileKeys: this.allCurrentFileKeys(),
+			originalFileKeys: this.allOriginalFileKeys(),
+			subScopeDatas: [],
+			dirtyWords: this.allDirtyWords(),
 			words: new TranslateWords(
 				this.allCodeTranslateWords(),
 				this.allFuncTranslateWords(),
-				this.allUsedTranslateWords()),
+				this.allUsedTranslateWords()
+			)
 		});
 	},
 	/**
@@ -479,13 +442,11 @@ _.extend(CodeInfoResult.prototype,
 	 *
 	 * @return {Array}
 	 */
-	allFuncLans: function()
-	{
-		var self = this;
-		var result = self.words.funcTranslateWords.lans();
+	allFuncLans: function() {
+		const self = this;
+		const result = self.words.funcTranslateWords.lans();
 
-		self.subScopeDatas.forEach(function(item)
-		{
+		self.subScopeDatas.forEach(function(item) {
 			ArrayPush.apply(result, item.words.funcTranslateWords.lans());
 		});
 
@@ -496,13 +457,11 @@ _.extend(CodeInfoResult.prototype,
 	 *
 	 * @return {Array}
 	 */
-	allUsedLans: function()
-	{
-		var self = this;
-		var result = self.words.usedTranslateWords.lans();
+	allUsedLans: function() {
+		const self = this;
+		const result = self.words.usedTranslateWords.lans();
 
-		self.subScopeDatas.forEach(function(item)
-		{
+		self.subScopeDatas.forEach(function(item) {
 			ArrayPush.apply(result, item.words.usedTranslateWords.lans());
 		});
 
@@ -513,13 +472,11 @@ _.extend(CodeInfoResult.prototype,
 	 *
 	 * @return {CodeTranslateWords}
 	 */
-	allCodeTranslateWords: function()
-	{
-		var self = this;
-		var result = self.words.codeTranslateWords.clone();
+	allCodeTranslateWords: function() {
+		const self = this;
+		const result = self.words.codeTranslateWords.clone();
 
-		self.subScopeDatas.forEach(function(item)
-		{
+		self.subScopeDatas.forEach(function(item) {
 			result.merge(item.allCodeTranslateWords());
 		});
 
@@ -530,13 +487,11 @@ _.extend(CodeInfoResult.prototype,
 	 *
 	 * @return {FileKeyTranslateWords}
 	 */
-	allFuncTranslateWords: function()
-	{
-		var self = this;
-		var result = self.words.funcTranslateWords.clone();
+	allFuncTranslateWords: function() {
+		const self = this;
+		const result = self.words.funcTranslateWords.clone();
 
-		self.subScopeDatas.forEach(function(item)
-		{
+		self.subScopeDatas.forEach(function(item) {
 			result.merge(item.allFuncTranslateWords());
 		});
 
@@ -547,13 +502,11 @@ _.extend(CodeInfoResult.prototype,
 	 *
 	 * @return {FileKeyTranslateWords}
 	 */
-	allUsedTranslateWords: function()
-	{
-		var self = this;
-		var result = self.words.usedTranslateWords.clone();
+	allUsedTranslateWords: function() {
+		const self = this;
+		const result = self.words.usedTranslateWords.clone();
 
-		self.subScopeDatas.forEach(function(item)
-		{
+		self.subScopeDatas.forEach(function(item) {
 			result.merge(item.allUsedTranslateWords());
 		});
 
@@ -564,14 +517,12 @@ _.extend(CodeInfoResult.prototype,
 	 *
 	 * @return {Array}
 	 */
-	allCurrentFileKeys: function()
-	{
-		var self = this;
-		var result = [];
+	allCurrentFileKeys: function() {
+		const self = this;
+		const result = [];
 
 		if (self.currentFileKey) result.push(self.currentFileKey);
-		self.subScopeDatas.forEach(function(item)
-		{
+		self.subScopeDatas.forEach(function(item) {
 			ArrayPush.apply(result, item.allCurrentFileKeys());
 		});
 
@@ -582,13 +533,11 @@ _.extend(CodeInfoResult.prototype,
 	 *
 	 * @return {Array}
 	 */
-	allOriginalFileKeys: function()
-	{
-		var self = this;
-		var result = self.originalFileKeys.slice();
+	allOriginalFileKeys: function() {
+		const self = this;
+		const result = self.originalFileKeys.slice();
 
-		self.subScopeDatas.forEach(function(item)
-		{
+		self.subScopeDatas.forEach(function(item) {
 			ArrayPush.apply(result, item.allOriginalFileKeys());
 		});
 
@@ -599,16 +548,14 @@ _.extend(CodeInfoResult.prototype,
 	 *
 	 * @return {DirtyWords}
 	 */
-	allDirtyWords: function()
-	{
-		var self = this;
-		var result = self.dirtyWords.clone();
+	allDirtyWords: function() {
+		const self = this;
+		const result = self.dirtyWords.clone();
 
-		self.subScopeDatas.forEach(function(item)
-		{
+		self.subScopeDatas.forEach(function(item) {
 			result.merge(item.allDirtyWords());
 		});
 
 		return result;
-	},
+	}
 });

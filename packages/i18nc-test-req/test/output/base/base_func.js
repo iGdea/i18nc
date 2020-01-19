@@ -1,4 +1,3 @@
-module.exports = function code()
-		{
+module.exports = function code() {
 			console.log(11);
 		}

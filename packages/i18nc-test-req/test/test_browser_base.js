@@ -1,26 +1,21 @@
 'use strict';
 
-var expect			= require('expect.js');
-var testReq			= require('../');
-var checkResult		= require('./check_result');
-testReq.ROOT_PATH	= __dirname + '/output';
+const expect = require('expect.js');
+const testReq = require('../');
+const checkResult = require('./check_result');
+testReq.ROOT_PATH = __dirname + '/output';
 
-describe('#base', function()
-{
-	it('#require', function()
-	{
-		var requireAfterWrite = testReq('base');
-		expect(requireAfterWrite('base.json')).to.eql({data: 1});
+describe('#base', function() {
+	it('#require', function() {
+		const requireAfterWrite = testReq('base');
+		expect(requireAfterWrite('base.json')).to.eql({ data: 1 });
 	});
 
-	describe('#check', function()
-	{
-		beforeEach(function()
-		{
+	describe('#check', function() {
+		beforeEach(function() {
 			testReq.BUILD = false;
 		});
-		afterEach(function()
-		{
+		afterEach(function() {
 			testReq.BUILD = false;
 		});
 

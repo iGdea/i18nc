@@ -1,21 +1,17 @@
 'use strict';
 
-var fs = require('fs');
-var mkdirp = require('mkdirp');
+const fs = require('fs');
+const mkdirp = require('mkdirp');
 
-
-exports.requireAfterWrite = function requireAfterWrite(path)
-{
-	var outpath = __dirname+'/files/'+path+'/';
+exports.requireAfterWrite = function requireAfterWrite(path) {
+	const outpath = __dirname + '/files/' + path + '/';
 	mkdirp.sync(outpath);
 
-	return function(filename, data, options)
-	{
-		var file = outpath+filename;
+	return function(filename, data, options) {
+		const file = outpath + filename;
 		if (!process.env.TEST_BUILD) return _requireOrFs(file, options);
 
-		if (typeof data == 'object')
-		{
+		if (typeof data == 'object') {
 			data = JSON.stringify(data, null, '\t');
 		}
 
@@ -23,28 +19,22 @@ exports.requireAfterWrite = function requireAfterWrite(path)
 
 		return _requireOrFs(file, options);
 	};
-}
+};
 
-function _requireOrFs(file, options)
-{
+function _requireOrFs(file, options) {
 	options || (options = {});
 
-	switch(options.mode)
-	{
+	switch (options.mode) {
 		case 'string':
-			return fs.readFileSync(file, {encoding: 'utf8'});
+			return fs.readFileSync(file, { encoding: 'utf8' });
 
 		default:
 			return require(file);
 	}
 }
 
-
-exports.code2arr = function code2arr(code)
-{
-	return code.split('\n')
-		.filter(function(val)
-		{
-			return val.trim();
-		});
-}
+exports.code2arr = function code2arr(code) {
+	return code.split('\n').filter(function(val) {
+		return val.trim();
+	});
+};

@@ -11,6 +11,6 @@ msgid "中文"
 msgstr ""
 
 #: @@0,*
-#: @@2,7,subtype,*
+#: @@2,6,subkey,*
 msgid "简体"
 msgstr ""

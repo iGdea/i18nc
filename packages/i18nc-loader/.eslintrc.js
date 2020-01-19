@@ -1,4 +1,3 @@
-module.exports =
-{
-	extends: 'eslint-config-brcjs'
+module.exports = {
+	extends: "eslint-config-brcjs"
 };

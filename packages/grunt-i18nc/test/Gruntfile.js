@@ -1,17 +1,12 @@
 'use strict';
 
-module.exports = function(grunt)
-{
-	grunt.initConfig(
-	{
-		i18nc:
-		{
-			options:
-			{
-				dbTranslateWords: require('./files/translate_data.json'),
+module.exports = function(grunt) {
+	grunt.initConfig({
+		i18nc: {
+			options: {
+				dbTranslateWords: require('./files/translate_data.json')
 			},
-			test:
-			{
+			test: {
 				src: '*.js',
 				cwd: 'files/',
 				dest: 'tmp/',
@@ -19,28 +14,23 @@ module.exports = function(grunt)
 				expand: true
 			}
 		},
-		'i18nc-po':
-		{
-			options:
-			{
+		'i18nc-po': {
+			options: {
 				pickFileLanguages: ['en-US', 'zh-TW']
 			},
-			test:
-			{
-				output: __dirname+'/tmp/'
+			test: {
+				output: __dirname + '/tmp/'
 			}
 		},
-		'i18nc-check':
-		{
-			test:
-			{
+		'i18nc-check': {
+			test: {
 				src: '*.js',
 				cwd: 'files/',
 				dest: 'tmp/',
 				filter: 'isFile',
 				expand: true
 			}
-		},
+		}
 	});
 
 	grunt.loadTasks('../tasks');

@@ -1,6 +1,5 @@
 module.exports = I18N;
-function I18N(msg, tpldata)
-{
+function I18N(msg, tpldata) {
 	if (!msg) return msg === undefined || msg === null ? '' : '' + msg;
 
 	msg += '';
@@ -12,7 +11,8 @@ function I18N(msg, tpldata)
 	self.V = 'Ks';
 
 	var replace_index = 0;
-	return msg.replace(/%\{(\d+)\}/g, function(all, index) {
+	return msg
+		.replace(/%\{(\d+)\}/g, function(all, index) {
 			var newVal = tpldata[+index];
 			return newVal === undefined ? '' : newVal;
 		})

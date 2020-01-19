@@ -1,9 +1,7 @@
-module.exports =
-{
-	presets:
-	[
+module.exports = {
+	presets: [
 		[
-			'@babel/preset-env',
+			"@babel/preset-env",
 			{
 				// targets:
 				// {
@@ -12,10 +10,9 @@ module.exports =
 			}
 		]
 	],
-	plugins:
-	[
+	plugins: [
 		[
-			'@babel/plugin-transform-runtime',
+			"@babel/plugin-transform-runtime",
 			{
 				// regenerator: true
 			}

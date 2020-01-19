@@ -1,14 +1,15 @@
 'use strict';
+/* eslint-disable no-var */
 
-module.exports = function $handlerName(msg, tpldata)
-{
+module.exports = function $handlerName(msg, tpldata) {
 	if (!msg) return msg === undefined || msg === null ? '' : '' + msg;
 
 	msg += '';
 	if (!tpldata || !tpldata.length || msg.indexOf('%') == -1) return msg;
 
 	var replace_index = 0;
-	return msg.replace(/%\{(\d+)\}/g, function(all, index) {
+	return msg
+		.replace(/%\{(\d+)\}/g, function(all, index) {
 			var newVal = tpldata[+index];
 			return newVal === undefined ? '' : newVal;
 		})
@@ -16,4 +17,4 @@ module.exports = function $handlerName(msg, tpldata)
 			var newVal = tpldata[replace_index++];
 			return newVal === undefined ? '' : newVal;
 		});
-}
+};

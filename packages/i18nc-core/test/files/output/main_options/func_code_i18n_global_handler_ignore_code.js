@@ -1,8 +1,7 @@
 module.exports = function code()
 {
 	var word = I18N('中文');
-	function I18N(msg)
-	{
+	function I18N(msg) {
 		var self = I18N;
 		var data = self.$;
 	

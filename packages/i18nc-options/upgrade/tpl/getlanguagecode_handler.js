@@ -2,16 +2,16 @@
 
 'use strict';
 
-
 module.exports = function GetLanguageCodeHandler(cache) {
 	if (!cache.global) {
-		cache.global = (typeof window == 'object' && window)
-			|| (typeof global == 'object' && global)
-			|| {};
+		cache.global =
+			(typeof window == 'object' && window) ||
+			(typeof global == 'object' && global) ||
+			{};
 	}
 
 	return cache.global.$LanguageVars.name$;
-}
+};
 
 // fix istanbul for test
 // if (process.env.running_under_istanbul)

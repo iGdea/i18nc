@@ -1,7 +1,8 @@
+/* eslint-disable no-var */
+
 'use strict';
 
-module.exports = function $handlerName(msg, tpldata)
-{
+module.exports = function $handlerName(msg, tpldata) {
 	if (!msg) return msg === undefined || msg === null ? '' : '' + msg;
 
 	msg += '';
@@ -15,7 +16,8 @@ module.exports = function $handlerName(msg, tpldata)
 	self.V = '$FUNCTION_VERSION';
 
 	var replace_index = 0;
-	return msg.replace(/%\{(\d+)\}/g, function(all, index) {
+	return msg
+		.replace(/%\{(\d+)\}/g, function(all, index) {
 			var newVal = tpldata[+index];
 			return newVal === undefined ? '' : newVal;
 		})
@@ -23,4 +25,4 @@ module.exports = function $handlerName(msg, tpldata)
 			var newVal = tpldata[replace_index++];
 			return newVal === undefined ? '' : newVal;
 		});
-}
+};

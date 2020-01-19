@@ -1,153 +1,118 @@
 'use strict';
 
-var expect				= require('expect.js');
-var astUtil				= require('i18nc-ast').util;
-var testReq				= require('i18nc-test-req');
-var i18nGenerator		= require('../lib/generator');
-var requireAfterWrite	= testReq('generator');
-testReq.ROOT_PATH		= __dirname + '/output';
+const expect = require('expect.js');
+const astUtil = require('i18nc-ast').util;
+const testReq = require('i18nc-test-req');
+const i18nGenerator = require('../lib/generator');
+const requireAfterWrite = testReq('generator');
+testReq.ROOT_PATH = __dirname + '/output';
 
-describe('#generator', function()
-{
-	it('#toTranslateJSON', function()
-	{
-		var data = require('./input.json');
-		var result = i18nGenerator.toTranslateJSON(data);
-		var outputJSON = requireAfterWrite('func_json.json', result);
+describe('#generator', function() {
+	it('#toTranslateJSON', function() {
+		const data = require('./input.json');
+		const result = i18nGenerator.toTranslateJSON(data);
+		const outputJSON = requireAfterWrite('func_json.json', result);
 
 		expect(result).to.eql(outputJSON);
 	});
 
+	it('#translateJSON2ast', function() {
+		const data = require('./output/generator/func_json.json');
+		const resultAst = i18nGenerator._translateJSON2ast(data);
+		const resultCode = 'var json = ' + astUtil.tocode(resultAst);
 
-	it('#translateJSON2ast', function()
-	{
-		var data = require('./output/generator/func_json.json');
-		var resultAst = i18nGenerator._translateJSON2ast(data);
-		var resultCode = 'var json = '+astUtil.tocode(resultAst);
+		const otherCode = requireAfterWrite('func_json.js', resultCode);
 
-		var otherCode = requireAfterWrite('func_json.js', resultCode);
-
-		expect(testReq.code2arr(resultCode)).to.eql(testReq.code2arr(otherCode));
+		expect(testReq.code2arr(resultCode)).to.eql(
+			testReq.code2arr(otherCode)
+		);
 	});
 
-
-	describe('#wordJson2ast', function()
-	{
-		describe('#comments', function()
-		{
-			it('#empty', function()
-			{
-				var astData =
-				{
-					'word_1': null,
-					'word_2': null,
-					'word_3': null,
+	describe('#wordJson2ast', function() {
+		describe('#comments', function() {
+			it('#empty', function() {
+				const astData = {
+					'中文_1': null,
+					'中文_2': null,
+					'中文_3': null
 				};
-				function code()
-				{
-					var d =
-					{
-						// 'word_1':
-						// 'word_2':
-						// 'word_3':
+				function code() {
+					console.log({
+						// '中文_1':
+						// '中文_2':
+						// '中文_3':
 						'': null
-					}
-					console.log(d);
+					});
 				}
-				var resultAst = i18nGenerator._wordJson2ast(astData);
-				var resultCode = astUtil.tocode(resultAst);
-				expect(code2arr(resultCode)).to.eql(func2codeArr(code).slice(1, -1));
+				const resultAst = i18nGenerator._wordJson2ast(astData);
+				const resultCode = astUtil.tocode(resultAst);
+				expect(code2arr(resultCode)).to.eql(func2codeArr(code));
 			});
 
-			it('#first', function()
-			{
-				var astData =
-				{
-					'word_1': null,
-					'word_2': null,
-					'word_3': 'word_3',
+			it('#first', function() {
+				const astData = {
+					'中文_1': null,
+					'中文_2': null,
+					'中文_3': 'word_3'
 				};
-				function code()
-				{
-					var d =
-					{
-						// 'word_1':
-						// 'word_2':
-						'word_3': 'word_3'
-					}
-					console.log(d);
+				function code() {
+					console.log({
+						// '中文_1':
+						// '中文_2':
+						'中文_3': 'word_3'
+					});
 				}
-				var resultAst = i18nGenerator._wordJson2ast(astData);
-				var resultCode = astUtil.tocode(resultAst);
-				expect(code2arr(resultCode)).to.eql(func2codeArr(code).slice(1, -1));
+				const resultAst = i18nGenerator._wordJson2ast(astData);
+				const resultCode = astUtil.tocode(resultAst);
+				expect(code2arr(resultCode)).to.eql(func2codeArr(code));
 			});
 
-			it('#middle', function()
-			{
-				var astData =
-				{
-					'word_1': null,
-					'word_2': 'word_2',
-					'word_3': null,
+			it('#middle', function() {
+				const astData = {
+					'中文_1': null,
+					'中文_2': 'word_2',
+					'中文_3': null
 				};
-				function code()
-				{
-					var d =
-					{
-						// 'word_1':
-						// 'word_3':
-						'word_2': 'word_2'
-					}
-					console.log(d);
+				function code() {
+					console.log({
+						// '中文_1':
+						// '中文_3':
+						'中文_2': 'word_2'
+					});
 				}
-				var resultAst = i18nGenerator._wordJson2ast(astData);
-				var resultCode = astUtil.tocode(resultAst);
-				expect(code2arr(resultCode)).to.eql(func2codeArr(code).slice(1, -1));
+				const resultAst = i18nGenerator._wordJson2ast(astData);
+				const resultCode = astUtil.tocode(resultAst);
+				expect(code2arr(resultCode)).to.eql(func2codeArr(code));
 			});
 
-			it('#last', function()
-			{
-				var astData =
-				{
-					'word_1': null,
-					'word_2': null,
-					'word_3': 'word_3',
+			it('#last', function() {
+				const astData = {
+					'中文_1': null,
+					'中文_2': null,
+					'中文_3': 'word_3'
 				};
-				function code()
-				{
-					var d =
-					{
-						// 'word_1':
-						// 'word_2':
-						'word_3': 'word_3'
-					}
-					console.log(d);
+				function code() {
+					console.log({
+						// '中文_1':
+						// '中文_2':
+						'中文_3': 'word_3'
+					});
 				}
-				var resultAst = i18nGenerator._wordJson2ast(astData);
-				var resultCode = astUtil.tocode(resultAst);
-				expect(code2arr(resultCode)).to.eql(func2codeArr(code).slice(1, -1));
+				const resultAst = i18nGenerator._wordJson2ast(astData);
+				const resultCode = astUtil.tocode(resultAst);
+				expect(code2arr(resultCode)).to.eql(func2codeArr(code));
 			});
 		});
 	});
 });
 
-
-function code2arr(code)
-{
-	return code.split(/\n\r?\t*/)
-		.filter(function(val)
-		{
-			return val;
-		});
+function code2arr(code) {
+	return code.split(/\n\r?\t*/).filter(function(val) {
+		return val;
+	});
 }
 
-function func2codeArr(func)
-{
-	var code = func.toString().split('{');
-	code.shift();
-	code = code.join('{').split('}');
-	code.pop();
-	code = code.join('}');
-
-	return code2arr(code);
+function func2codeArr(func) {
+	const code = func.toString().split(/\{|\};?/);
+	return code2arr(['{', code[2], '}'].join(''));
 }

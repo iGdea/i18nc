@@ -1,16 +1,23 @@
-;(function(handler)
-{
-	if (typeof define == 'function')
-		define(handler);
-	else if (typeof module != 'undefined' && exports != 'undefined' && module.exports === exports)
+;(function(handler) {
+	if (typeof define == 'function') define(handler);
+	else if (
+		typeof module != 'undefined' &&
+		exports != 'undefined' &&
+		module.exports === exports
+	)
 		handler(null, exports);
-	else
-		handler(null, this);
+	else handler(null, this);
 })
 (function(r, ctx)
 {
-	function topI18N(msg, args, translateJSON, fileKey, data, handler)
-	{
+	function topI18N(
+		msg,
+		args,
+		translateJSON,
+		fileKey,
+		data,
+		handler
+	) {
 		if (!msg) return msg === undefined || msg === null ? '' : '' + msg;
 	
 		var self = handler,
@@ -18,13 +25,18 @@
 			subkey = args[2],
 			replace_index = 0,
 			options = {},
-			lanArr, lanKeys, i, lanItem, translateMsg, subkeyJSON;
+			lanArr,
+			lanKeys,
+			i,
+			lanItem,
+			translateMsg,
+			subkeyJSON;
 	
-		if (!tpldata || !tpldata.join)
-		{
+		if (!tpldata || !tpldata.join) {
 			subkey = tpldata;
 			tpldata = [];
 		}
+	
 		if (subkey && typeof subkey == 'object') {
 			options = subkey;
 			subkey = options.subkey;
@@ -32,14 +44,11 @@
 	
 		var LAN = options.language || $I18N_getLanguageCode(data);
 	
-		if (LAN && LAN.split)
-		{
-			if (self.L != LAN)
-			{
+		if (LAN && LAN.split) {
+			if (self.L != LAN) {
 				lanKeys = LAN.split(',');
 				lanArr = self.M = [];
-				for(i = lanKeys.length; i--;)
-				{
+				for (i = lanKeys.length; i--; ) {
 					lanItem = translateJSON[lanKeys[i]];
 					if (lanItem) lanArr.push(lanItem);
 				}
@@ -48,17 +57,15 @@
 			}
 	
 			lanArr = self.M;
-			for(i = lanArr.length; !translateMsg && i--;)
-			{
+			for (i = lanArr.length; !translateMsg && i--; ) {
 				lanItem = lanArr[i];
-				if (subkey)
-				{
+				if (subkey) {
 					subkeyJSON = lanItem.SUBKEYS;
 					subkeyJSON = subkeyJSON && subkeyJSON[subkey];
 					translateMsg = subkeyJSON && subkeyJSON[msg];
 				}
-				if (!translateMsg)
-				{
+	
+				if (!translateMsg) {
 					subkeyJSON = lanItem.DEFAULTS;
 					translateMsg = subkeyJSON && subkeyJSON[msg];
 				}
@@ -71,13 +78,12 @@
 		// 判断是否需要替换：不需要替换，直接返回
 		if (!tpldata.length || msg.indexOf('%') == -1) return msg;
 	
-		return msg.replace(/%\{(\d+)\}/g, function(all, index)
-			{
+		return msg
+			.replace(/%\{(\d+)\}/g, function(all, index) {
 				var newVal = tpldata[+index];
 				return newVal === undefined ? '' : newVal;
 			})
-			.replace(/%s|%p|%\{.+?\}/g, function()
-			{
+			.replace(/%s|%p|%\{.+?\}/g, function() {
 				var newVal = tpldata[replace_index++];
 				return newVal === undefined ? '' : newVal;
 			});

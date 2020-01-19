@@ -1,37 +1,28 @@
 'use strict';
 
-var debug = require('debug')('i18nc-loader');
-var i18nc = require('i18nc');
-var loaderUtils = require('loader-utils');
-var extend = require('extend');
+const debug = require('debug')('i18nc-loader');
+const i18nc = require('i18nc');
+const loaderUtils = require('loader-utils');
+const extend = require('extend');
 
-module.exports = function(source)
-{
-	var options = loaderUtils.getOptions(this) || {};
-	var dbTranslateWords = options.dbTranslateWords;
+module.exports = async function(source) {
+	const options = loaderUtils.getOptions(this) || {};
+	let dbTranslateWords = options.dbTranslateWords;
 
 	debug('request:%s', this.request);
 
 	// if (this.cacheable) this.cacheable();
 
-	var poFilesInputDir = options.poFilesInputDir;
-	var dbTranslateWordsPromise;
-	if (poFilesInputDir)
-	{
-		dbTranslateWordsPromise = i18nc.util.file.loadPOFiles(poFilesInputDir)
-			.then(function(data)
-			{
+	const poFilesInputDir = options.poFilesInputDir;
+	if (poFilesInputDir) {
+		dbTranslateWords = await i18nc.util.file.loadPOFiles(poFilesInputDir)
+			.then(function(data) {
 				return extend(true, {}, data, dbTranslateWords);
 			});
 	}
-	else
-	{
-		dbTranslateWordsPromise = Promise.resolve(dbTranslateWords);
-	}
 
-	return dbTranslateWordsPromise.then(function(dbTranslateWords)
-		{
-			return i18nc(source, extend({}, options, { dbTranslateWords: dbTranslateWords })).code;
-		});
-
+	return i18nc(
+		source,
+		extend({}, options, { dbTranslateWords: dbTranslateWords })
+	).code;
 };

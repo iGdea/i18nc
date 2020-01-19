@@ -1,7 +1,7 @@
 'use strict';
 
-var debug			= require('debug')('i18nc-core:emitter');
-var EventEmitter	= require('events').EventEmitter;
+const debug = require('debug')('i18nc-core:emitter');
+const EventEmitter = require('events').EventEmitter;
 
 /**
  * [Event List]
@@ -22,54 +22,52 @@ var EventEmitter	= require('events').EventEmitter;
  * 		获取 emitData.value (array ast+lineStrings) 作为返回值
  */
 
-var globalEmitter = new EventEmitter;
-var tmpEmitter = null;
-var EventEmit = globalEmitter.emit;
+const globalEmitter = new EventEmitter();
+let tmpEmitter = null;
+const EventEmit = globalEmitter.emit;
 
-exports.clear = function()
-{
+exports.clear = function() {
 	tmpEmitter = null;
 };
 
-exports.new = function()
-{
-	return (tmpEmitter = new EventEmitter);
+exports.new = function() {
+	return (tmpEmitter = new EventEmitter());
 };
 
-exports.trigger = function()
-{
+exports.trigger = function() {
 	EventEmit.apply(globalEmitter, arguments);
 	if (tmpEmitter) EventEmit.apply(tmpEmitter, arguments);
 };
 
-exports.proxy = function(obj)
-{
+exports.proxy = function(obj) {
 	// 注意:
 	// 不提供prependXXX once这些方法
 	// 设计的时候，忽略添加的先后顺序
 	// once容易出错，毕竟有scope等情况，容易导成误解
 	[
-		'on', 'addListener',
-		'removeListener', 'removeAllListeners',
+		'on',
+		'addListener',
+		'removeListener',
+		'removeAllListeners',
 		'eventNames',
 		'emit',
-		'setMaxListeners', 'listenerCount', 'getMaxListeners'
-	]
-	.forEach(function(name)
-	{
-		var handler = globalEmitter[name];
+		'setMaxListeners',
+		'listenerCount',
+		'getMaxListeners'
+	].forEach(function(name) {
+		const handler = globalEmitter[name];
 		if (typeof handler == 'function')
 			obj[name] = handler.bind(globalEmitter);
-		else
-			debug('handler is not function:%s', name);
+		else debug('handler is not function:%s', name);
 	});
 
-
-	obj.off = function(eventName, handler)
-	{
+	obj.off = function(eventName, handler) {
 		if (handler)
 			return globalEmitter.removeListener.apply(globalEmitter, arguments);
 		else
-			return globalEmitter.removeAllListeners.apply(globalEmitter, arguments);
+			return globalEmitter.removeAllListeners.apply(
+				globalEmitter,
+				arguments
+			);
 	};
-}
+};

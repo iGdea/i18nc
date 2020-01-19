@@ -9,175 +9,153 @@ exports.AST_FLAGS = require('./lib/ast_flags').AST_FLAGS;
 },{"./lib/ast_flags":2,"./lib/ast_tpl":3,"./lib/ast_util":4,"./lib/config":5}],2:[function(require,module,exports){
 'use strict';
 
-exports.AST_FLAGS =
-{
-	SKIP_SACN				: 1 << 0,
-	SKIP_REPLACE			: 1 << 1,
-	SELF_CREATED			: 1 << 2,
-	DIS_REPLACE				: 1 << 3,
-	BLOCK_MODIFIER			: 1 << 4,
-	I18N_ALIAS				: 1 << 5,
-	OBJECT_KEY				: 1 << 6,
-	TEMPLATE_LITERAL		: 1 << 7,
-	JSX_ELEMENT				: 1 << 8,
-	TAGGED_TEMPLATE_LITERAL	: 1 << 9,
-	PLACEHOLDER_WORD		: 1 << 10,
+exports.AST_FLAGS = {
+	SKIP_SACN: 1 << 0,
+	SKIP_REPLACE: 1 << 1,
+	SELF_CREATED: 1 << 2,
+	DIS_REPLACE: 1 << 3,
+	BLOCK_MODIFIER: 1 << 4,
+	I18N_ALIAS: 1 << 5,
+	OBJECT_KEY: 1 << 6,
+	TEMPLATE_LITERAL: 1 << 7,
+	JSX_ELEMENT: 1 << 8,
+	TAGGED_TEMPLATE_LITERAL: 1 << 9,
+	PLACEHOLDER_WORD: 1 << 10
 };
 
 },{}],3:[function(require,module,exports){
 'use strict';
 
-var SELF_CREATED_FLAG = require('./ast_flags').AST_FLAGS.SELF_CREATED;
+const SELF_CREATED_FLAG = require('./ast_flags').AST_FLAGS.SELF_CREATED;
 
-exports.Property = function Property(name, valueAst)
-{
+exports.Property = function Property(name, valueAst) {
 	return {
 		__i18n_flag__: SELF_CREATED_FLAG,
-		"type": "Property",
-		"key":
-		{
-			"type": "Literal",
-			"value": name,
+		type: 'Property',
+		key: {
+			type: 'Literal',
+			value: name
 		},
-		"computed": false,
-		"value": valueAst,
-		"kind": "init",
-		"method": false,
-		"shorthand": false
-	}
-};
-
-exports.ObjectExpression = function ObjectExpression(propertiesAst)
-{
-	return {
-		__i18n_flag__: SELF_CREATED_FLAG,
-		"type": "ObjectExpression",
-		"properties": propertiesAst
+		computed: false,
+		value: valueAst,
+		kind: 'init',
+		method: false,
+		shorthand: false
 	};
 };
 
-exports.CallExpression = function CallExpression(name, argumentsAst)
-{
+exports.ObjectExpression = function ObjectExpression(propertiesAst) {
 	return {
 		__i18n_flag__: SELF_CREATED_FLAG,
-		"type": "CallExpression",
-		"callee":
-		{
-			"type": "Identifier",
-			"name": name
+		type: 'ObjectExpression',
+		properties: propertiesAst
+	};
+};
+
+exports.CallExpression = function CallExpression(name, argumentsAst) {
+	return {
+		__i18n_flag__: SELF_CREATED_FLAG,
+		type: 'CallExpression',
+		callee: {
+			type: 'Identifier',
+			name: name
 		},
-		"arguments": argumentsAst
+		arguments: argumentsAst
 	};
 };
 
-exports.ArrayExpression = function ArrayExpression(elementsAst)
-{
+exports.ArrayExpression = function ArrayExpression(elementsAst) {
 	return {
 		__i18n_flag__: SELF_CREATED_FLAG,
-		"type": "ArrayExpression",
-		"elements": elementsAst
+		type: 'ArrayExpression',
+		elements: elementsAst
 	};
 };
 
-exports.Literal = function Literal(val)
-{
+exports.Literal = function Literal(val) {
 	return {
 		__i18n_flag__: SELF_CREATED_FLAG,
-		"type": "Literal",
-		"value": val
+		type: 'Literal',
+		value: val
 	};
 };
 
-exports.BinaryExpression = function BinaryExpression(leftAst, rightAst)
-{
+exports.BinaryExpression = function BinaryExpression(leftAst, rightAst) {
 	return {
 		__i18n_flag__: SELF_CREATED_FLAG,
-		"type": "BinaryExpression",
-		"operator": "+",
-		"left": leftAst,
-		"right": rightAst
+		type: 'BinaryExpression',
+		operator: '+',
+		left: leftAst,
+		right: rightAst
 	};
 };
 
-exports.LineComment = function LineComment(value)
-{
+exports.LineComment = function LineComment(value) {
 	return {
-		"type": "Line",
-		"value": value
+		type: 'Line',
+		value: value
 	};
 };
 
-exports.NewExpression = function NewExpression(name, argumentsAst)
-{
+exports.NewExpression = function NewExpression(name, argumentsAst) {
 	return {
 		__i18n_flag__: SELF_CREATED_FLAG,
-		"type": "NewExpression",
-		"callee":
-		{
-			"type": "Identifier",
-			"name": name
+		type: 'NewExpression',
+		callee: {
+			type: 'Identifier',
+			name: name
 		},
-		"arguments": argumentsAst
+		arguments: argumentsAst
 	};
-}
+};
 
 },{"./ast_flags":2}],4:[function(require,module,exports){
 'use strict';
 
-var esprima		= require('esprima');
-var escodegen	= require('escodegen');
-var astTpl		= require('./ast_tpl');
-var config		= require('./config');
-var debug		= require('debug')('i18nc-ast:ast_util');
-var ArrayPush	= Array.prototype.push;
+const esprima = require('esprima');
+const escodegen = require('escodegen');
+const astTpl = require('./ast_tpl');
+const config = require('./config');
+const debug = require('debug')('i18nc-ast:ast_util');
+const ArrayPush = Array.prototype.push;
 
-exports.setAstFlag = function setAstFlag(ast, flag)
-{
+exports.setAstFlag = function setAstFlag(ast, flag) {
 	if (!flag || !ast) return;
 
-	var flag2 = ast.__i18n_flag__ || 0;
+	const flag2 = ast.__i18n_flag__ || 0;
 	ast.__i18n_flag__ = flag2 | flag;
 };
 
-exports.checkAstFlag = function checkAstFlag(ast, flag)
-{
-	return ast && flag && ast.__i18n_flag__ && (ast.__i18n_flag__ & flag);
+exports.checkAstFlag = function checkAstFlag(ast, flag) {
+	return ast && flag && ast.__i18n_flag__ && ast.__i18n_flag__ & flag;
 };
 
-
-exports.parse = function parse(code)
-{
+exports.parse = function parse(code) {
 	return esprima.parse(code, config.esprimaOptions);
 };
 
-exports.mincode = function mincode(code)
-{
+exports.mincode = function mincode(code) {
 	return escodegen.generate(exports.parse(code), config.escodegenMinOptions);
 };
 
-exports.tocode = function tocode(ast)
-{
+exports.tocode = function tocode(ast) {
 	return escodegen.generate(ast, config.escodegenOptions);
 };
 
-
-exports.codeIndent = function codeIndent(ast, code)
-{
-	var indent = code.slice(0, ast.range[0])
-			.split('\n')
-			.pop()
-			.match(/^\s*/)[0];
+exports.codeIndent = function codeIndent(ast, code) {
+	const indent = code
+		.slice(0, ast.range[0])
+		.split('\n')
+		.pop()
+		.match(/^\s*/)[0];
 
 	return indent || '';
 };
 
-exports.ast2constVal = function ast2constVal(ast)
-{
+exports.ast2constVal = function ast2constVal(ast) {
 	if (ast.type == 'Literal') return ast.value;
-	if (ast.type == 'Identifier')
-	{
-		switch(ast.name)
-		{
+	if (ast.type == 'Identifier') {
+		switch (ast.name) {
 			case 'undefined':
 				return undefined;
 			case 'NaN':
@@ -191,76 +169,59 @@ exports.ast2constVal = function ast2constVal(ast)
 	}
 };
 
-
-exports.ast2constKey = function(ast)
-{
+exports.ast2constKey = function(ast) {
 	if (ast.type == 'Literal') return ast.value;
 	if (ast.type == 'Identifier') return ast.name;
 };
 
-exports.constVal2ast = function constVal2ast(val)
-{
-	if (val === undefined)
-	{
+exports.constVal2ast = function constVal2ast(val) {
+	if (val === undefined) {
 		return {
-			"type": "Identifier",
-			"name": "undefined"
+			type: 'Identifier',
+			name: 'undefined'
 		};
-	}
-	else if (val === null)
-	{
+	} else if (val === null) {
 		return {
-			"type": "Literal",
-			"value": null,
+			type: 'Literal',
+			value: null
 		};
-	}
-	else if (val === Infinity)
-	{
+	} else if (val === Infinity) {
 		return {
-			"type": "Identifier",
-			"name": "Infinity"
+			type: 'Identifier',
+			name: 'Infinity'
 		};
-	}
-	else if (!val && isNaN(val))
-	{
+	} else if (!val && isNaN(val)) {
 		return {
-			"type": "Identifier",
-			"name": "NaN"
+			type: 'Identifier',
+			name: 'NaN'
 		};
-	}
-	else
-	{
+	} else {
 		return {
-			"type": "Literal",
-			"value": val
+			type: 'Literal',
+			value: val
 		};
 	}
 };
 
 // 获取ast的位置
 // 一般用于日志输出
-exports.getAstLocStr = function getAstLocStr(ast)
-{
+exports.getAstLocStr = function getAstLocStr(ast) {
 	if (ast && ast.loc)
-		return 'Loc:'+ast.loc.start.line+','+ast.loc.start.column;
-	else
-		return '';
+		return 'Loc:' + ast.loc.start.line + ',' + ast.loc.start.column;
+	else return '';
 };
 
 // 将astArr结果，加上“+”运算
-exports.asts2plusExpression = function asts2plusExpression(asts)
-{
-	var len = asts && asts.length;
+exports.asts2plusExpression = function asts2plusExpression(asts) {
+	const len = asts && asts.length;
 	if (!len) return;
 	if (len == 1) return asts[0];
 
-	var result = asts[0];
-	for(var i = 1; i < len; i++)
-	{
-		var item = asts[i];
+	let result = asts[0];
+	for (let i = 1; i < len; i++) {
+		let item = asts[i];
 		// 遇到数组，就稍微递归一下
-		if (Array.isArray(item))
-		{
+		if (Array.isArray(item)) {
 			item = exports.asts2plusExpression(item);
 		}
 
@@ -270,60 +231,50 @@ exports.asts2plusExpression = function asts2plusExpression(asts)
 	return result;
 };
 
-
-exports.astMemberExpression2arr = function astMemberExpression2arr(ast)
-{
-	var result = [];
+exports.astMemberExpression2arr = function astMemberExpression2arr(ast) {
+	const result = [];
 
 	if (ast.object.type == 'MemberExpression')
 		ArrayPush.apply(result, exports.astMemberExpression2arr(ast.object));
-	else
-		result.push(exports.ast2constKey(ast.object));
+	else result.push(exports.ast2constKey(ast.object));
 
 	result.push(exports.ast2constKey(ast.property));
 
 	return result;
-}
+};
 
 },{"./ast_tpl":3,"./config":5,"debug":6,"escodegen":8,"esprima":10}],5:[function(require,module,exports){
 'use strict';
 
-exports.escodegenOptions =
-{
+exports.escodegenOptions = {
 	comment: true,
-	format:
-	{
+	format: {
 		// escapeless 为true的时候，会把 \u0000 这样的字符直接以字符的形式输出
 		// 不开启，又会导致一些普通字符转移输出，比如“，”
 		escapeless: true,
 		newline: '\n',
-		indent:
-		{
+		indent: {
 			style: '\t'
 		}
 	}
 };
 
-
-exports.escodegenMinOptions =
-{
+exports.escodegenMinOptions = {
 	comment: false,
-	format:
-	{
+	format: {
+		// escapeless 为true的时候，会把 \u0000 这样的字符直接以字符的形式输出
+		// 不开启，又会导致一些普通字符转移输出，比如“，”
 		escapeless: true,
 		newline: '\n',
 		quotes: 'auto',
 		compact: true,
-		indent:
-		{
+		indent: {
 			style: ''
 		}
 	}
-}
+};
 
-
-exports.esprimaOptions =
-{
+exports.esprimaOptions = {
 	range: true,
 	loc: true
 };
@@ -14920,13 +14871,12 @@ exports.SourceNode = require('./lib/source-node').SourceNode;
 },{"./lib/source-map-consumer":24,"./lib/source-map-generator":25,"./lib/source-node":26}],29:[function(require,module,exports){
 'use strict';
 
-var debug = require('debug')('i18nc-core');
-var options = require('i18nc-options');
+const debug = require('debug')('i18nc-core');
+const options = require('i18nc-options');
 
 exports = module.exports = require('./lib/main').main;
 exports.version = require('./package.json').version;
 exports.defaults = options.defaults;
-
 
 // 已经采用标准版的json格式去处理翻译数据
 // 所以不用再输出parse的接口
@@ -14935,9 +14885,8 @@ exports.defaults = options.defaults;
 require('./lib/emitter').proxy(exports);
 
 exports.plugins = {};
-exports.registerPlugin = function(name, handler)
-{
-	var defaults = options.defaults;
+exports.registerPlugin = function(name, handler) {
+	const defaults = options.defaults;
 	handler(exports, defaults.pluginSettings, defaults.pluginEnabled);
 	exports.plugins[name] = handler;
 	debug('register plugin:%s', name);
@@ -14946,78 +14895,65 @@ exports.registerPlugin = function(name, handler)
 },{"./lib/emitter":34,"./lib/main":41,"./package.json":80,"debug":44,"i18nc-options":106}],30:[function(require,module,exports){
 'use strict';
 
-var _					= require('lodash');
-var debug				= require('debug')('i18nc-core:ast_collector');
-var estraverse			= require('estraverse');
-var emitter				= require('./emitter');
-var i18ncAst			 = require('i18nc-ast');
-var astUtil				= i18ncAst.util;
-var DEF					= require('./def');
-var ASTScope			= require('./ast_scope').ASTScope;
-var LiteralHandler		= require('./ast_literal_handler').LiteralHandler;
-var ArrayPush			= Array.prototype.push;
+const _ = require('lodash');
+const debug = require('debug')('i18nc-core:ast_collector');
+const estraverse = require('estraverse');
+const emitter = require('./emitter');
+const i18ncAst = require('i18nc-ast');
+const astUtil = i18ncAst.util;
+const DEF = require('./def');
+const ASTScope = require('./ast_scope').ASTScope;
+const LiteralHandler = require('./ast_literal_handler').LiteralHandler;
+const ArrayPush = Array.prototype.push;
 
-var VISITOR_KEYS		= estraverse.VisitorKeys;
-var BLOCK_MODIFIER		= DEF.BLOCK_MODIFIER;
-var AST_FLAGS			= i18ncAst.AST_FLAGS;
-var UNSUPPORT_AST_TYPS	= DEF.UNSUPPORT_AST_TYPS;
+const VISITOR_KEYS = estraverse.VisitorKeys;
+const BLOCK_MODIFIER = DEF.BLOCK_MODIFIER;
+const AST_FLAGS = i18ncAst.AST_FLAGS;
+const UNSUPPORT_AST_TYPS = DEF.UNSUPPORT_AST_TYPS;
 
-exports.ASTCollector	= ASTCollector;
+exports.ASTCollector = ASTCollector;
 
-
-function ASTCollector(options)
-{
+function ASTCollector(options) {
 	this.options = options;
 	this.literalHandler = new LiteralHandler(options);
 }
 
-_.extend(ASTCollector.prototype,
-{
-	collect: function(ast, scopeType)
-	{
-		var scope = new ASTScope(ast, scopeType);
+_.extend(ASTCollector.prototype, {
+	collect: function(ast, scopeType) {
+		const scope = new ASTScope(ast, scopeType);
 		scope.translateWordAsts = this.scan(scope, ast) || [];
 		return scope;
 	},
 
-	_parseI18NArgs: function(calleeAst)
-	{
-		var args = calleeAst.arguments;
-		var result =
-		{
+	_parseI18NArgs: function(calleeAst) {
+		const args = calleeAst.arguments;
+		const result = {
 			calleeAst: calleeAst,
 			translateWordAst: args[0]
 		};
 
-		var maybeSubkeyAst;
+		let maybeSubkeyAst;
 
-		if (args.length > 1)
-		{
-			if (args[1].type == 'ArrayExpression')
-			{
+		if (args.length > 1) {
+			if (args[1].type == 'ArrayExpression') {
 				result.formatArgAsts = args[1];
 				if (args[2]) maybeSubkeyAst = args[2];
-			}
-			else
-			{
+			} else {
 				maybeSubkeyAst = args[1];
 			}
 		}
 
 		// 获取subkey ast
 		// 两种情况：字符串，或者options.subkey
-		if (maybeSubkeyAst)
-		{
-			if (maybeSubkeyAst.type == 'Literal')
-			{
+		if (maybeSubkeyAst) {
+			if (maybeSubkeyAst.type == 'Literal') {
 				result.subkeyAst = maybeSubkeyAst;
-			}
-			else if (maybeSubkeyAst.type == 'ObjectExpression' && maybeSubkeyAst.properties)
-			{
-				maybeSubkeyAst.properties.forEach(function(ast)
-				{
-					if (ast.key && ast.key.name == 'subkey')
-					{
+			} else if (
+				maybeSubkeyAst.type == 'ObjectExpression' &&
+				maybeSubkeyAst.properties
+			) {
+				maybeSubkeyAst.properties.forEach(function(ast) {
+					if (ast.key && ast.key.name == 'subkey') {
 						result.subkeyAst = ast.value;
 					}
 				});
@@ -15027,66 +14963,65 @@ _.extend(ASTCollector.prototype,
 		return result;
 	},
 
-	scan: function(scope, ast)
-	{
-		var self = this;
+	scan: function(scope, ast) {
+		const self = this;
 
-		if (Array.isArray(ast))
-		{
-			var result = [];
-			ast.forEach(function(item)
-			{
-				var result2 = self.scan(scope, item);
+		if (Array.isArray(ast)) {
+			const result = [];
+			ast.forEach(function(item) {
+				const result2 = self.scan(scope, item);
 				if (result2 && result2.length) ArrayPush.apply(result, result2);
 			});
 
 			return result;
 		}
 
-		var emitData =
-		{
+		const emitData = {
 			// 可以改写ast，后续处理以此为准
 			// 注意：改写的时候，要extend一下，避免修改原始数据
-			result		: ast,
-			options		: self.options,
-			original	: ast,
+			result: ast,
+			options: self.options,
+			original: ast
 		};
 
 		emitter.trigger('beforeScan', emitData);
 
-		if (ast !== emitData.result)
-		{
-			debug('ast is modified before scan, old:%o, new:%o', ast, emitData.result);
+		if (ast !== emitData.result) {
+			debug(
+				'ast is modified before scan, old:%o, new:%o',
+				ast,
+				emitData.result
+			);
 			ast = emitData.result;
 		}
 
-		if (!ast || astUtil.checkAstFlag(ast, AST_FLAGS.BLOCK_MODIFIER))
-		{
+		if (!ast || astUtil.checkAstFlag(ast, AST_FLAGS.BLOCK_MODIFIER)) {
 			return;
 		}
 
-		switch(ast.type)
-		{
+		switch (ast.type) {
 			case 'FunctionExpression':
 			case 'FunctionDeclaration':
-			case 'ArrowFunctionExpression':
+			case 'ArrowFunctionExpression': {
 				// 定义I18N
-				var handlerName = ast.id && ast.id.name;
-				if (handlerName)
-				{
-					if (handlerName == self.options.I18NHandlerName)
-					{
+				const handlerName = ast.id && ast.id.name;
+				if (handlerName) {
+					if (handlerName == self.options.I18NHandlerName) {
 						scope.I18NHandlerAsts.push(ast);
 						return;
-					}
-					else if (self.options.ignoreScanHandlerNames[handlerName])
-					{
-						debug('ignore scan function body %s.%s', handlerName, astUtil.getAstLocStr(ast));
+					} else if (
+						self.options.ignoreScanHandlerNames[handlerName]
+					) {
+						debug(
+							'ignore scan function body %s.%s',
+							handlerName,
+							astUtil.getAstLocStr(ast)
+						);
 						return;
-					}
-					else if (self.options.I18NHandlerAlias
-						&& self.options.I18NHandlerAlias.indexOf(handlerName) != -1)
-					{
+					} else if (
+						self.options.I18NHandlerAlias &&
+						self.options.I18NHandlerAlias.indexOf(handlerName) != -1
+					) {
 						astUtil.setAstFlag(ast, AST_FLAGS.I18N_ALIAS);
 						scope.I18NHandlerAsts.push(ast);
 						return;
@@ -15095,47 +15030,55 @@ _.extend(ASTCollector.prototype,
 
 				scope.subScopes.push(self.collect(ast.body, 'closure'));
 				return;
+			}
 
-			case 'CallExpression':
+			case 'CallExpression': {
 				if (!ast.callee) break;
 
-				var calleeName;
-				if (ast.callee.type == 'Identifier')
-				{
+				let calleeName;
+				if (ast.callee.type == 'Identifier') {
 					calleeName = ast.callee.name;
 
-					switch(calleeName)
-					{
+					switch (calleeName) {
 						// 如果发现define函数，就留心一下，可能要插入I18N函数
 						// 注意：
 						// 只处理直接在define里面插入function的情况
 						// 如果是通过变量方式代入funtion，就忽略
-						case 'define':
-							var defineLastArg = ast.arguments[ast.arguments.length-1];
-							if (defineLastArg.type == 'FunctionExpression')
-							{
-								scope.subScopes.push(self.collect(defineLastArg.body, 'define factory'));
+						case 'define': {
+							const defineLastArg =
+								ast.arguments[ast.arguments.length - 1];
+							if (defineLastArg.type == 'FunctionExpression') {
+								scope.subScopes.push(
+									self.collect(
+										defineLastArg.body,
+										'define factory'
+									)
+								);
 								return;
 							}
 							break;
+						}
 
-						case self.options.I18NHandlerName:
-							var I18NArgReulst = self._parseI18NArgs(ast);
+						case self.options.I18NHandlerName: {
+							const I18NArgReulst = self._parseI18NArgs(ast);
 							scope.I18NArgs.push(I18NArgReulst);
-							if (I18NArgReulst.formatArgAsts)
-							{
-								return self.scan(scope, I18NArgReulst.formatArgAsts);
+							if (I18NArgReulst.formatArgAsts) {
+								return self.scan(
+									scope,
+									I18NArgReulst.formatArgAsts
+								);
 							}
 							return;
+						}
 					}
 				}
 
-				if (!calleeName)
-				{
-					switch(ast.callee.type)
-					{
+				if (!calleeName) {
+					switch (ast.callee.type) {
 						case 'MemberExpression':
-							calleeName = astUtil.astMemberExpression2arr(ast.callee).join('.');
+							calleeName = astUtil
+								.astMemberExpression2arr(ast.callee)
+								.join('.');
 							break;
 
 						case 'FunctionExpression':
@@ -15146,109 +15089,114 @@ _.extend(ASTCollector.prototype,
 
 				if (!calleeName) break;
 
-				if (self.options.ignoreScanHandlerNames[calleeName])
-				{
-					debug('ignore scan function args %s.%s', calleeName, astUtil.getAstLocStr(ast));
+				if (self.options.ignoreScanHandlerNames[calleeName]) {
+					debug(
+						'ignore scan function args %s.%s',
+						calleeName,
+						astUtil.getAstLocStr(ast)
+					);
 					return;
-				}
-				else if (ast.callee.type != 'FunctionExpression'
-					&& self.options.I18NHandlerAlias
-					&& self.options.I18NHandlerAlias.indexOf(calleeName) != -1)
-				{
+				} else if (
+					ast.callee.type != 'FunctionExpression' &&
+					self.options.I18NHandlerAlias &&
+					self.options.I18NHandlerAlias.indexOf(calleeName) != -1
+				) {
 					astUtil.setAstFlag(ast, AST_FLAGS.I18N_ALIAS);
 
-					var I18NArgReulst = self._parseI18NArgs(ast);
+					const I18NArgReulst = self._parseI18NArgs(ast);
 					I18NArgReulst.alias = calleeName;
 					scope.I18NArgs.push(I18NArgReulst);
-					if (I18NArgReulst.formatArgAsts)
-					{
+					if (I18NArgReulst.formatArgAsts) {
 						return self.scan(scope, I18NArgReulst.formatArgAsts);
 					}
 					return;
 				}
 
 				break;
+			}
 
-			case 'Literal':
-				var ret = self.literalHandler.handle(ast);
+			case 'Literal': {
+				const ret = self.literalHandler.handle(ast);
 				debug('deal literal, ast val:%s ret:%o', ast.value, ret);
 				return ret;
+			}
 
-			case 'ObjectExpression':
-				var result = [];
-				ast.properties.forEach(function(item)
-				{
-					var ret = self.scan(scope, item.key);
-					if (ret && ret.length)
-					{
-						ret.forEach(function(keyAst)
-						{
-							astUtil.setAstFlag(keyAst, AST_FLAGS.DIS_REPLACE | AST_FLAGS.OBJECT_KEY);
-							debug('Ignore not replace property key error.%s', astUtil.getAstLocStr(keyAst));
+			case 'ObjectExpression': {
+				const result = [];
+				ast.properties.forEach(function(item) {
+					let ret = self.scan(scope, item.key);
+					if (ret && ret.length) {
+						ret.forEach(function(keyAst) {
+							astUtil.setAstFlag(
+								keyAst,
+								AST_FLAGS.DIS_REPLACE | AST_FLAGS.OBJECT_KEY
+							);
+							debug(
+								'Ignore not replace property key error.%s',
+								astUtil.getAstLocStr(keyAst)
+							);
 						});
 
 						ArrayPush.apply(result, ret);
 					}
 
-					var ret = self.scan(scope, item.value);
+					ret = self.scan(scope, item.value);
 					if (ret && ret.length) ArrayPush.apply(result, ret);
 				});
 
 				return result;
+			}
 
 			// @todo 归类到脏数据中
-			// var dd = `before ${xxd} middle ${I11(xxx)} after`
+			// const dd = `before ${xxd} middle ${I11(xxx)} after`
 			// function dd() {return <div>xxxdd {this.xxx} {xxx(fff)} </div>}
 			case 'TemplateLiteral':
 			case 'JSXElement':
-			case 'TaggedTemplateExpression':
-				var result = self.scan(scope, ast);
+			case 'TaggedTemplateExpression': {
+				const result = self.scan(scope, ast);
 
-				if (result)
-				{
-					var flag = UNSUPPORT_AST_TYPS[ast.type] | AST_FLAGS.DIS_REPLACE;
-					result.forEach(function(item)
-					{
+				if (result) {
+					const flag =
+						UNSUPPORT_AST_TYPS[ast.type] | AST_FLAGS.DIS_REPLACE;
+					result.forEach(function(item) {
 						astUtil.setAstFlag(item, flag);
 					});
 				}
 
 				return result;
+			}
 		}
 
-
-		var blockModifier = self._getBlockModifier(ast);
-		if (self._isBlockModifier(blockModifier, BLOCK_MODIFIER.SKIP_SACN))
-		{
+		const blockModifier = self._getBlockModifier(ast);
+		if (self._isBlockModifier(blockModifier, BLOCK_MODIFIER.SKIP_SACN)) {
 			astUtil.setAstFlag(ast, AST_FLAGS.SKIP_SACN);
 			astUtil.setAstFlag(ast.body[0], AST_FLAGS.BLOCK_MODIFIER);
 			debug('skip scan, body len:%s', ast.body.length);
 			return;
 		}
 
-
-		var scanKeys = VISITOR_KEYS[ast.type];
-		if (!scanKeys)
-		{
+		let scanKeys = VISITOR_KEYS[ast.type];
+		if (!scanKeys) {
 			debug('undefined ast type:%s', ast.type);
 			scanKeys = _.keys(ast);
 		}
 		if (!scanKeys.length) return;
 
-		var result = [];
-		scanKeys.forEach(function(ast_key)
-		{
-			var result2 = self.scan(scope, ast[ast_key]);
+		const result = [];
+		scanKeys.forEach(function(ast_key) {
+			const result2 = self.scan(scope, ast[ast_key]);
 			if (result2 && result2.length) ArrayPush.apply(result, result2);
 		});
 
-		if (result.length)
-		{
+		if (result.length) {
 			// 不替换成函数
-			if (self._isBlockModifier(blockModifier, BLOCK_MODIFIER.SKIP_REPLACE))
-			{
-				result.forEach(function(item)
-				{
+			if (
+				self._isBlockModifier(
+					blockModifier,
+					BLOCK_MODIFIER.SKIP_REPLACE
+				)
+			) {
+				result.forEach(function(item) {
 					astUtil.setAstFlag(item, AST_FLAGS.SKIP_REPLACE);
 					debug('skip replace %s', astUtil.getAstLocStr(item));
 				});
@@ -15260,26 +15208,32 @@ _.extend(ASTCollector.prototype,
 
 	// 获取块的描述符
 	// 必须是{}之间的第一行
-	_getBlockModifier: function(ast)
-	{
-		if ((ast.type != 'BlockStatement' && ast.type != 'Program') || !ast.body) return;
+	_getBlockModifier: function(ast) {
+		if (
+			(ast.type != 'BlockStatement' && ast.type != 'Program') ||
+			!ast.body
+		)
+			return;
 
-		var astBodyFirst = ast.body[0];
+		const astBodyFirst = ast.body[0];
 
-		var val = astBodyFirst
-			&& astBodyFirst.type == 'ExpressionStatement'
-			&& astBodyFirst.expression
-			&& astBodyFirst.expression.type == 'Literal'
-			&& astBodyFirst.expression.value;
+		const val =
+			astBodyFirst &&
+			astBodyFirst.type == 'ExpressionStatement' &&
+			astBodyFirst.expression &&
+			astBodyFirst.expression.type == 'Literal' &&
+			astBodyFirst.expression.value;
 
-		if (val) return {ast: astBodyFirst, value: val};
+		if (val)
+			return {
+				ast: astBodyFirst,
+				value: val
+			};
 	},
 
-	_isBlockModifier: function(blockModifier, flag)
-	{
-		var val = blockModifier && blockModifier.value
-		if (val == flag || val == flag+'@'+this.options.I18NHandlerName)
-		{
+	_isBlockModifier: function(blockModifier, flag) {
+		const val = blockModifier && blockModifier.value;
+		if (val == flag || val == flag + '@' + this.options.I18NHandlerName) {
 			astUtil.setAstFlag(blockModifier.ast, AST_FLAGS.BLOCK_MODIFIER);
 			return true;
 		}
@@ -15291,149 +15245,147 @@ _.extend(ASTCollector.prototype,
 },{"./ast_literal_handler":31,"./ast_scope":32,"./def":33,"./emitter":34,"debug":44,"estraverse":58,"i18nc-ast":1,"lodash":66}],31:[function(require,module,exports){
 'use strict';
 
-var _			= require('lodash');
-var debug		= require('debug')('i18nc-core:ast_literal_handler');
-var emitter		= require('./emitter');
-var i18ncAst	= require('i18nc-ast');
-var wordsUtils	= require('./utils/words_utils');
-var astUtil		= i18ncAst.util;
-var astTpl		= i18ncAst.tpl;
+const _ = require('lodash');
+const debug = require('debug')('i18nc-core:ast_literal_handler');
+const emitter = require('./emitter');
+const i18ncAst = require('i18nc-ast');
+const wordsUtils = require('./utils/words_utils');
+const astUtil = i18ncAst.util;
+const astTpl = i18ncAst.tpl;
 
-exports.LiteralHandler	= LiteralHandler;
+exports.LiteralHandler = LiteralHandler;
 
-function LiteralHandler(options)
-{
+function LiteralHandler(options) {
 	this.options = options;
 }
 
-_.extend(LiteralHandler.prototype,
-{
-	handle: function(ast)
-	{
-		var value = ast.value;
+_.extend(LiteralHandler.prototype, {
+	handle: function(ast) {
+		const value = ast.value;
 		if (!value) return;
 
-		if (typeof value == 'string')
-			return this._stringHandler(ast);
-		else if (value instanceof RegExp)
-			return this._regExpHandler(ast);
-		else
-			debug('ignore value init, val:%s, type:%s', value, typeof value);
+		if (typeof value == 'string') return this._stringHandler(ast);
+		else if (value instanceof RegExp) return this._regExpHandler(ast);
+		else debug('ignore value init, val:%s, type:%s', value, typeof value);
 	},
-	_regExpHandler: function(ast)
-	{
-		var self = this;
-		var regex = ast.regex;
-		if (!regex || !regex.pattern || typeof regex.pattern != 'string') return;
+	_regExpHandler: function(ast) {
+		const self = this;
+		const regex = ast.regex;
+		if (!regex || !regex.pattern || typeof regex.pattern != 'string')
+			return;
 
-		var value = regex.pattern; //.replace(/\\/g, '\\\\');
-		var lineStrings = wordsUtils.splitValue2lineStrings(value, 'regexp', self.options);
+		const value = regex.pattern; //.replace(/\\/g, '\\\\');
+		const lineStrings = wordsUtils.splitValue2lineStrings(
+			value,
+			'regexp',
+			self.options
+		);
 		debug('regex value:%s split result:%o', value, lineStrings);
 		if (!lineStrings) return;
 
-		var literalAst = astUtil.asts2plusExpression(self._txts2asts(lineStrings));
-		var args = [literalAst];
+		const literalAst = astUtil.asts2plusExpression(
+			self._txts2asts(lineStrings)
+		);
+		const args = [literalAst];
 		if (regex.flags) args.push(astTpl.Literal(regex.flags));
 
-		ast.__i18n_replace_info__ =
-		{
-			newAst			: astTpl.NewExpression('RegExp', args),
-			translateWords	: wordsUtils.getTranslateWordsFromLineStrings(lineStrings)
+		ast.__i18n_replace_info__ = {
+			newAst: astTpl.NewExpression('RegExp', args),
+			translateWords: wordsUtils.getTranslateWordsFromLineStrings(
+				lineStrings
+			)
 		};
 
 		return [ast];
 	},
 
-	_stringHandler: function(ast)
-	{
-		var self = this;
-		var value = ast.value;
-		var lineStrings = wordsUtils.splitValue2lineStrings(value, 'string', self.options);
+	_stringHandler: function(ast) {
+		const self = this;
+		const value = ast.value;
+		const lineStrings = wordsUtils.splitValue2lineStrings(
+			value,
+			'string',
+			self.options
+		);
 		debug('value split result:%o', lineStrings);
 		if (!lineStrings) return;
 
-		var retArr =
-		[{
-			ast			: ast,
-			lineStrings	: lineStrings,
-		}];
+		let retArr = [
+			{
+				ast: ast,
+				lineStrings: lineStrings
+			}
+		];
 
 		// 整理最后的结果，进行输出
-		var emitData =
-		{
-			type		: 'string',
-			value		: retArr,
-			original	: retArr,
-			options		: self.options,
+		const emitData = {
+			type: 'string',
+			value: retArr,
+			original: retArr,
+			options: self.options
 		};
 		emitter.trigger('assignLineStrings', emitData);
 
-		if (retArr !== emitData.value)
-		{
+		if (retArr !== emitData.value) {
 			debug('word ast chanage, old:%o, new:%o', retArr, emitData.value);
 			retArr = emitData.value;
 		}
 
 		if (!retArr || !retArr.length) return;
 
-		return retArr.map(function(item)
-			{
-				var ast = item.ast;
-				var newAst = astUtil.asts2plusExpression(self._txts2asts(item.lineStrings));
+		return retArr
+			.map(function(item) {
+				const ast = item.ast;
+				const newAst = astUtil.asts2plusExpression(
+					self._txts2asts(item.lineStrings)
+				);
 				if (!newAst) return;
 
 				debug('literal new ast:%o', newAst);
 
-				ast.__i18n_replace_info__ =
-				{
-					newAst			: newAst,
-					translateWords	: wordsUtils.getTranslateWordsFromLineStrings(item.lineStrings)
+				ast.__i18n_replace_info__ = {
+					newAst: newAst,
+					translateWords: wordsUtils.getTranslateWordsFromLineStrings(
+						item.lineStrings
+					)
 				};
 
 				return ast;
 			})
-			.filter(function(item)
-			{
+			.filter(function(item) {
 				return item;
 			});
 	},
 
-	_txt2ast: function(txt, isTranslateWord)
-	{
+	_txt2ast: function(txt, isTranslateWord) {
 		return isTranslateWord
-			? astTpl.CallExpression(this.options.I18NHandlerName, [astTpl.Literal(txt)])
+			? astTpl.CallExpression(this.options.I18NHandlerName, [
+					astTpl.Literal(txt)
+				])
 			: astTpl.Literal(txt);
 	},
 
 	// 将文本结构体整理成ast的数组
-	_txts2asts: function(txts)
-	{
+	_txts2asts: function(txts) {
 		if (!txts || !txts.length) return;
 
-		var self = this;
-		var tmpValue = '';
-		var isTranslateWord;
-		var result = [];
+		const self = this;
+		let tmpValue = '';
+		let isTranslateWord;
+		const result = [];
 
-		txts.forEach(function(item)
-		{
+		txts.forEach(function(item) {
 			if (!item || !item.value || item.ignore) return;
-			if (item.disconnected)
-			{
-				if (tmpValue)
-				{
+			if (item.disconnected) {
+				if (tmpValue) {
 					result.push(self._txt2ast(tmpValue, isTranslateWord));
 					tmpValue = '';
 				}
 
 				result.push(self._txt2ast(item.value, item.translateWord));
-			}
-			else
-			{
-				if (tmpValue && isTranslateWord != item.translateWord)
-				{
-					if (tmpValue)
-					{
+			} else {
+				if (tmpValue && isTranslateWord != item.translateWord) {
+					if (tmpValue) {
 						result.push(self._txt2ast(tmpValue, isTranslateWord));
 						tmpValue = '';
 					}
@@ -15447,40 +15399,40 @@ _.extend(LiteralHandler.prototype,
 		if (tmpValue) result.push(self._txt2ast(tmpValue, isTranslateWord));
 
 		return result;
-	},
+	}
 });
 
 },{"./emitter":34,"./utils/words_utils":43,"debug":44,"i18nc-ast":1,"lodash":66}],32:[function(require,module,exports){
 'use strict';
 
-var _					= require('lodash');
-var debug				= require('debug')('i18nc-core:ast_scope');
-var i18ncAst			= require('i18nc-ast');
-var astTpl				= i18ncAst.tpl;
-var astUtil				= i18ncAst.util;
-var DEF					= require('./def');
-var I18NPlaceholder		= require('./i18n_placeholder').I18NPlaceholder;
-var ArrayPush			= Array.prototype.push;
-var AST_FLAGS			= i18ncAst.AST_FLAGS;
-var UNSUPPORT_AST_TYPS	= DEF.UNSUPPORT_AST_TYPS;
+const _ = require('lodash');
+const debug = require('debug')('i18nc-core:ast_scope');
+const i18ncAst = require('i18nc-ast');
+const astTpl = i18ncAst.tpl;
+const astUtil = i18ncAst.util;
+const DEF = require('./def');
+const I18NPlaceholder = require('./i18n_placeholder').I18NPlaceholder;
+const ArrayPush = Array.prototype.push;
+const AST_FLAGS = i18ncAst.AST_FLAGS;
+const UNSUPPORT_AST_TYPS = DEF.UNSUPPORT_AST_TYPS;
 
-var ResultObject		= require('./result_object');
-var DirtyWords			= ResultObject.DirtyWords;
-var CodeTranslateWords	= ResultObject.CodeTranslateWords;
-var FuncTranslateWords	= ResultObject.FuncTranslateWords;
-var UsedTranslateWords	= ResultObject.UsedTranslateWords;
-var TranslateWords		= ResultObject.TranslateWords;
-var CodeInfoResult		= ResultObject.CodeInfoResult;
+const ResultObject = require('./result_object');
+const DirtyWords = ResultObject.DirtyWords;
+const CodeTranslateWords = ResultObject.CodeTranslateWords;
+const FuncTranslateWords = ResultObject.FuncTranslateWords;
+const UsedTranslateWords = ResultObject.UsedTranslateWords;
+const TranslateWords = ResultObject.TranslateWords;
+const CodeInfoResult = ResultObject.CodeInfoResult;
 
-var I18NC;
-function runNewI18NC(code, ast, options, originalCode, isInsertHandler)
-{
+let I18NC;
+
+function runNewI18NC(code, ast, options, originalCode, isInsertHandler) {
 	// 存在循环应用，所以在调用的时候，再require
 	if (!I18NC) I18NC = require('./main');
 	options.I18NHandler.insert.enable = false;
-	var codeIndent = astUtil.codeIndent(ast, originalCode);
-	var newCode = I18NC.run(code, options).code;
-	newCode = newCode.split('\n').join('\n'+codeIndent);
+	const codeIndent = astUtil.codeIndent(ast, originalCode);
+	let newCode = I18NC.run(code, options).code;
+	newCode = newCode.split('\n').join('\n' + codeIndent);
 	options.I18NHandler.insert.enable = isInsertHandler;
 
 	return newCode;
@@ -15488,23 +15440,21 @@ function runNewI18NC(code, ast, options, originalCode, isInsertHandler)
 
 exports.ASTScope = ASTScope;
 
-function ASTScope(ast, type)
-{
-	this.ast	= ast;
+function ASTScope(ast, type) {
+	this.ast = ast;
 	// type:
 	// define factory
 	// top
-	this.type	= type;
+	this.type = type;
 
-	this.I18NArgs			= [];
-	this.I18NHandlerAsts	= [];
-	this.translateWordAsts	= [];
+	this.I18NArgs = [];
+	this.I18NHandlerAsts = [];
+	this.translateWordAsts = [];
 
-	this.subScopes	= [];
+	this.subScopes = [];
 }
 
-_.extend(ASTScope.prototype,
-{
+_.extend(ASTScope.prototype, {
 	/**
 	 * 将subScope进行压缩
 	 * 由于采集的时候，只要遇到函数定义，就会生成一个新的scope
@@ -15517,9 +15467,8 @@ _.extend(ASTScope.prototype,
 	 * 1. 参数不使用options，因为每次修改值，都要重新拷贝一份，很麻烦
 	 * 2. 合并仅仅将删除的subScope的采集内容合并到父scope，不会合并非自己的采集内容
 	 */
-	squeeze: function(isKeepDefineFactoryScope, options)
-	{
-		var self = this;
+	squeeze: function(isKeepDefineFactoryScope, options) {
+		const self = this;
 
 		if (!self.subScopes.length) return self;
 		// 如果已经定义了I18N函数，则不进行define的闭包
@@ -15527,29 +15476,27 @@ _.extend(ASTScope.prototype,
 		// 只保留一层define，嵌套的不处理
 		if (self.type == 'define factory') isKeepDefineFactoryScope = false;
 
-		var newScope = new ASTScope(self.ast, self.type);
+		const newScope = new ASTScope(self.ast, self.type);
 		newScope._merge(this);
 
-		self.subScopes.forEach(function(scope)
-		{
-			var scope2 = scope.squeeze(isKeepDefineFactoryScope, options);
+		self.subScopes.forEach(function(scope) {
+			const scope2 = scope.squeeze(isKeepDefineFactoryScope, options);
 
 			// 已经有I18N函数
-			if (scope2.I18NHandlerAsts.length
+			if (
+				scope2.I18NHandlerAsts.length ||
 				// 对define函数调用进行特殊处理
-				|| (isKeepDefineFactoryScope && scope2.type == 'define factory')
+				(isKeepDefineFactoryScope && scope2.type == 'define factory') ||
 				// 如果是顶层，又希望闭包的时候，把I18N函数插入到第二层
-				|| (self.type == 'top' && options.I18NHandler.insert.checkClosure))
-			{
+				(self.type == 'top' && options.I18NHandler.insert.checkClosure)
+			) {
 				newScope.subScopes.push(scope2);
 			}
 			// 合并数据
-			else
-			{
+			else {
 				newScope._merge(scope2);
 
-				if (scope2.subScopes.length)
-				{
+				if (scope2.subScopes.length) {
 					ArrayPush.apply(newScope.subScopes, scope2.subScopes);
 				}
 			}
@@ -15558,8 +15505,7 @@ _.extend(ASTScope.prototype,
 		return newScope;
 	},
 
-	_merge: function(scope)
-	{
+	_merge: function(scope) {
 		// 不合并subScopes
 		// subScopes会在后续进行判断之后看需要进行合并
 		ArrayPush.apply(this.I18NArgs, scope.I18NArgs);
@@ -15570,205 +15516,201 @@ _.extend(ASTScope.prototype,
 	/**
 	 * 获取自身除I18N函数之外的translateInfo
 	 */
-	_codeTranslateWordInfoOfSelf: function(options)
-	{
-		var scope					= this;
-		var dirtyWords				= new DirtyWords();
-		var allCodeTranslateWords	= new CodeTranslateWords();
-		var myCodeTranslateWords	= new CodeTranslateWords();
+	_codeTranslateWordInfoOfSelf: function(options) {
+		const scope = this;
+		const dirtyWords = new DirtyWords();
+		const allCodeTranslateWords = new CodeTranslateWords();
+		const myCodeTranslateWords = new CodeTranslateWords();
 
-		var aliasCodeTranslateWords	= {};
-		var IGNORE_translateWord	= !options.codeModifyItems.TranslateWord;
-		var IGNORE_regexp			= !options.codeModifyItems.TranslateWord_RegExp;
+		const aliasCodeTranslateWords = {};
+		const IGNORE_translateWord = !options.codeModifyItems.TranslateWord;
+		const IGNORE_regexp = !options.codeModifyItems.TranslateWord_RegExp;
 
-		scope.translateWordAsts.forEach(function(ast)
-		{
-			if (astUtil.checkAstFlag(ast, AST_FLAGS.DIS_REPLACE))
-			{
-				var ret = _.some(UNSUPPORT_AST_TYPS, function(flag, name)
-				{
-					if (astUtil.checkAstFlag(ast, flag))
-					{
-						dirtyWords.add(ast, 'Not Support Ast `'+name+'` yet');
+		scope.translateWordAsts.forEach(function(ast) {
+			if (astUtil.checkAstFlag(ast, AST_FLAGS.DIS_REPLACE)) {
+				const ret = _.some(UNSUPPORT_AST_TYPS, function(flag, name) {
+					if (astUtil.checkAstFlag(ast, flag)) {
+						dirtyWords.add(
+							ast,
+							'Not Support Ast `' + name + '` yet'
+						);
 						return true;
 					}
 				});
 
-				if (!ret) dirtyWords.add(ast, "This ast can't use I18N");
-			}
-			else if (IGNORE_translateWord ||
-				(IGNORE_regexp && ast.value instanceof RegExp))
-			{
+				if (!ret) dirtyWords.add(ast, 'This ast can\'t use I18N');
+			} else if (
+				IGNORE_translateWord ||
+				(IGNORE_regexp && ast.value instanceof RegExp)
+			) {
 				dirtyWords.add(ast, 'Text Replacer Not Enabled');
-			}
-			else
-			{
+			} else {
 				allCodeTranslateWords.pushNewWord(ast);
 				myCodeTranslateWords.pushNewWord(ast);
 			}
 		});
 
-		scope.I18NArgs.filter(function(argsInfo)
-			{
-				return argsInfo && argsInfo.translateWordAst;
-			})
-			.forEach(function(argsInfo)
-			{
-				var translateWordAst = argsInfo.translateWordAst;
-				var subkeyAst = argsInfo.subkeyAst;
+		scope.I18NArgs.filter(function(argsInfo) {
+			return argsInfo && argsInfo.translateWordAst;
+		}).forEach(function(argsInfo) {
+			const translateWordAst = argsInfo.translateWordAst;
+			const subkeyAst = argsInfo.subkeyAst;
 
-				if (!translateWordAst || !translateWordAst.value) return;
-				if (translateWordAst.type != 'Literal')
-				{
-					dirtyWords.add(translateWordAst, 'I18N args[0] is not literal');
-					return;
-				}
+			if (!translateWordAst || !translateWordAst.value) return;
+			if (translateWordAst.type != 'Literal') {
+				dirtyWords.add(translateWordAst, 'I18N args[0] is not literal');
+				return;
+			}
 
-				// 需要提取后面两个参数数据
-				var value = (''+translateWordAst.value).trim();
-				if (!value)
-				{
-					debug('blank i18n args:%s', translateWordAst.value);
-					return;
-				}
+			// 需要提取后面两个参数数据
+			const value = ('' + translateWordAst.value).trim();
+			if (!value) {
+				debug('blank i18n args:%s', translateWordAst.value);
+				return;
+			}
 
-				var subkey = subkeyAst && astUtil.ast2constVal(subkeyAst);
+			const subkey = subkeyAst && astUtil.ast2constVal(subkeyAst);
 
+			if (subkey)
+				allCodeTranslateWords.pushSubkey(subkey, translateWordAst);
+			else allCodeTranslateWords.pushWraped(translateWordAst);
 
-				if (subkey)
-					allCodeTranslateWords.pushSubkey(subkey, translateWordAst);
-				else
-					allCodeTranslateWords.pushWraped(translateWordAst);
+			const alias = argsInfo.alias;
+			let aliasCodes;
+			if (alias) {
+				aliasCodes =
+					aliasCodeTranslateWords[alias] ||
+					(aliasCodeTranslateWords[alias] = new CodeTranslateWords());
+			} else {
+				aliasCodes = myCodeTranslateWords;
+			}
 
-				var alias = argsInfo.alias;
-				var aliasCodes;
-				if (alias)
-				{
-					aliasCodes = aliasCodeTranslateWords[alias]
-						|| (aliasCodeTranslateWords[alias] = new CodeTranslateWords());
-				}
-				else
-				{
-					aliasCodes = myCodeTranslateWords;
-				}
-
-				if (subkey)
-					aliasCodes.pushSubkey(subkey, translateWordAst);
-				else
-					aliasCodes.pushWraped(translateWordAst);
-			});
+			if (subkey) aliasCodes.pushSubkey(subkey, translateWordAst);
+			else aliasCodes.pushWraped(translateWordAst);
+		});
 
 		// 这里的数据，均不包含子域
 		return {
 			// 脏数据
-			dirtyWords				: dirtyWords,
+			dirtyWords: dirtyWords,
 			// 从代码中获取到的关键
-			allCodeTranslateWords	: allCodeTranslateWords,
-			myCodeTranslateWords	: myCodeTranslateWords,
-			aliasCodeTranslateWords	: aliasCodeTranslateWords,
+			allCodeTranslateWords: allCodeTranslateWords,
+			myCodeTranslateWords: myCodeTranslateWords,
+			aliasCodeTranslateWords: aliasCodeTranslateWords
 		};
 	},
 
 	// 处理code的核心代码
-	codeAndInfo: function(tmpCode, originalCode, options)
-	{
-		var scope			= this;
-		var codeFixOffset	= scope.ast.range[0];
-		var codeStartPos	= 0;
-		var dealAst			= [];
-		var newCodes		= [];
-		var selfTWords		= scope._codeTranslateWordInfoOfSelf(options);
-		var isInsertHandler	= options.I18NHandler.insert.enable;
+	codeAndInfo: function(tmpCode, originalCode, options) {
+		const scope = this;
+		let codeFixOffset = scope.ast.range[0];
+		let codeStartPos = 0;
+		let dealAst = [];
+		const newCodes = [];
+		const selfTWords = scope._codeTranslateWordInfoOfSelf(options);
+		const isInsertHandler = options.I18NHandler.insert.enable;
 
-		var allCodeTranslateWordsJSON = selfTWords.allCodeTranslateWords.toJSON();
-		var myCodeTranslateWordsJSON = selfTWords.myCodeTranslateWords.toJSON();
+		const allCodeTranslateWordsJSON = selfTWords.allCodeTranslateWords.toJSON();
+		const myCodeTranslateWordsJSON = selfTWords.myCodeTranslateWords.toJSON();
 
-		var selfFuncTranslateWords = new FuncTranslateWords();
-		var originalFileKeys = [];
+		const selfFuncTranslateWords = new FuncTranslateWords();
+		const originalFileKeys = [];
 
-		var REPLACE_I18NHandler_alias = options.codeModifyItems.I18NHandlerAlias;
+		const REPLACE_I18NHandler_alias =
+			options.codeModifyItems.I18NHandlerAlias;
 
 		// 预处理 I18N函数 begin
-		var I18NHandlerAsts = scope.I18NHandlerAsts.sort(function(a, b)
-			{
-				return a.range[0] > b.range[0] ? 1 : -1;
-			});
-		var lastI18NHandlerAst, lastI18NHandlerAliasAsts = {};
-		for(var i = I18NHandlerAsts.length; i--;)
-		{
-			var item = I18NHandlerAsts[i];
-			if (astUtil.checkAstFlag(item, AST_FLAGS.I18N_ALIAS))
-			{
-				var handlerName = item.id && item.id.name;
-				if (!lastI18NHandlerAliasAsts[handlerName])
-				{
+		const I18NHandlerAsts = scope.I18NHandlerAsts.sort(function(a, b) {
+			return a.range[0] > b.range[0] ? 1 : -1;
+		});
+		let lastI18NHandlerAst;
+		const lastI18NHandlerAliasAsts = {};
+		for (let i = I18NHandlerAsts.length; i--; ) {
+			const item = I18NHandlerAsts[i];
+			if (astUtil.checkAstFlag(item, AST_FLAGS.I18N_ALIAS)) {
+				const handlerName = item.id && item.id.name;
+				if (!lastI18NHandlerAliasAsts[handlerName]) {
 					lastI18NHandlerAliasAsts[handlerName] = item;
 				}
-			}
-			else
-			{
+			} else {
 				if (!lastI18NHandlerAst) lastI18NHandlerAst = item;
 			}
 		}
 
-		I18NHandlerAsts.forEach(function(ast)
-		{
-			dealAst.push({type: 'I18NHandler', value: ast});
+		I18NHandlerAsts.forEach(function(ast) {
+			dealAst.push({
+				type: 'I18NHandler',
+				value: ast
+			});
 		});
 		// 预处理 I18N函数 end
 
-
-		if (REPLACE_I18NHandler_alias)
-		{
-			scope.I18NArgs.forEach(function(item)
-			{
-				if (astUtil.checkAstFlag(item.calleeAst, AST_FLAGS.I18N_ALIAS))
-				{
-					dealAst.push({type: 'I18NAliasCallee', value: item.calleeAst});
+		if (REPLACE_I18NHandler_alias) {
+			scope.I18NArgs.forEach(function(item) {
+				if (
+					astUtil.checkAstFlag(item.calleeAst, AST_FLAGS.I18N_ALIAS)
+				) {
+					dealAst.push({
+						type: 'I18NAliasCallee',
+						value: item.calleeAst
+					});
 				}
 			});
 		}
 
-		scope.subScopes.forEach(function(item)
-		{
-			dealAst.push({type: 'scope', value: item.ast, scope: item});
+		scope.subScopes.forEach(function(item) {
+			dealAst.push({
+				type: 'scope',
+				value: item.ast,
+				scope: item
+			});
 		});
 
-		selfTWords.allCodeTranslateWords.list.forEach(function(item)
-		{
-			if (item.type == 'new'
-				&& !astUtil.checkAstFlag(item.originalAst, AST_FLAGS.SKIP_REPLACE | AST_FLAGS.DIS_REPLACE))
-			{
-				dealAst.push({type: 'translateWord', value: item.originalAst});
+		selfTWords.allCodeTranslateWords.list.forEach(function(item) {
+			if (
+				item.type == 'new' &&
+				!astUtil.checkAstFlag(
+					item.originalAst,
+					AST_FLAGS.SKIP_REPLACE | AST_FLAGS.DIS_REPLACE
+				)
+			) {
+				dealAst.push({
+					type: 'translateWord',
+					value: item.originalAst
+				});
 			}
 		});
-
 
 		// 插入一个默认的翻译函数
 		// 注意，alias不会进行处理，
 		// 如果保留alias，但alias本身没有placeholder，处理逻辑也不会忘代码里面插入placeholder
-		var I18NPlaceholderNew = new I18NPlaceholder(
-				REPLACE_I18NHandler_alias ? allCodeTranslateWordsJSON : myCodeTranslateWordsJSON,
-				originalCode,
-				options
-			);
-		if (scope.ast.type == 'BlockStatement')
-		{
+		const I18NPlaceholderNew = new I18NPlaceholder(
+			REPLACE_I18NHandler_alias
+				? allCodeTranslateWordsJSON
+				: myCodeTranslateWordsJSON,
+			originalCode,
+			options
+		);
+		if (scope.ast.type == 'BlockStatement') {
 			codeStartPos++;
 
 			// 如果是在结构体内，那么至少要缩进一个tab
-			var _originalI18nPlaceholderNewToString = I18NPlaceholderNew.toString;
-			I18NPlaceholderNew.toString = function()
-			{
-				var str = _originalI18nPlaceholderNewToString.apply(this, arguments);
+			const _originalI18nPlaceholderNewToString =
+				I18NPlaceholderNew.toString;
+			I18NPlaceholderNew.toString = function() {
+				const str = _originalI18nPlaceholderNewToString.apply(
+					this,
+					arguments
+				);
 				if (!str) return str;
 
-				var codeIndent = astUtil.codeIndent(scope.ast, originalCode)+'\t';
+				const codeIndent =
+					astUtil.codeIndent(scope.ast, originalCode) + '\t';
 
-				return str.split('\n')
-					.map(function(val)
-					{
-						return val.trim() ? codeIndent+val : val;
+				return str
+					.split('\n')
+					.map(function(val) {
+						return val.trim() ? codeIndent + val : val;
 					})
 					.join('\n');
 			};
@@ -15777,18 +15719,14 @@ _.extend(ASTScope.prototype,
 		tmpCode = tmpCode.slice(codeStartPos);
 		codeFixOffset += codeStartPos;
 
-		dealAst = dealAst.sort(function(a, b)
-		{
+		dealAst = dealAst.sort(function(a, b) {
 			return a.value.range[0] > b.value.range[0] ? 1 : -1;
 		});
 
-		if (dealAst.length > 1)
-		{
-			dealAst.reduce(function(a, b)
-			{
+		if (dealAst.length > 1) {
+			dealAst.reduce(function(a, b) {
 				// 整理包含关系
-				if (a.value.range[1] > b.value.range[0])
-				{
+				if (a.value.range[1] > b.value.range[0]) {
 					a.include = true;
 					b.included = true;
 					return a;
@@ -15799,100 +15737,116 @@ _.extend(ASTScope.prototype,
 		}
 
 		// 逐个处理需要替换的数据
-		var myI18NPlaceholderList = [];
-		var aliasI18NPlaceholderList = [];
-		var allI18NPlaceholderList = [];
-		var subScopeDatas = [];
-		dealAst.forEach(function(item)
-		{
+		const myI18NPlaceholderList = [];
+		const aliasI18NPlaceholderList = [];
+		const allI18NPlaceholderList = [];
+		const subScopeDatas = [];
+		dealAst.forEach(function(item) {
 			// 被包含的元素，不进行处理
 			if (item.included) return;
 
-			var ast = item.value;
-			var codeStartPos = ast.range[0] - codeFixOffset;
-			var codeEndPos = ast.range[1] - codeFixOffset;
+			const ast = item.value;
+			const codeStartPos = ast.range[0] - codeFixOffset;
+			const codeEndPos = ast.range[1] - codeFixOffset;
 
 			newCodes.push(tmpCode.slice(0, codeStartPos));
-			var newCode;
+			let newCode;
 
-			switch(item.type)
-			{
-				case 'I18NAliasCallee':
-					var myAst = astTpl.CallExpression(options.I18NHandlerName, ast.arguments);
+			switch (item.type) {
+				case 'I18NAliasCallee': {
+					const myAst = astTpl.CallExpression(
+						options.I18NHandlerName,
+						ast.arguments
+					);
 					newCode = astUtil.tocode(myAst);
 					break;
+				}
 
-				case 'I18NHandler':
-					var handlerName = ast.id && ast.id.name;
-					var isAliasHandler = astUtil.checkAstFlag(ast, AST_FLAGS.I18N_ALIAS);
-					var codeJSON;
-					if (REPLACE_I18NHandler_alias)
-					{
+				case 'I18NHandler': {
+					const handlerName = ast.id && ast.id.name;
+					const isAliasHandler = astUtil.checkAstFlag(
+						ast,
+						AST_FLAGS.I18N_ALIAS
+					);
+					let codeJSON;
+					if (REPLACE_I18NHandler_alias) {
 						debug('use all code json');
 						codeJSON = allCodeTranslateWordsJSON;
-					}
-					else if (isAliasHandler)
-					{
+					} else if (isAliasHandler) {
 						debug('use alias code json');
-						codeJSON = selfTWords.aliasCodeTranslateWords[handlerName]
-							&& selfTWords.aliasCodeTranslateWords[handlerName].toJSON()
-							|| {};
-					}
-					else
-					{
+						codeJSON =
+							(selfTWords.aliasCodeTranslateWords[handlerName] &&
+								selfTWords.aliasCodeTranslateWords[
+									handlerName
+								].toJSON()) ||
+							{};
+					} else {
 						debug('use my code json');
 						codeJSON = myCodeTranslateWordsJSON;
 					}
 
-					var myPlaceholder = new I18NPlaceholder(
-							codeJSON,
-							originalCode,
-							options,
-							ast
-						);
+					const myPlaceholder = new I18NPlaceholder(
+						codeJSON,
+						originalCode,
+						options,
+						ast
+					);
 
-					if ((!isAliasHandler && ast !== lastI18NHandlerAst)
-						&& (isAliasHandler && ast !== lastI18NHandlerAliasAsts[handlerName]))
-					{
+					if (
+						!isAliasHandler &&
+						ast !== lastI18NHandlerAst &&
+						isAliasHandler &&
+							ast !== lastI18NHandlerAliasAsts[handlerName]
+					) {
 						// 函数保留，但翻译数据全部不要
 						// 翻译数据，全部以po文件或者最后的函数为准
 						myPlaceholder.renderType = 'simple';
 					}
 
 					allI18NPlaceholderList.push(myPlaceholder);
-					if (!REPLACE_I18NHandler_alias && isAliasHandler)
-					{
+					if (!REPLACE_I18NHandler_alias && isAliasHandler) {
 						aliasI18NPlaceholderList.push(myPlaceholder);
-					}
-					else
-					{
+					} else {
 						myPlaceholder.handlerName = options.I18NHandlerName;
 						myI18NPlaceholderList.push(myPlaceholder);
 					}
 
 					newCode = myPlaceholder;
 					break;
+				}
 
 				case 'translateWord':
 					newCode = astUtil.tocode(ast.__i18n_replace_info__.newAst);
 					break;
 
-
-				case 'scope':
-					var scopeData = item.scope.codeAndInfo(tmpCode.slice(codeStartPos, codeEndPos), originalCode, options);
+				case 'scope': {
+					const scopeData = item.scope.codeAndInfo(
+						tmpCode.slice(codeStartPos, codeEndPos),
+						originalCode,
+						options
+					);
 					newCode = scopeData.code;
 					subScopeDatas.push(scopeData);
 					break;
+				}
 
 				default:
 					debug('undefind type:%s ast:%o', item.type, ast);
 					newCode = tmpCode.slice(codeStartPos, codeEndPos);
 			}
 
-			if (item.include && newCode != tmpCode.slice(codeStartPos, codeEndPos))
-			{
+			if (
+				item.include &&
+				newCode != tmpCode.slice(codeStartPos, codeEndPos)
+			) {
 				// 包含情况下，对结果再允许一次i18nc解析
-				newCode = runNewI18NC(newCode, ast, options, originalCode, isInsertHandler);
+				newCode = runNewI18NC(
+					newCode,
+					ast,
+					options,
+					originalCode,
+					isInsertHandler
+				);
 			}
 
 			newCodes.push(newCode);
@@ -15903,46 +15857,54 @@ _.extend(ASTScope.prototype,
 
 		// 如果作用域中，已经有I18N函数
 		// 那么头部插入的函数就不需要了
-		if (!isInsertHandler || myI18NPlaceholderList.length)
-		{
+		if (!isInsertHandler || myI18NPlaceholderList.length) {
 			debug('ignore insert new I18NHandler');
 			I18NPlaceholderNew.renderType = 'empty';
 		}
 
 		// 输出最终代码
-		var resultCode = newCodes.join('')+tmpCode;
+		const resultCode = newCodes.join('') + tmpCode;
 
-		if (isInsertHandler
-			&& options.I18NHandler.insert.checkClosure
-			&& scope.type == 'top'
-			&& I18NPlaceholderNew.getRenderType() == 'complete')
-		{
+		if (
+			isInsertHandler &&
+			options.I18NHandler.insert.checkClosure &&
+			scope.type == 'top' &&
+			I18NPlaceholderNew.getRenderType() == 'complete'
+		) {
 			throw new Error('closure by youself');
 		}
 
 		// 进行最后的附加数据整理、合并
-		myI18NPlaceholderList.concat(aliasI18NPlaceholderList)
-			.forEach(function(I18NPlaceholder)
-			{
-				var info = I18NPlaceholder.parse();
-				var FILE_KEY = info.__FILE_KEY__;
+		myI18NPlaceholderList
+			.concat(aliasI18NPlaceholderList)
+			.forEach(function(I18NPlaceholder) {
+				const info = I18NPlaceholder.parse();
+				const FILE_KEY = info.__FILE_KEY__;
 				originalFileKeys.push(FILE_KEY);
 
 				selfFuncTranslateWords.add(FILE_KEY, info.__TRANSLATE_JSON__);
 			});
 
-		var currentI18NHandler = allI18NPlaceholderList[allI18NPlaceholderList.length - 1] || I18NPlaceholderNew;
-		var usedTranslateWords = new UsedTranslateWords();
-		usedTranslateWords.add(currentI18NHandler.parse().__FILE_KEY__, currentI18NHandler.getTranslateJSON());
-		var selfScopeData = new CodeInfoResult(
-		{
-			code             : resultCode,
-			currentFileKey   : currentI18NHandler.parse().__FILE_KEY__,
-			originalFileKeys : originalFileKeys,
-			subScopeDatas    : subScopeDatas,
+		const currentI18NHandler =
+			allI18NPlaceholderList[allI18NPlaceholderList.length - 1] ||
+			I18NPlaceholderNew;
+		const usedTranslateWords = new UsedTranslateWords();
+		usedTranslateWords.add(
+			currentI18NHandler.parse().__FILE_KEY__,
+			currentI18NHandler.getTranslateJSON()
+		);
+		const selfScopeData = new CodeInfoResult({
+			code: resultCode,
+			currentFileKey: currentI18NHandler.parse().__FILE_KEY__,
+			originalFileKeys: originalFileKeys,
+			subScopeDatas: subScopeDatas,
 			// 脏数据
-			dirtyWords       : selfTWords.dirtyWords,
-			words            : new TranslateWords(selfTWords.allCodeTranslateWords, selfFuncTranslateWords, usedTranslateWords),
+			dirtyWords: selfTWords.dirtyWords,
+			words: new TranslateWords(
+				selfTWords.allCodeTranslateWords,
+				selfFuncTranslateWords,
+				usedTranslateWords
+			)
 		});
 
 		// 返回数据，不包含子域数据
@@ -15953,36 +15915,32 @@ _.extend(ASTScope.prototype,
 },{"./def":33,"./i18n_placeholder":40,"./main":41,"./result_object":42,"debug":44,"i18nc-ast":1,"lodash":66}],33:[function(require,module,exports){
 'use strict';
 
-var AST_FLAGS = require('i18nc-ast').AST_FLAGS;
+const AST_FLAGS = require('i18nc-ast').AST_FLAGS;
 
-exports.BLOCK_MODIFIER =
-{
-	SKIP_SACN		: '[i18nc] skip_scan',
-	SKIP_REPLACE	: '[i18nc] skip_replace',
+exports.BLOCK_MODIFIER = {
+	SKIP_SACN: '[i18nc] skip_scan',
+	SKIP_REPLACE: '[i18nc] skip_replace'
 };
 
-exports.UNSUPPORT_AST_TYPS	=
-{
-	ObjectKey					: AST_FLAGS.OBJECT_KEY,
-	JSXElement					: AST_FLAGS.JSX_ELEMENT,
-	TemplateLiteral				: AST_FLAGS.TEMPLATE_LITERAL,
-	TaggedTemplateExpression	: AST_FLAGS.TAGGED_TEMPLATE_LITERAL,
+exports.UNSUPPORT_AST_TYPS = {
+	ObjectKey: AST_FLAGS.OBJECT_KEY,
+	JSXElement: AST_FLAGS.JSX_ELEMENT,
+	TemplateLiteral: AST_FLAGS.TEMPLATE_LITERAL,
+	TaggedTemplateExpression: AST_FLAGS.TAGGED_TEMPLATE_LITERAL
 };
-
 
 exports.I18NFunctionVersion = 'K';
-exports.I18NFunctionSubVersion =
-{
-	FULL	: 'f',
-	SIMPLE	: 's',
-	GLOBAL	: 'g',
+exports.I18NFunctionSubVersion = {
+	FULL: 'f',
+	SIMPLE: 's',
+	GLOBAL: 'g'
 };
 
 },{"i18nc-ast":1}],34:[function(require,module,exports){
 'use strict';
 
-var debug			= require('debug')('i18nc-core:emitter');
-var EventEmitter	= require('events').EventEmitter;
+const debug = require('debug')('i18nc-core:emitter');
+const EventEmitter = require('events').EventEmitter;
 
 /**
  * [Event List]
@@ -16003,67 +15961,64 @@ var EventEmitter	= require('events').EventEmitter;
  * 		获取 emitData.value (array ast+lineStrings) 作为返回值
  */
 
-var globalEmitter = new EventEmitter;
-var tmpEmitter = null;
-var EventEmit = globalEmitter.emit;
+const globalEmitter = new EventEmitter();
+let tmpEmitter = null;
+const EventEmit = globalEmitter.emit;
 
-exports.clear = function()
-{
+exports.clear = function() {
 	tmpEmitter = null;
 };
 
-exports.new = function()
-{
-	return (tmpEmitter = new EventEmitter);
+exports.new = function() {
+	return (tmpEmitter = new EventEmitter());
 };
 
-exports.trigger = function()
-{
+exports.trigger = function() {
 	EventEmit.apply(globalEmitter, arguments);
 	if (tmpEmitter) EventEmit.apply(tmpEmitter, arguments);
 };
 
-exports.proxy = function(obj)
-{
+exports.proxy = function(obj) {
 	// 注意:
 	// 不提供prependXXX once这些方法
 	// 设计的时候，忽略添加的先后顺序
 	// once容易出错，毕竟有scope等情况，容易导成误解
 	[
-		'on', 'addListener',
-		'removeListener', 'removeAllListeners',
+		'on',
+		'addListener',
+		'removeListener',
+		'removeAllListeners',
 		'eventNames',
 		'emit',
-		'setMaxListeners', 'listenerCount', 'getMaxListeners'
-	]
-	.forEach(function(name)
-	{
-		var handler = globalEmitter[name];
+		'setMaxListeners',
+		'listenerCount',
+		'getMaxListeners'
+	].forEach(function(name) {
+		const handler = globalEmitter[name];
 		if (typeof handler == 'function')
 			obj[name] = handler.bind(globalEmitter);
-		else
-			debug('handler is not function:%s', name);
+		else debug('handler is not function:%s', name);
 	});
 
-
-	obj.off = function(eventName, handler)
-	{
+	obj.off = function(eventName, handler) {
 		if (handler)
 			return globalEmitter.removeListener.apply(globalEmitter, arguments);
 		else
-			return globalEmitter.removeAllListeners.apply(globalEmitter, arguments);
+			return globalEmitter.removeAllListeners.apply(
+				globalEmitter,
+				arguments
+			);
 	};
-}
+};
 
 },{"debug":44,"events":64}],35:[function(require,module,exports){
 'use strict';
 
-var _			= require('lodash');
-var debug		= require('debug')('i18nc-core:i18n_func_parser');
-var emitter		= require('../emitter');
-var escodegen	= require('escodegen');
-var jsoncode	= require('i18nc-jsoncode');
-
+const _ = require('lodash');
+const debug = require('debug')('i18nc-core:i18n_func_parser');
+const emitter = require('../emitter');
+const escodegen = require('escodegen');
+const jsoncode = require('i18nc-jsoncode');
 
 /**
  * 分析i18n函数，提取相关信息：
@@ -16077,173 +16032,172 @@ var jsoncode	= require('i18nc-jsoncode');
  * output: test/files/casefile/i18n_handler/i18n_handler_example_output.json
  */
 exports.parse = paseI18nHandlerInfo;
-function paseI18nHandlerInfo(ast, options, result)
-{
+
+function paseI18nHandlerInfo(ast, options, result) {
 	if (!ast) return;
 
-	var isFirstDeep = false;
-	if (!result)
-	{
+	let isFirstDeep = false;
+	if (!result) {
 		isFirstDeep = true;
 		// 第一次遍历，可以获取到函数名
-		result =
-		{
-			handlerName: ast.id && ast.id.name,
+		result = {
+			handlerName: ast.id && ast.id.name
 		};
 
 		// 第一次遍历，还要检查return 是否使用了全局变量
-		var funcBodyAst = ast.body && ast.body.body;
-		var lastBodyItem = funcBodyAst[funcBodyAst.length - 1];
-		var firstArgName = ast.params && ast.params[0] && ast.params[0].name;
-		debug('get handlerName:%s, firstArgName: %s', result.handlerName, firstArgName);
+		const funcBodyAst = ast.body && ast.body.body;
+		const lastBodyItem = funcBodyAst[funcBodyAst.length - 1];
+		const firstArgName = ast.params && ast.params[0] && ast.params[0].name;
+		debug(
+			'get handlerName:%s, firstArgName: %s',
+			result.handlerName,
+			firstArgName
+		);
 
-		var lastBodyArgument = lastBodyItem && lastBodyItem.argument;
-		if (lastBodyItem
-			&& lastBodyArgument
-			&& lastBodyItem.type == 'ReturnStatement'
-			&& lastBodyArgument.type == 'BinaryExpression'
-			&& lastBodyArgument.operator == '+'
-			&& lastBodyArgument.left
-			&& lastBodyArgument.left.type == 'Literal'
-			&& lastBodyArgument.left.value === '')
-		{
-			var rightAst = lastBodyArgument.right;
+		const lastBodyArgument = lastBodyItem && lastBodyItem.argument;
+		if (
+			lastBodyItem &&
+			lastBodyArgument &&
+			lastBodyItem.type == 'ReturnStatement' &&
+			lastBodyArgument.type == 'BinaryExpression' &&
+			lastBodyArgument.operator == '+' &&
+			lastBodyArgument.left &&
+			lastBodyArgument.left.type == 'Literal' &&
+			lastBodyArgument.left.value === ''
+		) {
+			const rightAst = lastBodyArgument.right;
 
-			if (rightAst.type == 'CallExpression'
-				&& rightAst.arguments
-				&& rightAst.arguments[0]
-				&& rightAst.arguments[0].type == 'Identifier'
-				&& rightAst.arguments[0].name == firstArgName)
-			{
+			if (
+				rightAst.type == 'CallExpression' &&
+				rightAst.arguments &&
+				rightAst.arguments[0] &&
+				rightAst.arguments[0].type == 'Identifier' &&
+				rightAst.arguments[0].name == firstArgName
+			) {
 				result.codeStyle = 'proxyGlobalHandler';
-				result.globalHandlerName = escodegen.generate(lastBodyArgument.right.callee);
+				result.globalHandlerName = escodegen.generate(
+					lastBodyArgument.right.callee
+				);
 				debug('get globalhandler:%s', result.globalHandlerName);
-			}
-			else if (rightAst.type == 'Identifier'
-				&& rightAst.name == firstArgName)
-			{
+			} else if (
+				rightAst.type == 'Identifier' &&
+				rightAst.name == firstArgName
+			) {
 				result.codeStyle = 'fullHandler';
 				debug('this is fullHandler');
 			}
 		}
 	}
 
-	if (result.handlerNameVarName
-		&& ast.type == 'ExpressionStatement'
-		&& ast.expression.type == 'AssignmentExpression'
-		&& ast.expression.operator == '='
-		&& ast.expression.left
-		&& ast.expression.left.object
-		&& ast.expression.left.object.name == result.handlerNameVarName
-		&& ast.expression.left.property
-		&& ast.expression.right)
-	{
-		var name = ast.expression.left.property.name;
-		var initVal = ast.expression.right;
-		switch(name)
-		{
+	if (
+		result.handlerNameVarName &&
+		ast.type == 'ExpressionStatement' &&
+		ast.expression.type == 'AssignmentExpression' &&
+		ast.expression.operator == '=' &&
+		ast.expression.left &&
+		ast.expression.left.object &&
+		ast.expression.left.object.name == result.handlerNameVarName &&
+		ast.expression.left.property &&
+		ast.expression.right
+	) {
+		let name = ast.expression.left.property.name;
+		const initVal = ast.expression.right;
+		switch (name) {
 			// 获取版本号相关信息
 			case 'V':
 			case 'K':
 			case '__FUNCTION_VERSION__':
 			case '__FILE_KEY__':
 				debug('find sys key:%s', name);
-				name = {V: '__FUNCTION_VERSION__', K: '__FILE_KEY__'}[name] || name;
-				result[name+'ast'] = initVal;
+				name =
+					{
+						V: '__FUNCTION_VERSION__',
+						K: '__FILE_KEY__'
+					}[name] || name;
+				result[name + 'ast'] = initVal;
 
-				if (initVal.type == 'Literal')
-				{
-					if (result[name]) throw new Error(name+' IS DEFINED TWICE');
+				if (initVal.type == 'Literal') {
+					if (result[name])
+						throw new Error(name + ' IS DEFINED TWICE');
 					result[name] = initVal.value;
-				}
-				else
-				{
+				} else {
 					debug('error ast <%s>:%o', name, initVal);
-					throw new Error(name+' IS NOT LITERAL');
+					throw new Error(name + ' IS NOT LITERAL');
 				}
 				break;
-
 
 			// 获取翻译数据
 			case '__TRANSLATE_JSON__':
 			case 'D':
 				debug('find sys key:%s', name);
 				if (name == 'D') name = '__TRANSLATE_JSON__';
-				result[name+'ast'] = initVal;
+				result[name + 'ast'] = initVal;
 
-				if (result[name]) throw new Error(name+' IS DEFINED TWICE');
+				if (result[name]) throw new Error(name + ' IS DEFINED TWICE');
 				break;
 		}
-	}
-	else if (!result.handlerNameVarName
-		&& ast.type == 'VariableDeclaration'
-		&& ast.declarations
-		&& ast.declarations.length)
-	{
-		ast.declarations.some(function(item)
-		{
-			if (item.init
-				&& item.init.type == 'Identifier'
-				&& item.init.name == result.handlerName)
-			{
+	} else if (
+		!result.handlerNameVarName &&
+		ast.type == 'VariableDeclaration' &&
+		ast.declarations &&
+		ast.declarations.length
+	) {
+		ast.declarations.some(function(item) {
+			if (
+				item.init &&
+				item.init.type == 'Identifier' &&
+				item.init.name == result.handlerName
+			) {
 				result.handlerNameVarName = item.id.name;
 				debug('handlerNameVarName %s', result.handlerNameVarName);
 				return true;
 			}
 		});
-	}
-	else if (ast.body || ast.consequent)
-	{
-		var body = ast.body;
-		if (!body)
-		{
+	} else if (ast.body || ast.consequent) {
+		let body = ast.body;
+		if (!body) {
 			body = ast.consequent.body;
-		}
-		else if (!_.isArray(body))
-		{
+		} else if (!_.isArray(body)) {
 			body = body.body;
 		}
 
-		if (_.isArray(body))
-		{
-			_.each(body, function(subAst)
-			{
-				if (subAst.type != 'FunctionDeclaration')
-				{
+		if (_.isArray(body)) {
+			_.each(body, function(subAst) {
+				if (subAst.type != 'FunctionDeclaration') {
 					paseI18nHandlerInfo(subAst, options, result);
 				}
 			});
-		}
-		else
-		{
-			debug('ast has body, but not a array, type:%s ast:%o', ast.type, ast);
+		} else {
+			debug(
+				'ast has body, but not a array, type:%s ast:%o',
+				ast.type,
+				ast
+			);
 		}
 	}
 
-
 	// 由于json数据需要根据version判断使用不同的parser
 	// 所以移动到第一个迭代使用
-	if (isFirstDeep && result.__TRANSLATE_JSON__ast)
-	{
+	if (isFirstDeep && result.__TRANSLATE_JSON__ast) {
 		debug('parse __TRANSLATE_JSON__ast');
-		var jsonAst = result.__TRANSLATE_JSON__ast;
-		var funcVersion = result.__FUNCTION_VERSION__;
-		jsonAst.toI18NJSON = function()
-		{
-			var json = jsoncode.getParser(funcVersion).translateAst2JSON(this);
+		const jsonAst = result.__TRANSLATE_JSON__ast;
+		const funcVersion = result.__FUNCTION_VERSION__;
+		jsonAst.toI18NJSON = function() {
+			const json = jsoncode.getParser(funcVersion).translateAst2JSON(this);
 			return new I18NJSON(json, funcVersion);
 		};
 		// 接入外部插件
-		var emitData =
-		{
-			result		: undefined,
-			options		: options,
-			original	: jsonAst,
+		const emitData = {
+			result: undefined,
+			options: options,
+			original: jsonAst
 		};
 		emitter.trigger('loadTranslateJSON', emitData);
 
-		result.__TRANSLATE_JSON__ = emitData.result === undefined
-			? jsonAst.toI18NJSON().toJSON() : emitData.result;
+		result.__TRANSLATE_JSON__ =
+			emitData.result === undefined
+				? jsonAst.toI18NJSON().toJSON()
+				: emitData.result;
 
 		// 删除toJSON，避免后续结果序列化有问题
 		delete jsonAst.toI18NJSON;
@@ -16252,69 +16206,72 @@ function paseI18nHandlerInfo(ast, options, result)
 	return result;
 }
 
-
-function I18NJSON(data, funcVersion)
-{
+function I18NJSON(data, funcVersion) {
 	this.data = data;
 	this.funcVersion = funcVersion;
 }
 
-_.extend(I18NJSON.prototype,
-{
-	toJSON: function()
-	{
+_.extend(I18NJSON.prototype, {
+	toJSON: function() {
 		return this.data;
-	},
+	}
 });
 
 },{"../emitter":34,"debug":44,"escodegen":46,"i18nc-jsoncode":88,"lodash":66}],36:[function(require,module,exports){
 'use strict';
 
-var esprima		= require('esprima');
-var esshorten	= require('esshorten4node11');
-var escodegen	= require('escodegen');
-var debug		= require('debug')('i18nc-core:i18nc_func_render');
+const esprima = require('esprima');
+const esshorten = require('esshorten4node11');
+const escodegen = require('escodegen');
+const debug = require('debug')('i18nc-core:i18nc_func_render');
 
-function tpl2render(code)
-{
+function tpl2render(code) {
 	// 删掉注释
-	var originalCode = code.replace(/(\n\r?[\t ]*)?\/\/[^\n]+/g, '');
-		// .replace(/(\$func_header);?/, '$1\n\t')
-		// .replace(/(\$func_footer);?/, '\n\t$1');
+	const originalCode = code.replace(/(\n\r?[\t ]*)?\/\/[^\n]+/g, '');
+	// .replace(/(\$func_header);?/, '$1\n\t')
+	// .replace(/(\$func_footer);?/, '\n\t$1');
 
 	// 对源码进行压缩
-	var minCode = exports.min(originalCode)
+	const minCode = exports
+		.min(originalCode)
 		.replace(/(\$TRANSLATE_JSON_CODE[;,]?)/, '$1\n\t')
 		// 函数体换行
 		.replace(/\{/, '{\n\t')
 		.replace(/\}([^}]*)$/, '\n}$1');
 
-	var minJsonCodeIndent = '\t';
-	var originalJsonCodeIndent = originalCode.match(/(\t+)([^\t]*?)\$TRANSLATE_JSON_CODE/);
-	originalJsonCodeIndent = originalJsonCodeIndent ? originalJsonCodeIndent[1] : '';
-	var originalGetLanguageCodeIndent = originalCode.match(/(\t+)([^\t]*?)\$getLanguageCode/);
+	const minJsonCodeIndent = '\t';
+	let originalJsonCodeIndent = originalCode.match(
+		/(\t+)([^\t]*?)\$TRANSLATE_JSON_CODE/
+	);
+	originalJsonCodeIndent = originalJsonCodeIndent
+		? originalJsonCodeIndent[1]
+		: '';
+	let originalGetLanguageCodeIndent = originalCode.match(
+		/(\t+)([^\t]*?)\$getLanguageCode/
+	);
 	originalGetLanguageCodeIndent = originalGetLanguageCodeIndent
-		? originalGetLanguageCodeIndent[1] : '';
-	debug('originalJsonCodeIndent:%d originalGetLanguageCodeIndent:%d',
-		originalJsonCodeIndent.length, originalGetLanguageCodeIndent.length);
+		? originalGetLanguageCodeIndent[1]
+		: '';
+	debug(
+		'originalJsonCodeIndent:%d originalGetLanguageCodeIndent:%d',
+		originalJsonCodeIndent.length,
+		originalGetLanguageCodeIndent.length
+	);
 
-	return function(data, isMin)
-	{
-		var code = isMin ? minCode : originalCode;
-		var codeIndent = isMin ? minJsonCodeIndent : originalJsonCodeIndent;
+	return function(data, isMin) {
+		const code = isMin ? minCode : originalCode;
+		const codeIndent = isMin ? minJsonCodeIndent : originalJsonCodeIndent;
 
-		return code.replace(/\$(\w+)/g, function(all, key)
-		{
-			var val = data[key];
+		return code.replace(/\$(\w+)/g, function(all, key) {
+			let val = data[key];
 			if (!val) return '';
 
-			if (key == 'TRANSLATE_JSON_CODE')
-			{
-				val = val.split(/\n\r?/).join('\n'+codeIndent);
-			}
-			else if (!isMin && key == 'getLanguageCode')
-			{
-				val = val.split(/\n\r?/).join('\n'+originalGetLanguageCodeIndent);
+			if (key == 'TRANSLATE_JSON_CODE') {
+				val = val.split(/\n\r?/).join('\n' + codeIndent);
+			} else if (!isMin && key == 'getLanguageCode') {
+				val = val
+					.split(/\n\r?/)
+					.join('\n' + originalGetLanguageCodeIndent);
 			}
 
 			return val;
@@ -16322,15 +16279,12 @@ function tpl2render(code)
 	};
 }
 
-exports.min = function(code)
-{
-	var ast = esprima.parse(code);
-	var result = esshorten.mangle(ast);
+exports.min = function(code) {
+	const ast = esprima.parse(code);
+	const result = esshorten.mangle(ast);
 
-	return escodegen.generate(result,
-	{
-		format:
-		{
+	return escodegen.generate(result, {
+		format: {
 			renumber: true,
 			hexadecimal: true,
 			escapeless: true,
@@ -16339,7 +16293,7 @@ exports.min = function(code)
 			parentheses: false
 		}
 	});
-}
+};
 
 exports.render = tpl2render(require('./tpl/full.js').toString());
 exports.renderSimple = tpl2render(require('./tpl/simple.js').toString());
@@ -16347,11 +16301,11 @@ exports.renderGlobal = tpl2render(require('./tpl/global.js').toString());
 
 },{"./tpl/full.js":37,"./tpl/global.js":38,"./tpl/simple.js":39,"debug":44,"escodegen":46,"esprima":51,"esshorten4node11":52}],37:[function(require,module,exports){
 /* global $getLanguageCode $TRANSLATE_JSON_CODE */
+/* eslint-disable no-var */
 
 'use strict';
 
-module.exports = function $handlerName(msg, tpldata, subkey)
-{
+module.exports = function $handlerName(msg, tpldata, subkey) {
 	if (!msg) return msg === undefined || msg === null ? '' : '' + msg;
 
 	var self = $handlerName,
@@ -16359,12 +16313,17 @@ module.exports = function $handlerName(msg, tpldata, subkey)
 		translateJSON,
 		replace_index = 0,
 		options = {},
-		lanIndexArr, i, lanIndex, msgResult, translateValues;
+		lanIndexArr,
+		i,
+		lanIndex,
+		msgResult,
+		translateValues;
 
 	if (!tpldata || !tpldata.join) {
 		subkey = tpldata;
 		tpldata = [];
 	}
+
 	if (subkey && typeof subkey == 'object') {
 		options = subkey;
 		subkey = options.subkey;
@@ -16388,8 +16347,10 @@ module.exports = function $handlerName(msg, tpldata, subkey)
 				dblansMap = {},
 				lanKeys = LAN.split(',');
 			lanIndexArr = self.M = [];
-			for(i = dblans.length; i--;) dblansMap[dblans[i]] = i;
-			for(i = lanKeys.length; i--;) {
+
+			for (i = dblans.length; i--; ) dblansMap[dblans[i]] = i;
+
+			for (i = lanKeys.length; i--; ) {
 				lanIndex = dblansMap[lanKeys[i]];
 				if (lanIndex || lanIndex === 0) lanIndexArr.push(lanIndex);
 			}
@@ -16400,13 +16361,15 @@ module.exports = function $handlerName(msg, tpldata, subkey)
 		lanIndexArr = self.M;
 		translateJSON = self.D;
 		var _getVaule = function(subkey) {
-			translateValues = translateJSON[subkey] && translateJSON[subkey][msg];
+			translateValues =
+				translateJSON[subkey] && translateJSON[subkey][msg];
 			if (translateValues) {
 				msgResult = translateValues[lanIndex];
-				if (typeof msgResult == 'number') msgResult = translateValues[msgResult];
+				if (typeof msgResult == 'number')
+					msgResult = translateValues[msgResult];
 			}
 		};
-		for(i = lanIndexArr.length; !msgResult && i--;) {
+		for (i = lanIndexArr.length; !msgResult && i--; ) {
 			lanIndex = lanIndexArr[i];
 			if (subkey) _getVaule(subkey);
 			if (!msgResult) _getVaule('*');
@@ -16419,7 +16382,8 @@ module.exports = function $handlerName(msg, tpldata, subkey)
 	// 判断是否需要替换：不需要替换，直接返回
 	if (!tpldata.length || msg.indexOf('%') == -1) return msg;
 
-	return msg.replace(/%\{(\d+)\}/g, function(all, index) {
+	return msg
+		.replace(/%\{(\d+)\}/g, function(all, index) {
 			var newVal = tpldata[+index];
 			return newVal === undefined ? '' : newVal;
 		})
@@ -16427,15 +16391,15 @@ module.exports = function $handlerName(msg, tpldata, subkey)
 			var newVal = tpldata[replace_index++];
 			return newVal === undefined ? '' : newVal;
 		});
-}
+};
 
 },{}],38:[function(require,module,exports){
 /* global $globalHandlerName $TRANSLATE_JSON_CODE */
+/* eslint-disable no-var */
 
 'use strict';
 
-module.exports = function $handlerName(msg)
-{
+module.exports = function $handlerName(msg) {
 	var self = $handlerName;
 	var data = self.$;
 
@@ -16450,13 +16414,14 @@ module.exports = function $handlerName(msg)
 	}
 
 	return '' + $globalHandlerName(msg, arguments, self.D, self.K, data, self);
-}
+};
 
 },{}],39:[function(require,module,exports){
+/* eslint-disable no-var */
+
 'use strict';
 
-module.exports = function $handlerName(msg, tpldata)
-{
+module.exports = function $handlerName(msg, tpldata) {
 	if (!msg) return msg === undefined || msg === null ? '' : '' + msg;
 
 	msg += '';
@@ -16470,7 +16435,8 @@ module.exports = function $handlerName(msg, tpldata)
 	self.V = '$FUNCTION_VERSION';
 
 	var replace_index = 0;
-	return msg.replace(/%\{(\d+)\}/g, function(all, index) {
+	return msg
+		.replace(/%\{(\d+)\}/g, function(all, index) {
 			var newVal = tpldata[+index];
 			return newVal === undefined ? '' : newVal;
 		})
@@ -16478,47 +16444,48 @@ module.exports = function $handlerName(msg, tpldata)
 			var newVal = tpldata[replace_index++];
 			return newVal === undefined ? '' : newVal;
 		});
-}
+};
 
 },{}],40:[function(require,module,exports){
 'use strict';
 
-var _					= require('lodash');
-var debug				= require('debug')('i18nc-core:i18n_placeholder');
-var DEF					= require('./def');
-var emitter				= require('./emitter');
-var astUtil				= require('i18nc-ast').util;
-var i18ncDB				= require('i18nc-db');
-var jsoncode			= require('i18nc-jsoncode');
-var i18nTpl				= require('./i18n_func/render');
-var i18nParser			= require('./i18n_func/parser');
-var LanguageVarsReg		= /\$LanguageVars\.([\w$]+)\$/g;
+const _ = require('lodash');
+const debug = require('debug')('i18nc-core:i18n_placeholder');
+const DEF = require('./def');
+const emitter = require('./emitter');
+const astUtil = require('i18nc-ast').util;
+const i18ncDB = require('i18nc-db');
+const jsoncode = require('i18nc-jsoncode');
+const i18nTpl = require('./i18n_func/render');
+const i18nParser = require('./i18n_func/parser');
+const LanguageVarsReg = /\$LanguageVars\.([\w$]+)\$/g;
 
 exports.I18NPlaceholder = I18NPlaceholder;
 
 // ast 解析的时候，必须要有range
-function I18NPlaceholder(codeTranslateWords, completedCode, options, originalAst)
-{
-	this.codeTranslateWords	= codeTranslateWords;
-	this.completedCode		= completedCode;
-	this.options			= options;
-	this.originalAst		= originalAst;
+function I18NPlaceholder(
+	codeTranslateWords,
+	completedCode,
+	options,
+	originalAst
+) {
+	this.codeTranslateWords = codeTranslateWords;
+	this.completedCode = completedCode;
+	this.options = options;
+	this.originalAst = originalAst;
 
-	this.renderType			= null;
-	this.handlerName		= null;
-	this._parseResult		= null;
+	this.renderType = null;
+	this.handlerName = null;
+	this._parseResult = null;
 }
 
-_.extend(I18NPlaceholder.prototype,
-{
-	toString: function()
-	{
-		var options = this.options;
-		var renderType = this.getRenderType();
+_.extend(I18NPlaceholder.prototype, {
+	toString: function() {
+		const options = this.options;
+		const renderType = this.getRenderType();
 		debug('renderType:%s', renderType);
 
-		switch(renderType)
-		{
+		switch (renderType) {
 			case 'partial':
 				return this._updatePartialCode();
 
@@ -16532,94 +16499,106 @@ _.extend(I18NPlaceholder.prototype,
 				return this._updateSimpleFunctionCode();
 
 			case 'complete':
-			default:
-				var newCode = this._updateTotalCode();
+			default: {
+				let newCode = this._updateTotalCode();
 				// 如果没有originalAst，表明是新的code，那么就多添加两个换行吧
-				if (!this.originalAst)
-				{
-					newCode = '\n'
-						+ options.I18NHandler.tpl.newHeaderCode
-						+ newCode
-						+ options.I18NHandler.tpl.newFooterCode
-						+ '\n';
+				if (!this.originalAst) {
+					newCode =
+						'\n' +
+						options.I18NHandler.tpl.newHeaderCode +
+						newCode +
+						options.I18NHandler.tpl.newFooterCode +
+						'\n';
 				}
 
 				return newCode;
+			}
 		}
 	},
-	getRenderType: function()
-	{
-		var options = this.options;
+	getRenderType: function() {
+		const options = this.options;
 		if (this.renderType) return this.renderType;
-		if (this.originalAst && !options.I18NHandler.upgrade.enable)
-		{
+		if (this.originalAst && !options.I18NHandler.upgrade.enable) {
 			return 'original';
 		}
 
-		var funcInfo = this.parse();
-		if (funcInfo.isNotI18NHandler)
-		{
+		const funcInfo = this.parse();
+		if (funcInfo.isNotI18NHandler) {
 			// 判断是否不需要插入新的i18n函数，直接使用原来代码
-			var codeTranslateWords = this.codeTranslateWords || {};
-			var defaults_length = codeTranslateWords.DEFAULTS
-					&& codeTranslateWords.DEFAULTS.length;
-			var subkeys_length = codeTranslateWords.SUBKEYS
-					&& Object.keys(codeTranslateWords.SUBKEYS).length;
+			const codeTranslateWords = this.codeTranslateWords || {};
+			const defaults_length =
+				codeTranslateWords.DEFAULTS &&
+				codeTranslateWords.DEFAULTS.length;
+			const subkeys_length =
+				codeTranslateWords.SUBKEYS &&
+				Object.keys(codeTranslateWords.SUBKEYS).length;
 
-			if (!defaults_length && !subkeys_length)
-			{
+			if (!defaults_length && !subkeys_length) {
 				debug('ignore generate I18NHandler');
 				return 'original';
 			}
-		}
-		else
-		{
-			var I18NHandlerConfig = options.I18NHandler;
-			var I18NHandlerStyleConfig = I18NHandlerConfig.style;
-			var proxyGlobalHandlerConfig = I18NHandlerStyleConfig.proxyGlobalHandler;
-			var fullHandlerConfig = I18NHandlerStyleConfig.fullHandler;
-			var FUNCTION_VERSION = funcInfo.__FUNCTION_VERSION__ || '';
+		} else {
+			const I18NHandlerConfig = options.I18NHandler;
+			const I18NHandlerStyleConfig = I18NHandlerConfig.style;
+			const proxyGlobalHandlerConfig =
+				I18NHandlerStyleConfig.proxyGlobalHandler;
+			const fullHandlerConfig = I18NHandlerStyleConfig.fullHandler;
+			const FUNCTION_VERSION = funcInfo.__FUNCTION_VERSION__ || '';
 			// 只更新翻译数据
 			// 值为true，则此项安全，可以进行局部更新
-			var checkPartialItems =
-			{
-				options					: I18NHandlerConfig.upgrade.partial,
-				originalAst				: this.originalAst,
-				translateJSON			: funcInfo.__TRANSLATE_JSON__ast,
-				handlerName				: !this.handlerName
-					|| funcInfo.handlerName == this.handlerName,
-				I18NFunctionVersion		: !I18NHandlerConfig.upgrade.checkVersion
-					|| FUNCTION_VERSION[0] == DEF.I18NFunctionVersion,
+			const checkPartialItems = {
+				options: I18NHandlerConfig.upgrade.partial,
+				originalAst: this.originalAst,
+				translateJSON: funcInfo.__TRANSLATE_JSON__ast,
+				handlerName:
+					!this.handlerName ||
+					funcInfo.handlerName == this.handlerName,
+				I18NFunctionVersion:
+					!I18NHandlerConfig.upgrade.checkVersion ||
+					FUNCTION_VERSION[0] == DEF.I18NFunctionVersion,
 
 				// 代码风格判断
-				fullHandler				: fullHandlerConfig.keepThisStyle
-					|| FUNCTION_VERSION[1] != DEF.I18NFunctionSubVersion.FULL,
-				proxyGlobalHandler		: proxyGlobalHandlerConfig.keepThisStyle
-					|| FUNCTION_VERSION[1] != DEF.I18NFunctionSubVersion.GLOBAL,
-				proxyGlobalHandlerName	: !(proxyGlobalHandlerConfig.ignoreFuncCodeName
-					&& funcInfo.globalHandlerName
-					&& funcInfo.globalHandlerName != proxyGlobalHandlerConfig.name)
+				fullHandler:
+					fullHandlerConfig.keepThisStyle ||
+					FUNCTION_VERSION[1] != DEF.I18NFunctionSubVersion.FULL,
+				proxyGlobalHandler:
+					proxyGlobalHandlerConfig.keepThisStyle ||
+					FUNCTION_VERSION[1] != DEF.I18NFunctionSubVersion.GLOBAL,
+				proxyGlobalHandlerName: !(
+					proxyGlobalHandlerConfig.ignoreFuncCodeName &&
+					funcInfo.globalHandlerName &&
+					funcInfo.globalHandlerName != proxyGlobalHandlerConfig.name
+				)
 			};
-			var ret = _.some(checkPartialItems, function(val, name)
-			{
+			const ret = _.some(checkPartialItems, function(val, name) {
 				if (val) return false;
 
-				switch(name)
-				{
+				switch (name) {
 					case 'handlerName':
-						debug('not partial, because %s <funcInfo:%s, this:%s>',
-							name, funcInfo.handlerName, this.handlerName);
+						debug(
+							'not partial, because %s <funcInfo:%s, this:%s>',
+							name,
+							funcInfo.handlerName,
+							this.handlerName
+						);
 						break;
 
 					case 'I18NFunctionVersion':
-						debug('not partial, because %s <funcInfo:%s DEF:%s>',
-							name, funcInfo.__FUNCTION_VERSION__,
-							DEF.I18NFunctionVersion);
+						debug(
+							'not partial, because %s <funcInfo:%s DEF:%s>',
+							name,
+							funcInfo.__FUNCTION_VERSION__,
+							DEF.I18NFunctionVersion
+						);
 						break;
 
 					case 'proxyGlobalHandlerName':
-						debug('not partial, because %s <funcInfo:%s option:%s>',
-							name, funcInfo.globalHandlerName, proxyGlobalHandlerConfig.name);
+						debug(
+							'not partial, because %s <funcInfo:%s option:%s>',
+							name,
+							funcInfo.globalHandlerName,
+							proxyGlobalHandlerConfig.name
+						);
 						break;
 
 					default:
@@ -16634,88 +16613,80 @@ _.extend(I18NPlaceholder.prototype,
 
 		return 'complete';
 	},
-	parse: function()
-	{
-		var options = this.options;
-		if (!this._parseResult)
-		{
-			if (this.originalAst)
-			{
+	parse: function() {
+		const options = this.options;
+		if (!this._parseResult) {
+			if (this.originalAst) {
 				this._parseResult = i18nParser.parse(this.originalAst, options);
 				// 处理解析出来的handler
 				// this._parseResult.handlerName = this.originalAst.id && this.originalAst.id.name;
 			}
 
-			if (!this._parseResult || !this._parseResult.__FILE_KEY__)
-			{
+			if (!this._parseResult || !this._parseResult.__FILE_KEY__) {
 				this._parseResult = _.extend(
 					{
-						handlerName				: options.I18NHandlerName,
-						__FILE_KEY__			: options.I18NHandler.data.defaultFileKey,
-						__FUNCTION_VERSION__	: DEF.I18NFunctionVersion,
-						__TRANSLATE_JSON__		: {}
+						handlerName: options.I18NHandlerName,
+						__FILE_KEY__: options.I18NHandler.data.defaultFileKey,
+						__FUNCTION_VERSION__: DEF.I18NFunctionVersion,
+						__TRANSLATE_JSON__: {}
 					},
 					this._parseResult,
-					{isNotI18NHandler: true});
+					{
+						isNotI18NHandler: true
+					}
+				);
 			}
 		}
 
 		return this._parseResult;
 	},
-	getTranslateJSON: function()
-	{
-		var options = this.options;
-		var funcInfo = this.parse();
-		var ignoreFuncWords = options.I18NHandler.data.ignoreFuncWords;
+	getTranslateJSON: function() {
+		const options = this.options;
+		const funcInfo = this.parse();
+		const ignoreFuncWords = options.I18NHandler.data.ignoreFuncWords;
 
-		var info =
-		{
-			FILE_KEY			: funcInfo.__FILE_KEY__,
-			onlyTheseLanguages	: options.I18NHandler.data.onlyTheseLanguages,
-			funcTranslateWords	: ignoreFuncWords ? null : funcInfo.__TRANSLATE_JSON__,
-			dbTranslateWords	: options.dbTranslateWords,
-			codeTranslateWords	: this.codeTranslateWords
+		const info = {
+			FILE_KEY: funcInfo.__FILE_KEY__,
+			onlyTheseLanguages: options.I18NHandler.data.onlyTheseLanguages,
+			funcTranslateWords: ignoreFuncWords
+				? null
+				: funcInfo.__TRANSLATE_JSON__,
+			dbTranslateWords: options.dbTranslateWords,
+			codeTranslateWords: this.codeTranslateWords
 		};
 
 		return i18ncDB.mergeTranslateData(info);
 	},
-	_getRenderTranslateJSONCode: function()
-	{
-		var options = this.options;
-		if (options.I18NHandler.upgrade.updateJSON)
-		{
+	_getRenderTranslateJSONCode: function() {
+		const options = this.options;
+		if (options.I18NHandler.upgrade.updateJSON) {
 			return this._getNewRenderTranslateJSONCode();
-		}
-		else
-		{
+		} else {
 			return this._getOldRenderTranslateJSONCode();
 		}
 	},
-	_getOldRenderTranslateJSONCode: function()
-	{
-		var funcInfo = this.parse();
+	_getOldRenderTranslateJSONCode: function() {
+		const funcInfo = this.parse();
 
-		if (funcInfo.__TRANSLATE_JSON__ast)
-		{
-			var range = funcInfo.__TRANSLATE_JSON__ast.range;
-			var code = this.completedCode.slice(range[0], range[1]);
+		if (funcInfo.__TRANSLATE_JSON__ast) {
+			const range = funcInfo.__TRANSLATE_JSON__ast.range;
+			let code = this.completedCode.slice(range[0], range[1]);
 
 			// 需要去掉原来的缩进，后面的逻辑会重新计算缩进
-			var codeArr = code.split('\n');
-			if (codeArr.length > 1)
-			{
-				var rmBlank = codeArr[codeArr.length-1].match(/^\s+/);
+			const codeArr = code.split('\n');
+			if (codeArr.length > 1) {
+				let rmBlank = codeArr[codeArr.length - 1].match(/^\s+/);
 				debug('rmBlank:%o', rmBlank);
-				if (rmBlank)
-				{
+				if (rmBlank) {
 					rmBlank = rmBlank[0];
-					var rmBlankLen = rmBlank.length;
-					code = codeArr.map(function(str)
-					{
-						return str.substr(0, rmBlankLen) == rmBlank
-							? str.substr(rmBlankLen) : str;
-					})
-					.join('\n');
+					const rmBlankLen = rmBlank.length;
+					code = codeArr
+						.map(function(str) {
+							return str.substr(0, rmBlankLen) == rmBlank
+								? str.substr(rmBlankLen)
+								: str;
+						})
+						.join('\n');
 				}
 			}
 
@@ -16724,139 +16695,154 @@ _.extend(I18NPlaceholder.prototype,
 
 		return '{}';
 	},
-	_getNewRenderTranslateJSONCode: function()
-	{
-		var options = this.options;
-		var myI18NGenerator = jsoncode.getGenerator(this.getRenderType() != 'complete' && this.parse().__FUNCTION_VERSION__);
-		var translateJSON = myI18NGenerator.toTranslateJSON(this.getTranslateJSON());
-		if (options.I18NHandler.style.comment4nowords)
-		{
+	_getNewRenderTranslateJSONCode: function() {
+		const options = this.options;
+		const myI18NGenerator = jsoncode.getGenerator(
+			this.getRenderType() != 'complete' &&
+				this.parse().__FUNCTION_VERSION__
+		);
+		const translateJSON = myI18NGenerator.toTranslateJSON(
+			this.getTranslateJSON()
+		);
+		if (options.I18NHandler.style.comment4nowords) {
 			myI18NGenerator.fillNoUsedCodeTranslateWords(
 				translateJSON,
 				this.codeTranslateWords,
 				options.I18NHandler.data.defaultLanguage
 			);
 		}
-		var translateJSONCode = myI18NGenerator.genTranslateJSONCode(translateJSON);
+		const translateJSONCode = myI18NGenerator.genTranslateJSONCode(
+			translateJSON
+		);
 
-		var emitData =
-		{
-			result			: translateJSONCode,
-			options			: options,
-			original		: translateJSONCode,
-			originalJSON	: translateJSON
+		const emitData = {
+			result: translateJSONCode,
+			options: options,
+			original: translateJSONCode,
+			originalJSON: translateJSON
 		};
 
 		emitter.trigger('newTranslateJSON', emitData);
 
-		return ''+emitData.result;
+		return '' + emitData.result;
 	},
-	_updatePartialCode: function()
-	{
-		var options = this.options;
-		var funcInfo = this.parse();
-		var newJSONCode = this._getRenderTranslateJSONCode();
+	_updatePartialCode: function() {
+		const options = this.options;
+		const funcInfo = this.parse();
+		let newJSONCode = this._getRenderTranslateJSONCode();
 
 		// 压缩这个代码的时候，需要加上()
 		// 不然esprima会报错
-		if (options.I18NHandler.style.minFuncJSON)
-		{
-			newJSONCode = astUtil.mincode('('+newJSONCode+')').slice(1);
+		if (options.I18NHandler.style.minFuncJSON) {
+			newJSONCode = astUtil.mincode('(' + newJSONCode + ')').slice(1);
 			// 删除添加的)的时候，要考虑到escodegen会多加一个;
 			// 所以用一个for循环来删除最后的)
-			for(var i = newJSONCode.length; i--;)
-			{
-				if (newJSONCode[i] == ')')
-				{
+			for (let i = newJSONCode.length; i--; ) {
+				if (newJSONCode[i] == ')') {
 					newJSONCode = newJSONCode.slice(0, i);
 					break;
 				}
 			}
 		}
 
-		newJSONCode = this._beautifyCode(newJSONCode, funcInfo.__TRANSLATE_JSON__ast);
+		newJSONCode = this._beautifyCode(
+			newJSONCode,
+			funcInfo.__TRANSLATE_JSON__ast
+		);
 
-		var json_ast_range = funcInfo.__TRANSLATE_JSON__ast.range;
-		var newCode = this.completedCode.slice(this.originalAst.range[0], json_ast_range[0])
-			+ newJSONCode
-			+ this.completedCode.slice(json_ast_range[1], this.originalAst.range[1]);
+		const json_ast_range = funcInfo.__TRANSLATE_JSON__ast.range;
+		const newCode =
+			this.completedCode.slice(
+				this.originalAst.range[0],
+				json_ast_range[0]
+			) +
+			newJSONCode +
+			this.completedCode.slice(
+				json_ast_range[1],
+				this.originalAst.range[1]
+			);
 
 		return newCode;
 	},
-	_updateTotalCode: function()
-	{
-		var options = this.options;
-		var isMinCode = options.I18NHandler.style.minFuncCode;
-		var funcInfo = this.parse();
-		var TRANSLATE_JSON_CODE = this._getRenderTranslateJSONCode();
+	_updateTotalCode: function() {
+		const options = this.options;
+		const isMinCode = options.I18NHandler.style.minFuncCode;
+		const funcInfo = this.parse();
+		const TRANSLATE_JSON_CODE = this._getRenderTranslateJSONCode();
 
 		// 添加的代码缩进：多一个tab
 		// 将这个tab放到了render函数中做
 		// TRANSLATE_JSON_CODE = TRANSLATE_JSON_CODE.split('\n').join('\n\t');
-		var getLanguageCode = options.I18NHandler.tpl.getLanguageCode;
+		let getLanguageCode = options.I18NHandler.tpl.getLanguageCode;
 
-		if (typeof getLanguageCode == 'function')
-		{
+		if (typeof getLanguageCode == 'function') {
 			getLanguageCode = getLanguageCode.toString();
 		}
 		getLanguageCode = getLanguageCode.trim();
 
-		if (isMinCode)
-		{
+		if (isMinCode) {
 			getLanguageCode = i18nTpl.min(
-					getLanguageCode.replace(/^function\s*\(/, 'function a(')
-				);
+				getLanguageCode.replace(/^function\s*\(/, 'function a(')
+			);
 		}
 
-		getLanguageCode = getLanguageCode.replace(/^function \s*[\w$]+\s*\(/, 'function(');
-		if (getLanguageCode.substr(0, 9) == 'function(')
-		{
-			getLanguageCode = '('+getLanguageCode+')';
+		getLanguageCode = getLanguageCode.replace(
+			/^function \s*[\w$]+\s*\(/,
+			'function('
+		);
+		if (getLanguageCode.substr(0, 9) == 'function(') {
+			getLanguageCode = '(' + getLanguageCode + ')';
 		}
 
-
-		var languageVars = options.I18NHandler.tpl.languageVars || {};
-		getLanguageCode = getLanguageCode.replace(LanguageVarsReg, function(all, name)
-		{
+		const languageVars = options.I18NHandler.tpl.languageVars || {};
+		getLanguageCode = getLanguageCode.replace(LanguageVarsReg, function(
+			all,
+			name
+		) {
 			return languageVars[name] || all;
 		});
 
-
 		// 更新整个函数
-		var renderData =
-		{
-			handlerName			: this.handlerName || funcInfo.handlerName || options.I18NHandlerName,
-			getLanguageCode		: getLanguageCode,
-			FILE_KEY			: funcInfo.__FILE_KEY__,
-			FUNCTION_VERSION	: DEF.I18NFunctionVersion + DEF.I18NFunctionSubVersion.FULL,
-			TRANSLATE_JSON_CODE	: TRANSLATE_JSON_CODE,
+		const renderData = {
+			handlerName:
+				this.handlerName ||
+				funcInfo.handlerName ||
+				options.I18NHandlerName,
+			getLanguageCode: getLanguageCode,
+			FILE_KEY: funcInfo.__FILE_KEY__,
+			FUNCTION_VERSION:
+				DEF.I18NFunctionVersion + DEF.I18NFunctionSubVersion.FULL,
+			TRANSLATE_JSON_CODE: TRANSLATE_JSON_CODE
 		};
 
-		var newCode;
-		var I18NHandlerStyleConfig = options.I18NHandler.style;
-		var proxyGlobalHandlerConfig = I18NHandlerStyleConfig.proxyGlobalHandler;
-		var useFullHanlder = I18NHandlerStyleConfig.fullHandler.autoConvert
-				&& funcInfo.codeStyle == 'fullHandler';
-		var useProxyGlobalHandler = !useFullHanlder
-				&& I18NHandlerStyleConfig.codeStyle == 'proxyGlobalHandler';
+		let newCode;
+		const I18NHandlerStyleConfig = options.I18NHandler.style;
+		const proxyGlobalHandlerConfig =
+			I18NHandlerStyleConfig.proxyGlobalHandler;
+		const useFullHanlder =
+			I18NHandlerStyleConfig.fullHandler.autoConvert &&
+			funcInfo.codeStyle == 'fullHandler';
+		const useProxyGlobalHandler =
+			!useFullHanlder &&
+			I18NHandlerStyleConfig.codeStyle == 'proxyGlobalHandler';
 
-		if ((proxyGlobalHandlerConfig.autoConvert && funcInfo.codeStyle == 'proxyGlobalHandler')
+		if (
+			(proxyGlobalHandlerConfig.autoConvert &&
+				funcInfo.codeStyle == 'proxyGlobalHandler') ||
 			// 初始化的时候，使用global进行初始化
-			|| (useProxyGlobalHandler && funcInfo.isNotI18NHandler)
+			(useProxyGlobalHandler && funcInfo.isNotI18NHandler) ||
 			// 启动全量更新，同时启动globalHandler
-			|| (useProxyGlobalHandler && !options.I18NHandler.upgrade.partial))
-		{
+			(useProxyGlobalHandler && !options.I18NHandler.upgrade.partial)
+		) {
 			renderData.globalHandlerName = proxyGlobalHandlerConfig.ignoreFuncCodeName
 				? proxyGlobalHandlerConfig.name
 				: funcInfo.globalHandlerName || proxyGlobalHandlerConfig.name;
-			renderData.FUNCTION_VERSION = DEF.I18NFunctionVersion
-				+ DEF.I18NFunctionSubVersion.GLOBAL;
+			renderData.FUNCTION_VERSION =
+				DEF.I18NFunctionVersion + DEF.I18NFunctionSubVersion.GLOBAL;
 
 			debug('i18n global function renderdata: %o', renderData);
 			newCode = i18nTpl.renderGlobal(renderData, isMinCode);
-		}
-		else
-		{
+		} else {
 			debug('i18n full fucntion renderdata: %o', renderData);
 			newCode = i18nTpl.render(renderData, isMinCode);
 		}
@@ -16864,154 +16850,148 @@ _.extend(I18NPlaceholder.prototype,
 		return this._beautifyCode(newCode, this.originalAst);
 	},
 
-	_keepOldCode: function()
-	{
-		var old_range = this.originalAst.range;
+	_keepOldCode: function() {
+		const old_range = this.originalAst.range;
 		return this.completedCode.slice(old_range[0], old_range[1]);
 	},
 
-	_updateSimpleFunctionCode: function()
-	{
-		var options = this.options;
-		var isMinCode = options.I18NHandler.style.minFuncCode;
-		var funcInfo = this.parse();
-		var SIMPLE_VERSION = DEF.I18NFunctionVersion + DEF.I18NFunctionSubVersion.SIMPLE;
+	_updateSimpleFunctionCode: function() {
+		const options = this.options;
+		const isMinCode = options.I18NHandler.style.minFuncCode;
+		const funcInfo = this.parse();
+		const SIMPLE_VERSION =
+			DEF.I18NFunctionVersion + DEF.I18NFunctionSubVersion.SIMPLE;
 
-		if (funcInfo.__FUNCTION_VERSION__ == SIMPLE_VERSION)
-		{
+		if (funcInfo.__FUNCTION_VERSION__ == SIMPLE_VERSION) {
 			return this._keepOldCode();
 		}
 
-		var newCode = i18nTpl.renderSimple(
+		let newCode = i18nTpl.renderSimple(
 			{
 				FILE_KEY: funcInfo.__FILE_KEY__,
 				FUNCTION_VERSION: SIMPLE_VERSION,
-				handlerName: this.handlerName || funcInfo.handlerName || options.I18NHandlerName,
+				handlerName:
+					this.handlerName ||
+					funcInfo.handlerName ||
+					options.I18NHandlerName
 			},
-			isMinCode);
+			isMinCode
+		);
 
 		newCode = this._beautifyCode(newCode, this.originalAst);
 
 		return newCode;
 	},
 
-	_beautifyCode: function(code, ast)
-	{
+	_beautifyCode: function(code, ast) {
 		// 获取原来代码锁进
-		var codeIndent = '';
-		if (ast)
-		{
+		let codeIndent = '';
+		if (ast) {
 			codeIndent = astUtil.codeIndent(ast, this.completedCode);
 			debug('codeIndent:%s, len:%d', codeIndent, codeIndent.length);
 		}
 
-		return code.split('\n').join('\n'+codeIndent);
+		return code.split('\n').join('\n' + codeIndent);
 	}
 });
 
 },{"./def":33,"./emitter":34,"./i18n_func/parser":35,"./i18n_func/render":36,"debug":44,"i18nc-ast":1,"i18nc-db":81,"i18nc-jsoncode":88,"lodash":66}],41:[function(require,module,exports){
 'use strict';
 
-var emitter			= require('./emitter');
-var astUtil			= require('i18nc-ast').util;
-var initOptions		= require('i18nc-options').init;
-var ASTCollector	= require('./ast_collector').ASTCollector;
+const emitter = require('./emitter');
+const astUtil = require('i18nc-ast').util;
+const initOptions = require('i18nc-options').init;
+const ASTCollector = require('./ast_collector').ASTCollector;
 
-
-exports.main = function(code, options)
-{
+exports.main = function(code, options) {
 	options = initOptions(options);
 
-	var tmpEmitter = emitter.new();
+	const tmpEmitter = emitter.new();
 
 	if (typeof options.events.loadTranslateJSON == 'function')
-		tmpEmitter.addListener('loadTranslateJSON', options.events.loadTranslateJSON);
+		tmpEmitter.addListener(
+			'loadTranslateJSON',
+			options.events.loadTranslateJSON
+		);
 	if (typeof options.events.newTranslateJSON == 'function')
-		tmpEmitter.addListener('newTranslateJSON', options.events.newTranslateJSON);
+		tmpEmitter.addListener(
+			'newTranslateJSON',
+			options.events.newTranslateJSON
+		);
 	if (typeof options.events.cutword == 'function')
 		tmpEmitter.addListener('cutword', options.events.cutword);
 
-	var result;
+	let result;
 
 	try {
 		result = exports.run(code, options);
-	}
-	catch(err)
-	{
+	} catch (err) {
 		emitter.clear();
 		throw err;
 	}
 
 	emitter.clear();
 	return result;
-}
+};
 
-
-exports.run = function(code, options)
-{
-	var ast		= astUtil.parse(code);
+exports.run = function(code, options) {
+	const ast = astUtil.parse(code);
 	// 设置scope type为top，表明是code开始处理的顶层作用区间
-	var scope	= new ASTCollector(options).collect(ast, 'top');
+	let scope = new ASTCollector(options).collect(ast, 'top');
 
-	scope = scope.squeeze(options.I18NHandler.insert.priorityDefineHalder, options);
+	scope = scope.squeeze(
+		options.I18NHandler.insert.priorityDefineHalder,
+		options
+	);
 
-	var startPos = scope.ast.range[0];
-	var result;
-	if (startPos)
-	{
+	const startPos = scope.ast.range[0];
+	let result;
+	if (startPos) {
 		result = scope.codeAndInfo(code.slice(startPos), code, options);
-		result.code = code.slice(0, startPos)+result.code;
-	}
-	else
-	{
+		result.code = code.slice(0, startPos) + result.code;
+	} else {
 		result = scope.codeAndInfo(code, code, options);
 	}
 
 	// 对最后的代码，进行整理
 	// 换行替换
-	if (/\r\n/.test(code))
-	{
+	if (/\r\n/.test(code)) {
 		result.code = result.code.replace(/\r?\n/g, '\r\n');
 	}
 
 	return result;
-}
+};
 
 },{"./ast_collector":30,"./emitter":34,"i18nc-ast":1,"i18nc-options":106}],42:[function(require,module,exports){
 'use strict';
 
-var _				= require('lodash');
-var debug			= require('debug')('i18nc-core:result_obj');
-var extend			= require('extend');
-var i18ncAst		= require('i18nc-ast');
-var astUtil			= i18ncAst.util;
-var AST_FLAGS		= i18ncAst.AST_FLAGS;
-var ArrayPush		= Array.prototype.push;
-var ArrayConcat		= Array.prototype.concat;
-
+const _ = require('lodash');
+const debug = require('debug')('i18nc-core:result_obj');
+const extend = require('extend');
+const i18ncAst = require('i18nc-ast');
+const astUtil = i18ncAst.util;
+const AST_FLAGS = i18ncAst.AST_FLAGS;
+const ArrayPush = Array.prototype.push;
+const ArrayConcat = Array.prototype.concat;
 
 exports.DirtyWords = DirtyWords;
 exports.TranslateWords = TranslateWords;
 exports.CodeInfoResult = CodeInfoResult;
 exports.CodeTranslateWords = CodeTranslateWords;
 
-var FuncTranslateWords = exports.FuncTranslateWords = FileKeyTranslateWords;
-var UsedTranslateWords = exports.UsedTranslateWords = FileKeyTranslateWords;
+const FuncTranslateWords = (exports.FuncTranslateWords = FileKeyTranslateWords);
+const UsedTranslateWords = (exports.UsedTranslateWords = FileKeyTranslateWords);
 
-function DirtyWords(list)
-{
+function DirtyWords(list) {
 	this.list = list || [];
 }
 
-_.extend(DirtyWords.prototype,
-{
-	add: function(ast, reason)
-	{
-		this.list.push(
-		{
-			code		: astUtil.tocode(ast),
-			reason		: reason,
-			originalAst	: ast,
+_.extend(DirtyWords.prototype, {
+	add: function(ast, reason) {
+		this.list.push({
+			code: astUtil.tocode(ast),
+			reason: reason,
+			originalAst: ast
 		});
 	},
 	/**
@@ -17019,10 +16999,8 @@ _.extend(DirtyWords.prototype,
 	 *
 	 * @return {Array} [源码片段]
 	 */
-	toArray: function()
-	{
-		return this.list.map(function(item)
-		{
+	toArray: function() {
+		return this.list.map(function(item) {
 			return item.code;
 		});
 	},
@@ -17031,8 +17009,7 @@ _.extend(DirtyWords.prototype,
 	 *
 	 * @return {Object}
 	 */
-	toJSON: function()
-	{
+	toJSON: function() {
 		return this.toArray();
 	},
 	/**
@@ -17040,8 +17017,7 @@ _.extend(DirtyWords.prototype,
 	 *
 	 * @return {DirtyWords}
 	 */
-	clone: function()
-	{
+	clone: function() {
 		return new DirtyWords(this.list.slice());
 	},
 	/**
@@ -17049,57 +17025,52 @@ _.extend(DirtyWords.prototype,
 	 *
 	 * @param  {DirtyWords} dirtyWords
 	 */
-	merge: function(dirtyWords)
-	{
+	merge: function(dirtyWords) {
 		ArrayPush.apply(this.list, dirtyWords.list);
 	}
 });
 
-
-function CodeTranslateWords(list)
-{
+function CodeTranslateWords(list) {
 	this.list = list || [];
 }
 
-_.extend(CodeTranslateWords.prototype,
-{
+_.extend(CodeTranslateWords.prototype, {
 	/**
 	 * 输出JSON格式的结果
 	 *
 	 * @return {Object}
 	 */
-	toJSON: function()
-	{
-		var DEFAULTS = [];
-		var SUBKEYS = {};
+	toJSON: function() {
+		const DEFAULTS = [];
+		const SUBKEYS = {};
 
 		// 排序，保证数组是按照code先后顺序生成
-		this.list.sort(function(a, b)
-		{
-			return a.originalAst.range[0] > b.originalAst.range[0] ? 1 : -1;
-		})
-		.forEach(function(item)
-		{
-			switch (item.type)
-			{
-				case 'new':
-					ArrayPush.apply(DEFAULTS, item.translateWords);
-					break;
+		this.list
+			.sort(function(a, b) {
+				return a.originalAst.range[0] > b.originalAst.range[0] ? 1 : -1;
+			})
+			.forEach(function(item) {
+				switch (item.type) {
+					case 'new':
+						ArrayPush.apply(DEFAULTS, item.translateWords);
+						break;
 
-				case 'subkey':
-					var arr = SUBKEYS[item.subkey] || (SUBKEYS[item.subkey] = []);
-					arr.push(item.translateWord);
-					break;
+					case 'subkey': {
+						const arr =
+							SUBKEYS[item.subkey] || (SUBKEYS[item.subkey] = []);
+						arr.push(item.translateWord);
+						break;
+					}
 
-				case 'wraped':
-					DEFAULTS.push(item.translateWord);
-					break;
-			}
-		});
+					case 'wraped':
+						DEFAULTS.push(item.translateWord);
+						break;
+				}
+			});
 
 		return {
 			DEFAULTS: DEFAULTS,
-			SUBKEYS: SUBKEYS,
+			SUBKEYS: SUBKEYS
 		};
 	},
 	/**
@@ -17107,8 +17078,7 @@ _.extend(CodeTranslateWords.prototype,
 	 *
 	 * @return {CodeTranslateWords}
 	 */
-	clone: function()
-	{
+	clone: function() {
 		return new CodeTranslateWords(this.list.slice());
 	},
 	/**
@@ -17116,8 +17086,7 @@ _.extend(CodeTranslateWords.prototype,
 	 *
 	 * @param  {CodeTranslateWords} codeTranslateWords
 	 */
-	merge: function(codeTranslateWords)
-	{
+	merge: function(codeTranslateWords) {
 		ArrayPush.apply(this.list, codeTranslateWords.list);
 	},
 	/**
@@ -17125,28 +17094,25 @@ _.extend(CodeTranslateWords.prototype,
 	 *
 	 * @return {String}
 	 */
-	allwords: function()
-	{
-		var result = [];
+	allwords: function() {
+		const result = [];
 
-		this.list.sort(function(a, b)
-		{
-			return a.originalAst.range[0] > b.originalAst.range[0] ? 1 : -1;
-		})
-		.forEach(function(item)
-		{
-			switch (item.type)
-			{
-				case 'new':
-					ArrayPush.apply(result, item.translateWords);
-					break;
+		this.list
+			.sort(function(a, b) {
+				return a.originalAst.range[0] > b.originalAst.range[0] ? 1 : -1;
+			})
+			.forEach(function(item) {
+				switch (item.type) {
+					case 'new':
+						ArrayPush.apply(result, item.translateWords);
+						break;
 
-				case 'subkey':
-				case 'wraped':
-					result.push(item.translateWord);
-					break;
-			}
-		});
+					case 'subkey':
+					case 'wraped':
+						result.push(item.translateWord);
+						break;
+				}
+			});
 
 		return result;
 	},
@@ -17155,37 +17121,36 @@ _.extend(CodeTranslateWords.prototype,
 	 *
 	 * @return {Ast}
 	 */
-	list4newWordAsts: function()
-	{
-		return this.list.filter(function(item)
-			{
-				return item.type == 'new';
-			});
+	list4newWordAsts: function() {
+		return this.list.filter(function(item) {
+			return item.type == 'new';
+		});
 	},
 	/**
 	 * 输出所有没有包裹的需要翻译的新词条
 	 *
 	 * @return {Ast}
 	 */
-	list4nowrappedWordAsts: function()
-	{
-		return this.list.filter(function(item)
-			{
-				return item.type == 'new'
-					&& !astUtil.checkAstFlag(item.originalAst, AST_FLAGS.SKIP_REPLACE | AST_FLAGS.DIS_REPLACE);
-			});
+	list4nowrappedWordAsts: function() {
+		return this.list.filter(function(item) {
+			return (
+				item.type == 'new' &&
+				!astUtil.checkAstFlag(
+					item.originalAst,
+					AST_FLAGS.SKIP_REPLACE | AST_FLAGS.DIS_REPLACE
+				)
+			);
+		});
 	},
 	/**
 	 * 输出所有需要翻译的新词条
 	 *
 	 * @return {String}
 	 */
-	list4newWords: function()
-	{
-		var arrs = this.list4newWordAsts().map(function(item)
-			{
-				return item.translateWords;
-			});
+	list4newWords: function() {
+		const arrs = this.list4newWordAsts().map(function(item) {
+			return item.translateWords;
+		});
 		return ArrayConcat.apply([], arrs);
 	},
 	/**
@@ -17193,65 +17158,54 @@ _.extend(CodeTranslateWords.prototype,
 	 *
 	 * @return {String}
 	 */
-	list4nowrappedWords: function()
-	{
-		var arrs = this.list4nowrappedWordAsts().map(function(item)
-			{
-				return item.translateWords;
-			});
+	list4nowrappedWords: function() {
+		const arrs = this.list4nowrappedWordAsts().map(function(item) {
+			return item.translateWords;
+		});
 		return ArrayConcat.apply([], arrs);
 	},
-	pushNewWord: function(ast)
-	{
-		this.list.push(
-		{
-			type           : 'new',
-			originalAst    : ast,
-			translateWords : ast.__i18n_replace_info__.translateWords
+	pushNewWord: function(ast) {
+		this.list.push({
+			type: 'new',
+			originalAst: ast,
+			translateWords: ast.__i18n_replace_info__.translateWords
 		});
 	},
-	pushSubkey: function(subkey, ast)
-	{
-		this.list.push(
-		{
-			type          : 'subkey',
-			originalAst   : ast,
-			subkey       : subkey,
-			translateWord : astUtil.ast2constVal(ast),
+	pushSubkey: function(subkey, ast) {
+		this.list.push({
+			type: 'subkey',
+			originalAst: ast,
+			subkey: subkey,
+			translateWord: astUtil.ast2constVal(ast)
 		});
 	},
-	pushWraped: function(ast)
-	{
-		this.list.push(
-		{
-			type          : 'wraped',
-			originalAst   : ast,
-			translateWord : astUtil.ast2constVal(ast),
+	pushWraped: function(ast) {
+		this.list.push({
+			type: 'wraped',
+			originalAst: ast,
+			translateWord: astUtil.ast2constVal(ast)
 		});
 	}
 });
 
-
-function FileKeyTranslateWords(list)
-{
+function FileKeyTranslateWords(list) {
 	this.list = list || [];
 }
 
-_.extend(FileKeyTranslateWords.prototype,
-{
-	add: function(fileKey, json)
-	{
-		this.list.push({fileKey: fileKey, data: json || {}});
+_.extend(FileKeyTranslateWords.prototype, {
+	add: function(fileKey, json) {
+		this.list.push({
+			fileKey: fileKey,
+			data: json || {}
+		});
 	},
 	/**
 	 * 输出JSON格式的结果
 	 *
 	 * @return {Object}
 	 */
-	toJSON: function()
-	{
-		var arrs = this.list.map(function(item)
-		{
+	toJSON: function() {
+		const arrs = this.list.map(function(item) {
 			return item.data;
 		});
 
@@ -17263,8 +17217,7 @@ _.extend(FileKeyTranslateWords.prototype,
 	 *
 	 * @return {FileKeyTranslateWords}
 	 */
-	clone: function()
-	{
+	clone: function() {
 		return new FileKeyTranslateWords(this.list.slice());
 	},
 	/**
@@ -17272,8 +17225,7 @@ _.extend(FileKeyTranslateWords.prototype,
 	 *
 	 * @param  {FileKeyTranslateWords} fileKeyTranslateWords
 	 */
-	merge: function(fileKeyTranslateWords)
-	{
+	merge: function(fileKeyTranslateWords) {
 		ArrayPush.apply(this.list, fileKeyTranslateWords.list);
 	},
 	/**
@@ -17281,47 +17233,40 @@ _.extend(FileKeyTranslateWords.prototype,
 	 *
 	 * @return {Array}
 	 */
-	lans: function()
-	{
-		var lanArrs = this.list.map(function(item)
-		{
+	lans: function() {
+		const lanArrs = this.list.map(function(item) {
 			return Object.keys(item.data);
 		});
 
 		return _.uniq(ArrayConcat.apply([], lanArrs));
 	},
-	words: function(lan)
-	{
-		var data = this.toJSON();
-		var SUBKEYS = {};
-		if (lan)
-		{
-			var json = data[lan] || {};
-			_.each(json.SUBKEYS, function(obj, subkey)
-			{
+	words: function(lan) {
+		const data = this.toJSON();
+		const SUBKEYS = {};
+		if (lan) {
+			const json = data[lan] || {};
+			_.each(json.SUBKEYS, function(obj, subkey) {
 				SUBKEYS[subkey] = Object.keys(obj);
 			});
 
 			return {
-				DEFAULTS: json.DEFAULTS && Object.keys(json.DEFAULTS) || [],
-				SUBKEYS: SUBKEYS,
+				DEFAULTS: (json.DEFAULTS && Object.keys(json.DEFAULTS)) || [],
+				SUBKEYS: SUBKEYS
 			};
 		}
 
-		var DEFAULTS = [];
-		_.each(data, function(json)
-		{
-			ArrayPush.apply(DEFAULTS, json.DEFAULTS && Object.keys(json.DEFAULTS) || []);
-			_.each(json.SUBKEYS, function(obj, subkey)
-			{
-				var arr = SUBKEYS[subkey];
-				if (arr)
-				{
+		const DEFAULTS = [];
+		_.each(data, function(json) {
+			ArrayPush.apply(
+				DEFAULTS,
+				(json.DEFAULTS && Object.keys(json.DEFAULTS)) || []
+			);
+			_.each(json.SUBKEYS, function(obj, subkey) {
+				const arr = SUBKEYS[subkey];
+				if (arr) {
 					ArrayPush.apply(arr, Object.keys(obj));
 					SUBKEYS[subkey] = _.uniq(arr);
-				}
-				else
-				{
+				} else {
 					SUBKEYS[subkey] = Object.keys(obj);
 				}
 			});
@@ -17329,81 +17274,85 @@ _.extend(FileKeyTranslateWords.prototype,
 
 		return {
 			DEFAULTS: _.uniq(DEFAULTS),
-			SUBKEYS: SUBKEYS,
+			SUBKEYS: SUBKEYS
 		};
-	},
+	}
 });
 
-
-
-function TranslateWords(codeTranslateWords, funcTranslateWords, usedTranslateWords)
-{
+function TranslateWords(
+	codeTranslateWords,
+	funcTranslateWords,
+	usedTranslateWords
+) {
 	// 从代码中获取到的关键字
-	this.codeTranslateWords = codeTranslateWords instanceof CodeTranslateWords
-		? codeTranslateWords : new CodeTranslateWords(codeTranslateWords);
+	this.codeTranslateWords =
+		codeTranslateWords instanceof CodeTranslateWords
+			? codeTranslateWords
+			: new CodeTranslateWords(codeTranslateWords);
 	// 从i18n函数中解出来的翻译数据 数据带filekey
-	this.funcTranslateWords = funcTranslateWords instanceof FuncTranslateWords
-		? funcTranslateWords : new FuncTranslateWords(funcTranslateWords);
+	this.funcTranslateWords =
+		funcTranslateWords instanceof FuncTranslateWords
+			? funcTranslateWords
+			: new FuncTranslateWords(funcTranslateWords);
 	// 处理后，正在使用的翻译数据  数据不带filekey
-	this.usedTranslateWords = usedTranslateWords instanceof UsedTranslateWords
-		? usedTranslateWords : new UsedTranslateWords(usedTranslateWords);
+	this.usedTranslateWords =
+		usedTranslateWords instanceof UsedTranslateWords
+			? usedTranslateWords
+			: new UsedTranslateWords(usedTranslateWords);
 }
 
-_.extend(TranslateWords.prototype,
-{
+_.extend(TranslateWords.prototype, {
 	/**
 	 * 输出JSON格式的结果
 	 *
 	 * @return {Object}
 	 */
-	toJSON: function()
-	{
+	toJSON: function() {
 		return {
 			codeTranslateWords: this.codeTranslateWords.toJSON(),
 			funcTranslateWords: this.funcTranslateWords.toJSON(),
-			usedTranslateWords: this.usedTranslateWords.toJSON(),
+			usedTranslateWords: this.usedTranslateWords.toJSON()
 		};
 	}
 });
 
+function CodeInfoResult(data) {
+	const self = this;
 
-function CodeInfoResult(data)
-{
-	var self = this;
-
-	['code', 'currentFileKey', 'originalFileKeys', 'subScopeDatas', 'currentFileKeys']
-		.forEach(function(name)
-		{
-			self[name] = data[name];
-		});
+	[
+		'code',
+		'currentFileKey',
+		'originalFileKeys',
+		'subScopeDatas',
+		'currentFileKeys'
+	].forEach(function(name) {
+		self[name] = data[name];
+	});
 
 	self.dirtyWords = data.dirtyWords instanceof DirtyWords
-		? data.dirtyWords : new DirtyWords(data.dirtyWords);
+		? data.dirtyWords
+		: new DirtyWords(data.dirtyWords);
 
-	if (data.words)
-	{
+	if (data.words) {
 		self.words = data.words instanceof TranslateWords
-			? data.words : new TranslateWords(
+			? data.words
+			: new TranslateWords(
 					data.words.codeTranslateWords,
 					data.words.funcTranslateWords,
 					data.words.usedTranslateWords
 				);
-	}
-	else
-	{
+	} else {
 		self.words = new TranslateWords();
 	}
 }
 
-_.extend(CodeInfoResult.prototype,
-{
+_.extend(CodeInfoResult.prototype, {
 	/**
 	 * 输出处理后的源码
 	 *
 	 * @return {String}
 	 */
-	toString: function()
-	{
+	toString: function() {
 		return this.code;
 	},
 	/**
@@ -17411,16 +17360,16 @@ _.extend(CodeInfoResult.prototype,
 	 *
 	 * @return {Object}
 	 */
-	toJSON: function()
-	{
-		var json =
-		{
-			code             : this.code,
-			currentFileKey   : this.currentFileKey,
-			originalFileKeys : this.originalFileKeys,
-			subScopeDatas    : this.subScopeDatas.map(function(item){return item.toJSON()}),
-			dirtyWords       : this.dirtyWords.toArray(),
-			words            : this.words.toJSON(),
+	toJSON: function() {
+		const json = {
+			code: this.code,
+			currentFileKey: this.currentFileKey,
+			originalFileKeys: this.originalFileKeys,
+			subScopeDatas: this.subScopeDatas.map(function(item) {
+				return item.toJSON();
+			}),
+			dirtyWords: this.dirtyWords.toArray(),
+			words: this.words.toJSON()
 		};
 
 		if (this.currentFileKeys) json.currentFileKeys = this.currentFileKeys;
@@ -17432,26 +17381,25 @@ _.extend(CodeInfoResult.prototype,
 	 *
 	 * @return {CodeInfoResult}
 	 */
-	squeeze: function()
-	{
-		var lans = this.allFuncLans();
+	squeeze: function() {
+		let lans = this.allFuncLans();
 		ArrayPush.apply(lans, this.allUsedLans());
 		lans = _.uniq(lans);
 		debug('alllans:%o', lans);
 
-		return new CodeInfoResult(
-		{
-			code             : this.code,
-			lans             : lans,
-			currentFileKey   : this.currentFileKey,
-			currentFileKeys  : this.allCurrentFileKeys(),
-			originalFileKeys : this.allOriginalFileKeys(),
-			subScopeDatas    : [],
-			dirtyWords       : this.allDirtyWords(),
+		return new CodeInfoResult({
+			code: this.code,
+			lans: lans,
+			currentFileKey: this.currentFileKey,
+			currentFileKeys: this.allCurrentFileKeys(),
+			originalFileKeys: this.allOriginalFileKeys(),
+			subScopeDatas: [],
+			dirtyWords: this.allDirtyWords(),
 			words: new TranslateWords(
 				this.allCodeTranslateWords(),
 				this.allFuncTranslateWords(),
-				this.allUsedTranslateWords()),
+				this.allUsedTranslateWords()
+			)
 		});
 	},
 	/**
@@ -17459,13 +17407,11 @@ _.extend(CodeInfoResult.prototype,
 	 *
 	 * @return {Array}
 	 */
-	allFuncLans: function()
-	{
-		var self = this;
-		var result = self.words.funcTranslateWords.lans();
+	allFuncLans: function() {
+		const self = this;
+		const result = self.words.funcTranslateWords.lans();
 
-		self.subScopeDatas.forEach(function(item)
-		{
+		self.subScopeDatas.forEach(function(item) {
 			ArrayPush.apply(result, item.words.funcTranslateWords.lans());
 		});
 
@@ -17476,13 +17422,11 @@ _.extend(CodeInfoResult.prototype,
 	 *
 	 * @return {Array}
 	 */
-	allUsedLans: function()
-	{
-		var self = this;
-		var result = self.words.usedTranslateWords.lans();
+	allUsedLans: function() {
+		const self = this;
+		const result = self.words.usedTranslateWords.lans();
 
-		self.subScopeDatas.forEach(function(item)
-		{
+		self.subScopeDatas.forEach(function(item) {
 			ArrayPush.apply(result, item.words.usedTranslateWords.lans());
 		});
 
@@ -17493,13 +17437,11 @@ _.extend(CodeInfoResult.prototype,
 	 *
 	 * @return {CodeTranslateWords}
 	 */
-	allCodeTranslateWords: function()
-	{
-		var self = this;
-		var result = self.words.codeTranslateWords.clone();
+	allCodeTranslateWords: function() {
+		const self = this;
+		const result = self.words.codeTranslateWords.clone();
 
-		self.subScopeDatas.forEach(function(item)
-		{
+		self.subScopeDatas.forEach(function(item) {
 			result.merge(item.allCodeTranslateWords());
 		});
 
@@ -17510,13 +17452,11 @@ _.extend(CodeInfoResult.prototype,
 	 *
 	 * @return {FileKeyTranslateWords}
 	 */
-	allFuncTranslateWords: function()
-	{
-		var self = this;
-		var result = self.words.funcTranslateWords.clone();
+	allFuncTranslateWords: function() {
+		const self = this;
+		const result = self.words.funcTranslateWords.clone();
 
-		self.subScopeDatas.forEach(function(item)
-		{
+		self.subScopeDatas.forEach(function(item) {
 			result.merge(item.allFuncTranslateWords());
 		});
 
@@ -17527,13 +17467,11 @@ _.extend(CodeInfoResult.prototype,
 	 *
 	 * @return {FileKeyTranslateWords}
 	 */
-	allUsedTranslateWords: function()
-	{
-		var self = this;
-		var result = self.words.usedTranslateWords.clone();
+	allUsedTranslateWords: function() {
+		const self = this;
+		const result = self.words.usedTranslateWords.clone();
 
-		self.subScopeDatas.forEach(function(item)
-		{
+		self.subScopeDatas.forEach(function(item) {
 			result.merge(item.allUsedTranslateWords());
 		});
 
@@ -17544,14 +17482,12 @@ _.extend(CodeInfoResult.prototype,
 	 *
 	 * @return {Array}
 	 */
-	allCurrentFileKeys: function()
-	{
-		var self = this;
-		var result = [];
+	allCurrentFileKeys: function() {
+		const self = this;
+		const result = [];
 
 		if (self.currentFileKey) result.push(self.currentFileKey);
-		self.subScopeDatas.forEach(function(item)
-		{
+		self.subScopeDatas.forEach(function(item) {
 			ArrayPush.apply(result, item.allCurrentFileKeys());
 		});
 
@@ -17562,13 +17498,11 @@ _.extend(CodeInfoResult.prototype,
 	 *
 	 * @return {Array}
 	 */
-	allOriginalFileKeys: function()
-	{
-		var self = this;
-		var result = self.originalFileKeys.slice();
+	allOriginalFileKeys: function() {
+		const self = this;
+		const result = self.originalFileKeys.slice();
 
-		self.subScopeDatas.forEach(function(item)
-		{
+		self.subScopeDatas.forEach(function(item) {
 			ArrayPush.apply(result, item.allOriginalFileKeys());
 		});
 
@@ -17579,48 +17513,43 @@ _.extend(CodeInfoResult.prototype,
 	 *
 	 * @return {DirtyWords}
 	 */
-	allDirtyWords: function()
-	{
-		var self = this;
-		var result = self.dirtyWords.clone();
+	allDirtyWords: function() {
+		const self = this;
+		const result = self.dirtyWords.clone();
 
-		self.subScopeDatas.forEach(function(item)
-		{
+		self.subScopeDatas.forEach(function(item) {
 			result.merge(item.allDirtyWords());
 		});
 
 		return result;
-	},
+	}
 });
 
 },{"debug":44,"extend":65,"i18nc-ast":1,"lodash":66}],43:[function(require,module,exports){
 'use strict';
 
-var debug			= require('debug')('i18nc-core:words_utils');
-var emitter			= require('../emitter');
+const debug = require('debug')('i18nc-core:words_utils');
+const emitter = require('../emitter');
 
 exports.splitValue2lineStrings = splitValue2lineStrings;
 
-function splitValue2lineStrings(value, type, options)
-{
+function splitValue2lineStrings(value, type, options) {
 	// 正则说明
 	// 必须要有非accii之外的字符（比如：中文）
 	// 同时包含非html标签的其他字符
-	var lineStrings = [];
-	var cutwordReg = options.cutwordReg;
+	let lineStrings = [];
+	const cutwordReg = options.cutwordReg;
 
-	if (cutwordReg instanceof RegExp)
-	{
-		var matchArr = value.match(cutwordReg);
-		var lastIndex = 0, noTranslateWordLen;
-		for (var i = 0; cutwordReg.test(value); i++)
-		{
-			var matchItem = matchArr[i];
-			noTranslateWordLen = cutwordReg.lastIndex - lastIndex - matchItem.length;
-			if (noTranslateWordLen)
-			{
-				lineStrings.push(
-				{
+	if (cutwordReg instanceof RegExp) {
+		const matchArr = value.match(cutwordReg);
+		let lastIndex = 0, noTranslateWordLen;
+
+		for (let i = 0; cutwordReg.test(value); i++) {
+			const matchItem = matchArr[i];
+			noTranslateWordLen =
+				cutwordReg.lastIndex - lastIndex - matchItem.length;
+			if (noTranslateWordLen) {
+				lineStrings.push({
 					translateWord: false,
 					ignore: false,
 					disconnected: false,
@@ -17628,8 +17557,7 @@ function splitValue2lineStrings(value, type, options)
 				});
 			}
 
-			lineStrings.push(
-			{
+			lineStrings.push({
 				translateWord: true,
 				ignore: false,
 				disconnected: false,
@@ -17640,10 +17568,8 @@ function splitValue2lineStrings(value, type, options)
 		}
 
 		noTranslateWordLen = value.length - lastIndex;
-		if (noTranslateWordLen)
-		{
-			lineStrings.push(
-			{
+		if (noTranslateWordLen) {
+			lineStrings.push({
 				translateWord: false,
 				ignore: false,
 				disconnected: false,
@@ -17652,26 +17578,32 @@ function splitValue2lineStrings(value, type, options)
 		}
 	}
 
-	if (!lineStrings.length)
-	{
-		lineStrings.push({translateWord: false, ignore: false, disconnected: false, value: value});
+	if (!lineStrings.length) {
+		lineStrings.push({
+			translateWord: false,
+			ignore: false,
+			disconnected: false,
+			value: value
+		});
 	}
 
-	var emitData =
-	{
-		type			: type,
-		options			: options,
-		original		: lineStrings,
-		originalString	: value,
-		result			: lineStrings,
+	const emitData = {
+		type: type,
+		options: options,
+		original: lineStrings,
+		originalString: value,
+		result: lineStrings
 	};
 	emitter.trigger('cutword', emitData);
 
 	lineStrings = emitData.result;
 	if (!lineStrings || !lineStrings.length) return;
 	// 如果结果全部是不需要翻译的，也忽略
-	if (!lineStrings.some(function(item){return item.translateWord && !item.ignore}))
-	{
+	if (
+		!lineStrings.some(function(item) {
+			return item.translateWord && !item.ignore;
+		})
+	) {
 		debug('ignore no translateWord of lineStrings:%o', lineStrings);
 		return;
 	}
@@ -17680,13 +17612,11 @@ function splitValue2lineStrings(value, type, options)
 }
 
 exports.getTranslateWordsFromLineStrings = getTranslateWordsFromLineStrings;
-function getTranslateWordsFromLineStrings(lineStrings)
-{
-	var translateWords = [];
-	lineStrings.forEach(function(item)
-	{
-		if (item.translateWord && !item.ignore)
-		{
+
+function getTranslateWordsFromLineStrings(lineStrings) {
+	const translateWords = [];
+	lineStrings.forEach(function(item) {
+		if (item.translateWord && !item.ignore) {
 			translateWords.push(item.value);
 		}
 	});
@@ -39466,8 +39396,7 @@ module.exports={
   "bugs": {
     "url": "https://github.com/Bacra/i18nc/issues"
   },
-  "homepage": "https://github.com/Bacra/i18nc",
-  "gitHead": "8c887760b5a39b31265cbd3840bca63bd68c3a99"
+  "homepage": "https://github.com/Bacra/i18nc"
 }
 
 },{}],81:[function(require,module,exports){
@@ -39484,18 +39413,15 @@ exports.update = require('./lib/update');
 
 'use strict';
 
-var _		= require('lodash');
-var debug	= require('debug')('i18nc-db:merge_translate_data');
-
+const _ = require('lodash');
+const debug = require('debug')('i18nc-db:merge_translate_data');
 
 exports = module.exports = mergeTranslateData;
 
-function mergeTranslateData(mainData)
-{
-	var json = _mergeData(mainData);
+function mergeTranslateData(mainData) {
+	const json = _mergeData(mainData);
 	return _toTranslateJSON(json);
 }
-
 
 exports._mergeData = _mergeData;
 /**
@@ -39505,36 +39431,44 @@ exports._mergeData = _mergeData;
  * input: test/files/merge_translate_data.js
  * output: test/files/output/merge_translate_data/merge_data.json
  */
-function _mergeData(mainData)
-{
+function _mergeData(mainData) {
 	// 先用一个不规范的数据保存，最后要把语言作为一级key处理
-	var result = {DEFAULTS: {}, SUBKEYS: {}};
-	var codeTranslateWords = mainData.codeTranslateWords || {};
-	var FILE_KEY = mainData.FILE_KEY;
-	var dbTranslateWords = mainData.dbTranslateWords && mainData.dbTranslateWords.data || {};
-	var typeData =
-	{
-		func		: mainData.funcTranslateWords,
-		db_filekey	: dbTranslateWords[FILE_KEY],
-		'db_*'		: dbTranslateWords['*'],
+	const result = { DEFAULTS: {}, SUBKEYS: {} };
+	const codeTranslateWords = mainData.codeTranslateWords || {};
+	const FILE_KEY = mainData.FILE_KEY;
+	const dbTranslateWords =
+		(mainData.dbTranslateWords && mainData.dbTranslateWords.data) || {};
+	const typeData = {
+		func: mainData.funcTranslateWords,
+		db_filekey: dbTranslateWords[FILE_KEY],
+		'db_*': dbTranslateWords['*']
 	};
-	var onlyTheseLanguages = mainData.onlyTheseLanguages
-			&& mainData.onlyTheseLanguages.length
-			&& mainData.onlyTheseLanguages;
+	const onlyTheseLanguages =
+		mainData.onlyTheseLanguages &&
+		mainData.onlyTheseLanguages.length &&
+		mainData.onlyTheseLanguages;
 	debug('onlyTheseLanguages:%o', onlyTheseLanguages);
 
-	_.each(_.uniq(codeTranslateWords.DEFAULTS), function(word)
-	{
-		var info = _getOneTypeListData('DEFAULTS', word, typeData, onlyTheseLanguages);
+	_.each(_.uniq(codeTranslateWords.DEFAULTS), function(word) {
+		const info = _getOneTypeListData(
+			'DEFAULTS',
+			word,
+			typeData,
+			onlyTheseLanguages
+		);
 		result.DEFAULTS[word] = info.result;
 	});
 
-	_.each(codeTranslateWords.SUBKEYS, function(words, subkey)
-	{
-		var subresult = result.SUBKEYS[subkey] = {};
-		_.each(_.uniq(words), function(word)
-		{
-			var info = _getOneTypeListData('SUBKEYS', word, typeData, onlyTheseLanguages, subkey);
+	_.each(codeTranslateWords.SUBKEYS, function(words, subkey) {
+		const subresult = (result.SUBKEYS[subkey] = {});
+		_.each(_.uniq(words), function(word) {
+			const info = _getOneTypeListData(
+				'SUBKEYS',
+				word,
+				typeData,
+				onlyTheseLanguages,
+				subkey
+			);
 			subresult[word] = info.result;
 		});
 	});
@@ -39550,46 +39484,51 @@ function _mergeData(mainData)
  *     db下所有文件和指定文件的两份数据融合
  *     和函数中分析出来的数据融合
  */
-function _getOneTypeListData(maintype, word, typeData, onlyTheseLanguages, subkey)
-{
-	var lans = {};
-	var results = {};
+function _getOneTypeListData(
+	maintype,
+	word,
+	typeData,
+	onlyTheseLanguages,
+	subkey
+) {
+	let lans = {};
+	const results = {};
 	// 数组有先后顺序，不要随便调整
-	var types = ['db_filekey', 'db_*', 'func'];
+	const types = ['db_filekey', 'db_*', 'func'];
 
-	types.forEach(function(type)
-	{
-		var result = results[type] = {};
-		_.each(typeData[type], function(lanInfo, lan)
-		{
+	types.forEach(function(type) {
+		const result = (results[type] = {});
+		_.each(typeData[type], function(lanInfo, lan) {
 			if (!lanInfo) return;
-			if (onlyTheseLanguages && onlyTheseLanguages.indexOf(lan) == -1) return;
+			if (onlyTheseLanguages && onlyTheseLanguages.indexOf(lan) == -1)
+				return;
 
-			var subLanInfo = lanInfo[maintype];
+			let subLanInfo = lanInfo[maintype];
 			if (subkey && subLanInfo) subLanInfo = subLanInfo[subkey];
-			var translateWord = subLanInfo && subLanInfo[word];
+			const translateWord = subLanInfo && subLanInfo[word];
 
-			if (translateWord || translateWord === '')
-			{
+			if (translateWord || translateWord === '') {
 				lans[lan] = 1;
 				result[lan] = translateWord;
 			}
 		});
 	});
 
-
-	var lans = Object.keys(lans);
-	debug('word:%s, subkey:%s lans:%o, results:%o', word, subkey, lans, results);
+	lans = Object.keys(lans);
+	debug(
+		'word:%s, subkey:%s lans:%o, results:%o',
+		word,
+		subkey,
+		lans,
+		results
+	);
 
 	// 对获取到的所有数据进行合并操作
-	var result = {};
-	lans.forEach(function(lan)
-	{
-		types.some(function(type)
-		{
-			var tmp = results[type][lan];
-			if (tmp || tmp === '')
-			{
+	const result = {};
+	lans.forEach(function(lan) {
+		types.some(function(type) {
+			const tmp = results[type][lan];
+			if (tmp || tmp === '') {
 				result[lan] = tmp;
 				return true;
 			}
@@ -39598,34 +39537,27 @@ function _getOneTypeListData(maintype, word, typeData, onlyTheseLanguages, subke
 
 	return {
 		lans: lans,
-		result: result,
+		result: result
 	};
 }
 
-
-function _toTranslateJSON(data)
-{
-	var result = {};
-	_.each(data.DEFAULTS, function(lanData, word)
-	{
-		_.each(lanData, function(translateData, lan)
-		{
-			var lanObj = result[lan] || (result[lan] = {});
-			var wordObj = lanObj.DEFAULTS || (lanObj.DEFAULTS = {});
+function _toTranslateJSON(data) {
+	const result = {};
+	_.each(data.DEFAULTS, function(lanData, word) {
+		_.each(lanData, function(translateData, lan) {
+			const lanObj = result[lan] || (result[lan] = {});
+			const wordObj = lanObj.DEFAULTS || (lanObj.DEFAULTS = {});
 
 			wordObj[word] = translateData;
 		});
 	});
 
-	_.each(data.SUBKEYS, function(item, subkey)
-	{
-		_.each(item, function(lanData, word)
-		{
-			_.each(lanData, function(translateData, lan)
-			{
-				var lanObj = result[lan] || (result[lan] = {});
-				var subkeyObj = lanObj.SUBKEYS || (lanObj.SUBKEYS = {});
-				var wordObj = subkeyObj[subkey] || (subkeyObj[subkey] = {});
+	_.each(data.SUBKEYS, function(item, subkey) {
+		_.each(item, function(lanData, word) {
+			_.each(lanData, function(translateData, lan) {
+				const lanObj = result[lan] || (result[lan] = {});
+				const subkeyObj = lanObj.SUBKEYS || (lanObj.SUBKEYS = {});
+				const wordObj = subkeyObj[subkey] || (subkeyObj[subkey] = {});
 
 				wordObj[word] = translateData;
 			});
@@ -39642,21 +39574,17 @@ function _toTranslateJSON(data)
 
 'use strict';
 
-var _			= require('lodash');
-var debug		= require('debug')('i18nc-db:update');
-var jsoncode	= require('i18nc-jsoncode');
-var parserV2	= jsoncode.jsoncode.v2.parser;
-
+const _ = require('lodash');
+const debug = require('debug')('i18nc-db:update');
+const jsoncode = require('i18nc-jsoncode');
+const parserV2 = jsoncode.jsoncode.v2.parser;
 
 module.exports = update;
-function update(dbTranslateWords)
-{
+function update(dbTranslateWords) {
 	if (!dbTranslateWords) return dbTranslateWords;
 
-	if (!dbTranslateWords.version)
-	{
-		dbTranslateWords =
-		{
+	if (!dbTranslateWords.version) {
+		dbTranslateWords = {
 			version: 1,
 			data: dbTranslateWords
 		};
@@ -39664,32 +39592,28 @@ function update(dbTranslateWords)
 
 	debug('update version:%s', dbTranslateWords.version);
 
-	var result = {};
-	switch(dbTranslateWords.version)
-	{
+	const result = {};
+	switch (dbTranslateWords.version) {
 		case 1:
-			_.each(dbTranslateWords.data || dbTranslateWords, function(item, lan)
-			{
+			_.each(dbTranslateWords.data || dbTranslateWords, function(
+				item,
+				lan
+			) {
 				if (lan == 'version') return;
-				_.each(item, function(data, fileKey)
-				{
-					var obj = result[fileKey] || (result[fileKey] = {});
+				_.each(item, function(data, fileKey) {
+					const obj = result[fileKey] || (result[fileKey] = {});
 					obj[lan] = data;
 				});
 			});
 			break;
 
 		case 2:
-			if (dbTranslateWords.data)
-			{
+			if (dbTranslateWords.data) {
 				return dbTranslateWords;
-			}
-			else
-			{
+			} else {
 				// 为了去掉version，同时不修改原来的结构体
 				// 如果修改，下次require会导致version判断错误
-				_.each(dbTranslateWords, function(item, key)
-				{
+				_.each(dbTranslateWords, function(item, key) {
 					if (key == 'version') return;
 					result[key] = item;
 				});
@@ -39697,8 +39621,10 @@ function update(dbTranslateWords)
 			break;
 
 		case 3:
-			_.each(dbTranslateWords.data || dbTranslateWords, function(val, key)
-			{
+			_.each(dbTranslateWords.data || dbTranslateWords, function(
+				val,
+				key
+			) {
 				if (key == 'version') return;
 				result[key] = parserV2.codeJSON2translateJSON(val);
 			});
@@ -39725,51 +39651,39 @@ arguments[4][17][0].apply(exports,arguments)
 },{"dup":17}],88:[function(require,module,exports){
 'use strict';
 
-var debug	 	= require('debug')('i18nc-jsoncode');
-var jsoncode1	= require('i18nc-jsoncode1');
-var jsoncode2	= require('i18nc-jsoncode2');
+const debug = require('debug')('i18nc-jsoncode');
+const jsoncode1 = require('i18nc-jsoncode1');
+const jsoncode2 = require('i18nc-jsoncode2');
 
-
-exports.jsoncode =
-{
+exports.jsoncode = {
 	v1: jsoncode1,
 	v2: jsoncode2
 };
 
-exports.getParser = function(funcVersion)
-{
-	if (!funcVersion || !ltI18NFuncVersion(funcVersion, 'G'))
-	{
+exports.getParser = function(funcVersion) {
+	if (!funcVersion || !ltI18NFuncVersion(funcVersion, 'G')) {
 		debug('use parser v2');
 		return jsoncode2.parser;
-	}
-	else
-	{
+	} else {
 		debug('use parser v1');
 		return jsoncode1.parser;
 	}
 };
 
-exports.getGenerator = function(funcVersion)
-{
-	if (!funcVersion || !ltI18NFuncVersion(funcVersion, 'G'))
-	{
+exports.getGenerator = function(funcVersion) {
+	if (!funcVersion || !ltI18NFuncVersion(funcVersion, 'G')) {
 		debug('use generator v2');
 		return jsoncode2.generator;
-	}
-	else
-	{
+	} else {
 		debug('use generator v1');
 		return jsoncode1.generator;
 	}
 };
 
-
 // 判断两个版本号，是否是小于关系
 // 由于一开始做的版本，先使用了小写字母，导致charCode转化有问题
 // 这里先转成大写进行判断，等到后面大写用完之后，再去掉toUpperCase
-function ltI18NFuncVersion(a, b)
-{
+function ltI18NFuncVersion(a, b) {
 	return a.toUpperCase().charCodeAt(0) < b.toUpperCase().charCodeAt(0);
 }
 
@@ -39788,85 +39702,73 @@ exports.generator = require('./lib/generator');
 },{"./lib/generator":93,"./lib/parser":94}],93:[function(require,module,exports){
 'use strict';
 
-var _			= require('lodash');
-var debug		= require('debug')('i18nc-jsoncode:generate');
-var i18ncAst	= require('i18nc-ast');
-var astTpl		= i18ncAst.tpl;
-var astUtil		= i18ncAst.util;
-var AST_FLAGS	= i18ncAst.AST_FLAGS;
+const _ = require('lodash');
+const debug = require('debug')('i18nc-jsoncode:generate');
+const i18ncAst = require('i18nc-ast');
+const astTpl = i18ncAst.tpl;
+const astUtil = i18ncAst.util;
+const AST_FLAGS = i18ncAst.AST_FLAGS;
 
-
-exports.toTranslateJSON = function(json)
-{
+exports.toTranslateJSON = function(json) {
 	return json;
 };
-
-
 
 exports.fillNoUsedCodeTranslateWords = fillNoUsedCodeTranslateWords;
 /**
  * 针对toTranslateJSON结果，将没有翻译的词条，生成注释
  */
-function fillNoUsedCodeTranslateWords(translateDataJSON, codeTranslateWords, defaultLanguage)
-{
-	var lans = Object.keys(translateDataJSON);
+function fillNoUsedCodeTranslateWords(
+	translateDataJSON,
+	codeTranslateWords,
+	defaultLanguage
+) {
+	let lans = Object.keys(translateDataJSON);
 	if (!lans.length) lans = [defaultLanguage];
 
-	var DEFAULTS_WORDS = _.uniq(codeTranslateWords.DEFAULTS);
-	if (DEFAULTS_WORDS.length)
-	{
-		lans.forEach(function(lan)
-		{
-			var lanItem = translateDataJSON[lan] || (translateDataJSON[lan] = {});
-			var result = lanItem.DEFAULTS || (lanItem.DEFAULTS = {});
-			_.each(DEFAULTS_WORDS, function(word)
-			{
+	const DEFAULTS_WORDS = _.uniq(codeTranslateWords.DEFAULTS);
+	if (DEFAULTS_WORDS.length) {
+		lans.forEach(function(lan) {
+			const lanItem =
+				translateDataJSON[lan] || (translateDataJSON[lan] = {});
+			const result = lanItem.DEFAULTS || (lanItem.DEFAULTS = {});
+			_.each(DEFAULTS_WORDS, function(word) {
 				if (!result[word]) result[word] = null;
 			});
 		});
 	}
 
-	_.each(codeTranslateWords.SUBKEYS, function(subkey_words, subkey)
-	{
-		var SUBKEY_WORDS = _.uniq(subkey_words);
+	_.each(codeTranslateWords.SUBKEYS, function(subkey_words, subkey) {
+		const SUBKEY_WORDS = _.uniq(subkey_words);
 		if (!SUBKEY_WORDS.length) return;
 
-		lans.forEach(function(lan)
-		{
-			var lanItem = translateDataJSON[lan] || (translateDataJSON[lan] = {});
+		lans.forEach(function(lan) {
+			let lanItem = translateDataJSON[lan] || (translateDataJSON[lan] = {});
 			lanItem = lanItem.SUBKEYS || (lanItem.SUBKEYS = {});
-			var result = lanItem[subkey] || (lanItem[subkey] = {});
+			const result = lanItem[subkey] || (lanItem[subkey] = {});
 
-			_.each(SUBKEY_WORDS, function(word)
-			{
+			_.each(SUBKEY_WORDS, function(word) {
 				if (!result[word]) result[word] = null;
 			});
 		});
 	});
 }
 
-
 exports.genTranslateJSONCode = genTranslateJSONCode;
 /**
  * 结果转code
  */
-function genTranslateJSONCode(translateData)
-{
+function genTranslateJSONCode(translateData) {
 	debug('translateData:%o', translateData);
 
-	var ast = _translateJSON2ast(translateData);
-	if (ast)
-	{
-		var code = astUtil.tocode(ast);
+	const ast = _translateJSON2ast(translateData);
+	if (ast) {
+		let code = astUtil.tocode(ast);
 		code = code.replace(/,?\s*(['"])\1 *: *null/g, '');
 		return code;
-	}
-	else
-	{
+	} else {
 		return '{}';
 	}
 }
-
 
 exports._translateJSON2ast = _translateJSON2ast;
 /**
@@ -39876,115 +39778,108 @@ exports._translateJSON2ast = _translateJSON2ast;
  * @param  {JSON} data toTranslateJSON  运行结果
  * @return {JSON}      test/output/generator/func_json.js
  */
-function _translateJSON2ast(mainData)
-{
-	var resultPropertiesAst = [];
+function _translateJSON2ast(mainData) {
+	const resultPropertiesAst = [];
 
-	_.each(Object.keys(mainData).sort(), function(lan)
-	{
-		var translateData = mainData[lan];
-		var lanPropertiesAst = [];
+	_.each(Object.keys(mainData).sort(), function(lan) {
+		const translateData = mainData[lan];
+		const lanPropertiesAst = [];
 
 		// 处理DEFAULTS
-		var tmp = _wordJson2ast(translateData.DEFAULTS);
-		if (tmp)
-		{
+		const tmp = _wordJson2ast(translateData.DEFAULTS);
+		if (tmp) {
 			lanPropertiesAst.push(astTpl.Property('DEFAULTS', tmp));
 		}
 
-
 		// 处理 SUBKEYS
-		if (translateData.SUBKEYS)
-		{
-			var tmpSubkeysPropertiesAst = _.map(Object.keys(translateData.SUBKEYS).sort(), function(subkey)
-				{
-					var tmp = _wordJson2ast(translateData.SUBKEYS[subkey]);
+		if (translateData.SUBKEYS) {
+			const tmpSubkeysPropertiesAst = _.map(
+				Object.keys(translateData.SUBKEYS).sort(),
+				function(subkey) {
+					const tmp = _wordJson2ast(translateData.SUBKEYS[subkey]);
 					if (!tmp) return;
 
 					return astTpl.Property(subkey, tmp);
-				})
-				.filter(function(val)
-				{
-					return val;
-				});
+				}
+			).filter(function(val) {
+				return val;
+			});
 
-			if (tmpSubkeysPropertiesAst.length)
-			{
-				lanPropertiesAst.push(astTpl.Property('SUBKEYS', astTpl.ObjectExpression(tmpSubkeysPropertiesAst)));
+			if (tmpSubkeysPropertiesAst.length) {
+				lanPropertiesAst.push(
+					astTpl.Property(
+						'SUBKEYS',
+						astTpl.ObjectExpression(tmpSubkeysPropertiesAst)
+					)
+				);
 			}
 		}
 
-		if (lanPropertiesAst.length)
-		{
-			resultPropertiesAst.push(astTpl.Property(lan, astTpl.ObjectExpression(lanPropertiesAst)));
+		if (lanPropertiesAst.length) {
+			resultPropertiesAst.push(
+				astTpl.Property(lan, astTpl.ObjectExpression(lanPropertiesAst))
+			);
 		}
 	});
 
-
-	if (resultPropertiesAst.length)
-	{
+	if (resultPropertiesAst.length) {
 		return astTpl.ObjectExpression(resultPropertiesAst);
 	}
 }
-
-
-
-
 
 exports._wordJson2ast = _wordJson2ast;
 /**
  * 将array表示的或关系转成ast表示
  */
-function _wordJson2ast(words)
-{
+function _wordJson2ast(words) {
 	if (!words) return;
-	var result = [];
+	const result = [];
 
 	// 翻译为空的时候，把这些words转化成注释
-	var emptyTranslateComments = [];
+	let emptyTranslateComments = [];
 
 	// 先对object进行排序，保证尽可能少触发svn变更
-	Object.keys(words).sort()
-		.forEach(function(val)
-		{
-			var translateWord = words[val];
+	Object.keys(words)
+		.sort()
+		.forEach(function(val) {
+			const translateWord = words[val];
 			debug('wordJson2ast val:%s, translateWord:%o', val, translateWord);
 
-			if (translateWord === null)
-			{
+			if (translateWord === null) {
 				// 使用escodegen.generate替换JSON.stringify
 				// JSON.stringify 会导致一些特殊字符不会encode，例如\u2029
-				var keyStr = astUtil.tocode(astTpl.Literal(val));
-				emptyTranslateComments.push(astTpl.LineComment(' '+keyStr+':'));
+				const keyStr = astUtil.tocode(astTpl.Literal(val));
+				emptyTranslateComments.push(
+					astTpl.LineComment(' ' + keyStr + ':')
+				);
 				return;
 			}
 
-			var valAst = translateWord == ''
-				? astTpl.ArrayExpression([])
-				: astUtil.constVal2ast(translateWord);
+			const valAst =
+				translateWord == ''
+					? astTpl.ArrayExpression([])
+					: astUtil.constVal2ast(translateWord);
 
-			var retAst = astTpl.Property(val, valAst);
+			const retAst = astTpl.Property(val, valAst);
 			result.push(retAst);
 
-
-			if (emptyTranslateComments.length)
-			{
+			if (emptyTranslateComments.length) {
 				retAst.leadingComments = emptyTranslateComments;
 				emptyTranslateComments = [];
 			}
 		});
 
-	if (emptyTranslateComments.length)
-	{
-		if (!result.length)
-		{
-			var protoKey = astTpl.Property('', astUtil.constVal2ast(null));
+	if (emptyTranslateComments.length) {
+		if (!result.length) {
+			const protoKey = astTpl.Property('', astUtil.constVal2ast(null));
 			astUtil.setAstFlag(protoKey, AST_FLAGS.PLACEHOLDER_WORDER);
 			result.push(protoKey);
 		}
 
-		var lastItem = result[result.length-1];
-		lastItem.leadingComments = (lastItem.leadingComments || []).concat(emptyTranslateComments);
+		const lastItem = result[result.length - 1];
+		lastItem.leadingComments = (lastItem.leadingComments || []).concat(
+			emptyTranslateComments
+		);
 	}
 
 	return astTpl.ObjectExpression(result);
@@ -39993,69 +39888,73 @@ function _wordJson2ast(words)
 },{"debug":95,"i18nc-ast":1,"lodash":97}],94:[function(require,module,exports){
 'use strict';
 
-var debug	= require('debug')('i18nc-jsoncode:parser');
-var astUtil	= require('i18nc-ast').util;
+const debug = require('debug')('i18nc-jsoncode:parser');
+const astUtil = require('i18nc-ast').util;
 
 exports.translateAst2JSON = translateAst2JSON;
-
 
 /**
  * 将__TRANSLATE_JSON__值的ast，解成json对象
  */
-function translateAst2JSON(ast)
-{
-	var result = {};
+function translateAst2JSON(ast) {
+	const result = {};
 
-	ast.properties.forEach(function(translate_json_ast)
-	{
-		var lan = astUtil.ast2constKey(translate_json_ast.key);
-		var lan_data = result[lan] = {}
+	ast.properties.forEach(function(translate_json_ast) {
+		const lan = astUtil.ast2constKey(translate_json_ast.key);
+		const lan_data = (result[lan] = {});
 
-		if (translate_json_ast.value.type != 'ObjectExpression')
-		{
-			debug('translate json lan <%s> value is not object: %s', lan, translate_json_ast.value.type);
+		if (translate_json_ast.value.type != 'ObjectExpression') {
+			debug(
+				'translate json lan <%s> value is not object: %s',
+				lan,
+				translate_json_ast.value.type
+			);
 			return;
 		}
 
-		translate_json_ast.value.properties.forEach(function(lan_ast)
-		{
-			var key = astUtil.ast2constKey(lan_ast.key);
+		translate_json_ast.value.properties.forEach(function(lan_ast) {
+			const key = astUtil.ast2constKey(lan_ast.key);
 
 			// 正式解析翻译数据
-			switch(key)
-			{
+			switch (key) {
 				case 'DEFAULTS':
 					debug('TranslateData JSON Key <%s> begin, lan:%', key, lan);
 					lan_data.DEFAULTS = _wordAst2json(lan_ast.value);
 					debug('TranslateData JSON Key <%s> end, lan:%', key, lan);
 					break;
 
-				case 'SUBKEYS':
-					var SUBKEYS_data = lan_data.SUBKEYS = {};
+				case 'SUBKEYS': {
+					const SUBKEYS_data = (lan_data.SUBKEYS = {});
 
-					lan_ast.value.properties.forEach(function(subkey_ast)
-					{
-						var subkey = astUtil.ast2constVal(subkey_ast.key);
-						debug('TranslateData JSON Key <%s> begin, lan:%, subkey:%s', key, lan, subkey);
+					lan_ast.value.properties.forEach(function(subkey_ast) {
+						const subkey = astUtil.ast2constVal(subkey_ast.key);
+						debug(
+							'TranslateData JSON Key <%s> begin, lan:%, subkey:%s',
+							key,
+							lan,
+							subkey
+						);
 						SUBKEYS_data[subkey] = _wordAst2json(subkey_ast.value);
-						debug('TranslateData JSON Key <%s> begin, lan:%, subkey:%s', key, lan, subkey);
+						debug(
+							'TranslateData JSON Key <%s> begin, lan:%, subkey:%s',
+							key,
+							lan,
+							subkey
+						);
 					});
 					break;
+				}
 
 				default:
 					debug('undefined TranslateData JSON Key: %s', key);
-
 			}
 		});
-
 	});
-
 
 	return result;
 }
 
-exports.codeJSON2translateJSON = function(json)
-{
+exports.codeJSON2translateJSON = function(json) {
 	return json;
 };
 
@@ -40065,32 +39964,26 @@ exports.codeJSON2translateJSON = function(json)
  * 暴露接口仅测试使用
  */
 exports._wordAst2json = _wordAst2json;
-function _wordAst2json(ast)
-{
-	var result = {};
-	ast.properties.forEach(function(proto_ast)
-	{
-		var name = astUtil.ast2constVal(proto_ast.key);
-		var val_ast = proto_ast.value;
+function _wordAst2json(ast) {
+	const result = {};
+	ast.properties.forEach(function(proto_ast) {
+		const name = astUtil.ast2constVal(proto_ast.key);
+		const val_ast = proto_ast.value;
 
-		if (result[name])
-		{
+		if (result[name]) {
 			debug('subkey defined twice, %s', name);
 		}
 
-		switch(val_ast.type)
-		{
-			case 'Literal':
-				var val = astUtil.ast2constVal(val_ast);
-				if (val)
-					result[name] = val;
-				else
-					debug('result is empty <%s>:%s', name, val);
+		switch (val_ast.type) {
+			case 'Literal': {
+				let val = astUtil.ast2constVal(val_ast);
+				if (val) result[name] = val;
+				else debug('result is empty <%s>:%s', name, val);
 				break;
+			}
 
 			case 'ArrayExpression':
-				if (val_ast.elements.length)
-				{
+				if (val_ast.elements.length) {
 					throw new Error('TRANSLATE DATA ONLY SUPPORT EMPTY ARRAY');
 				}
 				result[name] = '';
@@ -40117,13 +40010,12 @@ arguments[4][92][0].apply(exports,arguments)
 },{"./lib/generator":100,"./lib/parser":101,"dup":92}],100:[function(require,module,exports){
 'use strict';
 
-var _			= require('lodash');
-var debug		= require('debug')('i18nc-jsoncode:generator');
-var i18ncAst	= require('i18nc-ast');
-var astTpl		= i18ncAst.tpl;
-var astUtil		= i18ncAst.util;
-var AST_FLAGS	= i18ncAst.AST_FLAGS;
-
+const _ = require('lodash');
+const debug = require('debug')('i18nc-jsoncode:generator');
+const i18ncAst = require('i18nc-ast');
+const astTpl = i18ncAst.tpl;
+const astUtil = i18ncAst.util;
+const AST_FLAGS = i18ncAst.AST_FLAGS;
 
 exports.toTranslateJSON = toTranslateJSON;
 /**
@@ -40134,49 +40026,39 @@ exports.toTranslateJSON = toTranslateJSON;
  * @param  {JSON} data mergeTranslateData  运行结果，整合了翻译结果的数据格式
  * @return {JSON}      test/output/generator/func_json.json
  */
-function toTranslateJSON(data)
-{
-	var result = {};
-	var LANGS = _getlanArr(data);
+function toTranslateJSON(data) {
+	const result = {};
+	const LANGS = _getlanArr(data);
 	if (LANGS.length) result.$ = LANGS;
 
-	function _addkey(subkey, srcWord, targetWord, langIndex)
-	{
-		var obj = result[subkey] || (result[subkey] = {});
-		var arr = obj[srcWord];
-		if (arr)
-		{
-			var targetIndex = arr.indexOf(targetWord);
+	function _addkey(subkey, srcWord, targetWord, langIndex) {
+		const obj = result[subkey] || (result[subkey] = {});
+		let arr = obj[srcWord];
+		if (arr) {
+			const targetIndex = arr.indexOf(targetWord);
 			if (targetIndex != -1) targetWord = targetIndex;
-		}
-		else
-		{
+		} else {
 			arr = obj[srcWord] = [];
 		}
 
 		arr[langIndex] = targetWord;
 	}
 
-	LANGS.forEach(function(lang, langIndex)
-	{
-		var lang_data = data[lang];
+	LANGS.forEach(function(lang, langIndex) {
+		const lang_data = data[lang];
 
-		_.each(lang_data.DEFAULTS, function(targetWord, srcWord)
-		{
+		_.each(lang_data.DEFAULTS, function(targetWord, srcWord) {
 			_addkey('*', srcWord, targetWord, langIndex);
 		});
 
-		_.each(lang_data.SUBKEYS, function(item, subkey)
-		{
-			if (subkey == '*')
-				throw new Error('`*` IS SYSTEM RESERVED FIELD');
+		_.each(lang_data.SUBKEYS, function(item, subkey) {
+			if (subkey == '*') throw new Error('`*` IS SYSTEM RESERVED FIELD');
 			else if (subkey == '$')
 				throw new Error('`$` IS SYSTEM RESERVED FIELD');
-			else if ((''+subkey)[0] == '$')
+			else if (('' + subkey)[0] == '$')
 				throw new Error('`$...` ARE SYSTEM RESERVED FIELD');
 
-			_.each(item, function(targetWord, srcWord)
-			{
+			_.each(item, function(targetWord, srcWord) {
 				_addkey(subkey, srcWord, targetWord, langIndex);
 			});
 		});
@@ -40185,58 +40067,47 @@ function toTranslateJSON(data)
 	return result;
 }
 
-
 exports.fillNoUsedCodeTranslateWords = fillNoUsedCodeTranslateWords;
 /**
  * 针对toTranslateJSON结果，将没有翻译的词条，生成注释
  */
-function fillNoUsedCodeTranslateWords(translateDataJSON, codeTranslateWords)
-{
-	var DEFAULTS_WORDS = _.uniq(codeTranslateWords.DEFAULTS);
-	if (DEFAULTS_WORDS.length)
-	{
-		var result = translateDataJSON['*'] || (translateDataJSON['*'] = {});
-		_.each(DEFAULTS_WORDS, function(word)
-		{
+function fillNoUsedCodeTranslateWords(translateDataJSON, codeTranslateWords) {
+	const DEFAULTS_WORDS = _.uniq(codeTranslateWords.DEFAULTS);
+	if (DEFAULTS_WORDS.length) {
+		const result = translateDataJSON['*'] || (translateDataJSON['*'] = {});
+		_.each(DEFAULTS_WORDS, function(word) {
 			if (!result[word]) result[word] = null;
 		});
 	}
 
-	_.each(codeTranslateWords.SUBKEYS, function(subkey_words, subkey)
-	{
-		var SUBKEY_WORDS = _.uniq(subkey_words);
+	_.each(codeTranslateWords.SUBKEYS, function(subkey_words, subkey) {
+		const SUBKEY_WORDS = _.uniq(subkey_words);
 		if (!SUBKEY_WORDS.length) return;
 
-		var result = translateDataJSON[subkey] || (translateDataJSON[subkey] = {});
-		_.each(SUBKEY_WORDS, function(word)
-		{
+		const result =
+			translateDataJSON[subkey] || (translateDataJSON[subkey] = {});
+		_.each(SUBKEY_WORDS, function(word) {
 			if (!result[word]) result[word] = null;
 		});
 	});
 }
 
-
 exports.genTranslateJSONCode = genTranslateJSONCode;
 /**
  * 结果转code
  */
-function genTranslateJSONCode(translateData)
-{
+function genTranslateJSONCode(translateData) {
 	debug('translateData:%o', translateData);
 
-	var ast = _translateJSON2ast(translateData);
-	if (ast)
-	{
-		var code = astUtil.tocode(ast);
+	const ast = _translateJSON2ast(translateData);
+	if (ast) {
+		let code = astUtil.tocode(ast);
 		code = code.replace(/,?\s*(['"])\1 *: *null/g, '');
 		return code;
-	}
-	else
-	{
+	} else {
 		return '{}';
 	}
 }
-
 
 exports._translateJSON2ast = _translateJSON2ast;
 /**
@@ -40246,96 +40117,91 @@ exports._translateJSON2ast = _translateJSON2ast;
  * @param  {JSON} data toTranslateJSON  运行结果
  * @return {JSON}      test/output/generator/func_json.js
  */
-function _translateJSON2ast(mainData)
-{
-	var resultPropertiesAst = [];
-	var keys = Object.keys(mainData);
+function _translateJSON2ast(mainData) {
+	const resultPropertiesAst = [];
+	let keys = Object.keys(mainData);
 	keys = _.without(keys, '$', '*').sort();
 	if (mainData['*']) keys.unshift('*');
 
-	var lans = mainData.$;
-	if (lans && lans.length)
-	{
-		var tmp = astTpl.ArrayExpression(lans.map(function(val)
-		{
-			return astUtil.constVal2ast(val);
-		}));
+	const lans = mainData.$;
+	if (lans && lans.length) {
+		const tmp = astTpl.ArrayExpression(
+			lans.map(function(val) {
+				return astUtil.constVal2ast(val);
+			})
+		);
 		resultPropertiesAst.push(astTpl.Property('$', tmp));
 	}
 
-	_.each(keys, function(key)
-	{
-		resultPropertiesAst.push(astTpl.Property(key, _wordJson2ast(mainData[key])));
+	_.each(keys, function(key) {
+		resultPropertiesAst.push(
+			astTpl.Property(key, _wordJson2ast(mainData[key]))
+		);
 	});
 
-
-	if (resultPropertiesAst.length)
-	{
+	if (resultPropertiesAst.length) {
 		return astTpl.ObjectExpression(resultPropertiesAst);
 	}
 }
-
-
 
 exports._wordJson2ast = _wordJson2ast;
 /**
  * 将array表示的或关系转成ast表示
  */
-function _wordJson2ast(wordMap)
-{
+function _wordJson2ast(wordMap) {
 	if (!wordMap) return;
-	var result = [];
+	const result = [];
 
 	// 翻译为空的时候，把这些wordMap转化成注释
-	var emptyTranslateComments = [];
+	let emptyTranslateComments = [];
 
 	// 先对object进行排序，保证尽可能少触发svn变更
-	Object.keys(wordMap).sort()
-		.forEach(function(word)
-		{
-			var translateWords = wordMap[word];
-			debug('wordJson2ast word:%s, translateWords:%o', word, translateWords);
+	Object.keys(wordMap)
+		.sort()
+		.forEach(function(word) {
+			const translateWords = wordMap[word];
+			debug(
+				'wordJson2ast word:%s, translateWords:%o',
+				word,
+				translateWords
+			);
 
-			if (translateWords === null)
-			{
+			if (translateWords === null) {
 				// 使用escodegen.generate替换JSON.stringify
 				// JSON.stringify 会导致一些特殊字符不会encode，例如\u2029
-				var keyStr = astUtil.tocode(astTpl.Literal(word));
-				emptyTranslateComments.push(astTpl.LineComment(' '+keyStr+':'));
+				const keyStr = astUtil.tocode(astTpl.Literal(word));
+				emptyTranslateComments.push(
+					astTpl.LineComment(' ' + keyStr + ':')
+				);
 				return;
 			}
 
-			var valAst = translateWords.map(function(val)
-			{
-				if (val === undefined)
-					return null;
-				else if (val == '')
-					return astTpl.ArrayExpression([]);
-				else
-					return astUtil.constVal2ast(val);
+			const valAst = translateWords.map(function(val) {
+				if (val === undefined) return null;
+				else if (val == '') return astTpl.ArrayExpression([]);
+				else return astUtil.constVal2ast(val);
 			});
 
-			var retAst = astTpl.Property(word, astTpl.ArrayExpression(valAst));
+			const retAst = astTpl.Property(word, astTpl.ArrayExpression(valAst));
 			result.push(retAst);
 
-			if (emptyTranslateComments.length)
-			{
+			if (emptyTranslateComments.length) {
 				retAst.leadingComments = emptyTranslateComments;
 				emptyTranslateComments = [];
 			}
 		});
 
-	if (emptyTranslateComments.length)
-	{
-		if (!result.length)
-		{
-			var protoKey = astTpl.Property('', astUtil.constVal2ast(null));
+	if (emptyTranslateComments.length) {
+		if (!result.length) {
+			const protoKey = astTpl.Property('', astUtil.constVal2ast(null));
 			astUtil.setAstFlag(protoKey, AST_FLAGS.PLACEHOLDER_WORDER);
 			result.push(protoKey);
 		}
 
-		var lastItem = result[result.length-1];
-		lastItem.leadingComments = (lastItem.leadingComments || []).concat(emptyTranslateComments);
+		const lastItem = result[result.length - 1];
+		lastItem.leadingComments = (lastItem.leadingComments || []).concat(
+			emptyTranslateComments
+		);
 	}
 
 	return astTpl.ObjectExpression(result);
@@ -40350,34 +40216,28 @@ function _wordJson2ast(wordMap)
  * @param       {Object} translateData 翻译数据
  * @return      {Array}                获取到的语言列表
  */
-function _getlanArr(translateData)
-{
-	return _.map(translateData, function(obj, lang)
-		{
-			var subkeyWordsLen = _(obj.SUBKEYS)
-				.map(function(obj)
-				{
-					return Object.keys(obj).length;
-				})
-				.reduce(function(a, b)
-				{
-					return a + b;
-				});
+function _getlanArr(translateData) {
+	return _.map(translateData, function(obj, lang) {
+		const subkeyWordsLen = _(obj.SUBKEYS)
+			.map(function(obj) {
+				return Object.keys(obj).length;
+			})
+			.reduce(function(a, b) {
+				return a + b;
+			});
 
-			debug('subkeyWordsLen:%s', subkeyWordsLen);
+		debug('subkeyWordsLen:%s', subkeyWordsLen);
 
-			return {
-				lang: lang,
-				words_len: _.keys(obj.DEFAULTS).length + (subkeyWordsLen || 0)
-			};
-		})
-		.sort(function(a, b)
-		{
+		return {
+			lang: lang,
+			words_len: _.keys(obj.DEFAULTS).length + (subkeyWordsLen || 0)
+		};
+	})
+		.sort(function(a, b) {
 			if (a.words_len == b.words_len) return a.lang > b.lang ? -1 : 1;
 			return a.words_len > b.words_len ? -1 : 1;
 		})
-		.map(function(item)
-		{
+		.map(function(item) {
 			return item.lang;
 		});
 }
@@ -40385,37 +40245,31 @@ function _getlanArr(translateData)
 },{"debug":102,"i18nc-ast":1,"lodash":104}],101:[function(require,module,exports){
 'use strict';
 
-var _		= require('lodash');
-var debug	= require('debug')('i18nc-jsoncode:parser');
-var astUtil	= require('i18nc-ast').util;
+const _ = require('lodash');
+const debug = require('debug')('i18nc-jsoncode:parser');
+const astUtil = require('i18nc-ast').util;
 
 exports.translateAst2JSON = translateAst2JSON;
 
-function translateAst2JSON(ast)
-{
+function translateAst2JSON(ast) {
 	return codeJSON2translateJSON(_ast2json(ast));
 }
-
 
 /**
  * 将__TRANSLATE_JSON__值的ast，解成json对象
  */
-function _ast2json(ast)
-{
-	var lans = [];
-	var translateJSON = {};
-	var translateLansMaxLen = 0;
+function _ast2json(ast) {
+	let lans = [];
+	const translateJSON = {};
+	let translateLansMaxLen = 0;
 
-	ast.properties.forEach(function(translate_json_ast)
-	{
-		var key = astUtil.ast2constKey(translate_json_ast.key);
-		var value = translate_json_ast.value;
-		switch(key)
-		{
+	ast.properties.forEach(function(translate_json_ast) {
+		const key = astUtil.ast2constKey(translate_json_ast.key);
+		const value = translate_json_ast.value;
+		switch (key) {
 			// 语言
 			case '$':
-				if (value.type != 'ArrayExpression')
-				{
+				if (value.type != 'ArrayExpression') {
 					throw new Error('LANGS KEY `$` ONLY MUST BE AN ARRAY');
 				}
 				lans = value.elements.map(astUtil.ast2constVal);
@@ -40423,40 +40277,48 @@ function _ast2json(ast)
 
 			// 翻译数据
 			case '*':
-			default:
-				if (value.type != 'ObjectExpression')
-				{
+			default: {
+				if (value.type != 'ObjectExpression') {
 					if (key == '*')
-						throw new Error('DEFAULT TRANSLATE JSON `*` MUST BE AN OBJECT');
+						throw new Error(
+							'DEFAULT TRANSLATE JSON `*` MUST BE AN OBJECT'
+						);
 					else
-						throw new Error('SUBKEY TRANSLATE JSON MUST BE AN OBJECT');
+						throw new Error(
+							'SUBKEY TRANSLATE JSON MUST BE AN OBJECT'
+						);
 				}
-				var lan_data = translateJSON[key] = {};
-				value.properties.forEach(function(ast)
-				{
-					var word = astUtil.ast2constKey(ast.key);
-					var val = ast.value;
-					if (val.type != 'ArrayExpression')
-					{
-						debug('translate target err, word:%s ast:%o', word, val);
+				const lan_data = (translateJSON[key] = {});
+				value.properties.forEach(function(ast) {
+					const word = astUtil.ast2constKey(ast.key);
+					const val = ast.value;
+					if (val.type != 'ArrayExpression') {
+						debug(
+							'translate target err, word:%s ast:%o',
+							word,
+							val
+						);
 						throw new Error('TRANSLATE TARGET MUST BE AN ARRAY');
 					}
 
-					var targets = lan_data[word] = val.elements.map(function(ast)
-					{
+					const targets = (lan_data[word] = val.elements.map(function(
+						ast
+					) {
 						// 如果是null，说明是这种写法 [,,,,1]
 						if (val == null) return undefined;
 						return astUtil.ast2constVal(ast);
-					});
+					}));
 
-					translateLansMaxLen = Math.max(translateLansMaxLen, targets.length);
+					translateLansMaxLen = Math.max(
+						translateLansMaxLen,
+						targets.length
+					);
 				});
+			}
 		}
-
 	});
 
-	if (translateLansMaxLen > lans.length)
-	{
+	if (translateLansMaxLen > lans.length) {
 		debug('lans max len:%s, lans:%o', translateLansMaxLen, lans);
 		throw new Error('LANGS OVERFLOW');
 	}
@@ -40466,47 +40328,39 @@ function _ast2json(ast)
 	return translateJSON;
 }
 
-
-
 exports.codeJSON2translateJSON = codeJSON2translateJSON;
 /**
  * 将新的数据结构转化成普通的以语言为分类的结构体
  */
-function codeJSON2translateJSON(translateJSON)
-{
-	var result = {};
-	var lans = translateJSON.$ || [];
+function codeJSON2translateJSON(translateJSON) {
+	const result = {};
+	const lans = translateJSON.$ || [];
 	// 转数据结构，提速
-	var translateJSON2 = Object.keys(translateJSON)
-		.map(function(subkey)
-		{
-			if (subkey == '$') return;
+	const translateJSON2 = Object.keys(translateJSON).map(function(subkey) {
+		if (subkey == '$') return;
 
-			return {
-				subkey: subkey,
-				items: _.map(translateJSON[subkey], function(values, word)
-					{
-						return {word: word, values: values};
-					})
-			};
-		});
+		return {
+			subkey: subkey,
+			items: _.map(translateJSON[subkey], function(values, word) {
+				return { word: word, values: values };
+			})
+		};
+	});
 
-	lans.forEach(function(lan, lanIndex)
-	{
-		var lan_data = result[lan] = {};
+	lans.forEach(function(lan, lanIndex) {
+		const lan_data = (result[lan] = {});
 
-		translateJSON2.forEach(function(subkeyItem)
-		{
+		translateJSON2.forEach(function(subkeyItem) {
 			if (!subkeyItem) return;
 
-			if (subkeyItem.subkey == '*')
-			{
+			if (subkeyItem.subkey == '*') {
 				lan_data.DEFAULTS = _getSubkeyJSON(subkeyItem, lanIndex);
-			}
-			else
-			{
-				var SUBKEYS_data = lan_data.SUBKEYS || (lan_data.SUBKEYS = {});
-				SUBKEYS_data[subkeyItem.subkey] = _getSubkeyJSON(subkeyItem, lanIndex);
+			} else {
+				const SUBKEYS_data = lan_data.SUBKEYS || (lan_data.SUBKEYS = {});
+				SUBKEYS_data[subkeyItem.subkey] = _getSubkeyJSON(
+					subkeyItem,
+					lanIndex
+				);
 			}
 		});
 	});
@@ -40514,18 +40368,15 @@ function codeJSON2translateJSON(translateJSON)
 	return result;
 }
 
-
 /**
  * 从多个语言翻译结果合并的数组中，找到对应语言的翻译数据
  * 是对一个语言包的一个subkey完整处理，不是单个词
  */
-function _getSubkeyJSON(subkeyItem, lanIndex)
-{
-	var result = {};
+function _getSubkeyJSON(subkeyItem, lanIndex) {
+	const result = {};
 
-	_.each(subkeyItem.items, function(item)
-	{
-		var target = item.values[lanIndex];
+	_.each(subkeyItem.items, function(item) {
+		let target = item.values[lanIndex];
 		if (target === undefined || target === null) return;
 
 		// 如果是数字，则进行一次转化
@@ -40549,22 +40400,19 @@ arguments[4][17][0].apply(exports,arguments)
 },{"dup":17}],106:[function(require,module,exports){
 'use strict';
 
-var utils = require('./lib/utils');
-var globalDefaults = require('./lib/defaults');
+const utils = require('./lib/utils');
+const globalDefaults = require('./lib/defaults');
 exports.defaults = globalDefaults;
 exports.VARS = require('./lib/vars');
 
 utils.freeze(globalDefaults);
 
-exports.init = function(obj)
-{
+exports.init = function(obj) {
 	return utils.extend(globalDefaults, obj);
-}
+};
 
-exports.extend = function(defaults, obj)
-{
-	if (arguments.length < 2)
-	{
+exports.extend = function(defaults, obj) {
+	if (arguments.length < 2) {
 		obj = defaults;
 		defaults = globalDefaults;
 	}
@@ -40577,18 +40425,17 @@ exports.extend = function(defaults, obj)
 
 'use strict';
 
-var getLanguageCodeHandler = require('../upgrade/tpl/getlanguagecode_handler');
+const getLanguageCodeHandler = require('../upgrade/tpl/getlanguagecode_handler');
 
-module.exports =
-{
+module.exports = {
 	/**
 	 * 提取分词的正则
 	 *
 	 * 前后两个匹配，是为了尽可能匹配多的字符
- 	 * 排除所有的ascii字符，https://zh.wikipedia.org/wiki/ASCII
- 	 * 排除 "' 是因为tag标签属性用这个分隔，而本身很少用这两个引号
- 	 * 排除 <> 是因为html标签
- 	 *
+	 * 排除所有的ascii字符，https://zh.wikipedia.org/wiki/ASCII
+	 * 排除 "' 是因为tag标签属性用这个分隔，而本身很少用这两个引号
+	 * 排除 <> 是因为html标签
+	 *
 	 * @type {RegExp|null}
 	 * @default 排除所有ascii字符的正则
 	 */
@@ -40618,15 +40465,14 @@ module.exports =
 	 * @type {Object|Array}
 	 * @default [console.xxxx]
 	 */
-	ignoreScanHandlerNames:
-	{
-		'console.log'	: true,
-		'console.warn'	: true,
-		'console.trace'	: true,
-		'console.info'	: true,
-		'console.error'	: true,
-		'console.dir'	: true,
-		'console.table'	: true,
+	ignoreScanHandlerNames: {
+		'console.log': true,
+		'console.warn': true,
+		'console.trace': true,
+		'console.info': true,
+		'console.error': true,
+		'console.dir': true,
+		'console.table': true
 	},
 
 	/**
@@ -40642,10 +40488,8 @@ module.exports =
 	 * @remark 值false则关闭
 	 * @type {Object/False}
 	 */
-	I18NHandler:
-	{
-		data:
-		{
+	I18NHandler: {
+		data: {
 			/**
 			 * 函数默认标识，可标识出特定的I18N函数体
 			 * 一般用文件的相对路径
@@ -40667,7 +40511,7 @@ module.exports =
 			 * @remark 启动后，如果dbTranslateWords没有数据，直接删除在I18N已有的翻译
 			 * @type {Boolean}
 			 */
-			ignoreFuncWords: false,
+			ignoreFuncWords: false
 		},
 		/**
 		 * I18NHandler升级配置
@@ -40675,8 +40519,7 @@ module.exports =
 		 * @remark 值false则关闭
 		 * @type {Object/False}
 		 */
-		upgrade:
-		{
+		upgrade: {
 			/**
 			 * [总开关]能否更新已插入代码中I18N函数体
 			 *
@@ -40701,13 +40544,12 @@ module.exports =
 			 * 是否更新代码中的翻译结果JSON
 			 * 在只更新函数的时候，方便做文件版本库校验
 			 *
- 			 * @remark 此配置只影响输出代码的结果，不会影响输出的JSON结果
+			 * @remark 此配置只影响输出代码的结果，不会影响输出的JSON结果
 			 * @type {Boolean}
 			 */
-			updateJSON: true,
+			updateJSON: true
 		},
-		style:
-		{
+		style: {
 			/**
 			 * 优先使用的代码风格（fullHandler/proxyGlobalHandler）
 			 *
@@ -40740,8 +40582,7 @@ module.exports =
 			 *
 			 * @type {Object}
 			 */
-			proxyGlobalHandler:
-			{
+			proxyGlobalHandler: {
 				/**
 				 * 调用的外部函数名
 				 *
@@ -40763,19 +40604,18 @@ module.exports =
 				keepThisStyle: true,
 				/**
 				 * 忽略源代码中解析出来的外部函数名，强制使用配置的函数名
- 				 *
- 				 * @remark 如果原来有值，但不同，会触发更新；原来没有，则不会进行更新
+				 *
+				 * @remark 如果原来有值，但不同，会触发更新；原来没有，则不会进行更新
 				 * @type {Boolean}
 				 */
-				ignoreFuncCodeName: false,
+				ignoreFuncCodeName: false
 			},
 			/**
 			 * 插入完整的I18N函数体，代码不依赖外部任何库或者函数
 			 *
 			 * @type {Object}
 			 */
-			fullHandler:
-			{
+			fullHandler: {
 				/**
 				 * 将源码中类fullHandler写法的I18N函数，转换为标准的fullHandler
 				 *
@@ -40788,8 +40628,8 @@ module.exports =
 				 * @remark 权重高于autoConvert
 				 * @type {Boolean}
 				 */
-				keepThisStyle: true,
-			},
+				keepThisStyle: true
+			}
 		},
 		/**
 		 * I18NHandler升级配置
@@ -40797,8 +40637,7 @@ module.exports =
 		 * @remark 值false则关闭
 		 * @type {Object/False}
 		 */
-		insert:
-		{
+		insert: {
 			/**
 			 * [总开关]是否插入新的I18N函数
 			 *
@@ -40816,16 +40655,15 @@ module.exports =
 			 *
 			 * @type {Boolean}
 			 */
-			priorityDefineHalder: true,
+			priorityDefineHalder: true
 		},
-		tpl:
-		{
+		tpl: {
 			/**
 			 * I18N函数体中，获取当前语言包的JS业务代码
 			 *
 			 * string，即全局的函数调用
- 			 * function，必须是可被序列化成字符串，能独立运行
- 			 *
+			 * function，必须是可被序列化成字符串，能独立运行
+			 *
 			 * @type {String|Function}
 			 */
 			getLanguageCode: getLanguageCodeHandler,
@@ -40834,8 +40672,7 @@ module.exports =
 			 *
 			 * @type {Object}
 			 */
-			languageVars:
-			{
+			languageVars: {
 				/**
 				 * 获取语言包通用变量
 				 *
@@ -40847,7 +40684,7 @@ module.exports =
 				 *
 				 * @type {String}
 				 */
-				cookie: 'proj.i18n_lan',
+				cookie: 'proj.i18n_lan'
 			},
 			/**
 			 * 新插入的I18N函数外包裹的内容-开始部分
@@ -40860,8 +40697,8 @@ module.exports =
 			 *
 			 * @type {String}
 			 */
-			newFooterCode: '\n/* eslint-enable */\n\n',
-		},
+			newFooterCode: '\n/* eslint-enable */\n\n'
+		}
 	},
 
 	/**
@@ -40869,13 +40706,12 @@ module.exports =
 	 *
 	 * 如果去掉TranslateWord，
 	 * 配合最后输出的I18NArgsTranslateWords和codeTranslateWords，
- 	 * 可以实现check效果
- 	 *
+	 * 可以实现check效果
+	 *
 	 * @remark 空数据则关闭所有，空对象则使用默认
 	 * @type {Object|Array}
 	 */
-	codeModifyItems:
-	{
+	codeModifyItems: {
 		// I18NHandler 已经改名为 I18NHandler.upgrade.enable
 		// I18NHandler: true,
 		/**
@@ -40925,8 +40761,7 @@ module.exports =
 	 *
 	 * @type {Object}
 	 */
-	events:
-	{
+	events: {
 		/**
 		 * 从源码I18N函数体中提取到翻译数据时触发，可修改数据
 		 *
@@ -40956,8 +40791,8 @@ module.exports =
 		 *
 		 * @type {Function}
 		 */
-		assignLineStrings: null,
-	},
+		assignLineStrings: null
+	}
 };
 
 },{"../upgrade/tpl/getlanguagecode_handler":119}],108:[function(require,module,exports){
@@ -40968,125 +40803,101 @@ module.exports =
 
 'use strict';
 
-var _ = require('lodash');
-var debug = require('debug')('i18nc-options:options_vals');
-
+const _ = require('lodash');
+const debug = require('debug')('i18nc-options:options_vals');
 
 exports.KeyObj = KeyObj;
 
-var KEY_ARRS = {};
-function getKeys(key)
-{
+const KEY_ARRS = {};
+function getKeys(key) {
 	return KEY_ARRS[key] || (KEY_ARRS[key] = key.split('.'));
 }
 
-function KeyObj(options)
-{
+function KeyObj(options) {
 	this.options = options;
 	this._keyCache = {};
 }
 
-_.extend(KeyObj.prototype,
-{
-	exists: function(key)
-	{
-		var keyCache  = this._keyCache;
+_.extend(KeyObj.prototype, {
+	exists: function(key) {
+		const keyCache = this._keyCache;
 		if (key in keyCache) return true;
 
 		this.getVal(key);
 
 		return key in keyCache;
 	},
-	getVal: function(key)
-	{
-		var keyCache  = this._keyCache;
+	getVal: function(key) {
+		const keyCache = this._keyCache;
 		if (key in keyCache) return keyCache[key];
 
-		var key2 = '';
-		var prevVal = this.options;
-		var items = getKeys(key);
-		var exists = !_.some(items, function(name, index)
-		{
+		let key2 = '';
+		const items = getKeys(key);
+		let prevVal = this.options;
+		const exists = !_.some(items, function(name, index) {
 			if (!prevVal) return true;
 
 			if (key2) keyCache[key2] = prevVal;
-			key2 += index === 0 ? name : '.'+name;
-			if (name in prevVal)
-			{
+			key2 += index === 0 ? name : '.' + name;
+			if (name in prevVal) {
 				prevVal = prevVal[name];
-			}
-			else if (index == items.length - 1 && Array.isArray(prevVal))
-			{
+			} else if (index == items.length - 1 && Array.isArray(prevVal)) {
 				debug('val is exists by array mode, key:%s', key);
 				prevVal = prevVal.indexOf(name) != -1;
-			}
-			else
-			{
+			} else {
 				return true;
 			}
 		});
 
-		if (exists)
-		{
+		if (exists) {
 			keyCache[key] = prevVal;
 			return prevVal;
 		}
 	},
-	setVal: function(key, val)
-	{
-		var keyCache = this._keyCache;
+	setVal: function(key, val) {
+		const keyCache = this._keyCache;
 		keyCache[key] = val;
-		var items = getKeys(key);
-		var len = items.length;
-		var prevVal;
+		const items = getKeys(key);
+		const len = items.length;
+		let prevVal;
 
-		if (len < 3 || !(prevVal = keyCache[items.slice(0, -1).join('.')]))
-		{
+		if (len < 3 || !(prevVal = keyCache[items.slice(0, -1).join('.')])) {
 			prevVal = this.options;
-			for(var tmp, name, i = 0, key2 = '', t = len -1; i < t; i++)
-			{
+			for (let tmp, name, i = 0, key2 = '', t = len - 1; i < t; i++) {
 				name = items[i];
-				key2 += i === 0 ? name : '.'+name;
+				key2 += i === 0 ? name : '.' + name;
 				tmp = prevVal[name];
 				if (!tmp || typeof tmp != 'object')
 					prevVal = prevVal[name] = {};
-				else
-					prevVal = tmp;
+				else prevVal = tmp;
 
 				keyCache[key2] = prevVal;
 			}
 		}
 
-		var name = items[len -1];
-		if (Array.isArray(prevVal) && val === true)
-		{
+		const name = items[len - 1];
+		if (Array.isArray(prevVal) && val === true) {
 			prevVal.push(name);
 			debug('set val in array mode, key:%s', key);
-		}
-		else
-		{
+		} else {
 			prevVal[name] = val;
 		}
 	}
 });
 
-
-var STR2KEYVAL = {};
+const STR2KEYVAL = {};
 exports.str2keyVal = str2keyVal;
-function str2keyVal(key)
-{
-	var ret = STR2KEYVAL[key];
+function str2keyVal(key) {
+	let ret = STR2KEYVAL[key];
 
-	if (!ret)
-	{
-		var arr = key.split('=');
-		var val = arr.pop();
+	if (!ret) {
+		const arr = key.split('=');
+		let val = arr.pop();
 
 		if (val == 'true') val = true;
 		else if (val == 'false') val = false;
 
-		ret = STR2KEYVAL[key] =
-		{
+		ret = STR2KEYVAL[key] = {
 			key: arr.join('='),
 			value: val
 		};
@@ -41098,56 +40909,53 @@ function str2keyVal(key)
 },{"debug":111,"lodash":115}],109:[function(require,module,exports){
 'use strict';
 
-var _				= require('lodash');
-var extend			= require('extend');
-var debug			= require('debug')('i18nc-options');
-var depdOptions		= require('../upgrade/depd');
-var keyUtils		= require('./key_utils');
-var VARS			= require('./vars');
-var KeyObj			= keyUtils.KeyObj;
-var ObjectToString	= ({}).toString;
-var hasOwnProperty	= Object.prototype.hasOwnProperty;
+const _ = require('lodash');
+const extend = require('extend');
+const debug = require('debug')('i18nc-options');
+const depdOptions = require('../upgrade/depd');
+const keyUtils = require('./key_utils');
+const VARS = require('./vars');
+const KeyObj = keyUtils.KeyObj;
+const ObjectToString = {}.toString;
+const hasOwnProperty = Object.prototype.hasOwnProperty;
 
-
-exports.extend = function(defaults, originalOptions)
-{
+exports.extend = function(defaults, originalOptions) {
 	defaults = extend(true, {}, defaults);
-	var options = extend(true, {}, originalOptions);
+	const options = extend(true, {}, originalOptions);
 	if (options.depdEnable !== false) depdOptions.before(options);
-	var result = _extendDefault(defaults, options, '');
+	const result = _extendDefault(defaults, options, '');
 	depdOptions.after(result);
 
 	// for emitter
 	// 回调的时候，可能会带有额外的参数，保留这份
 	result.originalOptions = originalOptions;
 
-	var cutwordReg = result.cutwordReg;
+	const cutwordReg = result.cutwordReg;
 	// 必须lastIndex必须重制为0，且处于global状态
-	if (cutwordReg instanceof RegExp
-		&& (cutwordReg.lastIndex !== 0 || !cutwordReg.global))
-	{
+	if (
+		cutwordReg instanceof RegExp &&
+		(cutwordReg.lastIndex !== 0 || !cutwordReg.global)
+	) {
 		throw new Error('Invalid cutwordReg');
 	}
 
 	_fixOptionsVal(result);
 
 	return result;
-}
+};
 
-function _fixOptionsVal(options)
-{
-	var myKeys = new KeyObj(options);
+function _fixOptionsVal(options) {
+	const myKeys = new KeyObj(options);
 
-	_.each(VARS.LINK_VALUES, function(targetKey, readKey)
-	{
-		var readInfo = keyUtils.str2keyVal(readKey);
+	_.each(VARS.LINK_VALUES, function(targetKey, readKey) {
+		const readInfo = keyUtils.str2keyVal(readKey);
 
-		if (myKeys.exists(readInfo.key)
-			&& myKeys.getVal(readInfo.key) === readInfo.value)
-		{
-			var targetInfo = keyUtils.str2keyVal(targetKey);
-			if (myKeys.getVal(targetInfo.key) !== targetInfo.value)
-			{
+		if (
+			myKeys.exists(readInfo.key) &&
+			myKeys.getVal(readInfo.key) === readInfo.value
+		) {
+			const targetInfo = keyUtils.str2keyVal(targetKey);
+			if (myKeys.getVal(targetInfo.key) !== targetInfo.value) {
 				myKeys.setVal(targetInfo.key, targetInfo.value);
 				debug('when %s, then %s', readKey, targetKey);
 			}
@@ -41155,156 +40963,121 @@ function _fixOptionsVal(options)
 	});
 }
 
-
-
-exports.freeze = function(obj)
-{
-	if (Object.freeze)
-	{
-		_.each(obj, function(val, key)
-		{
-			if (key != 'pluginEnabled' && key != 'pluginSettings')
-			{
+exports.freeze = function(obj) {
+	if (Object.freeze) {
+		_.each(obj, function(val, key) {
+			if (key != 'pluginEnabled' && key != 'pluginSettings') {
 				deepFreeze(val);
 			}
 		});
 
 		Object.freeze(obj);
 	}
-}
+};
 
-
-
-function deepFreeze(obj)
-{
+function deepFreeze(obj) {
 	if (!obj) return;
 
-	if (checkFreeze(obj))
-	{
-		_.each(obj, function(val)
-		{
+	if (checkFreeze(obj)) {
+		_.each(obj, function(val) {
 			if (checkFreeze(val)) Object.freeze(val);
 		});
 		Object.freeze(obj);
 	}
 }
 
-function checkFreeze(val)
-{
-	var type = ObjectToString.call(val);
+function checkFreeze(val) {
+	const type = ObjectToString.call(val);
 	return type == '[object Object]' || type == '[object Array]';
 }
 
-function _arr2jsonOnly(defaults, arr)
-{
-	var result = {};
-	arr.forEach(function(name)
-	{
-		if (typeof defaults[name] == 'boolean')
-			result[name] = true;
-		else
-			debug('ignore key <%s>, which are not defined in defaults.', name);
+function _arr2jsonOnly(defaults, arr) {
+	const result = {};
+	arr.forEach(function(name) {
+		if (typeof defaults[name] == 'boolean') result[name] = true;
+		else debug('ignore key <%s>, which are not defined in defaults.', name);
 	});
 	return result;
 }
 
-function _arr2jsonMore(arr, defaultVal)
-{
-	var result = _.extend({}, defaultVal);
-	arr.forEach(function(name)
-	{
+function _arr2jsonMore(arr, defaultVal) {
+	const result = _.extend({}, defaultVal);
+	arr.forEach(function(name) {
 		result[name] = true;
 	});
 	return result;
 }
 
-
-function _extendDefault(defaults, object, parentKey)
-{
+function _extendDefault(defaults, object, parentKey) {
 	if (!object) return defaults;
 
-	var result = {};
-	_.each(defaults, function(defaultVal, key)
-	{
-		if (hasOwnProperty.call(object, key))
-		{
-			var newVal = object[key];
-			var defaultType = typeof defaultVal;
+	const result = {};
+	_.each(defaults, function(defaultVal, key) {
+		if (hasOwnProperty.call(object, key)) {
+			const newVal = object[key];
+			const defaultType = typeof defaultVal;
 
-			if (newVal === false)
-			{
-				if (parentKey == '' && key == 'I18NHandler')
-				{
-					result[key] =
-					{
-						insert: {enable: false},
-						upgrade: {enable: false},
+			if (newVal === false) {
+				if (parentKey == '' && key == 'I18NHandler') {
+					result[key] = {
+						insert: { enable: false },
+						upgrade: { enable: false }
 					};
 
 					return;
-				}
-				else if (parentKey == '.I18NHandler'
-					&& (key == 'insert' || key == 'upgrade'))
-				{
-					result[key] = {enable: false};
+				} else if (
+					parentKey == '.I18NHandler' &&
+					(key == 'insert' || key == 'upgrade')
+				) {
+					result[key] = { enable: false };
 					return;
 				}
 			}
 
-
-			switch(defaultType)
-			{
+			switch (defaultType) {
 				case 'object':
 					// 如果默认值为null或者undefined，那么运行newVal为任意值
-					if (!defaultVal)
-					{
+					if (!defaultVal) {
 						result[key] = newVal;
-					}
-					else if (defaultVal instanceof RegExp)
-					{
-						if (newVal === null)
-						{
+					} else if (defaultVal instanceof RegExp) {
+						if (newVal === null) {
 							debug('clear regexp options');
 							result[key] = null;
-						}
-						else if (newVal instanceof RegExp)
-						{
+						} else if (newVal instanceof RegExp) {
 							result[key] = newVal;
+						} else {
+							debug(
+								'ignore regexp val, key:%s, val:%o',
+								key,
+								newVal
+							);
 						}
-						else
-						{
-							debug('ignore regexp val, key:%s, val:%o', key, newVal);
-						}
-					}
-					else if (Array.isArray(newVal))
-					{
-						if (parentKey == '')
-						{
-							if (key == 'ignoreScanHandlerNames')
-							{
+					} else if (Array.isArray(newVal)) {
+						if (parentKey == '') {
+							if (key == 'ignoreScanHandlerNames') {
 								result[key] = _arr2jsonMore(newVal, defaultVal);
 								return;
-							}
-							else if (key == 'pluginEnabled' || key == 'codeModifyItems')
-							{
+							} else if (
+								key == 'pluginEnabled' ||
+								key == 'codeModifyItems'
+							) {
 								result[key] = _arr2jsonOnly(defaultVal, newVal);
 								return;
 							}
 						}
 
-						if (Array.isArray(defaultVal))
-						{
+						if (Array.isArray(defaultVal)) {
 							result[key] = newVal;
-						}
-						else
-						{
+						} else {
 							debug('ignore array data:%s', key);
 							result[key] = defaultVal;
 						}
-					}
-					else
-					{
-						result[key] = _extendDefault(defaultVal, newVal, parentKey+'.'+key);
+					} else {
+						result[key] = _extendDefault(
+							defaultVal,
+							newVal,
+							parentKey + '.' + key
+						);
 					}
 					break;
 
@@ -41313,19 +41086,14 @@ function _extendDefault(defaults, object, parentKey)
 					break;
 
 				default:
-					if (newVal)
-					{
+					if (newVal) {
 						result[key] = newVal;
-					}
-					else
-					{
+					} else {
 						result[key] = defaultVal;
 						debug('ignore options val, key:%s', key);
 					}
 			}
-		}
-		else
-		{
+		} else {
 			result[key] = defaultVal;
 		}
 	});
@@ -41336,9 +41104,7 @@ function _extendDefault(defaults, object, parentKey)
 },{"../upgrade/depd":117,"./key_utils":108,"./vars":110,"debug":111,"extend":114,"lodash":115}],110:[function(require,module,exports){
 'use strict';
 
-
-exports.OLD_RENAME_OPTIONS =
-{
+exports.OLD_RENAME_OPTIONS = {
 	cutWordReg: 'cutwordReg',
 	handlerName: 'I18NHandlerName',
 
@@ -41356,13 +41122,12 @@ exports.OLD_RENAME_OPTIONS =
 
 	// isProxyGlobalHandler: 'I18NHandler.style.proxyGlobalHandler.enable',
 	proxyGlobalHandlerName: 'I18NHandler.style.proxyGlobalHandler.name',
-	isIgnoreCodeProxyGlobalHandlerName: 'I18NHandler.style.proxyGlobalHandler.ignoreFuncCodeName',
-
+	isIgnoreCodeProxyGlobalHandlerName:
+		'I18NHandler.style.proxyGlobalHandler.ignoreFuncCodeName',
 
 	isCheckClosureForNewI18NHandler: 'I18NHandler.insert.checkClosure',
 	isClosureWhenInsertedHead: 'I18NHandler.insert.checkClosure',
 	isInsertToDefineHalder: 'I18NHandler.insert.priorityDefineHalder',
-
 
 	I18NHandlerTPL_GetLanguageCode: 'I18NHandler.tpl.getLanguageCode',
 	I18NHandlerTPL_LanguageVars: 'I18NHandler.tpl.languageVars',
@@ -41381,7 +41146,8 @@ exports.OLD_RENAME_OPTIONS =
 	'I18NhandlerTpl:GetGlobalCode': 'I18NHandler.tpl.getLanguageCode',
 
 	'I18NHandler.upgrade.version': 'I18NHandler.upgrade.checkVersion',
-	'I18NHandler.style.proxyGlobalHandler.ignoreFuncCode': 'I18NHandler.style.proxyGlobalHandler.ignoreFuncCodeName',
+	'I18NHandler.style.proxyGlobalHandler.ignoreFuncCode':
+		'I18NHandler.style.proxyGlobalHandler.ignoreFuncCodeName',
 
 	loadTranslateJSON: 'events.loadTranslateJSON',
 	newTranslateJSON: 'events.newTranslateJSON',
@@ -41391,63 +41157,50 @@ exports.OLD_RENAME_OPTIONS =
 
 	// 由于会修改I18NHandler值，所以放到最后去处理
 	codeModifiedArea: 'codeModifyItems',
-	'codeModifiedArea.I18NHandler': 'I18NHandler',
+	'codeModifiedArea.I18NHandler': 'I18NHandler'
 };
 
-
-exports.OLD_VALUE_OPTIONS =
-{
-	'minTranslateFuncCode=all':
-		[
-			'I18NHandler.style.minFuncCode=true',
-			'I18NHandler.style.minFuncJSON=true'
-		],
-	'minTranslateFuncCode=onlyFunc':
-		[
-			'I18NHandler.style.minFuncCode=true',
-			'I18NHandler.style.minFuncJSON=false'
-		],
-	'minTranslateFuncCode=none':
-		[
-			'I18NHandler.style.minFuncCode=false',
-			'I18NHandler.style.minFuncJSON=false'
-		],
-	'isMinFuncTranslateCode=true':
-		[
-			'I18NHandler.style.minFuncCode=true',
-			'I18NHandler.style.minFuncJSON=true'
-		],
-	'isMinFuncTranslateCode=false':
-		[
-			'I18NHandler.style.minFuncCode=true',
-			'I18NHandler.style.minFuncJSON=false'
-		],
-	'I18NHandler.style.proxyGlobalHandler.enable=true':
-		[
-			'I18NHandler.style.codeStyle=proxyGlobalHandler'
-		],
-	'isProxyGlobalHandler=true':
-		[
-			'I18NHandler.style.codeStyle=proxyGlobalHandler'
-		],
+exports.OLD_VALUE_OPTIONS = {
+	'minTranslateFuncCode=all': [
+		'I18NHandler.style.minFuncCode=true',
+		'I18NHandler.style.minFuncJSON=true'
+	],
+	'minTranslateFuncCode=onlyFunc': [
+		'I18NHandler.style.minFuncCode=true',
+		'I18NHandler.style.minFuncJSON=false'
+	],
+	'minTranslateFuncCode=none': [
+		'I18NHandler.style.minFuncCode=false',
+		'I18NHandler.style.minFuncJSON=false'
+	],
+	'isMinFuncTranslateCode=true': [
+		'I18NHandler.style.minFuncCode=true',
+		'I18NHandler.style.minFuncJSON=true'
+	],
+	'isMinFuncTranslateCode=false': [
+		'I18NHandler.style.minFuncCode=true',
+		'I18NHandler.style.minFuncJSON=false'
+	],
+	'I18NHandler.style.proxyGlobalHandler.enable=true': [
+		'I18NHandler.style.codeStyle=proxyGlobalHandler'
+	],
+	'isProxyGlobalHandler=true': [
+		'I18NHandler.style.codeStyle=proxyGlobalHandler'
+	]
 };
 
-
-exports.RM_OPTIONS =
-{
+exports.RM_OPTIONS = {
 	/**
 	 * 当没有找到任何语言包 & 启动了comment4nowords, 使用这个语言，作为代码中的语言包
 	 * 由于没有任何实际数据，对代码结果无影响
 	 *
 	 * @type {String}
 	 */
-	'I18NHandler.data.defaultLanguage': 'en-US',
+	'I18NHandler.data.defaultLanguage': 'en-US'
 };
 
-
 // 修改key的值，会导致val的值被强制设置
-exports.LINK_VALUES =
-{
+exports.LINK_VALUES = {
 	'I18NHandler.style.minFuncJSON=true':
 		'I18NHandler.style.comment4nowords=false',
 
@@ -41461,7 +41214,7 @@ exports.LINK_VALUES =
 		'I18NHandler.style.fullHandler.autoConvert=false',
 
 	'I18NHandler.style.proxyGlobalHandler.keepThisStyle=false':
-		'I18NHandler.style.proxyGlobalHandler.autoConvert=false',
+		'I18NHandler.style.proxyGlobalHandler.autoConvert=false'
 };
 
 },{}],111:[function(require,module,exports){
@@ -41556,33 +41309,30 @@ arguments[4][17][0].apply(exports,arguments)
 },{"dup":17}],117:[function(require,module,exports){
 'use strict';
 
-var _					= require('lodash');
-var debug				= require('debug')('i18nc-options:depd');
-var deprecate			= require('depd')('i18nc-options');
-var i18ncDB				= require('i18nc-db');
-var keyUtils			= require('../lib/key_utils.js');
-var VARS				= require('../lib/vars');
-var KeyObj				= keyUtils.KeyObj;
-var GetLanguageCodeDepd	= require('./tpl/depd_getlanguagecode_handler').toString();
+const _ = require('lodash');
+const debug = require('debug')('i18nc-options:depd');
+const deprecate = require('depd')('i18nc-options');
+const i18ncDB = require('i18nc-db');
+const keyUtils = require('../lib/key_utils.js');
+const VARS = require('../lib/vars');
+const KeyObj = keyUtils.KeyObj;
+const GetLanguageCodeDepd = require('./tpl/depd_getlanguagecode_handler').toString();
 
-
-var rename_1to1 = (function()
-{
-	var checkMap = {};
-	_.each(VARS.OLD_RENAME_OPTIONS, function(newKey, oldKey)
-	{
-		var config = checkMap[newKey] || (checkMap[newKey] = []);
+const rename_1to1 = (function() {
+	const checkMap = {};
+	_.each(VARS.OLD_RENAME_OPTIONS, function(newKey, oldKey) {
+		const config = checkMap[newKey] || (checkMap[newKey] = []);
 		config.push(oldKey);
 	});
 
-
-	function repalceKeyValHandler(newKey, oldKey, val)
-	{
-		switch(oldKey)
-		{
+	function repalceKeyValHandler(newKey, oldKey, val) {
+		switch (oldKey) {
 			case 'I18NhandlerTpl_GetGlobalCode':
 			case 'I18NhandlerTpl:GetGlobalCode':
-				val = GetLanguageCodeDepd.replace(/\$GetLanguageCode/, ''+val);
+				val = GetLanguageCodeDepd.replace(
+					/\$GetLanguageCode/,
+					'' + val
+				);
 				break;
 
 			case 'codeModifiedArea.I18NHandler':
@@ -41590,23 +41340,23 @@ var rename_1to1 = (function()
 				break;
 		}
 
-		deprecate('use `'+newKey+'` instead of `'+oldKey+'`');
+		deprecate('use `' + newKey + '` instead of `' + oldKey + '`');
 		return val;
 	}
 
-	return function(myKeys)
-	{
-		_.each(checkMap, function(oldKeys, newKey)
-		{
+	return function(myKeys) {
+		_.each(checkMap, function(oldKeys, newKey) {
 			// options已经定义了最新的key
 			if (myKeys.exists(newKey)) return;
 
-			_.some(oldKeys, function(oldKey)
-			{
+			_.some(oldKeys, function(oldKey) {
 				// 判断老的key，有没有可能存在
-				if (myKeys.exists(oldKey))
-				{
-					var val = repalceKeyValHandler(newKey, oldKey, myKeys.getVal(oldKey));
+				if (myKeys.exists(oldKey)) {
+					const val = repalceKeyValHandler(
+						newKey,
+						oldKey,
+						myKeys.getVal(oldKey)
+					);
 					myKeys.setVal(newKey, val);
 					return true;
 				}
@@ -41615,89 +41365,75 @@ var rename_1to1 = (function()
 	};
 })();
 
-
-
-function rename_1toN(myKeys)
-{
-	_.each(VARS.OLD_VALUE_OPTIONS, function(targetArr, oldKey)
-	{
+function rename_1toN(myKeys) {
+	_.each(VARS.OLD_VALUE_OPTIONS, function(targetArr, oldKey) {
 		// 老的key是否定义，值是否满足
-		var oldKeyInfo = keyUtils.str2keyVal(oldKey);
-		if (!myKeys.exists(oldKeyInfo.key)
-			|| myKeys.getVal(oldKeyInfo.key) !== oldKeyInfo.value)
-		{
+		const oldKeyInfo = keyUtils.str2keyVal(oldKey);
+		if (
+			!myKeys.exists(oldKeyInfo.key) ||
+			myKeys.getVal(oldKeyInfo.key) !== oldKeyInfo.value
+		) {
 			return;
 		}
 
 		// 判断新的是否已经定义
-		var ret = targetArr.some(function(newKey)
-		{
+		const ret = targetArr.some(function(newKey) {
 			return myKeys.exists(keyUtils.str2keyVal(newKey).key);
 		});
 
 		if (ret) return;
 
 		// 值转换
-		targetArr.forEach(function(newKey)
-		{
-			var info = keyUtils.str2keyVal(newKey);
+		targetArr.forEach(function(newKey) {
+			const info = keyUtils.str2keyVal(newKey);
 			myKeys.setVal(info.key, info.value);
 		});
 
-		deprecate('use `'+targetArr.join(';')+'` instead of `'+oldKey+'`');
+		deprecate(
+			'use `' + targetArr.join(';') + '` instead of `' + oldKey + '`'
+		);
 	});
 }
 
-
-function rmkeys(myKeys)
-{
-	_.each(VARS.RM_OPTIONS, function(defaultVal, key)
-	{
-		switch(key)
-		{
+function rmkeys(myKeys) {
+	_.each(VARS.RM_OPTIONS, function(defaultVal, key) {
+		switch (key) {
 			case 'I18NHandler.data.defaultLanguage':
-				if (myKeys.exists(key))
-				{
-					deprecate('`'+key+'` will be removed');
-				}
-				else if (myKeys.exists('defaultTranslateLanguage'))
-				{
+				if (myKeys.exists(key)) {
+					deprecate('`' + key + '` will be removed');
+				} else if (myKeys.exists('defaultTranslateLanguage')) {
 					deprecate('`defaultTranslateLanguage` will be removed');
-					myKeys.setVal(key, myKeys.getVal('defaultTranslateLanguage'));
-				}
-				else
-				{
+					myKeys.setVal(
+						key,
+						myKeys.getVal('defaultTranslateLanguage')
+					);
+				} else {
 					myKeys.setVal(key, defaultVal);
 				}
 				break;
 
 			default:
 				if (myKeys.exists(key))
-					deprecate('`'+key+'` will be removed');
-				else
-					myKeys.setVal(key, defaultVal);
+					deprecate('`' + key + '` will be removed');
+				else myKeys.setVal(key, defaultVal);
 		}
 	});
 }
 
-
-exports.before = function(options)
-{
-	var myKeys = new KeyObj(options);
+exports.before = function(options) {
+	const myKeys = new KeyObj(options);
 	rename_1toN(myKeys);
 	rename_1to1(myKeys);
 
-	var dbTranslateWords = i18ncDB.update(options.dbTranslateWords);
-	if (dbTranslateWords)
-	{
-		deprecate('dbTranslateWords v2 is support')
+	const dbTranslateWords = i18ncDB.update(options.dbTranslateWords);
+	if (dbTranslateWords) {
+		deprecate('dbTranslateWords v2 is support');
 		options.dbTranslateWords = dbTranslateWords;
 	}
-}
+};
 
-exports.after = function(result)
-{
-	var resultVals = new KeyObj(result);
+exports.after = function(result) {
+	const resultVals = new KeyObj(result);
 	rmkeys(resultVals);
 };
 
@@ -41706,11 +41442,10 @@ exports.after = function(result)
 
 'use strict';
 
-
 module.exports = function GetLanguageCodeHandler(cache) {
-	var g = cache.g || (cache.g = $GetLanguageCode);
+	const g = cache.g || (cache.g = $GetLanguageCode);
 	return g.$LanguageVars.name$;
-}
+};
 
 // fix istanbul for test
 // if (process.env.running_under_istanbul)
@@ -41731,16 +41466,16 @@ module.exports = function GetLanguageCodeHandler(cache) {
 
 'use strict';
 
-
 module.exports = function GetLanguageCodeHandler(cache) {
 	if (!cache.global) {
-		cache.global = (typeof window == 'object' && window)
-			|| (typeof global == 'object' && global)
-			|| {};
+		cache.global =
+			(typeof window == 'object' && window) ||
+			(typeof global == 'object' && global) ||
+			{};
 	}
 
 	return cache.global.$LanguageVars.name$;
-}
+};
 
 // fix istanbul for test
 // if (process.env.running_under_istanbul)

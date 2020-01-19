@@ -2,18 +2,17 @@
 
 'use strict';
 
-var getLanguageCodeHandler = require('../upgrade/tpl/getlanguagecode_handler');
+const getLanguageCodeHandler = require('../upgrade/tpl/getlanguagecode_handler');
 
-module.exports =
-{
+module.exports = {
 	/**
 	 * 提取分词的正则
 	 *
 	 * 前后两个匹配，是为了尽可能匹配多的字符
- 	 * 排除所有的ascii字符，https://zh.wikipedia.org/wiki/ASCII
- 	 * 排除 "' 是因为tag标签属性用这个分隔，而本身很少用这两个引号
- 	 * 排除 <> 是因为html标签
- 	 *
+	 * 排除所有的ascii字符，https://zh.wikipedia.org/wiki/ASCII
+	 * 排除 "' 是因为tag标签属性用这个分隔，而本身很少用这两个引号
+	 * 排除 <> 是因为html标签
+	 *
 	 * @type {RegExp|null}
 	 * @default 排除所有ascii字符的正则
 	 */
@@ -43,15 +42,14 @@ module.exports =
 	 * @type {Object|Array}
 	 * @default [console.xxxx]
 	 */
-	ignoreScanHandlerNames:
-	{
-		'console.log'	: true,
-		'console.warn'	: true,
-		'console.trace'	: true,
-		'console.info'	: true,
-		'console.error'	: true,
-		'console.dir'	: true,
-		'console.table'	: true,
+	ignoreScanHandlerNames: {
+		'console.log': true,
+		'console.warn': true,
+		'console.trace': true,
+		'console.info': true,
+		'console.error': true,
+		'console.dir': true,
+		'console.table': true
 	},
 
 	/**
@@ -67,10 +65,8 @@ module.exports =
 	 * @remark 值false则关闭
 	 * @type {Object/False}
 	 */
-	I18NHandler:
-	{
-		data:
-		{
+	I18NHandler: {
+		data: {
 			/**
 			 * 函数默认标识，可标识出特定的I18N函数体
 			 * 一般用文件的相对路径
@@ -92,7 +88,7 @@ module.exports =
 			 * @remark 启动后，如果dbTranslateWords没有数据，直接删除在I18N已有的翻译
 			 * @type {Boolean}
 			 */
-			ignoreFuncWords: false,
+			ignoreFuncWords: false
 		},
 		/**
 		 * I18NHandler升级配置
@@ -100,8 +96,7 @@ module.exports =
 		 * @remark 值false则关闭
 		 * @type {Object/False}
 		 */
-		upgrade:
-		{
+		upgrade: {
 			/**
 			 * [总开关]能否更新已插入代码中I18N函数体
 			 *
@@ -126,13 +121,12 @@ module.exports =
 			 * 是否更新代码中的翻译结果JSON
 			 * 在只更新函数的时候，方便做文件版本库校验
 			 *
- 			 * @remark 此配置只影响输出代码的结果，不会影响输出的JSON结果
+			 * @remark 此配置只影响输出代码的结果，不会影响输出的JSON结果
 			 * @type {Boolean}
 			 */
-			updateJSON: true,
+			updateJSON: true
 		},
-		style:
-		{
+		style: {
 			/**
 			 * 优先使用的代码风格（fullHandler/proxyGlobalHandler）
 			 *
@@ -165,8 +159,7 @@ module.exports =
 			 *
 			 * @type {Object}
 			 */
-			proxyGlobalHandler:
-			{
+			proxyGlobalHandler: {
 				/**
 				 * 调用的外部函数名
 				 *
@@ -188,19 +181,18 @@ module.exports =
 				keepThisStyle: true,
 				/**
 				 * 忽略源代码中解析出来的外部函数名，强制使用配置的函数名
- 				 *
- 				 * @remark 如果原来有值，但不同，会触发更新；原来没有，则不会进行更新
+				 *
+				 * @remark 如果原来有值，但不同，会触发更新；原来没有，则不会进行更新
 				 * @type {Boolean}
 				 */
-				ignoreFuncCodeName: false,
+				ignoreFuncCodeName: false
 			},
 			/**
 			 * 插入完整的I18N函数体，代码不依赖外部任何库或者函数
 			 *
 			 * @type {Object}
 			 */
-			fullHandler:
-			{
+			fullHandler: {
 				/**
 				 * 将源码中类fullHandler写法的I18N函数，转换为标准的fullHandler
 				 *
@@ -213,8 +205,8 @@ module.exports =
 				 * @remark 权重高于autoConvert
 				 * @type {Boolean}
 				 */
-				keepThisStyle: true,
-			},
+				keepThisStyle: true
+			}
 		},
 		/**
 		 * I18NHandler升级配置
@@ -222,8 +214,7 @@ module.exports =
 		 * @remark 值false则关闭
 		 * @type {Object/False}
 		 */
-		insert:
-		{
+		insert: {
 			/**
 			 * [总开关]是否插入新的I18N函数
 			 *
@@ -241,16 +232,15 @@ module.exports =
 			 *
 			 * @type {Boolean}
 			 */
-			priorityDefineHalder: true,
+			priorityDefineHalder: true
 		},
-		tpl:
-		{
+		tpl: {
 			/**
 			 * I18N函数体中，获取当前语言包的JS业务代码
 			 *
 			 * string，即全局的函数调用
- 			 * function，必须是可被序列化成字符串，能独立运行
- 			 *
+			 * function，必须是可被序列化成字符串，能独立运行
+			 *
 			 * @type {String|Function}
 			 */
 			getLanguageCode: getLanguageCodeHandler,
@@ -259,8 +249,7 @@ module.exports =
 			 *
 			 * @type {Object}
 			 */
-			languageVars:
-			{
+			languageVars: {
 				/**
 				 * 获取语言包通用变量
 				 *
@@ -272,7 +261,7 @@ module.exports =
 				 *
 				 * @type {String}
 				 */
-				cookie: 'proj.i18n_lan',
+				cookie: 'proj.i18n_lan'
 			},
 			/**
 			 * 新插入的I18N函数外包裹的内容-开始部分
@@ -285,8 +274,8 @@ module.exports =
 			 *
 			 * @type {String}
 			 */
-			newFooterCode: '\n/* eslint-enable */\n\n',
-		},
+			newFooterCode: '\n/* eslint-enable */\n\n'
+		}
 	},
 
 	/**
@@ -294,13 +283,12 @@ module.exports =
 	 *
 	 * 如果去掉TranslateWord，
 	 * 配合最后输出的I18NArgsTranslateWords和codeTranslateWords，
- 	 * 可以实现check效果
- 	 *
+	 * 可以实现check效果
+	 *
 	 * @remark 空数据则关闭所有，空对象则使用默认
 	 * @type {Object|Array}
 	 */
-	codeModifyItems:
-	{
+	codeModifyItems: {
 		// I18NHandler 已经改名为 I18NHandler.upgrade.enable
 		// I18NHandler: true,
 		/**
@@ -350,8 +338,7 @@ module.exports =
 	 *
 	 * @type {Object}
 	 */
-	events:
-	{
+	events: {
 		/**
 		 * 从源码I18N函数体中提取到翻译数据时触发，可修改数据
 		 *
@@ -381,6 +368,6 @@ module.exports =
 		 *
 		 * @type {Function}
 		 */
-		assignLineStrings: null,
-	},
+		assignLineStrings: null
+	}
 };

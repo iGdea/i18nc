@@ -4,58 +4,49 @@
  */
 'use strict';
 
-var _			= require('lodash');
-var debug		= require('debug')('i18nc-key-combo');
-var i18ncAst	= require('i18nc-ast');
-var astTpl		= i18ncAst.tpl;
-var astUtil		= i18ncAst.util;
-var ArrayPush	= Array.prototype.push;
+const _ = require('lodash');
+const debug = require('debug')('i18nc-key-combo');
+const i18ncAst = require('i18nc-ast');
+const astTpl = i18ncAst.tpl;
+const astUtil = i18ncAst.util;
+const ArrayPush = Array.prototype.push;
 
-
-exports = module.exports = function(i18nc)
-{
-	i18nc.registerPlugin('keyCombo', function(i18nc, settings, enabled)
-	{
+exports = module.exports = function(i18nc) {
+	i18nc.registerPlugin('keyCombo', function(i18nc, settings, enabled) {
 		debug('register keycombo for i18nc');
-		i18nc.addListener('beforeScan', function(emitData)
-		{
-			if (emitData.options.pluginEnabled.keyCombo)
-			{
-				if (emitData.result.type == 'BinaryExpression')
-				{
-					var newAst = combo(emitData.result, emitData.options);
+		i18nc.addListener('beforeScan', function(emitData) {
+			if (emitData.options.pluginEnabled.keyCombo) {
+				if (emitData.result.type == 'BinaryExpression') {
+					const newAst = combo(emitData.result, emitData.options);
 					if (newAst) emitData.result = newAst;
 				}
-			}
-			else
-			{
+			} else {
 				debug('keycombo is not enabled');
 			}
 		});
 
-		i18nc.addListener('assignLineStrings', function(emitData)
-		{
-			if (!emitData.options.pluginEnabled.keyCombo
-				|| !emitData.result || !emitData.result.length)
-			{
+		i18nc.addListener('assignLineStrings', function(emitData) {
+			if (
+				!emitData.options.pluginEnabled.keyCombo ||
+				!emitData.result ||
+				!emitData.result.length
+			) {
 				return;
 			}
 
-			var result = [];
-			emitData.result.forEach(function(item)
-			{
-				var comboAsts = item.ast.__i18n_combo_asts__;
-				if (!comboAsts)
-				{
+			const result = [];
+			emitData.result.forEach(function(item) {
+				const comboAsts = item.ast.__i18n_combo_asts__;
+				if (!comboAsts) {
 					result.push(item);
-				}
-				else
-				{
-					var ret = revert(item.lineStrings, comboAsts, emitData.options);
-					if (ret)
-						ArrayPush.apply(result, ret);
-					else
-						result.push(item);
+				} else {
+					const ret = revert(
+						item.lineStrings,
+						comboAsts,
+						emitData.options
+					);
+					if (ret) ArrayPush.apply(result, ret);
+					else result.push(item);
 				}
 			});
 
@@ -69,28 +60,25 @@ exports = module.exports = function(i18nc)
 	});
 };
 
-var exportsTest = exports._test = {};
+const exportsTest = (exports._test = {});
 exports.revert = revert;
 exports.combo = combo;
 
-
 // 合并 + 号的字符
 // 注意：只有发生改变的情况下，才返回数据
-function combo(ast, options)
-{
-	var arr = _plusBinaryExpressionAst2arrWidthClear(ast, options);
+function combo(ast, options) {
+	const arr = _plusBinaryExpressionAst2arrWidthClear(ast, options);
 
 	// 将数组表示，转换为ast返回
 	// 同时要计算新的range
-	var asts = _arr2newAsts(arr);
-	var newAst = astUtil.asts2plusExpression(asts);
+	const asts = _arr2newAsts(arr);
+	const newAst = astUtil.asts2plusExpression(asts);
 	newAst.__i18n_combo_key__ = true;
 	newAst.range = ast.range;
 	newAst.__i18n_flag__ = ast.__i18n_flag__;
 
 	return newAst;
 }
-
 
 /**
  * lineStrings:
@@ -108,33 +96,28 @@ function combo(ast, options)
  * n:1
  * n:n （有一个是交叉的）
  */
-function revert(lineStrings, comboAsts, options)
-{
-	var result = [];
+function revert(lineStrings, comboAsts, options) {
+	let result = [];
 
 	// 先整理一个需要翻译的起始位置map表处理
-	var translateWordStartMap = {};
-	var allValue = '';
-	var allValue2 = '';
-	var strlen = 0;
-	lineStrings.forEach(function(item)
-	{
-		var value = item.value;
+	const translateWordStartMap = {};
+	let allValue = '';
+	let allValue2 = '';
+	let strlen = 0;
+	lineStrings.forEach(function(item) {
+		let value = item.value;
 
 		if (typeof value != 'string' && value !== undefined) value += '';
-		if (!value)
-		{
+		if (!value) {
 			debug('translateWord value is emtpy');
 			return;
 		}
 
-		if (item.translateWord)
-		{
-			translateWordStartMap[strlen] =
-			{
-				value	: value,
-				start	: strlen,
-				end		: strlen + value.length
+		if (item.translateWord) {
+			translateWordStartMap[strlen] = {
+				value: value,
+				start: strlen,
+				end: strlen + value.length
 			};
 		}
 
@@ -142,20 +125,18 @@ function revert(lineStrings, comboAsts, options)
 		allValue += value;
 	});
 
-
 	// 对ast进行一个字符一个字符的判断
-	var strOffset = 0;
-	var translateWordItem = null;
-	var collectorOne = new _RevertCollector(options);
-	comboAsts.forEach(function(ast)
-	{
-		var astValue = ast.type == 'CallExpression'
-				? _getArgs0IfI18NLiteral(ast, options)
-				: ast.value;
+	let strOffset = 0;
+	let translateWordItem = null;
+	let collectorOne = new _RevertCollector(options);
+	comboAsts.forEach(function(ast) {
+		let astValue = ast.type == 'CallExpression'
+			? _getArgs0IfI18NLiteral(ast, options)
+			: ast.value;
 
-		if (typeof astValue != 'string' && astValue !== undefined) astValue += '';
-		if (!astValue)
-		{
+		if (typeof astValue != 'string' && astValue !== undefined)
+			astValue += '';
+		if (!astValue) {
 			debug('ast value is emtpy');
 			return;
 		}
@@ -164,150 +145,125 @@ function revert(lineStrings, comboAsts, options)
 
 		// endOffset 是下一个ast的开始
 		// 当前ast不包含此偏移值
-		var endOffset = strOffset+astValue.length;
+		const endOffset = strOffset + astValue.length;
 		debug('ast value info:%s, endOffset:%d', astValue, endOffset);
 
-		var isJoin = false;
-		do
-		{
-			if (translateWordItem && strOffset >= translateWordItem.end)
-			{
+		let isJoin = false;
+		do {
+			if (translateWordItem && strOffset >= translateWordItem.end) {
 				translateWordItem = null;
 			}
 
-			if (!translateWordItem)
-			{
+			if (!translateWordItem) {
 				translateWordItem = translateWordStartMap[strOffset];
-				if (translateWordItem)
-				{
+				if (translateWordItem) {
 					collectorOne.addTranslateWordItem(translateWordItem);
-					debug('finded translateWordItem, offset:%d, endOffset:%d', strOffset, translateWordItem.end);
+					debug(
+						'finded translateWordItem, offset:%d, endOffset:%d',
+						strOffset,
+						translateWordItem.end
+					);
 				}
 			}
 
 			// 初始化的offset 可能还在上一个translateWordItem范围内
-			if (translateWordItem)
-			{
-				if (!isJoin)
-				{
+			if (translateWordItem) {
+				if (!isJoin) {
 					isJoin = true;
-					collectorOne.addAst(ast, endOffset-astValue.length);
+					collectorOne.addAst(ast, endOffset - astValue.length);
 				}
 			}
 			// 如果没有翻译的word，自身也没有加入过
 			// 但却有采集到数据
 			// 说明采集到的数据，是之前一个完整闭环的数据
-			else if (!isJoin && collectorOne.asts.length)
-			{
+			else if (!isJoin && collectorOne.asts.length) {
 				_restartCollect();
 			}
-		}
-		while(++strOffset < endOffset);
+		} while (++strOffset < endOffset);
 
 		// ast 结束的时候，判断一下translateWordItem是否也正好结束
 		// 如果两个都结束，就要回收数据到result
-		if (translateWordItem && strOffset >= translateWordItem.end)
-		{
+		if (translateWordItem && strOffset >= translateWordItem.end) {
 			_restartCollect();
 		}
 	});
 
-
-	function _restartCollect()
-	{
+	function _restartCollect() {
 		debug('run _restartCollect');
-		var newValue = collectorOne.value();
-		var newLiteralAst = astTpl.Literal(newValue);
+		const newValue = collectorOne.value();
+		const newLiteralAst = astTpl.Literal(newValue);
 
-		newLiteralAst.range =
-			[
-				collectorOne.asts[0].range[0],
-				collectorOne.asts[collectorOne.asts.length-1].range[1]
-			];
+		newLiteralAst.range = [
+			collectorOne.asts[0].range[0],
+			collectorOne.asts[collectorOne.asts.length - 1].range[1]
+		];
 
-		result.push(
-			{
-				ast			: newLiteralAst,
-				lineStrings	: collectorOne.lineStrings(),
-			});
+		result.push({
+			ast: newLiteralAst,
+			lineStrings: collectorOne.lineStrings()
+		});
 
 		translateWordItem = null;
 		collectorOne = new _RevertCollector(options);
 	}
 
-	if (collectorOne.asts.length)
-	{
+	if (collectorOne.asts.length) {
 		_restartCollect();
 	}
 
-
 	// 如果两个字符串不一致，就不替换了，避免出现range问题
-	if (allValue != allValue2)
-	{
+	if (allValue != allValue2) {
 		debug('Combo and translates value is not eql');
 		return;
 	}
 
-
 	return result;
 }
 
-
-function _RevertCollector(options)
-{
+function _RevertCollector(options) {
 	this.firstAstStart = 0;
 	this.options = options;
 	this.asts = [];
 	this.translateWordItems = [];
 }
 
-_.extend(_RevertCollector.prototype,
-{
-	addTranslateWordItem: function(item)
-	{
+_.extend(_RevertCollector.prototype, {
+	addTranslateWordItem: function(item) {
 		this.translateWordItems.push(item);
 	},
-	addAst: function(item, astStart)
-	{
-		if (!this.asts.length)
-		{
+	addAst: function(item, astStart) {
+		if (!this.asts.length) {
 			this.firstAstStart = astStart;
 		}
 		this.asts.push(item);
 	},
-	value: function()
-	{
-		var options = this.options;
+	value: function() {
+		const options = this.options;
 
-		return this.asts.map(function(item)
-			{
+		return this.asts
+			.map(function(item) {
 				return item.type == 'CallExpression'
 					? _getArgs0IfI18NLiteral(item, options)
 					: item.value;
 			})
 			.join('');
 	},
-	lineStrings: function()
-	{
-		var tmpValue = this.value();
-		var offset = this.firstAstStart;
-		var result = [];
+	lineStrings: function() {
+		let tmpValue = this.value();
+		let offset = this.firstAstStart;
+		const result = [];
 
-		this.translateWordItems.forEach(function(item)
-		{
-			var preLen = item.start - offset;
+		this.translateWordItems.forEach(function(item) {
+			const preLen = item.start - offset;
 
-			if (preLen)
-			{
-				result.push(
-				{
+			if (preLen) {
+				result.push({
 					translateWord: false,
 					value: tmpValue.slice(0, preLen)
 				});
 			}
 
-			result.push(
-			{
+			result.push({
 				translateWord: true,
 				value: item.value
 			});
@@ -316,67 +272,59 @@ _.extend(_RevertCollector.prototype,
 			offset = item.end;
 		});
 
-		if (tmpValue)
-		{
-			result.push(
-			{
+		if (tmpValue) {
+			result.push({
 				translateWord: false,
 				value: tmpValue
 			});
 		}
 
 		return result;
-	},
+	}
 });
-
 
 /**
  * 将_plusBinaryExpressionAst2arrWidthClear结果，转换成纯ast的数组
  * 过程中会重新生成合并的combo的ast，计算range
  */
-function _arr2newAsts(mainArr)
-{
-	return mainArr.map(function(item)
-		{
-			if (Array.isArray(item))
-			{
-				return _arr2newAsts(item);
-			}
+function _arr2newAsts(mainArr) {
+	return mainArr.map(function(item) {
+		if (Array.isArray(item)) {
+			return _arr2newAsts(item);
+		}
 
-			if (item.comboAsts)
-			{
-				var ast = astTpl.Literal(item.value);
-				ast.__i18n_combo_key__ = true;
+		if (item.comboAsts) {
+			const ast = astTpl.Literal(item.value);
+			ast.__i18n_combo_key__ = true;
 
-				var comboAsts = item.comboAsts = item.comboAsts.sort(function(a, b)
-					{
-						return a.range[0] > b.range[0] ? 1 : -1;
-					});
+			const comboAsts = (item.comboAsts = item.comboAsts.sort(function(
+				a,
+				b
+			) {
+				return a.range[0] > b.range[0] ? 1 : -1;
+			}));
 
-				ast.range =
-					[
-						comboAsts[0].range[0],
-						comboAsts[comboAsts.length-1].range[1]
-					];
+			ast.range = [
+				comboAsts[0].range[0],
+				comboAsts[comboAsts.length - 1].range[1]
+			];
 
-				// 保存起来，后面拆分的时候，还可以用
-				ast.__i18n_combo_asts__ = comboAsts;
+			// 保存起来，后面拆分的时候，还可以用
+			ast.__i18n_combo_asts__ = comboAsts;
 
-				return ast;
-			}
+			return ast;
+		}
 
-			return item.ast;
-		});
+		return item.ast;
+	});
 }
-
 
 /**
  * 同_plusBinaryExpressionAst2arr，只是增加对可合并数据的合并
  */
 exportsTest._plusBinaryExpressionAst2arrWidthClear = _plusBinaryExpressionAst2arrWidthClear;
-function _plusBinaryExpressionAst2arrWidthClear(ast, options)
-{
-	var arr = _plusBinaryExpressionAst2arr(ast, options);
+function _plusBinaryExpressionAst2arrWidthClear(ast, options) {
+	const arr = _plusBinaryExpressionAst2arr(ast, options);
 	debug('plusBinaryExpressionAst2arr: %o', arr);
 
 	return _comboLiteralText(arr);
@@ -386,83 +334,60 @@ function _plusBinaryExpressionAst2arrWidthClear(ast, options)
  * 合并_plusBinaryExpressionAst2arr结果
  * 输出的结构体，存在item.ast item.comboAsts两种情况
  */
-function _comboLiteralText(mainArr)
-{
-	var result = [];
-	var comboArr = [];
-	var firstNumberItem;
-	var isStringStart = false;
+function _comboLiteralText(mainArr) {
+	const result = [];
+	let comboArr = [];
+	let isStringStart = false;
+	let firstNumberItem;
 
-	function _end()
-	{
-		if (firstNumberItem)
-		{
-			if (isStringStart)
-			{
+	function _end() {
+		if (firstNumberItem) {
+			if (isStringStart) {
 				comboArr.push(firstNumberItem);
-			}
-			else
-			{
+			} else {
 				result.push(firstNumberItem);
 			}
 
 			firstNumberItem = null;
 		}
 
-		if (comboArr.length)
-		{
-			if (comboArr.length == 1)
-			{
+		if (comboArr.length) {
+			if (comboArr.length == 1) {
 				result.push(comboArr[0]);
-			}
-			else
-			{
-				var comboAsts = [];
-				var value = '';
+			} else {
+				const comboAsts = [];
+				let value = '';
 
-				comboArr.forEach(function(item)
-				{
+				comboArr.forEach(function(item) {
 					value += item.value;
 
-					if (item.ast)
-					{
+					if (item.ast) {
 						comboAsts.push(item.ast);
-					}
-					else if (item.comboAsts)
-					{
+					} else if (item.comboAsts) {
 						ArrayPush.apply(comboAsts, item.comboAsts);
 					}
 				});
 
-				result.push(
-					{
-						type		: 'string',
-						value		: value,
-						comboAsts	: comboAsts
-					});
+				result.push({
+					type: 'string',
+					value: value,
+					comboAsts: comboAsts
+				});
 			}
 
 			comboArr = [];
 		}
 	}
 
-	function _itemHandler(item, index)
-	{
-		switch(item.type)
-		{
+	function _itemHandler(item, index) {
+		switch (item.type) {
 			case 'number':
-				if (index === 0)
-				{
+				if (index === 0) {
 					firstNumberItem = item;
-				}
-				else if (isStringStart)
-				{
+				} else if (isStringStart) {
 					comboArr.push(item);
-				}
-				else
-				{
-					if (firstNumberItem)
-					{
+				} else {
+					if (firstNumberItem) {
 						result.push(firstNumberItem);
 						firstNumberItem = null;
 					}
@@ -473,8 +398,7 @@ function _comboLiteralText(mainArr)
 			case 'string':
 				isStringStart = true;
 
-				if (firstNumberItem)
-				{
+				if (firstNumberItem) {
 					comboArr.push(firstNumberItem);
 					firstNumberItem = null;
 				}
@@ -487,53 +411,38 @@ function _comboLiteralText(mainArr)
 		}
 	}
 
+	mainArr.forEach(function(item, index) {
+		if (Array.isArray(item)) {
+			const subResult = _comboLiteralText(item);
+			let isSubFistNumber = false;
+			const isStopCombo = subResult.some(function(item, index) {
+				switch (item.type) {
+					case 'string':
+						return false;
 
-	mainArr.forEach(function(item, index)
-	{
-		if (Array.isArray(item))
-		{
-			var subResult = _comboLiteralText(item);
-			var isSubFistNumber = false;
-			var isStopCombo = subResult.some(function(item, index)
-				{
-					switch(item.type)
-					{
-						case 'string':
+					case 'number':
+						if (index === 0) {
+							isSubFistNumber = true;
 							return false;
+						} else if (index === 1) {
+							return isSubFistNumber;
+						} else {
+							return false;
+						}
+				}
 
-						case 'number':
-							if (index === 0)
-							{
-								isSubFistNumber = true;
-								return false;
-							}
-							else if (index === 1)
-							{
-								return isSubFistNumber;
-							}
-							else
-							{
-								return false;
-							}
-					}
-
-					return true;
-				});
+				return true;
+			});
 
 			debug('stop combo:%d, subResult:%o', isStopCombo, subResult);
 
-			if (isStopCombo)
-			{
+			if (isStopCombo) {
 				_end();
 				result.push(subResult);
-			}
-			else
-			{
+			} else {
 				subResult.forEach(_itemHandler);
 			}
-		}
-		else
-		{
+		} else {
 			_itemHandler(item, index);
 		}
 	});
@@ -542,7 +451,6 @@ function _comboLiteralText(mainArr)
 
 	return result;
 }
-
 
 /**
  * 将+号预算转换成array数据结构
@@ -554,80 +462,68 @@ function _comboLiteralText(mainArr)
  * 1+2+3+(4+5) => [1,2,3,[4,5]]
  * 1+2+I18N(3) => [1,2,3]
  */
-function _plusBinaryExpressionAst2arr(ast, options)
-{
-	if (ast.type != 'BinaryExpression' || ast.operator != '+')
-	{
-		return [{type: 'other', ast: ast}];
+function _plusBinaryExpressionAst2arr(ast, options) {
+	if (ast.type != 'BinaryExpression' || ast.operator != '+') {
+		return [{ type: 'other', ast: ast }];
 	}
 
-	var result = [];
-	var ret = _appendBinaryExpression(ast.left, options);
+	const result = [];
+	let ret = _appendBinaryExpression(ast.left, options);
 	ArrayPush.apply(result, ret);
-
 
 	// 根据返回参数个数，如果多余一个
 	// 那么表示有（）运算，需要独立出一个空间保存
 	ret = _appendBinaryExpression(ast.right, options);
-	if (ret.length == 1)
-	{
+	if (ret.length == 1) {
 		result.push(ret[0]);
-	}
-	else
-	{
+	} else {
 		result.push(ret);
 	}
 
 	return result;
 }
 
-function _appendBinaryExpression(ast, options)
-{
-	var result = [];
-	switch(ast.type)
-	{
+function _appendBinaryExpression(ast, options) {
+	let result = [];
+	switch (ast.type) {
 		case 'Literal':
-			result.push(
-				{
-					type: typeof ast.value,
-					value: ast.value,
-					ast: ast
-				});
+			result.push({
+				type: typeof ast.value,
+				value: ast.value,
+				ast: ast
+			});
 			break;
 
-		case 'CallExpression':
-			var arg0Value = _getArgs0IfI18NLiteral(ast, options);
+		case 'CallExpression': {
+			const arg0Value = _getArgs0IfI18NLiteral(ast, options);
 
-			if (arg0Value
-				&& options.pluginSettings
-				&& options.pluginSettings.keyComboMode == 'I18N'
-				&& ast.arguments.length == 1)
-			{
-				result.push(
-					{
-						type: 'string',
-						value: arg0Value,
-						ast: ast,
-					});
-			}
-			else
-			{
+			if (
+				arg0Value &&
+				options.pluginSettings &&
+				options.pluginSettings.keyComboMode == 'I18N' &&
+				ast.arguments.length == 1
+			) {
+				result.push({
+					type: 'string',
+					value: arg0Value,
+					ast: ast
+				});
+			} else {
 				debug('no ast info for call %s', ast.callee && ast.callee.name);
-				result.push(
-				{
+				result.push({
 					type: 'other',
 					ast: ast
 				});
 			}
 			break;
+		}
 
 		case 'BinaryExpression':
 			result = _plusBinaryExpressionAst2arr(ast, options);
 			break;
 
 		default:
-			result.push(
-			{
+			result.push({
 				type: 'other',
 				ast: ast
 			});
@@ -636,15 +532,14 @@ function _appendBinaryExpression(ast, options)
 	return result;
 }
 
-
-function _getArgs0IfI18NLiteral(ast, options)
-{
+function _getArgs0IfI18NLiteral(ast, options) {
 	if (ast.type != 'CallExpression') return;
-	var calleeName = ast.callee && ast.callee.name;
-	if (calleeName == options.I18NHandlerName
-		|| options.I18NHandlerAlias.indexOf(calleeName) != -1)
-	{
-		var arg0ast = ast.arguments && ast.arguments[0];
+	const calleeName = ast.callee && ast.callee.name;
+	if (
+		calleeName == options.I18NHandlerName ||
+		options.I18NHandlerAlias.indexOf(calleeName) != -1
+	) {
+		const arg0ast = ast.arguments && ast.arguments[0];
 		return arg0ast && arg0ast.type == 'Literal' && arg0ast.value;
 	}
 }

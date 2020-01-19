@@ -1,148 +1,146 @@
 'use strict';
 
-var _			= require('lodash');
-var debug		= require('debug')('i18nc-core:ast_literal_handler');
-var emitter		= require('./emitter');
-var i18ncAst	= require('i18nc-ast');
-var wordsUtils	= require('./utils/words_utils');
-var astUtil		= i18ncAst.util;
-var astTpl		= i18ncAst.tpl;
+const _ = require('lodash');
+const debug = require('debug')('i18nc-core:ast_literal_handler');
+const emitter = require('./emitter');
+const i18ncAst = require('i18nc-ast');
+const wordsUtils = require('./utils/words_utils');
+const astUtil = i18ncAst.util;
+const astTpl = i18ncAst.tpl;
 
-exports.LiteralHandler	= LiteralHandler;
+exports.LiteralHandler = LiteralHandler;
 
-function LiteralHandler(options)
-{
+function LiteralHandler(options) {
 	this.options = options;
 }
 
-_.extend(LiteralHandler.prototype,
-{
-	handle: function(ast)
-	{
-		var value = ast.value;
+_.extend(LiteralHandler.prototype, {
+	handle: function(ast) {
+		const value = ast.value;
 		if (!value) return;
 
-		if (typeof value == 'string')
-			return this._stringHandler(ast);
-		else if (value instanceof RegExp)
-			return this._regExpHandler(ast);
-		else
-			debug('ignore value init, val:%s, type:%s', value, typeof value);
+		if (typeof value == 'string') return this._stringHandler(ast);
+		else if (value instanceof RegExp) return this._regExpHandler(ast);
+		else debug('ignore value init, val:%s, type:%s', value, typeof value);
 	},
-	_regExpHandler: function(ast)
-	{
-		var self = this;
-		var regex = ast.regex;
-		if (!regex || !regex.pattern || typeof regex.pattern != 'string') return;
+	_regExpHandler: function(ast) {
+		const self = this;
+		const regex = ast.regex;
+		if (!regex || !regex.pattern || typeof regex.pattern != 'string')
+			return;
 
-		var value = regex.pattern; //.replace(/\\/g, '\\\\');
-		var lineStrings = wordsUtils.splitValue2lineStrings(value, 'regexp', self.options);
+		const value = regex.pattern; //.replace(/\\/g, '\\\\');
+		const lineStrings = wordsUtils.splitValue2lineStrings(
+			value,
+			'regexp',
+			self.options
+		);
 		debug('regex value:%s split result:%o', value, lineStrings);
 		if (!lineStrings) return;
 
-		var literalAst = astUtil.asts2plusExpression(self._txts2asts(lineStrings));
-		var args = [literalAst];
+		const literalAst = astUtil.asts2plusExpression(
+			self._txts2asts(lineStrings)
+		);
+		const args = [literalAst];
 		if (regex.flags) args.push(astTpl.Literal(regex.flags));
 
-		ast.__i18n_replace_info__ =
-		{
-			newAst			: astTpl.NewExpression('RegExp', args),
-			translateWords	: wordsUtils.getTranslateWordsFromLineStrings(lineStrings)
+		ast.__i18n_replace_info__ = {
+			newAst: astTpl.NewExpression('RegExp', args),
+			translateWords: wordsUtils.getTranslateWordsFromLineStrings(
+				lineStrings
+			)
 		};
 
 		return [ast];
 	},
 
-	_stringHandler: function(ast)
-	{
-		var self = this;
-		var value = ast.value;
-		var lineStrings = wordsUtils.splitValue2lineStrings(value, 'string', self.options);
+	_stringHandler: function(ast) {
+		const self = this;
+		const value = ast.value;
+		const lineStrings = wordsUtils.splitValue2lineStrings(
+			value,
+			'string',
+			self.options
+		);
 		debug('value split result:%o', lineStrings);
 		if (!lineStrings) return;
 
-		var retArr =
-		[{
-			ast			: ast,
-			lineStrings	: lineStrings,
-		}];
+		let retArr = [
+			{
+				ast: ast,
+				lineStrings: lineStrings
+			}
+		];
 
 		// 整理最后的结果，进行输出
-		var emitData =
-		{
-			type		: 'string',
-			value		: retArr,
-			original	: retArr,
-			options		: self.options,
+		const emitData = {
+			type: 'string',
+			value: retArr,
+			original: retArr,
+			options: self.options
 		};
 		emitter.trigger('assignLineStrings', emitData);
 
-		if (retArr !== emitData.value)
-		{
+		if (retArr !== emitData.value) {
 			debug('word ast chanage, old:%o, new:%o', retArr, emitData.value);
 			retArr = emitData.value;
 		}
 
 		if (!retArr || !retArr.length) return;
 
-		return retArr.map(function(item)
-			{
-				var ast = item.ast;
-				var newAst = astUtil.asts2plusExpression(self._txts2asts(item.lineStrings));
+		return retArr
+			.map(function(item) {
+				const ast = item.ast;
+				const newAst = astUtil.asts2plusExpression(
+					self._txts2asts(item.lineStrings)
+				);
 				if (!newAst) return;
 
 				debug('literal new ast:%o', newAst);
 
-				ast.__i18n_replace_info__ =
-				{
-					newAst			: newAst,
-					translateWords	: wordsUtils.getTranslateWordsFromLineStrings(item.lineStrings)
+				ast.__i18n_replace_info__ = {
+					newAst: newAst,
+					translateWords: wordsUtils.getTranslateWordsFromLineStrings(
+						item.lineStrings
+					)
 				};
 
 				return ast;
 			})
-			.filter(function(item)
-			{
+			.filter(function(item) {
 				return item;
 			});
 	},
 
-	_txt2ast: function(txt, isTranslateWord)
-	{
+	_txt2ast: function(txt, isTranslateWord) {
 		return isTranslateWord
-			? astTpl.CallExpression(this.options.I18NHandlerName, [astTpl.Literal(txt)])
+			? astTpl.CallExpression(this.options.I18NHandlerName, [
+					astTpl.Literal(txt)
+				])
 			: astTpl.Literal(txt);
 	},
 
 	// 将文本结构体整理成ast的数组
-	_txts2asts: function(txts)
-	{
+	_txts2asts: function(txts) {
 		if (!txts || !txts.length) return;
 
-		var self = this;
-		var tmpValue = '';
-		var isTranslateWord;
-		var result = [];
+		const self = this;
+		let tmpValue = '';
+		let isTranslateWord;
+		const result = [];
 
-		txts.forEach(function(item)
-		{
+		txts.forEach(function(item) {
 			if (!item || !item.value || item.ignore) return;
-			if (item.disconnected)
-			{
-				if (tmpValue)
-				{
+			if (item.disconnected) {
+				if (tmpValue) {
 					result.push(self._txt2ast(tmpValue, isTranslateWord));
 					tmpValue = '';
 				}
 
 				result.push(self._txt2ast(item.value, item.translateWord));
-			}
-			else
-			{
-				if (tmpValue && isTranslateWord != item.translateWord)
-				{
-					if (tmpValue)
-					{
+			} else {
+				if (tmpValue && isTranslateWord != item.translateWord) {
+					if (tmpValue) {
 						result.push(self._txt2ast(tmpValue, isTranslateWord));
 						tmpValue = '';
 					}
@@ -156,5 +154,5 @@ _.extend(LiteralHandler.prototype,
 		if (tmpValue) result.push(self._txt2ast(tmpValue, isTranslateWord));
 
 		return result;
-	},
+	}
 });

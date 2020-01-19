@@ -1,9 +1,9 @@
 /* global $globalHandlerName $TRANSLATE_JSON_CODE */
+/* eslint-disable no-var */
 
 'use strict';
 
-module.exports = function $handlerName(msg)
-{
+module.exports = function $handlerName(msg) {
 	var self = $handlerName;
 	var data = self.$;
 
@@ -18,4 +18,4 @@ module.exports = function $handlerName(msg)
 	}
 
 	return '' + $globalHandlerName(msg, arguments, self.D, self.K, data, self);
-}
+};

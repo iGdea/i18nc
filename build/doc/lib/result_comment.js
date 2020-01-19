@@ -1,138 +1,115 @@
 'use strict';
 
-var _ = require('lodash');
-var debug = require('debug')('i18nc-core:doc_lib/result_comment');
-var esprima = require('esprima');
-var parseComment = require('comment-parser');
-var codeMapTable = require('./codemap_table');
-var ArrayPush = Array.prototype.push;
+const _ = require('lodash');
+const debug = require('debug')('i18nc-core:doc_lib/result_comment');
+const esprima = require('esprima');
+const parseComment = require('comment-parser');
+const codeMapTable = require('./codemap_table');
+const ArrayPush = Array.prototype.push;
 
-function AstFunc(name, ast, comments)
-{
+function AstFunc(name, ast, comments) {
 	this.name = name;
 	this.ast = ast;
 	this.subfuncs = [];
 
-	var comment = comments && comments.pop();
+	const comment = comments && comments.pop();
 	this.comment = comment && comment.value;
 }
 
-_.extend(AstFunc.prototype,
-{
-	toString: function()
-	{
+_.extend(AstFunc.prototype, {
+	toString: function() {
 		return this.name;
 	},
-	add: function(funcs)
-	{
+	add: function(funcs) {
 		ArrayPush.apply(this.subfuncs, funcs);
 	},
-	funcname: function()
-	{
-		var args = _.map(this.ast.params, function(item)
-		{
+	funcname: function() {
+		const args = _.map(this.ast.params, function(item) {
 			return item.name;
 		});
 
-		return this.name+'('+args.join(', ')+')';
+		return this.name + '(' + args.join(', ') + ')';
 	},
-	toJSON: function()
-	{
-		var comment;
-		if (this.comment)
-		{
-			comment = parseComment('/*'+this.comment+'*/')[0];
-		}
+	toJSON: function() {
+		const comment = this.comment && parseComment('/*' + this.comment + '*/')[0];
 
 		return {
 			name: this.name,
 			funcname: this.funcname(),
 			comment: comment,
-			subfuncs: this.subfuncs.map(function(item)
-			{
+			subfuncs: this.subfuncs.map(function(item) {
 				return item.toJSON();
-			}),
+			})
 		};
 	},
-	render: function()
-	{
-		var obj = this.toJSON();
-		var content = [];
-		content.push('## '+obj.name);
+	render: function() {
+		const obj = this.toJSON();
+		const content = [];
+		content.push('## ' + obj.name);
 		content.push(obj.funcname);
-		if (obj.comment)
-		{
-			content.push(' > '+obj.comment.description);
+		if (obj.comment) {
+			content.push(' > ' + obj.comment.description);
 		}
 
-		var tableData = [];
-		obj.subfuncs.forEach(function(item)
-		{
+		const tableData = [];
+		obj.subfuncs.forEach(function(item) {
 			if (!item.comment) return;
 
-			var info =
-			{
+			const info = {
 				description: item.comment.description
 			};
 			debug('comment tags:%o', item.comment.tags);
-			item.comment.tags.forEach(function(tag)
-			{
-				switch(tag.tag)
-				{
+			item.comment.tags.forEach(function(tag) {
+				switch (tag.tag) {
 					case 'return':
 						info.return = tag.type;
 						break;
 				}
 			});
 
-			tableData.push([item.funcname, info.return || '', info.description || '']);
+			tableData.push([
+				item.funcname,
+				info.return || '',
+				info.description || ''
+			]);
 		});
 
-		if (tableData.length)
-		{
-			var tableInfo = codeMapTable.table_md(tableData,
-				[
-					{name: '方法名'},
-					{name: '返回值'},
-					{name: '说明'}
-				]);
-			content.push('### '+'成员方法', tableInfo.content);
+		if (tableData.length) {
+			const tableInfo = codeMapTable.table_md(tableData, [
+				{ name: '方法名' },
+				{ name: '返回值' },
+				{ name: '说明' }
+			]);
+			content.push('### ' + '成员方法', tableInfo.content);
 		}
 
 		return content.join('\n\n');
 	}
 });
 
-function findObject(ast)
-{
-	var result = [];
+function findObject(ast) {
+	const result = [];
 	if (!ast) return result;
 
-	if (ast.type == 'ObjectExpression')
-	{
-		ast.properties.forEach(function(item)
-		{
+	if (ast.type == 'ObjectExpression') {
+		ast.properties.forEach(function(item) {
 			if (item.type != 'Property') return;
 			if (!item.value || item.value.type != 'FunctionExpression') return;
 
-			result.push(new AstFunc(item.key.name, item.value, item.leadingComments));
+			result.push(
+				new AstFunc(item.key.name, item.value, item.leadingComments)
+			);
 		});
 
 		return result;
-	}
-	else if (Array.isArray(ast))
-	{
-		ast.forEach(function(item)
-		{
+	} else if (Array.isArray(ast)) {
+		ast.forEach(function(item) {
 			ArrayPush.apply(result, findObject(item));
 		});
 
 		return result;
-	}
-	else if (typeof ast == 'object')
-	{
-		_.each(ast, function(body)
-		{
+	} else if (typeof ast == 'object') {
+		_.each(ast, function(body) {
 			ArrayPush.apply(result, findObject(body));
 		});
 
@@ -140,28 +117,24 @@ function findObject(ast)
 	}
 }
 
-
-module.exports = function(content)
-{
-	var allConstructor = {};
-	var ast = esprima.parse(content, {attachComment: true});
-	var currentFunc = null;
-	ast.body.forEach(function(item)
-	{
-		if (item.type == 'FunctionDeclaration'
-			&& item.id
-			&& item.id.name)
-		{
-			var name = item.id.name;
+module.exports = function(content) {
+	const allConstructor = {};
+	const ast = esprima.parse(content, { attachComment: true });
+	let currentFunc = null;
+	ast.body.forEach(function(item) {
+		if (item.type == 'FunctionDeclaration' && item.id && item.id.name) {
+			const name = item.id.name;
 			if (allConstructor[name]) throw new Error('func has inited');
-			currentFunc = allConstructor[name] = new AstFunc(name, item, item.leadingComments);
-		}
-		else
-		{
-			var funcs = findObject(item);
-			if (funcs.length)
-			{
-				if (!currentFunc) throw new Error('init object before currentFunc init');
+			currentFunc = allConstructor[name] = new AstFunc(
+				name,
+				item,
+				item.leadingComments
+			);
+		} else {
+			const funcs = findObject(item);
+			if (funcs.length) {
+				if (!currentFunc)
+					throw new Error('init object before currentFunc init');
 				currentFunc.add(funcs);
 			}
 		}
@@ -170,4 +143,4 @@ module.exports = function(content)
 	debug('funcs: %o', allConstructor);
 
 	return allConstructor;
-}
+};

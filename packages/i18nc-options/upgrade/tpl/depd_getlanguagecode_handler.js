@@ -2,11 +2,10 @@
 
 'use strict';
 
-
 module.exports = function GetLanguageCodeHandler(cache) {
-	var g = cache.g || (cache.g = $GetLanguageCode);
+	const g = cache.g || (cache.g = $GetLanguageCode);
 	return g.$LanguageVars.name$;
-}
+};
 
 // fix istanbul for test
 // if (process.env.running_under_istanbul)

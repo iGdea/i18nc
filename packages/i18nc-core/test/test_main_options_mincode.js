@@ -4,78 +4,83 @@
  * 但功能没有问题
  */
 
-
 'use strict';
 
-var expect				= require('expect.js');
-var i18nc				= require('../');
-var dbTranslateWords	= require('./files/casefile/translate_words_db');
-var autoTestUtils		= require('./auto_test_utils');
-var requireAfterWrite	= autoTestUtils.requireAfterWrite('main_options_mincode');
-var collectFuncs		= require('./files/casefile/func_code/func_code_collect');
+const expect = require('expect.js');
+const i18nc = require('../');
+const dbTranslateWords = require('./files/casefile/translate_words_db');
+const autoTestUtils = require('./auto_test_utils');
+const requireAfterWrite = autoTestUtils.requireAfterWrite('main_options_mincode');
+const collectFuncs = require('./files/casefile/func_code/func_code_collect');
 
+describe('#main_options_mincode', function() {
+	function test(name) {
+		describe(name, function() {
+			const filename =
+				'func_code_i18n_min_' + name.toLowerCase() + '_output';
 
-describe('#main_options_mincode', function()
-{
-	function test(name)
-	{
-		describe(name, function()
-		{
-			var filename = 'func_code_i18n_min_'+name.toLowerCase()+'_output';
+			it('#base', function() {
+				const code = collectFuncs.has_words;
+				const info = i18nc(code.toString(), {
+					minTranslateFuncCode: name
+				});
 
-			it('#base', function()
-			{
-				var code = collectFuncs.has_words;
-				var info = i18nc(code.toString(),
-					{
-						minTranslateFuncCode: name
-					});
+				const otherCode = requireAfterWrite(
+					filename + '_base.js',
+					info.code
+				);
 
-				var otherCode = requireAfterWrite(filename+'_base.js', info.code);
-
-				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
+				expect(autoTestUtils.code2arr(info.code)).to.eql(
+					autoTestUtils.code2arr(otherCode)
+				);
 			});
 
-			it('#wdithdb', function()
-			{
-				var code = collectFuncs.has_words;
-				var info = i18nc(code.toString(),
-					{
-						dbTranslateWords: dbTranslateWords,
-						minTranslateFuncCode: name
-					});
+			it('#wdithdb', function() {
+				const code = collectFuncs.has_words;
+				const info = i18nc(code.toString(), {
+					dbTranslateWords: dbTranslateWords,
+					minTranslateFuncCode: name
+				});
 
-				var otherCode = requireAfterWrite(filename+'_widthdb.js', info.code);
+				const otherCode = requireAfterWrite(
+					filename + '_widthdb.js',
+					info.code
+				);
 
-				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
+				expect(autoTestUtils.code2arr(info.code)).to.eql(
+					autoTestUtils.code2arr(otherCode)
+				);
 			});
 
-			it('#partialUpdate', function()
-			{
-				var code = require('./files/casefile/i18n_handler/i18n_handler_example.js');
-				var funcInfo = require('./files/casefile/i18n_handler/i18n_handler_example_output.json');
-				var codeData =
-				{
-					DEFAULTS: Object.keys(funcInfo.__TRANSLATE_JSON__['en-US'].DEFAULTS),
+			it('#partialUpdate', function() {
+				const code = require('./files/casefile/i18n_handler/i18n_handler_example.js');
+				const funcInfo = require('./files/casefile/i18n_handler/i18n_handler_example_output.json');
+				let codeData = {
+					DEFAULTS: Object.keys(
+						funcInfo.__TRANSLATE_JSON__['en-US'].DEFAULTS
+					)
 				};
 
-				codeData = '\nvar codeJSON='+JSON.stringify(codeData, null, '\t');
+				codeData = '\nvar codeJSON=' + JSON.stringify(codeData, null, '\t');
 				// println(codeData);
 
-				var info = i18nc(code.toString()+codeData,
-					{
-						dbTranslateWords: dbTranslateWords,
-						minTranslateFuncCode: name
-					});
-				var wrapCode = autoTestUtils.wrapCode4pkg(info.code);
-				var otherCode = requireAfterWrite(filename+'_partiaupdate.js', wrapCode);
+				const info = i18nc(code.toString() + codeData, {
+					dbTranslateWords: dbTranslateWords,
+					minTranslateFuncCode: name
+				});
+				const wrapCode = autoTestUtils.wrapCode4pkg(info.code);
+				const otherCode = requireAfterWrite(
+					filename + '_partiaupdate.js',
+					wrapCode
+				);
 
-				expect(autoTestUtils.code2arr(info.code)).to.eql(autoTestUtils.code2arr(otherCode));
+				expect(autoTestUtils.code2arr(info.code)).to.eql(
+					autoTestUtils.code2arr(otherCode)
+				);
 			});
 		});
 	}
 
 	test('all');
 	test('onlyFunc');
-
 });
