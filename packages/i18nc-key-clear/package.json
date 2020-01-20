@@ -1,6 +1,6 @@
 {
   "name": "i18nc-key-clear",
-  "version": "1.0.8",
+  "version": "2.0.0",
   "description": "TranslateWord Clear for I18N",
   "main": "keyclear.js",
   "scripts": {
@@ -14,7 +14,7 @@
   "devDependencies": {
     "cross-env": "^5.2.0",
     "expect.js": "^0.3.1",
-    "i18nc": "^4.6.7",
+    "i18nc": "^5.0.0",
     "istanbul": "^0.4.5",
     "mocha": "^5.2.0"
   },
