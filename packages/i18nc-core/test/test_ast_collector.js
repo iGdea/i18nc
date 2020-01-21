@@ -148,6 +148,35 @@ describe('#ASTCollector', function() {
 			expect(getScopeCodeTranslateWord(scope)).to.eql(['1234']);
 		});
 	});
+
+	describe('#newstring', function() {
+		const newstringFuncs = require('./files/casefile/func_code/func_code_newstring');
+
+		it('#TemplateLiteral', function() {
+			const code = newstringFuncs.TemplateLiteral;
+			const scope = getFinalCollect(code);
+			expect(getScopeCodeTranslateWord(scope)).to.eql([]);
+		});
+
+		it('#TemplateLiteral2', function() {
+			const code = newstringFuncs.TemplateLiteral2;
+			const scope = getFinalCollect(code);
+			expect(getScopeCodeTranslateWord(scope)).to.eql([]);
+		});
+
+		// it('#JSXElement', function() {
+		// 	const code = newstringFuncs.JSXElement;
+		// 	const scope = getFinalCollect(code);
+		// 	expect(getScopeCodeTranslateWord(scope)).to.eql([]);
+		// });
+
+		it('#TaggedTemplateExpression', function() {
+			const code = newstringFuncs.TaggedTemplateExpression;
+			const scope = getFinalCollect(code);
+			expect(getScopeCodeTranslateWord(scope)).to.eql([]);
+		});
+
+	});
 });
 
 function getCollect(code, options) {

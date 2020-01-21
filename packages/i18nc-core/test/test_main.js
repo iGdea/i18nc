@@ -70,6 +70,67 @@ describe('#main', function() {
 		});
 	});
 
+	describe('#newstring', function() {
+		const newstringFuncs = require('./files/casefile/func_code/func_code_newstring');
+
+		it('#TemplateLiteral', function() {
+			const info = i18nc(newstringFuncs.TemplateLiteral.toString());
+
+			const wrapCode = autoTestUtils.wrapCode4pkg(info.code);
+			const otherCode = requireAfterWrite(
+				'i18n_handler_newstring_TemplateLiteral_output.js',
+				wrapCode
+			);
+
+			expect(autoTestUtils.code2arr(info.code)).to.eql(
+				autoTestUtils.code2arr(otherCode)
+			);
+		});
+
+		it('#TemplateLiteral2', function() {
+			const info = i18nc(newstringFuncs.TemplateLiteral2.toString());
+
+			const wrapCode = autoTestUtils.wrapCode4pkg(info.code);
+			const otherCode = requireAfterWrite(
+				'i18n_handler_newstring_TemplateLiteral2_output.js',
+				wrapCode
+			);
+
+			expect(autoTestUtils.code2arr(info.code)).to.eql(
+				autoTestUtils.code2arr(otherCode)
+			);
+		});
+
+		it('#JSXElement', function() {
+			const info = i18nc(newstringFuncs.JSXElement.toString());
+
+			const wrapCode = autoTestUtils.wrapCode4pkg(info.code);
+			const otherCode = requireAfterWrite(
+				'i18n_handler_newstring_JSXElement_output.js',
+				wrapCode
+			);
+
+			expect(autoTestUtils.code2arr(info.code)).to.eql(
+				autoTestUtils.code2arr(otherCode)
+			);
+		});
+
+		it('#TaggedTemplateExpression', function() {
+			const info = i18nc(newstringFuncs.TaggedTemplateExpression.toString());
+
+			const wrapCode = autoTestUtils.wrapCode4pkg(info.code);
+			const otherCode = requireAfterWrite(
+				'i18n_handler_newstring_TaggedTemplateExpression_output.js',
+				wrapCode
+			);
+
+			expect(autoTestUtils.code2arr(info.code)).to.eql(
+				autoTestUtils.code2arr(otherCode)
+			);
+		});
+
+	});
+
 	describe('#insert when noi18n', function() {
 		it('#noI18N', function() {
 			const exampleCode = require('./files/casefile/func_code/func_code_noi18n').toString();
