@@ -4,6 +4,7 @@ const debug = require('debug')('i18nc-core:test_example');
 const expect = require('expect.js');
 const i18nc = require('../');
 const autoTestUtils = require('./auto_test_utils');
+const astUtil = require('i18nc-ast').util;
 const dbTranslateWords = require('./files/casefile/translate_words_db');
 
 describe('#example', function() {
@@ -86,7 +87,7 @@ describe('#example', function() {
 						ast.callee.name == 'require' &&
 						ast.arguments &&
 						ast.arguments[0] &&
-						ast.arguments[0].type == 'Literal'
+						astUtil.isLiteral(ast.arguments[0])
 					) {
 						expect(emitData.options.originalOptions.mainFile).to.be(
 							mainFile

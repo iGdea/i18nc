@@ -87,6 +87,7 @@ function _wordAst2json(ast) {
 		}
 
 		switch (val_ast.type) {
+			case 'StringLiteral':
 			case 'Literal': {
 				let val = astUtil.ast2constVal(val_ast);
 				if (val) result[name] = val;
@@ -102,7 +103,7 @@ function _wordAst2json(ast) {
 				break;
 
 			default:
-				throw new Error('Error ast type for translate JSON');
+				throw new Error('Error ast type for translate JSON:' + val_ast.type);
 		}
 	});
 

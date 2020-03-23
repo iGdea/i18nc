@@ -2,7 +2,6 @@
 
 const _ = require('lodash');
 const debug = require('debug')('i18nc-core:ast_collector');
-const estraverse = require('estraverse');
 const emitter = require('./emitter');
 const i18ncAst = require('i18nc-ast');
 const astUtil = i18ncAst.util;
@@ -11,7 +10,6 @@ const ASTScope = require('./ast_scope').ASTScope;
 const LiteralHandler = require('./ast_literal_handler').LiteralHandler;
 const ArrayPush = Array.prototype.push;
 
-const VISITOR_KEYS = estraverse.VisitorKeys;
 const BLOCK_MODIFIER = DEF.BLOCK_MODIFIER;
 const AST_FLAGS = i18ncAst.AST_FLAGS;
 const UNSUPPORT_AST_TYPS = DEF.UNSUPPORT_AST_TYPS;
@@ -51,7 +49,7 @@ _.extend(ASTCollector.prototype, {
 		// 获取subkey ast
 		// 两种情况：字符串，或者options.subkey
 		if (maybeSubkeyAst) {
-			if (maybeSubkeyAst.type == 'Literal') {
+			if (astUtil.isLiteral(maybeSubkeyAst)) {
 				result.subkeyAst = maybeSubkeyAst;
 			} else if (
 				maybeSubkeyAst.type == 'ObjectExpression' &&
@@ -70,6 +68,7 @@ _.extend(ASTCollector.prototype, {
 
 	scan: function(scope, ast) {
 		const self = this;
+		if (typeof ast != 'object') return;
 
 		if (Array.isArray(ast)) {
 			const result = [];
@@ -280,11 +279,7 @@ _.extend(ASTCollector.prototype, {
 			return;
 		}
 
-		let scanKeys = VISITOR_KEYS[ast.type];
-		if (!scanKeys) {
-			debug('undefined ast type:%s', ast.type);
-			scanKeys = _.keys(ast);
-		}
+		const scanKeys = _.keys(ast);
 		if (!scanKeys.length) return;
 
 		const result = [];
@@ -326,7 +321,7 @@ _.extend(ASTCollector.prototype, {
 			astBodyFirst &&
 			astBodyFirst.type == 'ExpressionStatement' &&
 			astBodyFirst.expression &&
-			astBodyFirst.expression.type == 'Literal' &&
+			astUtil.isLiteral(astBodyFirst.expression) &&
 			astBodyFirst.expression.value;
 
 		if (val)

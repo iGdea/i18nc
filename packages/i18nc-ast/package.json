@@ -4,9 +4,9 @@
   "description": "I18N AST Tool for JS files",
   "main": "index.js",
   "dependencies": {
-    "debug": "^4.1.0",
-    "escodegen": "^1.13.0",
-    "esprima": "^4.0.1"
+    "@babel/generator": "^7.9.3",
+    "@babel/parser": "^7.9.3",
+    "debug": "^4.1.0"
   },
   "repository": {
     "type": "git",

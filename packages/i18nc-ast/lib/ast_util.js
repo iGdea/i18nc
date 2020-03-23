@@ -1,7 +1,7 @@
 'use strict';
 
-const esprima = require('esprima');
-const escodegen = require('escodegen');
+const babelParse = require('@babel/parser').parse;
+const babelGenerate = require('@babel/generator').default;
 const astTpl = require('./ast_tpl');
 const config = require('./config');
 const debug = require('debug')('i18nc-ast:ast_util');
@@ -19,15 +19,22 @@ exports.checkAstFlag = function checkAstFlag(ast, flag) {
 };
 
 exports.parse = function parse(code) {
-	return esprima.parse(code, config.esprimaOptions);
+	return babelParse(code, config.esparseOptions).program;
 };
 
 exports.mincode = function mincode(code) {
-	return escodegen.generate(exports.parse(code), config.escodegenMinOptions);
+	return babelGenerate(exports.parse(code), config.escodegenMinOptions).code;
 };
 
 exports.tocode = function tocode(ast) {
-	return escodegen.generate(ast, config.escodegenOptions);
+	return babelGenerate(ast, config.escodegenOptions).code;
+};
+
+exports.isLiteral = function isLiteral(ast) {
+	// @see https://babeljs.io/docs/en/babel-parser#output
+	if (ast && ast.type) {
+		return ast.type == 'Literal' || ast.type == 'StringLiteral';
+	}
 };
 
 exports.codeIndent = function codeIndent(ast, code) {
@@ -41,7 +48,7 @@ exports.codeIndent = function codeIndent(ast, code) {
 };
 
 exports.ast2constVal = function ast2constVal(ast) {
-	if (ast.type == 'Literal') return ast.value;
+	if (exports.isLiteral(ast)) return ast.value;
 	if (ast.type == 'Identifier') {
 		switch (ast.name) {
 			case 'undefined':
@@ -58,7 +65,7 @@ exports.ast2constVal = function ast2constVal(ast) {
 };
 
 exports.ast2constKey = function(ast) {
-	if (ast.type == 'Literal') return ast.value;
+	if (exports.isLiteral(ast)) return ast.value;
 	if (ast.type == 'Identifier') return ast.name;
 };
 

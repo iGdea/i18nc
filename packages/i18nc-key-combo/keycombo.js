@@ -540,6 +540,6 @@ function _getArgs0IfI18NLiteral(ast, options) {
 		options.I18NHandlerAlias.indexOf(calleeName) != -1
 	) {
 		const arg0ast = ast.arguments && ast.arguments[0];
-		return arg0ast && arg0ast.type == 'Literal' && arg0ast.value;
+		return arg0ast && astUtil.isLiteral(arg0ast) && arg0ast.value;
 	}
 }

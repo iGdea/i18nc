@@ -5,6 +5,7 @@ const debug = require('debug')('i18nc-core:i18n_func_parser');
 const emitter = require('../emitter');
 const escodegen = require('escodegen');
 const jsoncode = require('i18nc-jsoncode');
+const astUtil = require('i18nc-ast').util;
 
 /**
  * 分析i18n函数，提取相关信息：
@@ -48,7 +49,7 @@ function paseI18nHandlerInfo(ast, options, result) {
 			lastBodyArgument.type == 'BinaryExpression' &&
 			lastBodyArgument.operator == '+' &&
 			lastBodyArgument.left &&
-			lastBodyArgument.left.type == 'Literal' &&
+			astUtil.isLiteral(lastBodyArgument.left) &&
 			lastBodyArgument.left.value === ''
 		) {
 			const rightAst = lastBodyArgument.right;
@@ -102,7 +103,7 @@ function paseI18nHandlerInfo(ast, options, result) {
 					}[name] || name;
 				result[name + 'ast'] = initVal;
 
-				if (initVal.type == 'Literal') {
+				if (astUtil.isLiteral(initVal)) {
 					if (result[name])
 						throw new Error(name + ' IS DEFINED TWICE');
 					result[name] = initVal.value;
