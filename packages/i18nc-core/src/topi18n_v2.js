@@ -21,7 +21,7 @@ module.exports = function $handlerName(
 		lanIndexArr,
 		i,
 		lanIndex,
-		msgResult,
+		translateMsg,
 		translateValues;
 
 	if (!tpldata || !tpldata.join) {
@@ -58,19 +58,23 @@ module.exports = function $handlerName(
 			translateValues =
 				translateJSON[subkey] && translateJSON[subkey][msg];
 			if (translateValues) {
-				msgResult = translateValues[lanIndex];
-				if (typeof msgResult == 'number')
-					msgResult = translateValues[msgResult];
+				translateMsg = translateValues[lanIndex];
+				if (typeof translateMsg == 'number')
+					translateMsg = translateValues[translateMsg];
 			}
 		};
 
-		for (i = lanIndexArr.length; !msgResult && i--; ) {
+		for (i = lanIndexArr.length; !translateMsg && i--; ) {
 			lanIndex = lanIndexArr[i];
 			if (subkey) _getVaule(subkey);
-			if (!msgResult) _getVaule('*');
+			if (!translateMsg) _getVaule('*');
 		}
 
-		if (msgResult) msg = msgResult;
+		if (translateMsg) {
+			msg = translateMsg;
+		} else if (options.forceMatch) {
+			return '';
+		}
 	}
 
 	msg += '';

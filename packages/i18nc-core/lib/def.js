@@ -14,7 +14,7 @@ exports.UNSUPPORT_AST_TYPS = {
 	TaggedTemplateExpression: AST_FLAGS.TAGGED_TEMPLATE_LITERAL
 };
 
-exports.I18NFunctionVersion = 'K';
+exports.I18NFunctionVersion = 'L';
 exports.I18NFunctionSubVersion = {
 	FULL: 'f',
 	SIMPLE: 's',
