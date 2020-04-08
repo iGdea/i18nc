@@ -15935,7 +15935,7 @@ exports.UNSUPPORT_AST_TYPS = {
 	TaggedTemplateExpression: AST_FLAGS.TAGGED_TEMPLATE_LITERAL
 };
 
-exports.I18NFunctionVersion = 'K';
+exports.I18NFunctionVersion = 'L';
 exports.I18NFunctionSubVersion = {
 	FULL: 'f',
 	SIMPLE: 's',
@@ -16322,7 +16322,7 @@ module.exports = function $handlerName(msg, tpldata, subkey) {
 		lanIndexArr,
 		i,
 		lanIndex,
-		msgResult,
+		translateMsg,
 		translateValues;
 
 	if (!tpldata || !tpldata.join) {
@@ -16345,8 +16345,6 @@ module.exports = function $handlerName(msg, tpldata, subkey) {
 			self.K = '$FILE_KEY';
 			self.V = '$FUNCTION_VERSION';
 			self.D = $TRANSLATE_JSON_CODE;
-			// 很少遇到LAN切换，没必要为了低概率增加一个if
-			// if (!self.D) self.D = $TRANSLATE_JSON_CODE;
 			translateJSON = self.D;
 
 			var dblans = translateJSON.$ || [],
@@ -16370,18 +16368,22 @@ module.exports = function $handlerName(msg, tpldata, subkey) {
 			translateValues =
 				translateJSON[subkey] && translateJSON[subkey][msg];
 			if (translateValues) {
-				msgResult = translateValues[lanIndex];
-				if (typeof msgResult == 'number')
-					msgResult = translateValues[msgResult];
+				translateMsg = translateValues[lanIndex];
+				if (typeof translateMsg == 'number')
+					translateMsg = translateValues[translateMsg];
 			}
 		};
-		for (i = lanIndexArr.length; !msgResult && i--; ) {
+		for (i = lanIndexArr.length; !translateMsg && i--; ) {
 			lanIndex = lanIndexArr[i];
 			if (subkey) _getVaule(subkey);
-			if (!msgResult) _getVaule('*');
+			if (!translateMsg) _getVaule('*');
 		}
 
-		if (msgResult) msg = msgResult;
+		if (translateMsg) {
+			msg = translateMsg;
+		} else if (options.forceMatch) {
+			return '';
+		}
 	}
 
 	msg += '';

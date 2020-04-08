@@ -14,7 +14,7 @@ module.exports = function code()
 			lanIndexArr,
 			i,
 			lanIndex,
-			msgResult,
+			translateMsg,
 			translateValues;
 
 		if (!tpldata || !tpldata.join) {
@@ -41,7 +41,7 @@ module.exports = function code()
 		if (LAN && LAN.split) {
 			if (self.L != LAN) {
 				self.K = '*';
-				self.V = 'Kf';
+				self.V = 'Lf';
 				self.D = {
 					'*': {
 						// 'out define 中文':
@@ -69,18 +69,22 @@ module.exports = function code()
 				translateValues =
 					translateJSON[subkey] && translateJSON[subkey][msg];
 				if (translateValues) {
-					msgResult = translateValues[lanIndex];
-					if (typeof msgResult == 'number')
-						msgResult = translateValues[msgResult];
+					translateMsg = translateValues[lanIndex];
+					if (typeof translateMsg == 'number')
+						translateMsg = translateValues[translateMsg];
 				}
 			};
-			for (i = lanIndexArr.length; !msgResult && i--; ) {
+			for (i = lanIndexArr.length; !translateMsg && i--; ) {
 				lanIndex = lanIndexArr[i];
 				if (subkey) _getVaule(subkey);
-				if (!msgResult) _getVaule('*');
+				if (!translateMsg) _getVaule('*');
 			}
 
-			if (msgResult) msg = msgResult;
+			if (translateMsg) {
+				msg = translateMsg;
+			} else if (options.forceMatch) {
+				return '';
+			}
 		}
 
 		msg += '';
@@ -118,7 +122,7 @@ module.exports = function code()
 				lanIndexArr,
 				i,
 				lanIndex,
-				msgResult,
+				translateMsg,
 				translateValues;
 
 			if (!tpldata || !tpldata.join) {
@@ -145,7 +149,7 @@ module.exports = function code()
 			if (LAN && LAN.split) {
 				if (self.L != LAN) {
 					self.K = '*';
-					self.V = 'Kf';
+					self.V = 'Lf';
 					self.D = {
 						'*': {
 							// '中文':
@@ -173,18 +177,22 @@ module.exports = function code()
 					translateValues =
 						translateJSON[subkey] && translateJSON[subkey][msg];
 					if (translateValues) {
-						msgResult = translateValues[lanIndex];
-						if (typeof msgResult == 'number')
-							msgResult = translateValues[msgResult];
+						translateMsg = translateValues[lanIndex];
+						if (typeof translateMsg == 'number')
+							translateMsg = translateValues[translateMsg];
 					}
 				};
-				for (i = lanIndexArr.length; !msgResult && i--; ) {
+				for (i = lanIndexArr.length; !translateMsg && i--; ) {
 					lanIndex = lanIndexArr[i];
 					if (subkey) _getVaule(subkey);
-					if (!msgResult) _getVaule('*');
+					if (!translateMsg) _getVaule('*');
 				}
 
-				if (msgResult) msg = msgResult;
+				if (translateMsg) {
+					msg = translateMsg;
+				} else if (options.forceMatch) {
+					return '';
+				}
 			}
 
 			msg += '';
@@ -223,7 +231,7 @@ module.exports = function code()
 				lanIndexArr,
 				i,
 				lanIndex,
-				msgResult,
+				translateMsg,
 				translateValues;
 
 			if (!tpldata || !tpldata.join) {
@@ -250,7 +258,7 @@ module.exports = function code()
 			if (LAN && LAN.split) {
 				if (self.L != LAN) {
 					self.K = '*';
-					self.V = 'Kf';
+					self.V = 'Lf';
 					self.D = {
 						'$': ['zh'],
 						'*': { 'define2 中文': ['define2 中文'] }
@@ -277,18 +285,22 @@ module.exports = function code()
 					translateValues =
 						translateJSON[subkey] && translateJSON[subkey][msg];
 					if (translateValues) {
-						msgResult = translateValues[lanIndex];
-						if (typeof msgResult == 'number')
-							msgResult = translateValues[msgResult];
+						translateMsg = translateValues[lanIndex];
+						if (typeof translateMsg == 'number')
+							translateMsg = translateValues[translateMsg];
 					}
 				};
-				for (i = lanIndexArr.length; !msgResult && i--; ) {
+				for (i = lanIndexArr.length; !translateMsg && i--; ) {
 					lanIndex = lanIndexArr[i];
 					if (subkey) _getVaule(subkey);
-					if (!msgResult) _getVaule('*');
+					if (!translateMsg) _getVaule('*');
 				}
 
-				if (msgResult) msg = msgResult;
+				if (translateMsg) {
+					msg = translateMsg;
+				} else if (options.forceMatch) {
+					return '';
+				}
 			}
 
 			msg += '';
@@ -328,7 +340,7 @@ module.exports = function code()
 				lanIndexArr,
 				i,
 				lanIndex,
-				msgResult,
+				translateMsg,
 				translateValues;
 
 			if (!tpldata || !tpldata.join) {
@@ -355,7 +367,7 @@ module.exports = function code()
 			if (LAN && LAN.split) {
 				if (self.L != LAN) {
 					self.K = '*';
-					self.V = 'Kf';
+					self.V = 'Lf';
 					self.D = {
 						'*': {
 							// 'define3 中文':
@@ -383,18 +395,22 @@ module.exports = function code()
 					translateValues =
 						translateJSON[subkey] && translateJSON[subkey][msg];
 					if (translateValues) {
-						msgResult = translateValues[lanIndex];
-						if (typeof msgResult == 'number')
-							msgResult = translateValues[msgResult];
+						translateMsg = translateValues[lanIndex];
+						if (typeof translateMsg == 'number')
+							translateMsg = translateValues[translateMsg];
 					}
 				};
-				for (i = lanIndexArr.length; !msgResult && i--; ) {
+				for (i = lanIndexArr.length; !translateMsg && i--; ) {
 					lanIndex = lanIndexArr[i];
 					if (subkey) _getVaule(subkey);
-					if (!msgResult) _getVaule('*');
+					if (!translateMsg) _getVaule('*');
 				}
 
-				if (msgResult) msg = msgResult;
+				if (translateMsg) {
+					msg = translateMsg;
+				} else if (options.forceMatch) {
+					return '';
+				}
 			}
 
 			msg += '';
@@ -436,7 +452,7 @@ module.exports = function code()
 				lanIndexArr,
 				i,
 				lanIndex,
-				msgResult,
+				translateMsg,
 				translateValues;
 
 			if (!tpldata || !tpldata.join) {
@@ -463,7 +479,7 @@ module.exports = function code()
 			if (LAN && LAN.split) {
 				if (self.L != LAN) {
 					self.K = '*';
-					self.V = 'Kf';
+					self.V = 'Lf';
 					self.D = {
 						'*': {
 							// 'define4 中文':
@@ -492,18 +508,22 @@ module.exports = function code()
 					translateValues =
 						translateJSON[subkey] && translateJSON[subkey][msg];
 					if (translateValues) {
-						msgResult = translateValues[lanIndex];
-						if (typeof msgResult == 'number')
-							msgResult = translateValues[msgResult];
+						translateMsg = translateValues[lanIndex];
+						if (typeof translateMsg == 'number')
+							translateMsg = translateValues[translateMsg];
 					}
 				};
-				for (i = lanIndexArr.length; !msgResult && i--; ) {
+				for (i = lanIndexArr.length; !translateMsg && i--; ) {
 					lanIndex = lanIndexArr[i];
 					if (subkey) _getVaule(subkey);
-					if (!msgResult) _getVaule('*');
+					if (!translateMsg) _getVaule('*');
 				}
 
-				if (msgResult) msg = msgResult;
+				if (translateMsg) {
+					msg = translateMsg;
+				} else if (options.forceMatch) {
+					return '';
+				}
 			}
 
 			msg += '';
@@ -547,7 +567,7 @@ module.exports = function code()
 				lanIndexArr,
 				i,
 				lanIndex,
-				msgResult,
+				translateMsg,
 				translateValues;
 		
 			if (!tpldata || !tpldata.join) {
@@ -574,7 +594,7 @@ module.exports = function code()
 			if (LAN && LAN.split) {
 				if (self.L != LAN) {
 					self.K = '*';
-					self.V = 'Kf';
+					self.V = 'Lf';
 					self.D = {
 						'*': {
 							// 'define6 中文':
@@ -602,18 +622,22 @@ module.exports = function code()
 					translateValues =
 						translateJSON[subkey] && translateJSON[subkey][msg];
 					if (translateValues) {
-						msgResult = translateValues[lanIndex];
-						if (typeof msgResult == 'number')
-							msgResult = translateValues[msgResult];
+						translateMsg = translateValues[lanIndex];
+						if (typeof translateMsg == 'number')
+							translateMsg = translateValues[translateMsg];
 					}
 				};
-				for (i = lanIndexArr.length; !msgResult && i--; ) {
+				for (i = lanIndexArr.length; !translateMsg && i--; ) {
 					lanIndex = lanIndexArr[i];
 					if (subkey) _getVaule(subkey);
-					if (!msgResult) _getVaule('*');
+					if (!translateMsg) _getVaule('*');
 				}
 		
-				if (msgResult) msg = msgResult;
+				if (translateMsg) {
+					msg = translateMsg;
+				} else if (options.forceMatch) {
+					return '';
+				}
 			}
 		
 			msg += '';

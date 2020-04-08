@@ -8,7 +8,7 @@ function I18N(msg, tpldata) {
 	var self = I18N;
 
 	self.K = 'i18n_handler_example_simple';
-	self.V = 'Ks';
+	self.V = 'Ls';
 
 	var replace_index = 0;
 	return msg

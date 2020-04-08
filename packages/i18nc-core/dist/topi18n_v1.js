@@ -71,7 +71,11 @@
 				}
 			}
 	
-			if (translateMsg) msg = translateMsg;
+			if (translateMsg) {
+				msg = translateMsg;
+			} else if (options.forceMatch) {
+				return '';
+			}
 		}
 	
 		msg += '';

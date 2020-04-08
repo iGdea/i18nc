@@ -3,7 +3,7 @@ module.exports = function code() {
 				function I18N() {
 					const self = I18N;
 					self.__FILE_KEY__ = 'default_file_key';
-					self.__FUNCTION_VERSION__ = 'K';
+					self.__FUNCTION_VERSION__ = 'L';
 					self.__TRANSLATE_JSON__ = {
 						'*': {
 							// '不可能存在的中文翻译词组':
