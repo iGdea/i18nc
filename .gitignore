@@ -8,5 +8,6 @@ package-lock.json
 .tags*
 .DS_Store
 .vscode
+.history
 
 stdout_log_file_*
