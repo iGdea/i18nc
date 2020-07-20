@@ -1,6 +1,6 @@
 'use strict';
 
-const esprima = require('esprima');
+const esprima = require('esprima-master');
 const escodegen = require('escodegen');
 const astTpl = require('./ast_tpl');
 const config = require('./config');
