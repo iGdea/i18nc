@@ -1,12 +1,12 @@
 {
   "name": "i18nc-ast",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "I18N AST Tool for JS files",
   "main": "index.js",
   "dependencies": {
     "debug": "^4.1.0",
     "escodegen": "^1.13.0",
-    "esprima": "^4.0.1"
+    "esprima-master": "^4.2.0"
   },
   "repository": {
     "type": "git",
