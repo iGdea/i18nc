@@ -1,6 +1,6 @@
 {
   "name": "i18nc-options",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Options of I18NC",
   "main": "index.js",
   "scripts": {
@@ -12,7 +12,7 @@
     "debug": "^4.1.0",
     "depd": "^2.0.0",
     "extend": "^3.0.2",
-    "i18nc-db": "^2.0.1",
+    "i18nc-db": "^2.0.2",
     "lodash": "^4.17.11"
   },
   "devDependencies": {
