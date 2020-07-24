@@ -1,6 +1,6 @@
 {
   "name": "i18nc-core",
-  "version": "11.1.0",
+  "version": "11.1.1",
   "description": "Code of I18NC",
   "main": "index.js",
   "scripts": {
@@ -21,10 +21,10 @@
     "esprima": "^4.0.1",
     "esshorten4node11": "^1.1.2",
     "estraverse": "^4.2.0",
-    "i18nc-ast": "^2.0.1",
-    "i18nc-db": "^2.0.1",
-    "i18nc-jsoncode": "^2.0.1",
-    "i18nc-options": "^2.0.1",
+    "i18nc-ast": "^2.1.1",
+    "i18nc-db": "^2.0.2",
+    "i18nc-jsoncode": "^2.0.2",
+    "i18nc-options": "^2.0.2",
     "lodash": "^4.17.11"
   },
   "devDependencies": {
