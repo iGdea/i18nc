@@ -257,10 +257,10 @@ _.extend(ASTCollector.prototype, {
 			// function dd() {return <div>xxxdd {this.xxx} {xxx(fff)} </div>}
 			case 'TemplateLiteral':
 				// 处理模板字符串 @leo
-				var result = self.scan(scope, ast.expressions);
+				const result = self.scan(scope, ast.expressions);
 				if (result)
 				{
-					var flag = UNSUPPORT_AST_TYPS[ast.type] | AST_FLAGS.DIS_REPLACE;
+					const flag = UNSUPPORT_AST_TYPS[ast.type] | AST_FLAGS.DIS_REPLACE;
 					result.forEach(function(item)
 					{
 						astUtil.setAstFlag(item, flag);
