@@ -256,6 +256,17 @@ _.extend(ASTCollector.prototype, {
 			// const dd = `before ${xxd} middle ${I11(xxx)} after`
 			// function dd() {return <div>xxxdd {this.xxx} {xxx(fff)} </div>}
 			case 'TemplateLiteral':
+				// 处理模板字符串 @leo
+				var result = self.scan(scope, ast.expressions);
+				if (result)
+				{
+					var flag = UNSUPPORT_AST_TYPS[ast.type] | AST_FLAGS.DIS_REPLACE;
+					result.forEach(function(item)
+					{
+						astUtil.setAstFlag(item, flag);
+					});
+				}
+				return result;
 			case 'JSXElement':
 			case 'TaggedTemplateExpression': {
 				const result = self.scan(scope, ast);
