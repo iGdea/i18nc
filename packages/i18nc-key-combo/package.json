@@ -1,6 +1,6 @@
 {
   "name": "i18nc-key-combo",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "TranslateWord Combo for I18N",
   "main": "keycombo.js",
   "scripts": {
@@ -11,7 +11,7 @@
   "dependencies": {
     "debug": "^4.0.1",
     "i18nc-ast": "^2.1.1",
-    "i18nc-core": "^11.1.1",
+    "i18nc-core": "^11.2.2",
     "lodash": "^4.17.11"
   },
   "devDependencies": {
