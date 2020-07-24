@@ -1,6 +1,6 @@
 {
   "name": "i18nc-key-end",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "TranslateWord End for I18N",
   "main": "keyend.js",
   "scripts": {
@@ -14,7 +14,7 @@
   "devDependencies": {
     "cross-env": "^5.2.0",
     "expect.js": "^0.3.1",
-    "i18nc-core": "^11.2.2",
+    "i18nc-core": "^11.2.4",
     "istanbul": "^0.4.5",
     "mocha": "^5.2.0"
   },
