@@ -10,30 +10,38 @@ exports.req = function(req, curlans) {
 
 exports.req4cn = function(req) {
 	const lansHeader = req.headers['accept-language'];
+	if (!lansHeader) {
+		return ['zh-cn'];
+	}
 	return (lansHeader && _.uniq(_getReqLan4cn(lansHeader))) || [];
 };
 
 exports.filter = function(lans, onlyList) {
-	let onlyLansList = [];
-	let onlyPrevList = [];
-
-	onlyList.forEach(function(name) {
-		if (name.length == 2 || name.indexOf('-') == -1) {
-			onlyPrevList.push(name);
-		} else {
-			onlyLansList.push(name);
+	// 原来的语言判断太复杂，这里做了很简单的判断
+	const filterLan = 'en'; // 默认英文，比如日语、韩语，统统显示英文
+	const pickLan = lans && lans[0];
+	if (lans && lans.length > 0) {
+		lans.some(function(lan) {
+			const findIndex = _.findIndex(onlyList, function(onlyLan) {
+				return lan.indexOf(onlyLan) > -1
+			});
+			if (findIndex > -1) {
+				filterLan = onlyList[findIndex];
+				pickLan = lan;
+				return true;
+			}
+		})
+	}
+	// 对于中文做特殊处理
+	if (pickLan.indexOf('zh') > -1) {
+		// 保守起见，暂时只判断zh-HK和zh-TW使用繁体
+		// 事实上只有zh-cn和zh-hans这两种使用简体，其余一律用繁体
+		pickLan = pickLan.toLowerCase();
+		if (pickLan === 'zh-hk' || pickLan === 'zh-tw') {
+			filterLan = 'cht';
 		}
-	});
-
-	if (!onlyLansList.length) onlyLansList = null;
-	if (!onlyPrevList.length) onlyPrevList = null;
-
-	return lans.filter(function(name) {
-		return (
-			(onlyLansList && onlyLansList.indexOf(name) != -1) ||
-			(onlyPrevList && onlyPrevList.indexOf(name.split('-')[0]) != -1)
-		);
-	});
+	}
+	return filterLan;
 };
 
 testExports._getReqLan = _getReqLan;
