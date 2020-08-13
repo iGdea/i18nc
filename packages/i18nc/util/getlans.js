@@ -18,8 +18,8 @@ exports.req4cn = function(req) {
 
 exports.filter = function(lans, onlyList) {
 	// 原来的语言判断太复杂，这里做了很简单的判断
-	const filterLan = 'en'; // 默认英文，比如日语、韩语，统统显示英文
-	const pickLan = lans && lans[0];
+	let filterLan = 'en'; // 默认英文，比如日语、韩语，统统显示英文
+	let pickLan = lans && lans[0];
 	if (lans && lans.length > 0) {
 		lans.some(function(lan) {
 			const findIndex = _.findIndex(onlyList, function(onlyLan) {

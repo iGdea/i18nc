@@ -35,7 +35,7 @@ describe('#getlans', function() {
 
 	it('#filter', function() {
 		expect(
-			getlans.filter(['zh-hk', 'zh-tw', 'en-us'], ['zh-hk', 'en'])
-		).to.eql(['zh-hk', 'en-us']);
+			getlans.filter(['zh-cn', 'zh-tw', 'en-us'], ['zh', 'en', 'cht'])
+		).to.eql('zh');
 	});
 });
