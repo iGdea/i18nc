@@ -1,6 +1,6 @@
 {
   "name": "i18nc",
-  "version": "5.0.6",
+  "version": "5.0.8",
   "description": "i18nc",
   "main": "index.js",
   "bin": {
