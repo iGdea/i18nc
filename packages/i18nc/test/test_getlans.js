@@ -35,4 +35,24 @@ describe('#getlans', function() {
 			getlans.filter(['zh-cn', 'zh-tw', 'en-us'], ['zh', 'en', 'cht'])
 		).to.eql('zh');
 	});
+
+	it('#filter', function() {
+		const testAccessLanguages = [
+			'zh-CN,zh;q=0.9',
+			'zh-TW,zh-CN;q=0.9,zh;q=0.8',
+			'zh-TW,en-US;q=0.9',
+			'en-US,zh-TW;q=0.9'
+		];
+		const expectRes = [
+			'zh',
+			'cht',
+			'cht',
+			'en'
+		];
+		testAccessLanguages.forEach((accessLanguage, index) => {
+			expect(
+				getlans.filter(getlansTest._getReqLan4cn(accessLanguage), ['zh', 'en', 'cht'])
+			).to.eql(expectRes[index]);
+		})
+	});
 });
