@@ -19,19 +19,20 @@ exports.req4cn = function(req) {
 exports.filter = function(lans, onlyList) {
 	// 原来的语言判断太复杂，这里做了很简单的判断
 	let filterLan = 'en'; // 默认英文，比如日语、韩语，统统显示英文
-	let pickLan = lans && lans[0];
-	if (lans && lans.length > 0) {
-		lans.some(function(lan) {
-			const findIndex = _.findIndex(onlyList, function(onlyLan) {
-				return lan.indexOf(onlyLan) > -1
-			});
-			if (findIndex > -1) {
-				filterLan = onlyList[findIndex];
-				pickLan = lan;
-				return true;
-			}
-		})
+	if (!lans || lans.length === 0) {
+		return filterLan;
 	}
+	let pickLan = lans && lans[0];
+	lans.some(function(lan) {
+		const findIndex = _.findIndex(onlyList, function(onlyLan) {
+			return lan.indexOf(onlyLan) > -1
+		});
+		if (findIndex > -1) {
+			filterLan = onlyList[findIndex];
+			pickLan = lan;
+			return true;
+		}
+	})
 	// 对于中文做特殊处理
 	if (pickLan.indexOf('zh') > -1) {
 		// 保守起见，暂时只判断zh-HK和zh-TW使用繁体
@@ -81,33 +82,6 @@ function _getReqLan(lansHeader, curlans) {
 
 testExports._getReqLan4cn = _getReqLan4cn;
 function _getReqLan4cn(lansHeader) {
-	const lans = _getReqLan(lansHeader, ['zh-cn', 'zh']);
-
-	if (lans.length) {
-		let needCHT = false;
-		let needEn = false;
-		let chtFirst = true;
-		lans.some(function(name) {
-			if (name == 'zh-cn') return;
-
-			if (name.length == 2) {
-				if (name == 'en') needEn = false;
-			} else {
-				const prevKey = name.substr(0, 3);
-				if (prevKey == 'en-') {
-					needEn = true;
-					chtFirst = needCHT;
-				} else if (prevKey == 'zh-') {
-					needCHT = true;
-					chtFirst = !needEn;
-				}
-			}
-		});
-
-		if (needCHT && chtFirst) lans.push('cht');
-		if (needEn) lans.push('en');
-		if (needCHT && !chtFirst) lans.push('cht');
-	}
-
+	const lans = _getReqLan(lansHeader, []);
 	return lans;
 }
