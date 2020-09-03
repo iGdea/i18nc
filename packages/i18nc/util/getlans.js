@@ -81,33 +81,6 @@ function _getReqLan(lansHeader, curlans) {
 
 testExports._getReqLan4cn = _getReqLan4cn;
 function _getReqLan4cn(lansHeader) {
-	const lans = _getReqLan(lansHeader, ['zh-cn', 'zh']);
-
-	if (lans.length) {
-		let needCHT = false;
-		let needEn = false;
-		let chtFirst = true;
-		lans.some(function(name) {
-			if (name == 'zh-cn') return;
-
-			if (name.length == 2) {
-				if (name == 'en') needEn = false;
-			} else {
-				const prevKey = name.substr(0, 3);
-				if (prevKey == 'en-') {
-					needEn = true;
-					chtFirst = needCHT;
-				} else if (prevKey == 'zh-') {
-					needCHT = true;
-					chtFirst = !needEn;
-				}
-			}
-		});
-
-		if (needCHT && chtFirst) lans.push('cht');
-		if (needEn) lans.push('en');
-		if (needCHT && !chtFirst) lans.push('cht');
-	}
-
+	const lans = _getReqLan(lansHeader, []);
 	return lans;
 }

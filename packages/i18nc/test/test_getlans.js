@@ -14,22 +14,19 @@ describe('#getlans', function() {
 	});
 
 	it('#req4cn', function() {
-		expect(getlansTest._getReqLan4cn('zh-CN,zh;q=0.9')).to.eql([]);
+		expect(getlansTest._getReqLan4cn('zh-CN,zh;q=0.9')).to.eql(['zh-cn', 'zh']);
 		expect(getlansTest._getReqLan4cn('zh-TW,zh-CN;q=0.9,zh;q=0.8')).to.eql([
 			'zh-tw',
-			'cht'
+			'zh-cn',
+			'zh'
 		]);
 		expect(getlansTest._getReqLan4cn('zh-TW,en-US;q=0.9')).to.eql([
 			'zh-tw',
-			'en-us',
-			'cht',
-			'en'
+			'en-us'
 		]);
 		expect(getlansTest._getReqLan4cn('en-US,zh-TW;q=0.9')).to.eql([
 			'en-us',
-			'zh-tw',
-			'en',
-			'cht'
+			'zh-tw'
 		]);
 	});
 
