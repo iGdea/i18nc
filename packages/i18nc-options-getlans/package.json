@@ -5,16 +5,14 @@
   "main": "index.js",
   "scripts": {
     "test": "cross-env DEBUG=i18nc-options-getlans* mocha test/test_*",
-    "test-cov": "istanbul cover _mocha -- test/test_* --reporter dot",
     "test-e2e": "karma start --",
     "test-e2e-dev": "cross-env DEBUG=i18nc-options-getlans* karma start --auto-watch --no-single-run --browsers=Chrome",
     "test-e2e-sauce": "karma start -- sauce",
-    "test-ci": "istanbul cover _mocha --report lcovonly -- test/test_* --reporter dot",
     "test-build": "node test/prev_test_files && cross-env TEST_BUILD=true mocha test/test_*"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/Bacra/i18nc.git"
+    "url": "git+ssh://git@github.com/iGdea/i18nc.git"
   },
   "keywords": [
     "i18n",
@@ -24,14 +22,13 @@
   "author": "Bacra Woo <bacra.woo@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Bacra/i18nc/issues"
+    "url": "https://github.com/iGdea/i18nc/issues"
   },
-  "homepage": "https://github.com/Bacra/i18nc",
+  "homepage": "https://github.com/iGdea/i18nc",
   "devDependencies": {
     "cross-env": "^5.2.0",
     "debug": "^4.1.0",
     "expect.js": "^0.3.1",
-    "istanbul": "^0.4.5",
     "karma": "^3.1.1",
     "karma-config-brcjs": "^1.1.1",
     "lodash": "^4.17.11",

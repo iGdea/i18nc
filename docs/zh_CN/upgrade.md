@@ -71,7 +71,7 @@
 需要使用函数继续包裹（将`$GetLanguageCode`替换成原来的值）
 
 ```javascript
-// 最新代码见 https://github.com/Bacra/i18nc-core/blob/master/lib/upgrade/tpl/depd_getlanguagecode_handler.js
+// 最新代码见 https://github.com/iGdea/i18nc-core/blob/master/lib/upgrade/tpl/depd_getlanguagecode_handler.js
 
 function GetLanguageCodeHandler(cache)
 {

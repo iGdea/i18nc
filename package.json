@@ -5,11 +5,11 @@
     "lint": "eslint .",
     "bootstrap": "lerna bootstrap --no-ci",
     "ls": "lerna ls",
-    "pub": "lerna publish",
+    "pub": "lerna version",
+    "pub2": "lerna publish from-package -y",
     "build": "lerna run build -- && node build/index",
     "test": "lerna run test --",
-    "test-ci": "lerna run test-ci --",
-    "test-cov": "lerna run test-cov --",
+    "test-cov": "nyc --reporter=lcov --reporter=text-summary lerna run test",
     "test-build": "lerna run test-build --",
     "test-e2e": "lerna run test-e2e --",
     "test-e2e-dev": "lerna run test-e2e-dev --",
@@ -18,6 +18,7 @@
   "devDependencies": {
     "eslint": "^6.8.0",
     "eslint-config-brcjs": "^1.2.0",
+    "nyc": "^15.1.0",
     "lerna": "^3.20.2"
   }
 }

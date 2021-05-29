@@ -4,9 +4,7 @@
   "description": "TranslateWord Trim for I18N",
   "main": "keytrim.js",
   "scripts": {
-    "test": "cross-env DEBUG=i18nc-key-trim* mocha test/test_*",
-    "test-cov": "istanbul cover _mocha -- test/test_* --reporter dot",
-    "test-ci": "istanbul cover _mocha --report lcovonly -- test/test_* --reporter dot"
+    "test": "cross-env DEBUG=i18nc-key-trim* mocha test/test_*"
   },
   "dependencies": {
     "debug": "^4.0.1"
@@ -15,12 +13,11 @@
     "cross-env": "^5.2.0",
     "expect.js": "^0.3.1",
     "i18nc-core": "^11.2.4",
-    "istanbul": "^0.4.5",
     "mocha": "^5.2.0"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:Bacra/i18nc.git"
+    "url": "git@github.com:iGdea/i18nc.git"
   },
   "keywords": [
     "i18n",
@@ -30,7 +27,7 @@
   "author": "Bacra Woo<bacra.woo@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Bacra/i18nc/issues"
+    "url": "https://github.com/iGdea/i18nc/issues"
   },
-  "homepage": "https://github.com/Bacra/i18nc"
+  "homepage": "https://github.com/iGdea/i18nc"
 }

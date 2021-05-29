@@ -21,14 +21,13 @@
     "eslint": "^5.8.0",
     "eslint-config-brcjs": "^0.2.0",
     "expect.js": "^0.3.1",
-    "istanbul": "^0.4.5",
     "mocha": "^5.2.0",
     "webpack": "^4.23.1",
     "webpack-cli": "^3.1.2"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:Bacra/i18nc.git"
+    "url": "git@github.com:iGdea/i18nc.git"
   },
   "keywords": [
     "i18n",
@@ -39,7 +38,7 @@
   "author": "Bacra Woo<bacra.woo@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Bacra/i18nc/issues"
+    "url": "https://github.com/iGdea/i18nc/issues"
   },
-  "homepage": "https://github.com/Bacra/i18nc"
+  "homepage": "https://github.com/iGdea/i18nc"
 }

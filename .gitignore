@@ -3,11 +3,12 @@ node_modules
 **/test/output/tmp
 coverage
 npm-debug.log
-package-lock.json
+packages/**/package-lock.json
 
 .tags*
 .DS_Store
 .vscode
 .history
+.nyc_output
 
 stdout_log_file_*

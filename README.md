@@ -1,6 +1,5 @@
 # I18NC
 
-[![Build Status][travis-image]][travis-url]
 [![Coveralls][coveralls-image]][coveralls-url]
 
 | Name                   | Npm                       |
@@ -23,7 +22,5 @@
 | i18nc-key-trim         | [![NPM Version](https://img.shields.io/npm/v/i18nc-key-trim.svg)](https://www.npmjs.org/package/i18nc-key-trim)  |
 | i18nc-test-req         | [![NPM Version](https://img.shields.io/npm/v/i18nc-test-req.svg)](https://www.npmjs.org/package/i18nc-test-req)  |
 
-[travis-image]: https://img.shields.io/travis/Bacra/i18nc/master.svg?label=linux
-[travis-url]: https://travis-ci.org/Bacra/i18nc
-[coveralls-image]: https://img.shields.io/coveralls/Bacra/i18nc.svg
-[coveralls-url]: https://coveralls.io/github/Bacra/i18nc
+[coveralls-image]: https://img.shields.io/coveralls/iGdea/i18nc.svg
+[coveralls-url]: https://coveralls.io/github/iGdea/i18nc

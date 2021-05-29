@@ -13441,7 +13441,7 @@ IndexedSourceMapConsumer.prototype.sourceContentFor =
  * and an object is returned with the following properties:
  *
  *   - line: The line number in the generated source, or null.  The
- *     line number is 1-based. 
+ *     line number is 1-based.
  *   - column: The column number in the generated source, or null.
  *     The column number is 0-based.
  */
@@ -41968,11 +41968,9 @@ module.exports={
     "build": "node test/build",
     "bench": "node benchmark",
     "test": "cross-env DEBUG=i18nc-core* mocha test/test_*",
-    "test-cov": "istanbul cover _mocha -- test/test_* --reporter dot",
     "test-e2e": "karma start --",
     "test-e2e-dev": "cross-env DEBUG=i18nc-core* karma start --auto-watch --no-single-run --browsers=Chrome",
     "test-e2e-sauce": "karma start -- sauce",
-    "test-ci": "istanbul cover _mocha --report lcovonly -- test/test_* --reporter dot",
     "test-build": "node test/build && cross-env TEST_BUILD=true mocha test/test_*"
   },
   "dependencies": {
@@ -41995,14 +41993,13 @@ module.exports={
     "expect.js": "^0.3.1",
     "glob": "^7.1.3",
     "i18nc-test-req": "^2.0.0",
-    "istanbul": "^0.4.5",
     "karma": "^4.0.1",
     "karma-config-brcjs": "^2.0.0",
     "mocha": "^6.0.2"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:Bacra/i18nc.git"
+    "url": "git@github.com:iGdea/i18nc.git"
   },
   "keywords": [
     "i18n",
@@ -42015,9 +42012,9 @@ module.exports={
   "author": "Bacra Woo<bacra.woo@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Bacra/i18nc/issues"
+    "url": "https://github.com/iGdea/i18nc/issues"
   },
-  "homepage": "https://github.com/Bacra/i18nc"
+  "homepage": "https://github.com/iGdea/i18nc"
 }
 
 },{}],81:[function(require,module,exports){
