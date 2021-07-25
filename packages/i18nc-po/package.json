@@ -12,7 +12,6 @@
   "dependencies": {
     "debug": "^4.1.0",
     "depd": "^2.0.0",
-    "extend": "^3.0.2",
     "i18nc-db": "^2.0.2",
     "lodash": "^4.17.11",
     "pofile": "^1.0.11"

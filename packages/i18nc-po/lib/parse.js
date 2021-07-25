@@ -3,7 +3,6 @@
 const _ = require('lodash');
 const PO = require('pofile');
 const debug = require('debug')('i18nc-po:parse');
-const extend = require('extend');
 const i18ncDB = require('i18nc-db');
 const refsUtils = require('./refs_utils');
 
@@ -37,8 +36,7 @@ function _po2translateDBData(poInfo) {
 		refs.forEach(function(ref) {
 			msgids.forEach(function(msgid, index) {
 				const msgstr = poItem.msgstr[index] || poItem.msgstr[0];
-				const data = _oneRef_msgid_msgstr(ref, msgid, msgstr);
-				if (data) extend(true, fileKeyData, data);
+				_append_oneRef_msgid_msgstr(fileKeyData, ref, msgid, msgstr);
 			});
 		});
 	});
@@ -46,7 +44,7 @@ function _po2translateDBData(poInfo) {
 	return result;
 }
 
-function _oneRef_msgid_msgstr(ref, msgid, msgstr) {
+function _append_oneRef_msgid_msgstr(result, ref, msgid, msgstr) {
 	if (!msgid || !msgstr) return;
 
 	let info;
@@ -56,13 +54,9 @@ function _oneRef_msgid_msgstr(ref, msgid, msgstr) {
 	if (!info) info = {};
 	if (!info.fileKey) info.fileKey = '*';
 
-	let extendData1 = {};
-	let extendData2 = {};
 	switch (info.type) {
 		case refsUtils.TYPES.SUBKEY:
-			extendData1[msgid] = msgstr;
-			extendData2[info.subkey] = extendData1;
-			extendData2 = { SUBKEYS: extendData2 };
+			_.set(result, [info.fileKey, 'SUBKEYS', info.subkey, msgid], msgstr);
 			break;
 
 		case refsUtils.TYPES.SIMPLE_LINE:
@@ -72,29 +66,16 @@ function _oneRef_msgid_msgstr(ref, msgid, msgstr) {
 			const translateData = refsUtils.mixMsgsByJoinIndexs(info);
 			_.each(translateData, function(data, subkey) {
 				subkey = subkey == '*' ? info.subkey : info.subkey + '@' + subkey;
-				extendData1[subkey] = data;
+				_.each(data, function(msgstr, msgid) {
+					_.set(result, [info.fileKey, 'SUBKEYS', subkey, msgid], msgstr);
+				});
 			});
-			extendData2.SUBKEYS = extendData1;
 			break;
 		}
 
 		default:
 		case refsUtils.TYPES.BASE:
-			extendData1[msgid] = msgstr;
-			extendData2.DEFAULTS = extendData1;
+			_.set(result, [info.fileKey, 'DEFAULTS', msgid], msgstr);
 			break;
 	}
-
-	extendData1 = {};
-	extendData1[info.fileKey] = extendData2;
-
-	debug(
-		'ref:%s msgid:%s msgstr:%s result:%o',
-		ref,
-		msgid,
-		msgstr,
-		extendData1
-	);
-
-	return extendData1;
 }
