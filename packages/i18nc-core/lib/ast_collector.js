@@ -255,7 +255,7 @@ _.extend(ASTCollector.prototype, {
 			// @todo 归类到脏数据中
 			// const dd = `before ${xxd} middle ${I11(xxx)} after`
 			// function dd() {return <div>xxxdd {this.xxx} {xxx(fff)} </div>}
-			case 'TemplateLiteral':
+			case 'TemplateLiteral': {
 				// 处理模板字符串 @leo
 				const result = self.scan(scope, ast.expressions);
 				if (result)
@@ -267,6 +267,8 @@ _.extend(ASTCollector.prototype, {
 					});
 				}
 				return result;
+			}
+
 			case 'JSXElement':
 			case 'TaggedTemplateExpression': {
 				const result = self.scan(scope, ast);

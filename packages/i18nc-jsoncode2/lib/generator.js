@@ -168,7 +168,8 @@ function _wordJson2ast(wordMap) {
 
 			const valAst = translateWords.map(function(val) {
 				if (val === undefined) return null;
-				else if (val == '') return astTpl.ArrayExpression([]);
+				else if (val == '' && val !== 0)
+					return astTpl.ArrayExpression([]);
 				else return astUtil.constVal2ast(val);
 			});
 
